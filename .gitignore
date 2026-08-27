@@ -31,3 +31,17 @@ docs/*.png
 .venv/
 __pycache__/
 *.pyc
+
+# ===== 根目录旧资料（仅本地参考，不跟踪；docs/ 内已有对应归档/教学资源） =====
+chapter_1_quiz/
+chapter_2_3_quiz/
+chapter_4_5_quiz/
+chapter_6_7_8_quiz/
+Final_Project_Python_Sci_Comput/
+latex_simple/
+latex_vscode_template/
+input_pdfs/
+merge_pdfs.py
+texlive_vscode_setup.md
+md格式转ipynb格式命令.png
+课程增补方案*.md
