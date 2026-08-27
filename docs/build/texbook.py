@@ -11,6 +11,7 @@ Usage:
 import os, sys, json, re, shutil, tempfile, hashlib, subprocess
 import yaml
 from pypdf import PdfReader
+import fonts
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # docs/
 CHAPTERS = os.path.join(ROOT, "chapters")
@@ -21,9 +22,7 @@ BOOK_OUT = os.path.join(OUT_DIR, "Python科学计算_全书.pdf")
 
 PANDOC_OPTS = [
     "--pdf-engine=xelatex",
-    "-V", "mainfont=Microsoft YaHei",
-    "-V", "CJKmainfont=Microsoft YaHei",
-    "-V", "monofont=Consolas",
+    *fonts.PANDOC_FONT_OPTS,
     "-V", "geometry:margin=2.2cm",
     "-V", "colorlinks=true",
     "-V", "linkcolor=blue",

@@ -17,6 +17,7 @@ import subprocess
 import tempfile
 
 from pypdf import PdfReader, PdfWriter
+import fonts
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # docs/
 CHAPTERS_DIR = os.path.join(ROOT, "chapters")
@@ -24,9 +25,7 @@ OUT_DIR = os.path.join(ROOT, "教材PDF")
 
 PANDOC_OPTS = [
     "--pdf-engine=xelatex",
-    "-V", "mainfont=Microsoft YaHei",
-    "-V", "CJKmainfont=Microsoft YaHei",
-    "-V", "monofont=Consolas",
+    *fonts.PANDOC_FONT_OPTS,
     "-V", "geometry:margin=2.2cm",
     "-V", "colorlinks=true",
     "-V", "linkcolor=blue",

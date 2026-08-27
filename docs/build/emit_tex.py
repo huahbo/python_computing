@@ -16,6 +16,7 @@ from datetime import datetime
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import texbook as tb
+import fonts
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEX_DIR = os.path.join(ROOT, "教材TeX")
@@ -131,8 +132,8 @@ def main():
     cmd = ["pandoc", tmp, "-o", MAIN_FULL, "-s", "-t", "latex",
            "--top-level-division=chapter",
            "-V", "documentclass=ctexbook",
-           "-V", "mainfont=Microsoft YaHei", "-V", "CJKmainfont=Microsoft YaHei",
-           "-V", "monofont=Consolas", "-V", "geometry:margin=2.2cm",
+           *fonts.PANDOC_FONT_OPTS,
+           "-V", "geometry:margin=2.2cm",
            "-V", "colorlinks=true", "-V", "linkcolor=blue",
            "--toc", "--toc-depth=2", "-V", "toc-title=目录",
            "--highlight-style=tango",
