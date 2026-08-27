@@ -1,0 +1,9 @@
+# 第 1 章 PDF 合订清单（build/pdf_build.py 读取）
+TITLE: Numpy及其基本使用
+README.md
+01-数组基础.md
+02-数组运算.md
+03-线性代数.md
+04-多项式与拟合.md
+05-综合案例.md
+06-常见误区与技巧.md

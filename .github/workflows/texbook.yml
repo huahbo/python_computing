@@ -1,0 +1,50 @@
+name: Build Book PDFs
+
+on:
+  push:
+    paths:
+      - 'docs/chapters/**'
+      - 'docs/build/**'
+      - 'docs/教材PDF/README.md'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install LaTeX / pandoc / CJK fonts (Ubuntu)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc texlive-xetex texlive-lang-chinese texlive-latex-extra latexmk fonts-noto-cjk
+
+      - name: Install Python deps
+        run: pip install pypdf pyyaml
+
+      # 模式 A（默认）+ 模式 B（可编辑 TeX 工程，只生成不编译）
+      - name: Build book + per-chapter PDFs + TeX project
+        working-directory: docs
+        run: python build/update_all.py --tex
+
+      - name: Upload PDF artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-scientific-computing-pdfs
+          path: |
+            docs/教材PDF/Python科学计算_全书.pdf
+            docs/教材PDF/0*-*.pdf
+          if-no-files-found: error
+
+      - name: Upload editable TeX project
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-scientific-computing-tex
+          path: |
+            docs/教材TeX/main.tex
+            docs/教材TeX/chapters/
+            docs/教材TeX/figures/
+            docs/教材TeX/user_style.tex
+            docs/教材TeX/user_meta.yaml
+            docs/教材TeX/README.md
+          if-no-files-found: error

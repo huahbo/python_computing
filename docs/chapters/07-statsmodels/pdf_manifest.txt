@@ -1,0 +1,6 @@
+TITLE: Statsmodels及其基本使用
+README.md
+01-方差分析与回归.md
+02-时间序列预测.md
+03-综合案例.md
+04-常见误区与技巧.md

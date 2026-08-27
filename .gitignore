@@ -1,0 +1,33 @@
+# ===== 大文件 / 历史归档（不推） =====
+docs.zip
+Scientific_Computin_Book.pdf
+README.pdf
+*_quiz.zip
+
+# ===== 生成物 PDF（推荐忽略：由 build/ 脚本或 CI 重新生成；如需入库请删除本行） =====
+docs/教材PDF/
+
+# ===== LaTeX / 编译中间产物 =====
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.blg
+*.bbl
+*.xdv
+**/_manual_backup/
+docs/教材TeX/main.pdf
+
+# ===== 构建缓存 / 临时 =====
+docs/build/.texbook_cache.json
+docs/build/.tex_emit_cache.json
+docs/build/_tmp_*.md
+
+# ===== lab 执行时误存到 docs 根的图 =====
+docs/*.png
+
+# ===== Python =====
+.venv/
+__pycache__/
+*.pyc

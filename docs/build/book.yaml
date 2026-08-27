@@ -1,0 +1,14 @@
+# 全书 LaTeX 构建配置（build/texbook.py 读取）
+title: Python 科学计算（新版教程）
+author: Datawhale · 若冰（马世拓）
+date: 2026
+# 章节顺序：目录名对应 docs/chapters/<dir>；标题与文件清单复用该章 pdf_manifest.txt
+chapters:
+  - 01-numpy
+  - 02-sympy
+  - 03-scipy
+  - 04-pandas
+  - 05-matplotlib
+  - 06-networkx
+  - 07-statsmodels
+  - 08-sklearn

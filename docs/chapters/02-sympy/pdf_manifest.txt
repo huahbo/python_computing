@@ -1,0 +1,7 @@
+# 第 2 章 PDF 合订清单（build/pdf_build.py 读取）
+TITLE: Sympy及其基本使用
+README.md
+01-符号对象与基本运算.md
+02-利用SymPy求解问题.md
+03-综合案例.md
+04-常见误区与技巧.md

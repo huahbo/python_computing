@@ -1,0 +1,72 @@
+# 3. SciPy 及其基本使用（新版讲义）
+
+> 本页是第 3 章的**章首页（索引）**。正文位于 `01-微积分工具包.md` ~ `07-常见误区与技巧.md`，与原版资料完全分离（原版见 `../../原始资料/chap3/`）。
+
+## 本章概览
+
+SciPy 是建立在 NumPy 之上的科学计算核心库，把数值积分、常微分方程、优化、插值、统计检验、傅里叶变换与信号处理等“半成品”算法封装成稳定、经过验证的函数。它是《数学建模导论》与后续 Pandas、Matplotlib、Statsmodels、scikit-learn 各章的地基：只要问题的数学模型可写成函数/矩阵，通常就能用 SciPy 快速求数值解。
+
+本章按功能分成五个工具包：
+
+- **微积分工具包**（`scipy.integrate`）：数值积分、微分方程数值解；
+- **优化工具包**（`scipy.optimize`）：求根、无约束/约束极值、线性规划、指派、曲线拟合；
+- **插值工具包**（`scipy.interpolate`）：一维/多维插值、样条；
+- **假设检验工具包**（`scipy.stats`）：正态性检验、t 检验、卡方检验、方差分析；
+- **傅里叶变换工具包**（`scipy.fft` / `scipy.signal`）：FFT、频谱分析、滤波器。
+
+## 学习目标
+
+学完本章，你应该能够：
+
+1. 用 `quad`/`dblquad`/`trapezoid` 计算定积分，用 `odeint`/`solve_ivp` 求解一阶、二阶及高阶常微分方程（组）。
+2. 用 `fsolve`/`root`/`brentq` 求方程（组）的根，用 `brent`/`fmin`/`minimize` 求极值，用 `linprog`/`linear_sum_assignment` 解线性规划与指派问题。
+3. 用 `curve_fit`/`leastsq` 做非线性最小二乘拟合，读取 `pcov` 估计参数误差。
+4. 用 `CubicSpline`/`RegularGridInterpolator`/`griddata` 做一维与多维插值，理解插值 vs 拟合的区别。
+5. 用 `shapiro`/`ttest_ind`/`ttest_rel`/`chi2_contingency`/`f_oneway` 完成常用假设检验并正确解读 p 值。
+6. 用 `rfft`/`rfftfreq` 做频谱分析，用 `butter`+`lfilter` 设计低通/高通/带通/带阻滤波器。
+7. 完成一个综合小案例（如“传感器信号分析”），体会 SciPy 在真实数据上“积分 + 拟合 + 插值 + 检验 + FFT”的组合用法。
+
+## 先修要求与运行环境
+
+- 熟悉 Python 基础语法；建议先学第 1 章 NumPy（数组、广播、矩阵运算）与第 2 章 SymPy（符号求导/积分）。
+- 安装 Python 3.10+ 与 SciPy：
+
+```bash
+pip install numpy scipy matplotlib pandas
+# 若要做事后多重比较（Tukey HSD）或回归诊断，再安装
+pip install statsmodels
+```
+
+- 本讲义所用版本：SciPy 1.15.2、NumPy 2.1.2、Matplotlib 3.10.1、statsmodels 0.14.6（验证环境）。
+- 推荐在 JupyterLab / VS Code 中打开 `.ipynb` 练习；命令行列出的脚本直接保存为 `.py` 运行即可。
+
+## 本章目录
+
+| 小节 | 文件 | 内容 |
+| ---- | ---- | ---- |
+| 01 微积分工具包 | [01-微积分工具包.md](./01-微积分工具包.md) | 数值积分、二重积分、梯形法、odeint/solve_ivp 解 ODE |
+| 02 优化工具包 | [02-优化工具包.md](./02-优化工具包.md) | 求根、极值、线性规划、指派、最小二乘拟合 |
+| 03 插值工具包 | [03-插值工具包.md](./03-插值工具包.md) | 一维样条、多维插值、散点插值、插值 vs 拟合 |
+| 04 假设检验工具包 | [04-假设检验工具包.md](./04-假设检验工具包.md) | 正态性检验、t 检验、卡方、ANOVA、多重比较 |
+| 05 傅里叶变换工具包 | [05-傅里叶变换工具包.md](./05-傅里叶变换工具包.md) | FFT、频谱、滤波器设计 |
+| 06 综合案例 | [06-综合案例.md](./06-综合案例.md) | 传感器信号分析（插值 + FFT + 拟合 + 检验 + 积分，含配图） |
+| 07 常见误区与技巧 | [07-常见误区与技巧.md](./07-常见误区与技巧.md) | 易错点速查表、性能/调试/自测清单 |
+
+## 练习与上机入口
+
+- [本章练习（exercises/）](./exercises/README.md)：作业题、自测 quiz、参考答案。
+- [本章上机（lab/）](./lab/README.md)：循序渐进的上机 notebook，含环境自检、逐点演练与综合任务。
+- [本章参考与延伸阅读（references.md）](./references.md)：官方文档、精品教程、习题集、中文资料。
+- [教学说明（teaching.md）](./teaching.md)：课时安排、重点难点、考核建议（教师用）。
+
+## 建议课时
+
+| 环节 | 学时 | 对应内容 |
+| ---- | ---- | ---- |
+| 讲课 | 3–4 学时 | 01–05 正文 + 06 案例讲解 |
+| 上机 | 2–3 学时 | lab/ 逐题完成；课后完成 exercises/ 作业 |
+
+## 使用说明
+
+- **学生**：先读 01–05 正文并运行代码 → 完成 lab 上机 → 提交 exercises 作业 → 自测 quiz 检验。生词/公式不懂时，到 references.md 找官方对应章节。
+- **教师**：按 teaching.md 的课时表讲；lab 可作为上机课内容；exercises 中的 quiz 带自动评分，可直接回收。
