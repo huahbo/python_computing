@@ -2,8 +2,8 @@
 \chapter{微积分与数值方法}\label{ux5faeux79efux5206ux4e0eux6570ux503cux65b9ux6cd5}
 
 \begin{quote}
-一句话：微积分是''变化与累积''的语言，数值方法回答''电脑上到底怎么算''。本附录把第
-2 章 SymPy 的符号推导与第 3 章 SciPy 的数值工具背后的数学讲清楚。
+本附录为第 2 章 SymPy（符号推导）与第 3 章
+SciPy（数值工具）提供数学背景：微积分直觉、关键公式、数值方法（积分/优化/插值/FFT/ODE）与本科常见的难点（误差阶、收敛性、刚性问题）。
 \end{quote}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
@@ -11,62 +11,46 @@
 \section{B.1
 直觉故事：从''瞬时速度''说起}\label{b.1-ux76f4ux89c9ux6545ux4e8bux4eceux77acux65f6ux901fux5ea6ux8bf4ux8d77}
 
-你开车，两小时走了 180 公里，平均速度 90
-公里/小时。可如果车是''先快后慢''呢？平均速度看不出任何细节。
+开车两小时走 180 公里，平均 90
+km/h；但''先快后慢''时，平均速度看不出细节。
 
-\textbf{导数}就是回答''某一瞬间的速度''：把时间间隔缩到无限小，平均速度的极限。几何上它是曲线某点的切线斜率；物理上它是变化率；机器学习里它是''参数往哪个方向调、调多少''的依据。
-
-\textbf{积分}是反向累积：已知每秒的速度，求走过的总路程------把每秒速度乘上时间加总，间隔越细越准。几何上它是曲线下面积；概率里它是期望。
-
-\textbf{泰勒展开}把''复杂函数''在某个点附近写成多项式：\texttt{f(x+h)\ ≈\ f(x)\ +\ f\textquotesingle{}(x)h\ +\ f\textquotesingle{}\textquotesingle{}(x)h²/2}。它看起来很''取巧''，但牛顿法、误差分析、反向传播的直觉全都建立在''局部用直线/抛物线逼近''上。
+\begin{itemize}
+\tightlist
+\item
+  \textbf{导数} = 瞬时变化率：时间间隔缩到无限小，平均速度的极限。几何 =
+  切线斜率；机器学习里 = ``参数往哪调、调多少''。
+\item
+  \textbf{积分} = 累积量：已知每秒速度求总路程 =
+  把速度乘时间加总，间隔越细越准。几何 = 曲线下面积。
+\item
+  \textbf{泰勒展开}：\(f(x+h)=f(x)+f'(x)h+\tfrac12 f''(x)h^2+\cdots\)------把非线性函数在局部''线性化/抛物化''。牛顿法、误差分析、反向传播都靠它。
+\end{itemize}
 
 \begin{quote}
 \textbf{正文见}：\href{../../chapters/02-sympy/01-符号对象与基本运算.md}{2
 SymPy · 01
-符号对象与基本运算}（极限/导数/积分）、\href{../../chapters/02-sympy/02-利用SymPy求解问题.md}{2
+符号对象与基本运算}、\href{../../chapters/02-sympy/02-利用SymPy求解问题.md}{2
 SymPy · 02 利用SymPy求解问题}。
 \end{quote}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \section{B.2
-关键概念讲解（带手算小例子）}\label{b.2-ux5173ux952eux6982ux5ff5ux8bb2ux89e3ux5e26ux624bux7b97ux5c0fux4f8bux5b50}
+关键概念（带手算小例子）}\label{b.2-ux5173ux952eux6982ux5ff5ux5e26ux624bux7b97ux5c0fux4f8bux5b50}
 
 \subsection{B.2.1
-导数与偏导}\label{b.2.1-ux5bfcux6570ux4e0eux504fux5bfc}
+导数、偏导与梯度}\label{b.2.1-ux5bfcux6570ux504fux5bfcux4e0eux68afux5ea6}
 
-手算一个简单例子：\texttt{f(x)\ =\ x²}。按定义算
-\texttt{f\textquotesingle{}(2)}：\texttt{(\ (2+h)²\ -\ 4\ )\ /\ h\ =\ (4h\ +\ h²)/h\ =\ 4\ +\ h\ →\ 4}（\texttt{h→0}）。所以曲线在
-\texttt{x=2} 的斜率是 4。
+手算 \(f(x)=x^2\) 在 \(x=2\)：\(\dfrac{(2+h)^2-4}{h}=4+h\to 4\)。所以
+\(f'(2)=4\)。
 
-多元函数就要\textbf{偏导}（一次只动一个变量），把偏导排成向量就是\textbf{梯度}：
+多元 → 偏导 → 梯度：
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{梯度 grad f(x) = (∂f/∂x1, ∂f/∂x2, …, ∂f/∂xn)}
-\NormalTok{几何意义：指向 f 上升最快的方向；负梯度 = 最速下降方向}
-\end{Highlighting}
-\end{Shaded}
+\[\nabla f(x)=\Big(\frac{\partial f}{\partial x_1},\ldots,\frac{\partial f}{\partial x_n}\Big)\]
 
-\textbf{速查（常用导数）}
+含义：指向 \(f\) 上升最快的方向；负梯度 = 最速下降方向。
 
-{\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lllll@{}}
-\toprule\noalign{}
-函数 & 导数 & & 函数 & 导数 \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\texttt{x\^{}n} & \texttt{n\ x\^{}\{n-1\}} & & \texttt{sin\ x} &
-\texttt{cos\ x} \\
-\texttt{e\^{}x} & \texttt{e\^{}x} & & \texttt{ln\ x} & \texttt{1/x} \\
-\texttt{u(x)v(x)} &
-\texttt{u\textquotesingle{}v\ +\ uv\textquotesingle{}} & &
-\texttt{f(g(x))} &
-\texttt{f\textquotesingle{}(g(x))\ g\textquotesingle{}(x)} \\
-\end{longtable}
-}
+\textbf{导数速查}：\((x^n)'=nx^{n-1}\)、\((\sin x)'=\cos x\)、\((e^x)'=e^x\)、\((\ln x)'=1/x\)、\((uv)'=u'v+uv'\)、\((f(g(x)))'=f'(g(x))g'(x)\)。
 
 \subsection{B.2.2
 积分与基本定理}\label{b.2.2-ux79efux5206ux4e0eux57faux672cux5b9aux7406}
@@ -74,152 +58,159 @@ SymPy · 02 利用SymPy求解问题}。
 \begin{itemize}
 \tightlist
 \item
-  不定积分 \texttt{∫\ f(x)\ dx} 是''求原函数''（反导数）；
+  不定积分 = 求原函数；定积分 = 面积/累积；
 \item
-  定积分 \texttt{∫\_a\^{}b\ f(x)\ dx}
-  是面积/累积；微积分基本定理：\texttt{∫\_a\^{}b\ f\textquotesingle{}(x)dx\ =\ f(b)\ -\ f(a)}。
+  基本定理：\(\int_a^b f'(x)\,dx = f(b)-f(a)\)；
+\item
+  手算：\(\int_0^1 3x^2\,dx = x^3\big|_0^1 = 1\)。
 \end{itemize}
 
-手算例子：\texttt{∫\_0\^{}1\ 3x²\ dx\ =\ x³\ \textbar{}\_0\^{}1\ =\ 1}------正好验证''导数与积分互逆''。
-
 \subsection{B.2.3
-数值微分与积分（为什么还要''近似''）}\label{b.2.3-ux6570ux503cux5faeux5206ux4e0eux79efux5206ux4e3aux4ec0ux4e48ux8fd8ux8981ux8fd1ux4f3c}
+为什么还要''数值''（难点）}\label{b.2.3-ux4e3aux4ec0ux4e48ux8fd8ux8981ux6570ux503cux96beux70b9}
 
-很多实际函数没有解析式（例如只有采样数据），或者表达式复杂到 SymPy
-也算不动。此时用近似：
+实际函数常无解析式，或表达式复杂到算不动。近似方法：
 
 \begin{itemize}
 \tightlist
 \item
-  中心差分：\texttt{f\textquotesingle{}(x)\ ≈\ (f(x+h)\ -\ f(x-h))\ /\ (2h)}，误差
-  \texttt{O(h²)}，比前向差分更准；
+  \textbf{数值微分}（中心差分）：\(f'(x)\approx\dfrac{f(x+h)-f(x-h)}{2h}\)，误差
+  \(O(h^2)\)（比前向差分 \(O(h)\) 好）；
 \item
-  数值积分：梯形法则把曲线下的面积分成梯形求和；辛普森法则用二次抛物线逼近，更准；高阶自适应（\texttt{scipy.integrate.quad}）自动加密。
+  \textbf{数值积分}：梯形（一阶）、辛普森（二阶抛物线）、高斯求积（高阶、自适应加密）。\textbf{误差阶}告诉你''步长减半，误差怎么降''------这是数值分析最核心的思想。
 \end{itemize}
-
-\begin{quote}
-\textbf{正文见}：\href{../../chapters/03-scipy/01-微积分工具包.md}{3
-SciPy · 01 微积分工具包}。
-\end{quote}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \section{B.3
-数值方法详解：优化、插值、FFT、ODE}\label{b.3-ux6570ux503cux65b9ux6cd5ux8be6ux89e3ux4f18ux5316ux63d2ux503cfftode}
+深入：数值方法（重点、难点）}\label{b.3-ux6df1ux5165ux6570ux503cux65b9ux6cd5ux91cdux70b9ux96beux70b9}
 
 \subsection{B.3.1
 优化：找''最低点''}\label{b.3.1-ux4f18ux5316ux627eux6700ux4f4eux70b9}
 
-问题：\texttt{min\_x\ f(x)}。
-
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
-方法 & 思想 & 一句话记忆 \\
+方法 & 更新式 & 记忆点 \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-梯度下降 & \texttt{x\ ←\ x\ -\ α·grad\ f(x)} & 沿最陡下坡走，步长 α
-要调 \\
-牛顿法 & \texttt{x\ ←\ x\ -\ H\^{}\{-1\}·grad\ f} &
-用''坡度的坡度''（曲率）加速 \\
-拟牛顿（BFGS） & 近似 \texttt{H\^{}\{-1\}} &
-\texttt{scipy.optimize.minimize} 默认武器 \\
-约束优化 & KKT 条件 & 带 \texttt{g(x)\ ≤\ 0} 时求解 \\
+梯度下降 & \(x\gets x-\alpha\nabla f(x)\) & 沿最陡下坡走；步长要调 \\
+牛顿法 & \(x\gets x-H^{-1}\nabla f(x)\) & 用二阶曲率加速 \\
+拟牛顿/BFGS & 近似 \(H^{-1}\) & \texttt{scipy.optimize.minimize} 默认 \\
+约束优化 & KKT 条件 & 带 \(g(x)\le 0\) \\
 \end{longtable}
 }
 
-一个手算直觉：\texttt{f(x)\ =\ (x-3)²}，最优在 \texttt{x=3}。若
-\texttt{x0\ =\ 1}，\texttt{grad\ f\ =\ 2(x-3)\ =\ -4}，更新
-\texttt{x\ ←\ 1\ -\ α(-4)}；α 太大（如 1）会直接跳到
-5，再弹回来------这就是''步长太大震荡''。
+\textbf{为什么牛顿法快}：\(f\) 在 \(x_k\)
+附近用二阶泰勒近似，令导数为零得
+\(x_{k+1}=x_k-H^{-1}\nabla f\)。凸、光滑、好初值时\textbf{二次收敛}（误差平方级下降）。
 
-\begin{quote}
-优化是几乎所有机器学习和统计建模的引擎（见附录 E 的梯度下降）。
-\end{quote}
+\textbf{步长手算}：\(f(x)=(x-3)^2\)，\(x_0=1\)，\(\nabla f=2(x-3)=-4\)。\(\alpha=0.5\)
+→ 一步到 \(x=3\)；\(\alpha=2\) →
+\(x=9\)，直接弹过最优------``步长太大震荡''。
 
-\subsection{B.3.2
-插值与拟合：穿过点还是接近点}\label{b.3.2-ux63d2ux503cux4e0eux62dfux5408ux7a7fux8fc7ux70b9ux8fd8ux662fux63a5ux8fd1ux70b9}
+\subsection{B.3.2 插值 vs
+拟合（本科高频考点）}\label{b.3.2-ux63d2ux503c-vs-ux62dfux5408ux672cux79d1ux9ad8ux9891ux8003ux70b9}
 
 \begin{itemize}
 \tightlist
 \item
-  \textbf{插值}：曲线必须\textbf{经过}每个已知点（拉格朗日、样条）。适合''数据精确、形状重要''；
+  \textbf{插值}：曲线\textbf{穿过}每个已知点（拉格朗日、样条）；高次会\textbf{龙格震荡}（边界剧烈摆动）------不要迷信''高次''；
 \item
-  \textbf{拟合（最小二乘）}：曲线\textbf{接近}所有点（多项式拟合、岭回归）。适合''数据有噪声''。
+  \textbf{拟合}：曲线\textbf{接近}所有点（最小二乘，见附录
+  A）；噪声数据永远优先拟合（+正则化）；
+\item
+  选择：数据精确且要过点 → 样条插值；有噪声 → 拟合。
 \end{itemize}
-
-例子：已知
-\texttt{(0,0),\ (1,1),\ (2,4)}。线性拟合会给一条''平均线''；二次插值会精确穿过三点（但再高次就容易震荡------龙格现象）。\textbf{数据有噪声时永远优先拟合加正则化，而不是高次插值。}
-
-\begin{quote}
-\textbf{正文见}：\href{../../chapters/03-scipy/03-插值工具包.md}{3 SciPy
-· 03 插值工具包}。
-\end{quote}
 
 \subsection{B.3.3
-傅里叶变换：把信号拆成''频率''}\label{b.3.3-ux5085ux91ccux53f6ux53d8ux6362ux628aux4fe1ux53f7ux62c6ux6210ux9891ux7387}
+傅里叶变换（FFT）}\label{b.3.3-ux5085ux91ccux53f6ux53d8ux6362fft}
 
-直觉：任何周期信号都能写成不同频率正弦波的叠加。傅里叶变换把''时间域''的信号变成''频率域''的频谱
-\texttt{X(k)\ =\ Σ\ x(n)\ e\^{}\{-2πikn/N\}}。
+\[X(k)=\sum_{n=0}^{N-1}x(n)\,e^{-2\pi i kn/N}\]
+
+把信号拆成不同频率正弦叠加。FFT 复杂度 \(O(N\log N)\)（直接 DFT 是
+\(O(N^2)\)）；用途：找周期、去噪、平滑；截断信号会\textbf{频谱泄漏}（加窗缓解）。
+
+\subsection{B.3.4
+常微分方程（ODE）}\label{b.3.4-ux5e38ux5faeux5206ux65b9ux7a0bode}
+
+初值问题 \(y'(t)=f(t,y)\ ,\ y(t_0)=y_0\)：
 
 \begin{itemize}
 \tightlist
 \item
-  FFT 复杂度 \texttt{O(N\ log\ N)}，所以长序列也能秒级处理；
+  \textbf{欧拉法}：\(y_{n+1}=y_n+h f(t_n,y_n)\)------简单但误差大（\(O(h)\)）；
 \item
-  用途：找周期（电商销量季节）、去噪（滤掉高频）、平滑；
+  \textbf{RK45}：每步取 4\textasciitilde5 个点的加权平均，误差约
+  \(O(h^4)\)，\texttt{scipy.integrate.solve\_ivp} 默认；
 \item
-  注意：非周期/截断信号会出现''频谱泄漏''（加窗缓解）。
+  \textbf{刚性问题}：特征值相差悬殊时，显式方法步长被迫极小 → 换隐式方法
+  \(\mathrm{method="Radau"}\)。
 \end{itemize}
 
-\subsection{B.3.4 常微分方程
-ODE：让系统''跑起来''}\label{b.3.4-ux5e38ux5faeux5206ux65b9ux7a0b-odeux8ba9ux7cfbux7edfux8dd1ux8d77ux6765}
+\subsection{B.3.5
+怎么选数值方法（决策表）}\label{b.3.5-ux600eux4e48ux9009ux6570ux503cux65b9ux6cd5ux51b3ux7b56ux8868}
 
-初值问题：\texttt{y\textquotesingle{}(t)\ =\ f(t,\ y)}，\texttt{y(t0)\ =\ y0}。数值上讲就是''一小步一小步地推进''：
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{欧拉法：   y\_\{n+1\} = y\_n + h·f(t\_n, y\_n)    （简单但误差大）}
-\NormalTok{RK45：    每步取 4\textasciitilde{}5 个点的加权平均          （scipy 默认，精度高）}
-\NormalTok{刚性问题： 选 Radau 等隐式方法，稳定第一}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{quote}
-\textbf{正文见}：\href{../../chapters/03-scipy/01-微积分工具包.md}{3
-SciPy · 01 微积分工具包}（ODE 与
-solve\_ivp）、\href{../../chapters/02-sympy/02-利用SymPy求解问题.md}{2
-SymPy · 02 利用SymPy求解问题}（dsolve 符号解）。
-\end{quote}
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+场景 & 首选 & 理由 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+有解析式、要精确结构 & SymPy & 数值只是近似 \\
+只有采样数据、要面积 & \texttt{quad} & 自适应、精度高 \\
+求极值、无导数 & \texttt{minimize}（BFGS） & 稳健默认 \\
+数据精确要过点 & 样条插值 & 高次插值震荡 \\
+数据有噪声 & 最小二乘 & 插值会''记住''噪声 \\
+找周期/滤波 & FFT & 时域卷积长序列慢 \\
+ODE 初值 & \texttt{solve\_ivp}（RK45） & 精度/效率均衡；刚性用 Radau \\
+\end{longtable}
+}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\section{B.4 Python
-对应（速查）}\label{b.4-python-ux5bf9ux5e94ux901fux67e5}
+\section{B.4
+动手例题（选做）}\label{b.4-ux52a8ux624bux4f8bux9898ux9009ux505a}
+
+\textbf{例 1：数值积分 vs 解析}。\(\int_0^1 3x^2\,dx=1\)；梯形给
+0.75，辛普森给 1.0。
+
+\textbf{例
+2：中心差分}。\(f(x)=x^2\)，\(h=0.1\)：\((f(2.1)-f(1.9))/0.2=(4.41-3.61)/0.2=4.0\)（真值
+\(f'(2)=4\)）。
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\ImportTok{from}\NormalTok{ scipy }\ImportTok{import}\NormalTok{ integrate, optimize}
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\BuiltInTok{print}\NormalTok{(integrate.quad(}\KeywordTok{lambda}\NormalTok{ x: }\DecValTok{3}\OperatorTok{*}\NormalTok{x}\OperatorTok{**}\DecValTok{2}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{)[}\DecValTok{0}\NormalTok{])          }\CommentTok{\# 1.0}
+\BuiltInTok{print}\NormalTok{(optimize.minimize(}\KeywordTok{lambda}\NormalTok{ x: (x[}\DecValTok{0}\NormalTok{]}\OperatorTok{{-}}\DecValTok{3}\NormalTok{)}\OperatorTok{**}\DecValTok{2}\NormalTok{, x0}\OperatorTok{=}\NormalTok{[}\FloatTok{1.}\NormalTok{]).x)  }\CommentTok{\# \textasciitilde{}3}
+\NormalTok{x }\OperatorTok{=}\NormalTok{ np.array([}\FloatTok{1.9}\NormalTok{, }\FloatTok{2.0}\NormalTok{, }\FloatTok{2.1}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(np.gradient(x}\OperatorTok{*}\NormalTok{x, }\FloatTok{0.1}\NormalTok{)[}\DecValTok{1}\NormalTok{])                             }\CommentTok{\# \textasciitilde{}4.0}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{B.5 Python
+对应（速查）}\label{b.5-python-ux5bf9ux5e94ux901fux67e5}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np, sympy }\ImportTok{as}\NormalTok{ sp}
 \ImportTok{from}\NormalTok{ scipy }\ImportTok{import}\NormalTok{ integrate, optimize, interpolate, fft}
-\ImportTok{import}\NormalTok{ sympy }\ImportTok{as}\NormalTok{ sp}
 
 \NormalTok{x }\OperatorTok{=}\NormalTok{ sp.symbols(}\StringTok{"x"}\NormalTok{)}
-\NormalTok{sp.diff(sp.sin(x), x)                 }\CommentTok{\# 符号导数}
-\NormalTok{sp.integrate(}\DecValTok{3}\OperatorTok{*}\NormalTok{x}\OperatorTok{**}\DecValTok{2}\NormalTok{, (x, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{))       }\CommentTok{\# 符号定积分}
-
-\NormalTok{integrate.quad(np.sin, }\DecValTok{0}\NormalTok{, np.pi)      }\CommentTok{\# 数值积分}
-\NormalTok{np.gradient(np.array([}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{9}\NormalTok{]), }\FloatTok{0.1}\NormalTok{)   }\CommentTok{\# 数值微分}
-
-\NormalTok{f }\OperatorTok{=} \KeywordTok{lambda}\NormalTok{ x: (x[}\DecValTok{0}\NormalTok{] }\OperatorTok{{-}} \DecValTok{2}\NormalTok{)}\OperatorTok{**}\DecValTok{2} \OperatorTok{+}\NormalTok{ (x[}\DecValTok{1}\NormalTok{] }\OperatorTok{+} \DecValTok{1}\NormalTok{)}\OperatorTok{**}\DecValTok{2}
-\NormalTok{optimize.minimize(f, x0}\OperatorTok{=}\NormalTok{[}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{])       }\CommentTok{\# BFGS 优化}
-
-\NormalTok{interpolate.interp1d([}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{], [}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{4}\NormalTok{], kind}\OperatorTok{=}\StringTok{"cubic"}\NormalTok{)   }\CommentTok{\# 插值}
-\NormalTok{np.polyfit([}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{], [}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{4}\NormalTok{], }\DecValTok{2}\NormalTok{)       }\CommentTok{\# 拟合}
-
-\NormalTok{fft.fft(signal)                       }\CommentTok{\# FFT}
-\NormalTok{integrate.solve\_ivp(}\KeywordTok{lambda}\NormalTok{ t,y: }\OperatorTok{{-}}\NormalTok{y, [}\DecValTok{0}\NormalTok{,}\DecValTok{5}\NormalTok{], [}\FloatTok{1.0}\NormalTok{])      }\CommentTok{\# ODE}
+\NormalTok{sp.diff(sp.sin(x), x)}\OperatorTok{;}\NormalTok{ sp.integrate(}\DecValTok{3}\OperatorTok{*}\NormalTok{x}\OperatorTok{**}\DecValTok{2}\NormalTok{, (x, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\NormalTok{integrate.quad(np.sin, }\DecValTok{0}\NormalTok{, np.pi)}
+\NormalTok{optimize.minimize(}\KeywordTok{lambda}\NormalTok{ x: (x[}\DecValTok{0}\NormalTok{]}\OperatorTok{{-}}\DecValTok{2}\NormalTok{)}\OperatorTok{**}\DecValTok{2}\OperatorTok{+}\NormalTok{(x[}\DecValTok{1}\NormalTok{]}\OperatorTok{+}\DecValTok{1}\NormalTok{)}\OperatorTok{**}\DecValTok{2}\NormalTok{, x0}\OperatorTok{=}\NormalTok{[}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{])}
+\NormalTok{interpolate.interp1d([}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{], [}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{4}\NormalTok{], kind}\OperatorTok{=}\StringTok{"cubic"}\NormalTok{)}
+\NormalTok{np.polyfit([}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{], [}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{4}\NormalTok{], }\DecValTok{2}\NormalTok{)}
+\NormalTok{fft.fft(signal)}
+\NormalTok{integrate.solve\_ivp(}\KeywordTok{lambda}\NormalTok{ t, y: }\OperatorTok{{-}}\NormalTok{y, [}\DecValTok{0}\NormalTok{, }\DecValTok{5}\NormalTok{], [}\FloatTok{1.0}\NormalTok{])}
 \end{Highlighting}
 \end{Shaded}
 
@@ -231,12 +222,11 @@ SymPy · 02 利用SymPy求解问题}（dsolve 符号解）。
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-符号导数/积分 & \texttt{sympy.diff\ /\ sympy.integrate} \\
+符号导数/积分 & \texttt{sp.diff\ /\ sp.integrate} \\
 数值积分 & \texttt{scipy.integrate.quad} \\
 数值微分 & \texttt{np.gradient} \\
 优化 & \texttt{scipy.optimize.minimize} \\
-插值 & \texttt{interpolate.interp1d} \\
-拟合 & \texttt{np.polyfit\ /\ np.linalg.lstsq} \\
+插值/拟合 & \texttt{interpolate.interp1d} / \texttt{np.polyfit} \\
 FFT & \texttt{scipy.fft.fft} \\
 ODE & \texttt{solve\_ivp} \\
 \end{longtable}
@@ -244,40 +234,7 @@ ODE & \texttt{solve\_ivp} \\
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\section{B.5 动手例题（选做：手算 +
-验证）}\label{b.5-ux52a8ux624bux4f8bux9898ux9009ux505aux624bux7b97-ux9a8cux8bc1}
-
-\textbf{例 1：优化步长的教训}。@BT@f(x) = (x - 3)²@BT@，@BT@x0 =
-1@BT@，@BT@grad f = 2(x-3) = -4@BT@。@BT@α = 0.5@BT@：@BT@x1 = 1 -
-0.5×(-4) = 3@BT@（一步到位）；@BT@α = 2@BT@：@BT@x1 =
-9@BT@（弹过最优值）。这就是''学习率要小、要试''。
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\ImportTok{from}\NormalTok{ scipy.optimize }\ImportTok{import}\NormalTok{ minimize}
-\NormalTok{f }\OperatorTok{=} \KeywordTok{lambda}\NormalTok{ x: (x[}\DecValTok{0}\NormalTok{] }\OperatorTok{{-}} \DecValTok{3}\NormalTok{) }\OperatorTok{**} \DecValTok{2}
-\BuiltInTok{print}\NormalTok{(minimize(f, x0}\OperatorTok{=}\NormalTok{[}\FloatTok{1.0}\NormalTok{]).x)     }\CommentTok{\# 约 [3.]}
-\end{Highlighting}
-\end{Shaded}
-
-\textbf{例 2：数值积分与中心差分}。@BT@∫\_0\^{}1 3x² dx =
-1@BT@（解析）；梯形法则给出 0.75，辛普森给出
-1.0（更准）。中心差分：@BT@f(x)=x²@BT@，@BT@h=0.1@BT@ 时
-@BT@(f(2.1)-f(1.9))/(0.2) = (4.41-3.61)/0.2 = 4.0@BT@，正好等于
-@BT@f'(2)@BT@。
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\ImportTok{from}\NormalTok{ scipy }\ImportTok{import}\NormalTok{ integrate}
-\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
-\BuiltInTok{print}\NormalTok{(integrate.quad(}\KeywordTok{lambda}\NormalTok{ x: }\DecValTok{3}\OperatorTok{*}\NormalTok{x}\OperatorTok{**}\DecValTok{2}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{)[}\DecValTok{0}\NormalTok{])   }\CommentTok{\# 1.0}
-\NormalTok{x }\OperatorTok{=}\NormalTok{ np.array([}\FloatTok{1.9}\NormalTok{, }\FloatTok{2.0}\NormalTok{, }\FloatTok{2.1}\NormalTok{])}
-\BuiltInTok{print}\NormalTok{(np.gradient(x}\OperatorTok{*}\NormalTok{x, }\FloatTok{0.1}\NormalTok{)[}\DecValTok{1}\NormalTok{])                     }\CommentTok{\# 约 4.0}
-\end{Highlighting}
-\end{Shaded}
-
-\section{B.6 常见误区 +
-用在哪（双向）}\label{b.6-ux5e38ux89c1ux8befux533a-ux7528ux5728ux54eaux53ccux5411}
+\section{B.6 常见误区}\label{b.6-ux5e38ux89c1ux8befux533a}
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}ll@{}}
@@ -287,34 +244,19 @@ ODE & \texttt{solve\_ivp} \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-插值等于拟合 & 插值过点、拟合逼近；有噪声用拟合 \\
-优化不调初值 & 非凸问题初值决定结果；多试几组/给边界 \\
-数值微分直接用于噪声数据 & 先平滑/拟合（附录 A 最小二乘）再求导 \\
-以为 FFT 只能处理声音 & 任何时序/周期信号都能做频谱 \\
-用默认 solve\_ivp 硬解刚性系统 & 换 \texttt{method="Radau"} \\
+插值=拟合 & 插值过点、拟合逼近；有噪声用拟合 \\
+优化不设初值 & 非凸问题初值决定结果；多试几组 \\
+数值微分直接用于噪声数据 & 先平滑/拟合再求导 \\
+FFT 只能处理声音 & 任何时序都能做频谱 \\
+刚性系统用默认求解器 & 换 \texttt{method="Radau"} \\
+只看 \(O(h)\) 就选方法 & 还要看常数、稳定性与实现难度 \\
 \end{longtable}
 }
-
-\textbf{使用章节（可点击）} \textbar{} 章 \textbar{} 哪里用到 \textbar{}
-链接 \textbar{} \textbar{} ---- \textbar{} ---- \textbar{} ----
-\textbar{} \textbar{} 2 SymPy \textbar{} 极限/导数/积分/方程/ODE
-\textbar{} \href{../../chapters/02-sympy/01-符号对象与基本运算.md}{01
-符号对象与基本运算} \textbar{} \textbar{} 3 SciPy \textbar{}
-积分/优化/插值/FFT/ODE \textbar{}
-\href{../../chapters/03-scipy/01-微积分工具包.md}{01 微积分工具包}
-\textbar{} \textbar{} 1 NumPy \textbar{} 多项式拟合一节 \textbar{}
-\href{../../chapters/01-numpy/04-多项式与拟合.md}{04 多项式与拟合}
-\textbar{}
-
-\textbf{下游衔接}：intro-mathmodel 第 2 章（微分方程与动力系统）、第 3
-章（函数极值与规划模型）、第 6 章（数据处理与拟合模型）。
-\textbf{延伸阅读}：SciPy Lectures（优化/积分）、MIT OCW
-数值计算、《数值分析》教材（见 \href{./references.md}{references.md}）。
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \section{B.7
-补充：怎么选数值方法（决策表）}\label{b.7-ux8865ux5145ux600eux4e48ux9009ux6570ux503cux65b9ux6cd5ux51b3ux7b56ux8868}
+使用章节（双向）}\label{b.7-ux4f7fux7528ux7ae0ux8282ux53ccux5411}
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
@@ -323,28 +265,116 @@ ODE & \texttt{solve\_ivp} \\
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
-场景
+章
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-首选
+哪里用到
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-为什么不选另一个
+链接
 \end{minipage} \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-函数有解析式且可符号化 & SymPy 精确解 & 数值解只是近似，且看不懂结构 \\
-只有采样数据、要面积 & @BT@scipy.integrate.quad@BT@ &
-梯形精度低，辛普森对尖峰不够自适应 \\
-求极值、不知道导数值 & @BT@minimize@BT@（BFGS） &
-差分梯度慢；解析梯度快但易错 \\
-数据精确、要过点 & 样条插值 & 高次插值会震荡 \\
-数据有噪声 & 最小二乘/拟合 & 插值会把噪声也''记住'' \\
-找周期/滤波 & FFT & 时域卷积在长序列上慢 \\
-ODE 初值问题 & @BT@solve\_ivp@BT@（RK45） & 欧拉法误差大；刚性用
-Radau \\
+2 SymPy & 极限/导数/积分/方程/ODE &
+\href{../../chapters/02-sympy/01-符号对象与基本运算.md}{01
+符号对象与基本运算} \\
+3 SciPy & 积分/优化/插值/FFT/ODE &
+\href{../../chapters/03-scipy/01-微积分工具包.md}{01 微积分工具包} \\
+1 NumPy & 多项式拟合 &
+\href{../../chapters/01-numpy/04-多项式与拟合.md}{04 多项式与拟合} \\
 \end{longtable}
 }
 
-\textbf{经验法则}：先试官方/库默认，再根据报错/误差/稳定性换方法；永远保留一份''手算小例子''来验证你的理解（见
-B.5）。
+\textbf{下游衔接}：intro-mathmodel 第 2 章（微分方程与动力系统）、第 3
+章（函数极值与规划模型）、第 6 章（数据处理与拟合模型）。
+\textbf{延伸阅读}：SciPy Lectures（优化/积分）、MIT OCW
+数值计算、《数值分析》教材（见 \href{./references.md}{references.md}）。
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{B.10 常见考题与自查（考前 10
+分钟）}\label{b.10-ux5e38ux89c1ux8003ux9898ux4e0eux81eaux67e5ux8003ux524d-10-ux5206ux949f}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+会了吗？ & 考点 & 一句话答案 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+□ & 中心差分为什么优于前向 & 误差 O(h\^{}2) 而非 O(h) \\
+□ & 牛顿法为什么快 & 用二阶泰勒，凸光滑好初值二次收敛 \\
+□ & 插值和拟合的区别 & 插值过点、拟合逼近；有噪声用拟合 \\
+□ & FFT 复杂度 & O(N log N) \\
+□ & 欧拉法 vs RK45 & 误差 O(h) vs O(h\^{}4)，RK 更稳更准 \\
+□ & 优化步长太大 & 震荡不收敛；太小则慢 \\
+□ & 刚性系统 & 换隐式方法（Radau） \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{B.9 综合案例：拟合 +
+积分（做一道完整数值题）}\label{b.9-ux7efcux5408ux6848ux4f8bux62dfux5408-ux79efux5206ux505aux4e00ux9053ux5b8cux6574ux6570ux503cux9898}
+
+\textbf{问题}：已知某产品的''价格-销量''散点，希望给出''总需求''（曲线下的面积）与''最优定价''（利润最大点）。
+
+步骤：
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  用最小二乘拟合价格 p 与销量 q 的线性/二次关系（附录 A 的正规方程或
+  np.polyfit）；
+\item
+  用数值积分估算某区间的''总销量''（面积）；
+\item
+  用优化求利润 f(p) = p*q(p) 的最大值点；
+\item
+  用中心差分验证最优点的导数为 0。
+\end{enumerate}
+
+参考要点代码：
+
+\begin{verbatim}
+import numpy as np
+from scipy import integrate, optimize
+p = np.array([1., 2., 3., 4.]); q = np.array([9., 7., 5., 3.])
+coef = np.polyfit(p, q, 2)
+total = integrate.quad(lambda x: np.polyval(coef, x), 1, 4)[0]
+best = optimize.minimize_scalar(lambda x: -x * np.polyval(coef, x), bounds=(1, 4), method="bounded")
+print(total, best.x)
+\end{verbatim}
+
+\textbf{反思}：把''数据→模型→积分→优化''串起来，就是科学计算的常用闭环。
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{B.8
+例题集（深入练习）}\label{b.8-ux4f8bux9898ux96c6ux6df1ux5165ux7ec3ux4e60}
+
+\textbf{例 1：牛顿法手算两步}。\(f(x)=x^2-2\)，求
+\(\sqrt2\)。\(f'(x)=2x\)，\(x_{k+1}=x_k-\dfrac{x_k^2-2}{2x_k}\)。从
+\(x_0=1\)：\(x_1=1.5\)，\(x_2=1.4167\)，\(x_3=1.4142\)------收敛到
+\(\sqrt2\approx1.41421356\)（二次收敛）。
+
+\textbf{例 2：误差阶实验}。用梯形法则算
+\(\int_0^1 x^2dx=1/3\)：\(h=0.5\) 得 0.375，\(h=0.25\) 得
+0.34375。步长减半，误差从 0.0417 降到 0.0104------大约除以
+4（二阶收敛）。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{from}\NormalTok{ scipy }\ImportTok{import}\NormalTok{ integrate}
+\ControlFlowTok{for}\NormalTok{ h }\KeywordTok{in}\NormalTok{ [}\FloatTok{0.5}\NormalTok{, }\FloatTok{0.25}\NormalTok{]:}
+\NormalTok{    xs }\OperatorTok{=}\NormalTok{ np.arange(}\DecValTok{0}\NormalTok{, }\DecValTok{1} \OperatorTok{+}\NormalTok{ h, h)}
+\NormalTok{    trap }\OperatorTok{=}\NormalTok{ np.trapezoid(xs}\OperatorTok{**}\DecValTok{2}\NormalTok{, xs)}
+    \BuiltInTok{print}\NormalTok{(h, trap, }\BuiltInTok{abs}\NormalTok{(trap }\OperatorTok{{-}} \DecValTok{1}\OperatorTok{/}\DecValTok{3}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{例 3：ODE 欧拉 vs RK45}。\(y'=-y\)，\(y(0)=1\)，精确解
+\(y=e^{-t}\)。欧拉 \(h=0.1\) 在 \(t=1\) 得约
+0.3487（误差大）；\texttt{solve\_ivp} 用 RK45 得约 0.3679（近真值）。

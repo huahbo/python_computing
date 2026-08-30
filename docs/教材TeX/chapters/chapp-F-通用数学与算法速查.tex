@@ -2,16 +2,14 @@
 \chapter{通用数学与算法速查}\label{ux901aux7528ux6570ux5b66ux4e0eux7b97ux6cd5ux901fux67e5}
 
 \begin{quote}
-本附录是''随手翻''的卡片：常用记号、公式、复杂度、数值稳定性、可视化原则。它服务所有章节；建议上机前翻
+本附录是''随手翻''的卡片：常用记号、公式、复杂度、数值稳定性、可视化原则与术语英中对照。建议上机前翻
 5 分钟，期末大作业前完整过一遍。
 \end{quote}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\section{F.1 常用记号与希腊字母（讲解 +
-速查）}\label{f.1-ux5e38ux7528ux8bb0ux53f7ux4e0eux5e0cux814aux5b57ux6bcdux8bb2ux89e3-ux901fux67e5}
-
-数学里很多''看不懂''来自记号。先把它们认熟：
+\section{F.1
+常用记号与希腊字母（速查）}\label{f.1-ux5e38ux7528ux8bb0ux53f7ux4e0eux5e0cux814aux5b57ux6bcdux901fux67e5}
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lllll@{}}
@@ -21,17 +19,17 @@
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-\texttt{Σ} & 求和 & & \texttt{∏} & 连乘 \\
-\texttt{E{[}X{]}} & 期望 & & \texttt{Var(X)} & 方差 \\
-\texttt{x\^{}T} & 转置 & & \texttt{grad\ f} & 梯度 \\
-\texttt{∂f/∂x} & 偏导 & & \texttt{∫} & 积分 \\
-\texttt{λ} & 特征值/正则强度 & & \texttt{α} & 学习率 \\
-\texttt{θ} & 参数/角度 & & \texttt{ε} & 误差/小量 \\
-\texttt{≈} & 约等于 & & \texttt{\textless{}\textless{}} & 远小于 \\
+\(\sum\) & 求和 & & \(\prod\) & 连乘 \\
+\(E[X]\) & 期望 & & \(\mathrm{Var}(X)\) & 方差 \\
+\(x^T\) & 转置 & & \(\nabla f\) & 梯度 \\
+\(\partial f/\partial x\) & 偏导 & & \(\int\) & 积分 \\
+\(\lambda\) & 特征值/正则强度 & & \(\alpha\) & 学习率 \\
+\(\theta\) & 参数/角度 & & \(\varepsilon\) & 误差/小量 \\
+\(\approx\) & 约等于 & & \(\ll\) & 远小于 \\
 \end{longtable}
 }
 
-\textbf{读公式的口诀}：先找''求和/连乘''的范围，再看''指数/对数''在谁身上，最后看变量是矩阵还是标量。
+\textbf{读公式的口诀}：先找求和/连乘范围，再看指数/对数在谁身上，最后看变量是矩阵还是标量。
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -43,11 +41,11 @@
 \begin{itemize}
 \tightlist
 \item
-  \texttt{(x\^{}n)\textquotesingle{}\ =\ n\ x\^{}\{n-1\}}；\texttt{(e\^{}x)\textquotesingle{}\ =\ e\^{}x}；\texttt{(ln\ x)\textquotesingle{}\ =\ 1/x}
+  \((x^n)'=nx^{n-1}\)；\((e^x)'=e^x\)；\((\ln x)'=1/x\)
 \item
-  泰勒：\texttt{f(x+h)\ ≈\ f(x)\ +\ f\textquotesingle{}(x)h\ +\ f\textquotesingle{}\textquotesingle{}(x)h²/2}
+  泰勒：\(f(x+h)\approx f(x)+f'(x)h+\tfrac12 f''(x)h^2\)
 \item
-  数值微分（中心差分）：\texttt{f\textquotesingle{}(x)\ ≈\ (f(x+h)\ -\ f(x-h))\ /\ (2h)}
+  数值微分（中心差分）：\(f'(x)\approx\dfrac{f(x+h)-f(x-h)}{2h}\)
 \end{itemize}
 
 \subsection{线性代数}\label{ux7ebfux6027ux4ee3ux6570}
@@ -55,12 +53,12 @@
 \begin{itemize}
 \tightlist
 \item
-  \texttt{(AB)\^{}T\ =\ B\^{}T\ A\^{}T}；\texttt{tr(AB)\ =\ tr(BA)}
+  \((AB)^T=B^TA^T\)；\(\mathrm{tr}(AB)=\mathrm{tr}(BA)\)
 \item
-  最小二乘：\texttt{x\^{}\ =\ (A\^{}T\ A)\^{}\{-1\}\ A\^{}T\ b}（数值上多用
+  最小二乘：\(x^{*}=\mathrm{arg\min}_x\|Ax-b|_2^2\)（数值用
   \texttt{lstsq}）
 \item
-  SVD：\texttt{A\ =\ UΣV\^{}T}；对称矩阵：\texttt{A\ =\ QΛQ\^{}T}
+  SVD：\(A=U\Sigma V^T\)；对称矩阵：\(A=Q\Lambda Q^T\)
 \end{itemize}
 
 \subsection{概率统计}\label{ux6982ux7387ux7edfux8ba1}
@@ -68,13 +66,13 @@
 \begin{itemize}
 \tightlist
 \item
-  \texttt{E{[}X{]}\ =\ Σ\ x\ p(x)}；\texttt{Var(X)\ =\ E{[}X²{]}\ -\ (E{[}X{]})²}
+  \(E[X]=\sum x\,p(x)\)；\(\mathrm{Var}(X)=E[X^2]-(E[X])^2\)
 \item
-  样本方差：\texttt{s²\ =\ Σ(x\_i\ -\ x̄)²\ /\ (n-1)}
+  样本方差：\(s^2=\frac{1}{n-1}\sum(x_i-\bar{x})^2\)
 \item
-  置信区间：\texttt{x̄\ ±\ t\_\{α/2,\ n-1\}\ ·\ s/√n}
+  置信区间：\(\bar{x}\pm t_{\alpha/2,n-1}\cdot s/\sqrt n\)
 \item
-  线性回归：\texttt{y\ =\ Xβ\ +\ ε}，\texttt{β\^{}\ =\ (X\^{}T\ X)\^{}\{-1\}\ X\^{}T\ y}，\texttt{R²\ =\ 1\ -\ SSE/SST}
+  线性回归：\(y=X\beta+\varepsilon\)，\(\hat{\beta}=(X^TX)^{-1}X^Ty\)，\(R^2=1-\mathrm{SSE}/\mathrm{SST}\)
 \end{itemize}
 
 \subsection{机器学习}\label{ux673aux5668ux5b66ux4e60}
@@ -82,14 +80,11 @@
 \begin{itemize}
 \tightlist
 \item
-  逻辑回归（sigmoid）：\texttt{p\ =\ 1\ /\ (1\ +\ e\^{}\{-θ\^{}T\ x\})}；损失
-  = 交叉熵
+  逻辑回归（sigmoid）：\(p=1/(1+e^{-\theta^Tx})\)；损失 = 交叉熵
 \item
-  梯度下降：\texttt{θ\ ←\ θ\ -\ α·grad\ L}
+  梯度下降：\(\theta\gets\theta-\alpha\nabla L\)
 \item
-  正则化：Ridge
-  \texttt{L\ +\ λ\textbar{}\textbar{}θ\textbar{}\textbar{}²}；Lasso
-  \texttt{L\ +\ λ\textbar{}\textbar{}θ\textbar{}\textbar{}₁}
+  正则化：Ridge \(L+\lambda\|\theta|^2\)；Lasso \(L+\lambda\|\theta|_1\)
 \end{itemize}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
@@ -97,23 +92,30 @@
 \section{F.3
 复杂度与常用算法量级（速查）}\label{f.3-ux590dux6742ux5ea6ux4e0eux5e38ux7528ux7b97ux6cd5ux91cfux7ea7ux901fux67e5}
 
-为什么''能算''和''算得动''是两回事？看复杂度。
-
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
 \toprule\noalign{}
-运算 & 复杂度 & 备注 \\
+\begin{minipage}[b]{\linewidth}\raggedright
+运算
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+复杂度
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+备注
+\end{minipage} \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-矩阵乘/解方程组（n×n） & \texttt{O(n³)} &
+矩阵乘/解方程组（\(n\times n\)） & \(O(n^3)\) &
 向量化库已优化；避免显式求逆 \\
-特征分解 / SVD & 约 \texttt{O(n³)} & 只求前 k 个可加速 \\
-FFT & \texttt{O(N\ log\ N)} & 比直接 DFT 的 \texttt{O(N²)} 快得多 \\
-Dijkstra & \texttt{O((V+E)\ log\ V)} & 用堆实现 \\
-最小生成树（Kruskal） & \texttt{O(E\ log\ E)} & 排序为主 \\
-k-Means 一次迭代 & \texttt{O(n·k·d)} & 与样本数线性 \\
+特征分解 / SVD & 约 \(O(n^3)\) & 只求前 \(k\) 个可加速 \\
+FFT & \(O(N\log N)\) & 比 \(O(N^2)\) 直接 DFT 快得多 \\
+Dijkstra & \(O((V+E)\log V)\) & 堆实现 \\
+Kruskal MST & \(O(E\log E)\) & 排序为主 \\
+k-Means 一次迭代 & \(O(n\cdot k\cdot d)\) & 与样本数线性 \\
 Python 纯循环 & 慢 & 用 NumPy 向量化/广播 \\
 \end{longtable}
 }
@@ -125,39 +127,36 @@ Python 纯循环 & 慢 & 用 NumPy 向量化/广播 \\
 \section{F.4
 数值稳定性（科学计算必修，讲解）}\label{f.4-ux6570ux503cux7a33ux5b9aux6027ux79d1ux5b66ux8ba1ux7b97ux5fc5ux4feeux8bb2ux89e3}
 
-浮点数是有限精度的（约 15\textasciitilde16
-位有效小数），所以''数学上对''的公式在电脑上可能''崩''：
+浮点数是有限精度（约 15\textasciitilde16
+位有效小数），``数学上对的公式''在电脑上可能''崩''：
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
   \textbf{比较}：别用 \texttt{==} 比浮点；用 \texttt{np.isclose} /
-  \texttt{abs(a-b)\ \textless{}\ 1e-9}。
+  \(|a-b|<10^{-9}\)；
 \item
-  \textbf{条件数}：\texttt{np.linalg.cond(A)} 大 →
-  病态，解对输入过敏；优先看它再''硬解''。
+  \textbf{条件数}：\(\mathrm{cond}(A)\) 大 → 病态，解对输入过敏；
 \item
-  \textbf{灾难性消去}：\texttt{sqrt(x²+1)\ -\ x} 在大 \texttt{x}
-  时相减丢精度，改写 \texttt{1/(sqrt(x²+1)+x)}。
+  \textbf{灾难性消去}：\(\sqrt{x^2+1}-x\)（大 \(x\)）→ 改写
+  \(1/(\sqrt{x^2+1}+x)\)；
 \item
-  \textbf{缩放}：优化/距离/聚类前对特征标准化（\texttt{StandardScaler}）。
+  \textbf{缩放}：优化/距离/聚类前标准化（\texttt{StandardScaler}）；
 \item
-  \textbf{对数域}：连乘小概率时取 log，避免下溢；分类看概率用
-  \texttt{log\_proba}。
+  \textbf{对数域}：连乘小概率取 log 防下溢；分类用 \texttt{log\_proba}；
 \item
   \textbf{可复现}：固定种子（\texttt{random\_state} /
-  \texttt{np.random.default\_rng(seed)}）。
+  \texttt{default\_rng(seed)}）。
 \end{enumerate}
 
-配一个手算直觉：\texttt{x\ =\ 10\^{}8} 时，\texttt{sqrt(x²+1)\ -\ x}
-用双精度算出来≈\texttt{0}（真正约
-\texttt{5×10\^{}\{-9\}}）------不是数学错了，是浮点''看不见''那么小的差。
+手算直觉：\(x=10^8\) 时 \(\sqrt{x^2+1}-x\) 双精度算出来约 0（真值约
+\(5\times 10^{-9}\)）------不是数学错了，是浮点''看不见''那么小的差。
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \section{F.5
-常用数学与算法''关键词索引''（速查）}\label{f.5-ux5e38ux7528ux6570ux5b66ux4e0eux7b97ux6cd5ux5173ux952eux8bcdux7d22ux5f15ux901fux67e5}
+关键词索引（速查）}\label{f.5-ux5173ux952eux8bcdux7d22ux5f15ux901fux67e5}
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}ll@{}}
@@ -180,38 +179,41 @@ Python 纯循环 & 慢 & 用 NumPy 向量化/广播 \\
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \section{F.6
-使用章节与通用提示（双向）}\label{f.6-ux4f7fux7528ux7ae0ux8282ux4e0eux901aux7528ux63d0ux793aux53ccux5411}
+使用章节（双向）}\label{f.6-ux4f7fux7528ux7ae0ux8282ux53ccux5411}
 
-\begin{itemize}
-\tightlist
-\item
-  \textbf{全 9 个章节}都会用到：符号、公式卡、复杂度、数值稳定性；
-\item
-  上机前 5 分钟：看 F.2 公式卡 + F.4 稳定性；
-\item
-  期末大作业前：过一遍 F.1\textasciitilde F.4；
-\item
-  与第 5 章结合：图表原则见
-  \href{../../chapters/05-matplotlib/04-综合案例.md}{5 Matplotlib · 04
-  综合案例}。
-\end{itemize}
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+章
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+用法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+链接
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 前置基础 & 成绩统计公式 &
+\href{../../chapters/00-prep/00-07-综合案例.md}{07 综合案例} \\
+1 NumPy & 数值稳定性/向量化 &
+\href{../../chapters/01-numpy/02-数组运算.md}{02 数组运算} \\
+3 SciPy & 优化/插值上下界 &
+\href{../../chapters/03-scipy/02-优化工具包.md}{02 优化工具包} \\
+5 Matplotlib & 可视化原则 &
+\href{../../chapters/05-matplotlib/01-基本绘图.md}{01 基本绘图} \\
+8 sklearn & 特征缩放/评估 &
+\href{../../chapters/08-sklearn/01-数据集的预处理.md}{01
+数据集的预处理} \\
+\end{longtable}
+}
 
-\textbf{使用章节（可点击）} \textbar{} 章 \textbar{} 用法 \textbar{}
-链接 \textbar{} \textbar{} ---- \textbar{} ---- \textbar{} ----
-\textbar{} \textbar{} 0 前置基础 \textbar{} 成绩统计公式 \textbar{}
-\href{../../chapters/00-prep/00-07-综合案例.md}{07 综合案例} \textbar{}
-\textbar{} 1 NumPy \textbar{} 数值稳定性/向量化 \textbar{}
-\href{../../chapters/01-numpy/02-数组运算.md}{02 数组运算} \textbar{}
-\textbar{} 3 SciPy \textbar{} 优化/插值上下界 \textbar{}
-\href{../../chapters/03-scipy/02-优化工具包.md}{02 优化工具包}
-\textbar{} \textbar{} 5 Matplotlib \textbar{} 可视化原则 \textbar{}
-\href{../../chapters/05-matplotlib/01-基本绘图.md}{01 基本绘图}
-\textbar{} \textbar{} 8 sklearn \textbar{} 特征缩放/评估 \textbar{}
-\href{../../chapters/08-sklearn/01-数据集的预处理.md}{01 数据集的预处理}
-\textbar{}
-
-\textbf{延伸阅读}：Big-O Cheat Sheet、NumPy broadcasting
-文档、《算法导论》简明版（见 \href{./references.md}{references.md}）。
+\textbf{可视化原则（配合第 5
+章）}：一图一信息；坐标轴标清楚；柱状看类别、直方看分布、散点看关系、折线看趋势；标注单位/图例/样本量；颜色兼顾色盲。
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -243,3 +245,52 @@ complexity / numerical stability & 复杂度 / 数值稳定性 & 附录 F \\
 }
 
 \textbf{一句话总结}：遇到不认识的名词，先查这张表，再进对应主题读''直觉故事''。
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{F.9 考前 10
+分钟清单（全附录）}\label{f.9-ux8003ux524d-10-ux5206ux949fux6e05ux5355ux5168ux9644ux5f55}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  记号：\(\sum\)、\(E[X]\)、\(\nabla\)、\(A^T\)------见 F.1；
+\item
+  公式：导数/积分/最小二乘/置信区间/正则化------见 F.2；
+\item
+  复杂度：矩阵乘 \(O(n^3)\)、FFT \(O(N\log N)\)、Dijkstra
+  \(O((V+E)\log V)\)------见 F.3；
+\item
+  数值稳定性：条件数、灾难消去、缩放、对数域------见 F.4；
+\item
+  关键词索引：哪类问题看哪个附录------见 F.5；
+\item
+  术语英中：matrix、loss、p-value\ldots\ldots------见 F.7；
+\item
+  常用技巧：向量化、log 域、日志坐标、NaN 处理、种子------见 F.8。
+\end{enumerate}
+
+\textbf{最后一句}：先看''直觉故事''建立画面，再用''速查表''拿公式，最后用''例题集''练手。
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{F.8
+数值小技巧（速查）}\label{f.8-ux6570ux503cux5c0fux6280ux5de7ux901fux67e5}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  求和/连乘尽量用向量化；避免 Python 循环里重复分配大数组；
+\item
+  概率乘积取对数：\texttt{np.log} + \texttt{np.sum}；
+\item
+  画图前把大数值日志化（\texttt{plt.yscale("log")}）；
+\item
+  长序列先 \texttt{np.fft.fft} 看谱，再决定滤波/平滑；
+\item
+  拟合前先 \texttt{np.nan\_to\_num}/去掉缺失，避免 NaN 传染；
+\item
+  复现：所有随机过程给 \texttt{random\_state}/种子，并写进报告。
+\end{enumerate}

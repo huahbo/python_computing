@@ -2,9 +2,9 @@
 \chapter{线性代数与矩阵}\label{ux7ebfux6027ux4ee3ux6570ux4e0eux77e9ux9635}
 
 \begin{quote}
-本附录讲科学计算里最常用的线性代数：向量与矩阵是什么、怎么''想''它们、数字上怎么算、Python
-里怎么调。学完你应能用''线性变换''的眼光看明白第 1 章 NumPy
-的线性代数、第 8 章 sklearn 的降维。
+本附录讲科学计算里最常用的线性代数：向量/矩阵的直觉、关键定义、分解与算法（重点是特征值与
+SVD）、数值稳定性，以及 Python 对应。学完你应能用''线性变换''的眼光看第
+1 章 NumPy 的线性代数与第 8 章 sklearn 的降维。
 \end{quote}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
@@ -12,25 +12,23 @@
 \section{A.1
 直觉故事：矩阵到底在干什么}\label{a.1-ux76f4ux89c9ux6545ux4e8bux77e9ux9635ux5230ux5e95ux5728ux5e72ux4ec0ux4e48}
 
-很多同学背熟了矩阵乘法，却不知道它''在算什么''。我们从一个具体问题开始：
+很多同学背熟了矩阵乘法，却不知道它在''算什么''。从一个具体问题开始：
 
 \begin{quote}
-一家店只卖两种套餐：A 套餐（米饭 1 份 + 鸡肉 2 份），B 套餐（米饭 2 份 +
-鸡肉 1 份）。今天卖出 3 份 A、2 份 B，问一共用了多少米饭和鸡肉？
+一家店卖两种套餐：A 套餐（米饭 1 份 + 鸡肉 2 份），B 套餐（米饭 2 份 +
+鸡肉 1 份）。卖出 3 份 A、2 份 B，一共用了多少米饭和鸡肉？
 \end{quote}
 
-把配额写成向量：卖出的数量 \texttt{x\ =\ (3,\ 2)}（A 份数、B
-份数）。每种套餐的用料写成列向量：A 套餐 \texttt{(1,\ 2)}，B 套餐
-\texttt{(2,\ 1)}。那么总用料就是\textbf{线性组合}：
+卖出数量写成向量 \(x=(3,2)\)；A、B 套餐用料写成列向量 \((1,2)\) 与
+\((2,1)\)。总用料就是\textbf{线性组合}：
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{总米饭 = 3×1 + 2×2 = 7；总鸡肉 = 3×2 + 2×1 = 8}
-\NormalTok{→ 写成矩阵： [1 2; 2 1] × [3; 2] = [7; 8]}
-\end{Highlighting}
-\end{Shaded}
+\[\text{米饭} = 3\times 1 + 2\times 2 = 7,\qquad \text{鸡肉} = 3\times 2 + 2\times 1 = 8\]
 
-这个例子说明了三件事：
+写成矩阵：
+
+\[\begin{bmatrix} 1 & 2 \\ 2 & 1 \end{bmatrix} \begin{bmatrix} 3 \\ 2 \end{bmatrix} = \begin{bmatrix} 7 \\ 8 \end{bmatrix}\]
+
+这个例子说明三件事：
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -38,30 +36,23 @@
 \item
   \textbf{向量是''配比''}：一行数据、一份订单、一个状态，都可以是一个向量；
 \item
-  \textbf{矩阵是''线性变换的约定''}：\texttt{A}
-  的每一列是一种''原料的配方''，\texttt{Ax} 就是按 \texttt{x}
-  的比例把各列混合起来；
+  \textbf{矩阵是''线性变换的约定''}：\(A\)
+  的每一列是一种''原料配方''，\(Ax\) 就是按 \(x\) 的比例把各列混合起来；
 \item
-  \textbf{矩阵乘法 = 复合变换}：先做变换再变换一次，顺序不能换------所以
-  \texttt{AB\ ≠\ BA} 一般情况下成立。
+  \textbf{矩阵乘法 = 复合变换}：先做 \(B\) 再做
+  \(A\)，顺序不能换------所以一般 \(AB\ne BA\)。
 \end{enumerate}
-
-\textbf{为什么这对科学计算重要？}
-因为很多模型都是一句''线性组合''：多项式拟合是''基函数的线性组合''、线性回归是''特征的线性组合''、傅里叶分析是''正弦波的线性组合''。学会线性代数，等于看懂了这些模型共同的骨架。
 
 \begin{quote}
 \textbf{正文见}：\href{../../chapters/01-numpy/03-线性代数.md}{1 NumPy ·
-03
-线性代数}（矩阵运算与求解）、\href{../../chapters/01-numpy/04-多项式与拟合.md}{1
-NumPy · 04 多项式与拟合}（最小二乘）。
+03 线性代数}、\href{../../chapters/01-numpy/04-多项式与拟合.md}{1 NumPy
+· 04 多项式与拟合}。
 \end{quote}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \section{A.2
 关键概念讲解：把名词翻译成人话}\label{a.2-ux5173ux952eux6982ux5ff5ux8bb2ux89e3ux628aux540dux8bcdux7ffbux8bd1ux6210ux4ebaux8bdd}
-
-下面每个概念，先给定义，再用一句话人话解释，最后配一个 2×2 小例子。
 
 \subsection{A.2.1
 转置、内积与范数}\label{a.2.1-ux8f6cux7f6eux5185ux79efux4e0eux8303ux6570}
@@ -74,16 +65,15 @@ NumPy · 04 多项式与拟合}（最小二乘）。
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-转置 \texttt{A\^{}T} & 行列互换 & ``把表格行变列、列变行'' \\
-内积 \texttt{x·y\ =\ x\^{}T\ y} & 对应元素相乘再求和 &
-``两个向量有多'同向''' \\
-范数 \texttt{\textbar{}\textbar{}x\textbar{}\textbar{}\_2} &
-\texttt{sqrt(x\^{}T\ x)} & ``向量长度'' \\
+转置 & \(A^T\) & 行列互换；\((AB)^T=B^TA^T\) \\
+内积 & \(x\cdot y = x^Ty\) & 两个向量有多''同向'' \\
+范数 & \(\|x|_2=\sqrt{x^Tx}\) & 向量长度 \\
 \end{longtable}
 }
 
-例子：\texttt{x\ =\ (1,\ 2)}，\texttt{y\ =\ (3,\ 4)}，则
-\texttt{x·y\ =\ 1×3\ +\ 2×4\ =\ 11}，\texttt{\textbar{}\textbar{}x\textbar{}\textbar{}\_2\ =\ sqrt(1+4)\ ≈\ 2.24}。内积越大且同向，相似度越高------这就是余弦相似度、皮尔逊相关、注意力机制的底层直觉。
+例子：\(x=(1,2)\)，\(y=(3,4)\)，则
+\(x\cdot y = 1\times 3+2\times 4 = 11\)，\(\|x|_2=\sqrt{5}\approx 2.24\)。内积大且同向
+→ 相似度高：这是余弦相似度、皮尔逊相关、注意力机制的底层直觉。
 
 \subsection{A.2.2
 逆、行列式与秩：能否把变换''倒回去''}\label{a.2.2-ux9006ux884cux5217ux5f0fux4e0eux79e9ux80fdux5426ux628aux53d8ux6362ux5012ux56deux53bb}
@@ -91,148 +81,223 @@ NumPy · 04 多项式与拟合}（最小二乘）。
 \begin{itemize}
 \tightlist
 \item
-  \textbf{逆
-  \texttt{A\^{}\{-1\}}}：把变换倒着做一遍。\texttt{A\^{}\{-1\}A\ =\ I}。
+  \textbf{逆} \(A^{-1}\)：把变换倒着做一遍，\(A^{-1}A=I\)；
 \item
-  \textbf{行列式
-  \texttt{det(A)}}：变换后''体积''放大的倍数。\texttt{det(A)\ =\ 0}
-  表示变换把高维压扁了（不可逆），方程组要么无解要么无穷多解。
+  \textbf{行列式} \(\det(A)\)：变换后''体积''放大的倍数；\(\det(A)=0\)
+  表示被压扁（不可逆）；
 \item
-  \textbf{秩
-  \texttt{rank(A)}}：变换后空间的真正维度（列向量中线性无关的个数）。满秩方阵才可逆。
+  \textbf{秩}
+  \(\mathrm{rank}(A)\)：变换后空间的真正维度（列向量中线性无关的个数）；满秩方阵才可逆。
 \end{itemize}
 
-例子：\texttt{A\ =\ {[}{[}2,1{]},{[}1,2{]}{]}}。\texttt{det(A)\ =\ 4-1\ =\ 3\ ≠\ 0}，可逆；\texttt{A\^{}\{-1\}\ =\ (1/3){[}{[}2,-1{]},{[}-1,2{]}{]}}。而
-\texttt{B\ =\ {[}{[}1,2{]},{[}2,4{]}{]}}
-两列成比例，\texttt{rank(B)\ =\ 1}，\texttt{det(B)\ =\ 0}------它把平面压成一条线，因此
-\texttt{Bx\ =\ b} 要么无解要么无穷多解。
+例子：\(A=\begin{bmatrix}2&1\\1&2\end{bmatrix}\)。\(\det(A)=4-1=3\ne 0\)，可逆；\(A^{-1}=\frac{1}{3}\begin{bmatrix}2&-1\\-1&2\end{bmatrix}\)。而
+\(B=\begin{bmatrix}1&2\\2&4\end{bmatrix}\)
+两列成比例，\(\mathrm{rank}(B)=1\)，\(\det(B)=0\)------它把平面压成一条线，\(Bx=b\)
+要么无解要么无穷多解。
 
 \subsection{A.2.3
 特征值与特征向量：变换的''不动轴''}\label{a.2.3-ux7279ux5f81ux503cux4e0eux7279ux5f81ux5411ux91cfux53d8ux6362ux7684ux4e0dux52a8ux8f74}
 
-定义：若 \texttt{Av\ =\ λv}（\texttt{v\ ≠\ 0}），则 \texttt{v}
-是特征向量，\texttt{λ}
-是对应特征值。人话：\textbf{有的方向被矩阵只''拉伸''不''拐弯''，拉伸倍数是特征值}。
+定义：若 \(Av=\lambda v\)（\(v\ne 0\)），则 \(v\)
+是特征向量，\(\lambda\)
+是特征值。人话：\textbf{有的方向被矩阵只''拉伸''不''拐弯''，拉伸倍数是特征值}。
 
-继续用 \texttt{A\ =\ {[}{[}2,1{]},{[}1,2{]}{]}}：特征值
-\texttt{λ1\ =\ 3}（方向 \texttt{(1,1)}）、\texttt{λ2\ =\ 1}（方向
-\texttt{(1,-1)}）。也就是说：沿对角线方向放 3 倍、沿反对角线方向不动。
+对 \(A\) 手算：\(\det(A-\lambda I)=(A-\lambda I)\) 展开得
+\(\lambda_1=3\)（方向 \((1,1)\)）、\(\lambda_2=1\)（方向
+\((1,-1)\)）。即：沿对角线方向放 3 倍、沿反对角线方向不动。
 
-用处： - 对称矩阵
-\texttt{A\ =\ QΛQ\^{}T}：把坐标轴转成''特征方向''，问题立刻解耦（PCA
-就是找这些方向）； -
-幂迭代、PageRank、马尔可夫链稳态都在找''最大特征值的特征向量''。
+用途： - \textbf{对称矩阵}：\(A=Q\Lambda Q^T\)（\(Q\)
+正交），坐标轴转成''特征方向''后问题立刻解耦------PCA 就是找这些方向； -
+\textbf{幂迭代 / PageRank /
+马尔可夫链稳态}：都在找最大特征值对应的特征向量。
+
+\begin{quote}
+手算展开式：\(\begin{vmatrix}2-\lambda & 1\\1 & 2-\lambda\end{vmatrix}=(2-\lambda)^2-1=0\)，即
+\(\lambda=1\) 或 \(3\)。
+\end{quote}
 
 \subsection{A.2.4
-条件数：解的''敏感度''}\label{a.2.4-ux6761ux4ef6ux6570ux89e3ux7684ux654fux611fux5ea6}
+条件数：解有多''敏感''}\label{a.2.4-ux6761ux4ef6ux6570ux89e3ux6709ux591aux654fux611f}
 
-\texttt{cond(A)\ =\ \textbar{}\textbar{}A\textbar{}\textbar{}\ ·\ \textbar{}\textbar{}A\^{}\{-1\}\textbar{}\textbar{}}，粗略说明：\texttt{b}
-变化一点点，\texttt{x} 可能变化多大倍数。条件数大（病态）≠
-无解，而是\textbf{数值上很难算准}。
+\[\mathrm{cond}(A)=\|A|\cdot\|A^{-1}|\]
+
+直觉：\(b\) 变化一点点，\(x\) 可能变化很多倍。条件数大（病态）≠
+无解，而是\textbf{数值上很难算准}，做模型/拟合前值得看一眼。
 
 \begin{quote}
 \textbf{正文见}：\href{../../chapters/01-numpy/03-线性代数.md}{1 NumPy ·
 03
 线性代数}（条件数/病态）、\href{../../chapters/03-scipy/02-优化工具包.md}{3
-SciPy · 02 优化工具包}（优化里的病态）。
+SciPy · 02 优化工具包}。
 \end{quote}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \section{A.3
-分解与算法：为什么这样做}\label{a.3-ux5206ux89e3ux4e0eux7b97ux6cd5ux4e3aux4ec0ux4e48ux8fd9ux6837ux505a}
+深入：分解与算法（重点、难点）}\label{a.3-ux6df1ux5165ux5206ux89e3ux4e0eux7b97ux6cd5ux91cdux70b9ux96beux70b9}
 
-\subsection{A.3.1 解方程组：从高斯消元到
-LU}\label{a.3.1-ux89e3ux65b9ux7a0bux7ec4ux4eceux9ad8ux65afux6d88ux5143ux5230-lu}
+\subsection{A.3.1 解方程组：高斯消元与
+LU}\label{a.3.1-ux89e3ux65b9ux7a0bux7ec4ux9ad8ux65afux6d88ux5143ux4e0e-lu}
 
-求解 \texttt{Ax\ =\ b}
-最直接是高斯消元：把增广矩阵化成上三角，再回代。消元过程等价于把
-\texttt{A} 写成 \texttt{A\ =\ LU}（L 下三角、U
-上三角）。好处是：\textbf{解多组 \texttt{b} 时复用
-LU，一次消元多次求解}。
+求解 \(Ax=b\) 最直接是高斯消元（上三角 + 回代）。消元等价于
+\(A=LU\)：\textbf{一次分解、多次求解}，解多组 \(b\) 时很划算。
 
 \begin{itemize}
 \tightlist
 \item
-  矩阵规模 \texttt{n×n}，复杂度 \texttt{O(n\^{}3)}；
+  复杂度
+  \(O(n^3)\)；必须\textbf{部分主元}（选最大元素当主元），避免小除数放大误差；
 \item
-  数值上要\textbf{部分主元}（选最大的元素当主元），避免小除数放大误差；
-\item
-  Python 里直接 \texttt{np.linalg.solve}（内部就是带主元的
-  LU），\textbf{不要}用 \texttt{inv(A)\ @\ b}。
+  代码：\texttt{np.linalg.solve}（带主元的 LU），\textbf{不要}用
+  \texttt{np.linalg.inv(A)\ @\ b}。
 \end{itemize}
 
-\subsection{A.3.2 特征值分解与
-SVD：谁是''最重要的方向''}\label{a.3.2-ux7279ux5f81ux503cux5206ux89e3ux4e0e-svdux8c01ux662fux6700ux91cdux8981ux7684ux65b9ux5411}
+\subsection{A.3.2
+特征值分解：对称矩阵为什么''好''}\label{a.3.2-ux7279ux5f81ux503cux5206ux89e3ux5bf9ux79f0ux77e9ux9635ux4e3aux4ec0ux4e48ux597d}
 
 \begin{itemize}
 \tightlist
 \item
-  \textbf{特征分解}：\texttt{A\ =\ VΛV\^{}\{-1\}}（对称阵时 \texttt{V}
-  正交，\texttt{A\ =\ QΛQ\^{}T}）。适合方阵、可对角化矩阵；求
-  \texttt{A\^{}k}、判断稳态很舒服。
+  一般方阵：\(A=V\Lambda V^{-1}\)（可对角化时）。特征向量可能不正交，且可能是复数；
 \item
-  \textbf{奇异值分解
-  SVD}：\texttt{A\ =\ UΣV\^{}T}，\textbf{任意矩阵都行}。\texttt{U}、\texttt{V}
-  正交，\texttt{Σ}
-  对角（奇异值按降序）。直觉：把''变换''分解成''先旋转、再缩放、再旋转''。
+  \textbf{对称矩阵}：\(A=A^T\)
+  时特征值全是实数，特征向量可正交归一：\(A=Q\Lambda Q^T\)。此时
+  \(A^k=Q\Lambda^k Q^T\)，求幂、求逆、判断正定都极简单；
+\item
+  用途：二次型分析（\(x^TAx\) 的正定性 =\textgreater{}
+  凸性）、PCA、谱聚类、稳定性分析。
 \end{itemize}
-
-SVD 最漂亮的性质是\textbf{最优低秩近似}（Eckart--Young）：保留前
-\texttt{k} 大奇异值，就得到与原矩阵''最接近''的秩 \texttt{k}
-矩阵。所以： - 图像压缩：把大矩阵拆成''少数奇异值 × 两个小矩阵''； -
-PCA：对数据矩阵做 SVD，右奇异向量就是主成分方向； -
-伪逆与最小二乘：\texttt{A\^{}+\ =\ VΣ\^{}\{-1\}U\^{}T}，比正规方程稳定。
-
-\begin{quote}
-\textbf{正文见}：\href{../../chapters/01-numpy/05-综合案例.md}{1 NumPy ·
-05 综合案例}（SVD
-图像压缩）、\href{../../chapters/08-sklearn/03-无监督学习的案例.md}{8
-sklearn · 03 无监督学习的案例}（PCA 降维）。
-\end{quote}
 
 \subsection{A.3.3
-最小二乘：数据有噪声怎么办}\label{a.3.3-ux6700ux5c0fux4e8cux4e58ux6570ux636eux6709ux566aux58f0ux600eux4e48ux529e}
+SVD：最重要的一段（本科必会）}\label{a.3.3-svdux6700ux91cdux8981ux7684ux4e00ux6bb5ux672cux79d1ux5fc5ux4f1a}
 
-超定方程
-\texttt{Ax\ ≈\ b}（方程比未知数多）通常无精确解，最小二乘找''残差平方和最小''的解：
+\textbf{定理（SVD）}：任意 \(m\times n\) 矩阵 \(A\) 可写成
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{正规方程：x\^{} = (A\^{}T A)\^{}\{{-}1\} A\^{}T b}
-\NormalTok{几何：    把 b 投影到 A 的列空间，误差向量垂直于列空间}
-\NormalTok{数值：    优先 lstsq（QR/ SVD 路径），避免求 (A\^{}T A)\^{}\{{-}1\}（会平方条件数）}
-\end{Highlighting}
-\end{Shaded}
+\[A = U\Sigma V^T\]
 
-如果再加 \texttt{\textbar{}\textbar{}x\textbar{}\textbar{}\^{}2}
-惩罚（岭回归），就是''在最小二乘和'不放大'之间妥协''------这是第 8
-章正则化的数学原型。
+其中
+\(U\)（\(m\times m\)）、\(V\)（\(n\times n\)）是正交矩阵，\(\Sigma\) 是
+\(m\times n\) 的''对角矩阵''，对角线元素
+\(\sigma_1\ge\sigma_2\ge\cdots\ge 0\) 叫\textbf{奇异值}。
+
+\textbf{几何解读（三步）}：先旋转（\(V^T\)）→ 逐方向缩放（\(\Sigma\)）→
+再旋转（\(U\)）。奇异值 = 每个方向的''重要性/能量''。
+
+\textbf{与特征值的关系}：\(A^TA\) 的特征值是 \(\sigma_i^2\)，\(V\) 是
+\(A^TA\) 的特征向量；\(AA^T\) 给出 \(U\)。所以
+SVD''任意矩阵都能做''，是特征分解的''万能推广''。
+
+\textbf{三个用途（考试/作业高频）}：
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{最优低秩近似}（Eckart--Young）：保留前 \(k\) 大奇异值得到
+  \(A_k\)，是所有秩 \(k\) 矩阵中与 \(A\) 的 Frobenius
+  距离最小者。\[\|A-A_k|_F^2 = \sum_{i>k}\sigma_i^2\] ------
+  图像压缩、去噪、推荐系统都靠它。
+\item
+  \textbf{PCA}：对数据中心化后的矩阵做 SVD，\(V\) 的前 \(k\)
+  列就是主成分方向；奇异值平方占比 = 解释方差比。
+\item
+  \textbf{伪逆与最小二乘}：\(A^{+}=V\Sigma^{-1}U^T\)（\(\Sigma^{-1}\)
+  取非零奇异值的倒数），比正规方程 \((A^TA)^{-1}A^Tb\)
+  数值更稳（避免把条件数平方）。
+\end{enumerate}
+
+\textbf{数值上怎么算}：实际用 QR 迭代/分治法（库内实现），复杂度约
+\(O(mn^2)\)（薄 SVD）。代码只需 \texttt{np.linalg.svd}。
+
+\subsection{A.3.4
+最小二乘与正则化}\label{a.3.4-ux6700ux5c0fux4e8cux4e58ux4e0eux6b63ux5219ux5316}
+
+超定方程组 \(Ax\approx b\) 的最小二乘解：
+
+\[x^{*} = \arg\min_x\|Ax-b|_2^2 \quad\Longrightarrow\quad A^TAx = A^Tb\]
+
+\begin{itemize}
+\tightlist
+\item
+  几何：把 \(b\) 投影到 \(A\) 的列空间，误差向量与列空间垂直；
+\item
+  数值：优先 \(A^{+}b\)（SVD）或 QR；直接求 \((A^TA)^{-1}\)
+  会平方条件数；
+\item
+  加惩罚
+  \(\lambda\|x|^2\)（岭回归）：在''拟合''与''不放大''之间取舍------这就是第
+  8 章正则化的数学原型。
+\end{itemize}
+
+\subsection{A.3.5
+数值稳定性：本科最易踩的坑}\label{a.3.5-ux6570ux503cux7a33ux5b9aux6027ux672cux79d1ux6700ux6613ux8e29ux7684ux5751}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+坑
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+例子
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+正确做法
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+灾难性消去 & \(\sqrt{x^2+1}-x\)（大 \(x\)） & 改写
+\(1/(\sqrt{x^2+1}+x)\) \\
+显式求逆 & \(A^{-1}b\) & \(Ax=b\) 用 \texttt{np.linalg.solve} \\
+病态不检查 & 条件数 \(10^{12}\) 硬解 & 先看
+\(\mathrm{cond}(A)\)，换模型/加正则 \\
+忘记缩放 & PCA/距离计算被大数值特征主导 & 先标准化 \\
+\end{longtable}
+}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\section{A.4 Python
-对应（速查）}\label{a.4-python-ux5bf9ux5e94ux901fux67e5}
+\section{A.4 动手例题（选做：手算 +
+验证）}\label{a.4-ux52a8ux624bux4f8bux9898ux9009ux505aux624bux7b97-ux9a8cux8bc1}
+
+\textbf{例 1：解方程组}。\(2x+y=1\)、\(x+2y=2\)。代入得
+\(x=0, y=1\)。验证：\texttt{np.linalg.solve({[}{[}2,1{]},{[}1,2{]}{]},{[}1,2{]})\ =\ {[}0,\ 1{]}}。
+
+\textbf{例 2：SVD 手算
+2×2}。\(A=\begin{bmatrix}1&1\\1&-1\end{bmatrix}\)。\(A^TA=\begin{bmatrix}2&0\\0&2\end{bmatrix}\)，奇异值
+\(\sigma_1=\sigma_2=\sqrt{2}\)；\(V=I\)，\(U=\frac{1}{\sqrt2}A\)。这说明对称正交型矩阵''只缩放不旋转''，是
+SVD 最简单的例子。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{A }\OperatorTok{=}\NormalTok{ np.array([[}\FloatTok{1.}\NormalTok{, }\FloatTok{1.}\NormalTok{], [}\FloatTok{1.}\NormalTok{, }\OperatorTok{{-}}\FloatTok{1.}\NormalTok{]])}
+\NormalTok{U, S, Vt }\OperatorTok{=}\NormalTok{ np.linalg.svd(A, full\_matrices}\OperatorTok{=}\VariableTok{False}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(S, U }\OperatorTok{@}\NormalTok{ np.diag(S) }\OperatorTok{@}\NormalTok{ Vt)      }\CommentTok{\# 还原 A}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{A.5 Python
+对应（速查）}\label{a.5-python-ux5bf9ux5e94ux901fux67e5}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np, sympy }\ImportTok{as}\NormalTok{ sp}
+\NormalTok{A }\OperatorTok{=}\NormalTok{ np.array([[}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{], [}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{]])}\OperatorTok{;}\NormalTok{ b }\OperatorTok{=}\NormalTok{ np.array([[}\DecValTok{1}\NormalTok{], [}\DecValTok{2}\NormalTok{]])}
 
-\NormalTok{A }\OperatorTok{=}\NormalTok{ np.array([[}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{], [}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{]])}
-\NormalTok{b }\OperatorTok{=}\NormalTok{ np.array([[}\DecValTok{1}\NormalTok{], [}\DecValTok{2}\NormalTok{]])}
-
-\NormalTok{np.linalg.solve(A, b)                 }\CommentTok{\# 解方程组（推荐）}
-\NormalTok{np.linalg.inv(A)                      }\CommentTok{\# 显式求逆（尽量不用）}
-\NormalTok{np.linalg.det(A), np.linalg.matrix\_rank(A)}
-\NormalTok{np.linalg.eig(A)                      }\CommentTok{\# 特征值/特征向量}
-\NormalTok{np.linalg.eigh(A) }\ControlFlowTok{if}\NormalTok{ (A }\OperatorTok{==}\NormalTok{ A.T).}\BuiltInTok{all}\NormalTok{() }\ControlFlowTok{else} \VariableTok{None}   \CommentTok{\# 对称矩阵专用}
-\NormalTok{np.linalg.svd(A, full\_matrices}\OperatorTok{=}\VariableTok{False}\NormalTok{)  }\CommentTok{\# U, S, Vt（S 是向量!）}
-\NormalTok{np.linalg.lstsq(A, b, rcond}\OperatorTok{=}\VariableTok{None}\NormalTok{)      }\CommentTok{\# 最小二乘}
-\NormalTok{np.linalg.cond(A)                      }\CommentTok{\# 条件数}
-\NormalTok{np.linalg.pinv(A)                      }\CommentTok{\# 伪逆}
-
-\CommentTok{\# SymPy 符号解}
-\NormalTok{sp.Matrix([[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{],[}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{]]).eigenvects()}
+\NormalTok{np.linalg.solve(A, b)                  }\CommentTok{\# 解方程组}
+\NormalTok{np.linalg.det(A)}\OperatorTok{;}\NormalTok{ np.linalg.matrix\_rank(A)}
+\NormalTok{np.linalg.eig(A)                       }\CommentTok{\# 特征值/特征向量}
+\NormalTok{np.linalg.eigh(A) }\ControlFlowTok{if}\NormalTok{ (A }\OperatorTok{==}\NormalTok{ A.T).}\BuiltInTok{all}\NormalTok{() }\ControlFlowTok{else} \VariableTok{None}
+\NormalTok{np.linalg.svd(A, full\_matrices}\OperatorTok{=}\VariableTok{False}\NormalTok{)  }\CommentTok{\# U, S, Vt（S 是向量！）}
+\NormalTok{np.linalg.lstsq(A, b, rcond}\OperatorTok{=}\VariableTok{None}\NormalTok{)}
+\NormalTok{np.linalg.cond(A)}\OperatorTok{;}\NormalTok{ np.linalg.pinv(A)}
+\NormalTok{sp.Matrix(A).eigenvects()              }\CommentTok{\# SymPy 符号版}
 \end{Highlighting}
 \end{Shaded}
 
@@ -254,34 +319,7 @@ SVD & \texttt{np.linalg.svd}（注意 \texttt{S} 是向量） \\
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\section{A.5 动手例题（选做：手算 +
-验证）}\label{a.5-ux52a8ux624bux4f8bux9898ux9009ux505aux624bux7b97-ux9a8cux8bc1}
-
-\textbf{例 1：解方程组}。解 @BT@2x + y = 1@BT@、@BT@x + 2y =
-2@BT@。手算：由第一式 @BT@y = 1 - 2x@BT@ 代入第二式 @BT@x + 2(1-2x) =
-2@BT@ → @BT@-3x = 0@BT@ → @BT@x = 0@BT@，@BT@y =
-1@BT@。代码验证：@BT@np.linalg.solve({[}{[}2,1{]},{[}1,2{]}{]},
-{[}1,2{]}) = {[}0, 1{]}@BT@。
-
-\textbf{例 2：最小二乘的''投影直觉''}。数据 @BT@(0,1), (1,2), (2,3)@BT@
-明显在同一直线 @BT@y = x + 1@BT@ 上，最小二乘应还原出斜率 1、截距
-1。若把第 3 点改成 @BT@(2, 4)@BT@（有噪声），斜率会略大于
-1------因为解被''拉''向那个异常点。试试：
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
-\NormalTok{x }\OperatorTok{=}\NormalTok{ np.array([}\FloatTok{0.}\NormalTok{, }\FloatTok{1.}\NormalTok{, }\FloatTok{2.}\NormalTok{])}\OperatorTok{;}\NormalTok{ y }\OperatorTok{=}\NormalTok{ np.array([}\FloatTok{1.}\NormalTok{, }\FloatTok{2.}\NormalTok{, }\FloatTok{3.}\NormalTok{])}
-\NormalTok{A }\OperatorTok{=}\NormalTok{ np.vstack([x, np.ones\_like(x)]).T        }\CommentTok{\# 列：[x, 1]}
-\NormalTok{k, b }\OperatorTok{=}\NormalTok{ np.linalg.lstsq(A, y, rcond}\OperatorTok{=}\VariableTok{None}\NormalTok{)[}\DecValTok{0}\NormalTok{]}
-\BuiltInTok{print}\NormalTok{(k, b)                                   }\CommentTok{\# 1.0 1.0}
-\NormalTok{y2 }\OperatorTok{=}\NormalTok{ np.array([}\FloatTok{1.}\NormalTok{, }\FloatTok{2.}\NormalTok{, }\FloatTok{4.}\NormalTok{])}
-\BuiltInTok{print}\NormalTok{(np.linalg.lstsq(A, y2, rcond}\OperatorTok{=}\VariableTok{None}\NormalTok{)[}\DecValTok{0}\NormalTok{])  }\CommentTok{\# 斜率 \textgreater{} 1，被噪声拉偏}
-\end{Highlighting}
-\end{Shaded}
-
-\section{A.6 常见误区 +
-用在哪（双向）}\label{a.6-ux5e38ux89c1ux8befux533a-ux7528ux5728ux54eaux53ccux5411}
+\section{A.6 常见误区}\label{a.6-ux5e38ux89c1ux8befux533a}
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}ll@{}}
@@ -291,52 +329,149 @@ SVD & \texttt{np.linalg.svd}（注意 \texttt{S} 是向量） \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-\texttt{A\ *\ B} 当矩阵乘 & \texttt{*} 是逐元素；用 \texttt{A\ @\ B} \\
+\texttt{A\ *\ B} 当矩阵乘 & \texttt{*} 是逐元素；矩阵乘用
+\texttt{A\ @\ B} \\
 用 \texttt{inv(A)\ @\ b} & 用 \texttt{solve} / \texttt{lstsq} \\
 以为 \texttt{S} 是矩阵 & SVD 返回奇异值\textbf{向量}，需
 \texttt{np.diag(S)} \\
 忽略条件数 & 病态时解会''抖''，先看 \texttt{cond} \\
 非对称矩阵用 \texttt{eigh} & \texttt{eigh} 要求对称；否则用
 \texttt{eig} \\
+以为 \(\Sigma\) 全为正 & 非负奇异值；若出现 0
+说明有''压扁''方向（降秩） \\
 \end{longtable}
 }
 
-\textbf{使用章节（可点击）} \textbar{} 章 \textbar{} 哪里用到 \textbar{}
-链接 \textbar{} \textbar{} ---- \textbar{} ---- \textbar{} ----
-\textbar{} \textbar{} 1 NumPy \textbar{} 03 线性代数、05 SVD 压缩
-\textbar{} \href{../../chapters/01-numpy/03-线性代数.md}{正文}
-\textbar{} \textbar{} 2 SymPy \textbar{} 矩阵与特征值 \textbar{}
-\href{../../chapters/02-sympy/01-符号对象与基本运算.md}{正文} \textbar{}
-\textbar{} 3 SciPy \textbar{} 优化/插值中的矩阵 \textbar{}
-\href{../../chapters/03-scipy/02-优化工具包.md}{正文} \textbar{}
-\textbar{} 8 sklearn \textbar{} PCA/降维 \textbar{}
-\href{../../chapters/08-sklearn/03-无监督学习的案例.md}{正文} \textbar{}
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{A.7
+使用章节（双向）}\label{a.7-ux4f7fux7528ux7ae0ux8282ux53ccux5411}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+章
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+哪里用到
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+链接
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 NumPy & 03 线性代数、05 SVD 压缩 &
+\href{../../chapters/01-numpy/03-线性代数.md}{正文} \\
+2 SymPy & 矩阵与特征值 &
+\href{../../chapters/02-sympy/01-符号对象与基本运算.md}{正文} \\
+3 SciPy & 优化/插值中的矩阵 &
+\href{../../chapters/03-scipy/02-优化工具包.md}{正文} \\
+8 sklearn & PCA/降维 &
+\href{../../chapters/08-sklearn/03-无监督学习的案例.md}{正文} \\
+\end{longtable}
+}
 
 \textbf{下游衔接}：intro-mathmodel 第 1 章（Numpy 与线性代数）、第 3
 章（线性规划→非线性规划）。 \textbf{延伸阅读}：mml-book 第
 2\textasciitilde4 章、SciPy Lectures、numpy.linalg 官方文档（见
-\href{./references.md}{本目录 references.md}）。
+\href{./references.md}{references.md}）。
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\section{A.7 补充：特征值与 SVD 的 3
-个实际用途}\label{a.7-ux8865ux5145ux7279ux5f81ux503cux4e0e-svd-ux7684-3-ux4e2aux5b9eux9645ux7528ux9014}
+\section{A.10 常见考题与自查（考前 10
+分钟）}\label{a.10-ux5e38ux89c1ux8003ux9898ux4e0eux81eaux67e5ux8003ux524d-10-ux5206ux949f}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+会了吗？ & 考点 & 一句话答案 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+□ & det=0 意味着什么 & 列线性相关，变换压扁，不可逆 \\
+□ & 特征向量的几何含义 & 只被拉伸不改方向，拉伸倍数是特征值 \\
+□ & SVD 与 PCA 的关系 & 中心化后 SVD 的右奇异向量 = 主成分方向 \\
+□ & 条件数干什么 & 衡量解对输入扰动的敏感度 \\
+□ & 最小二乘的几何 & 把 b 投影到列空间，残差垂直列空间 \\
+□ & 为什么不用 (A\^{}T A)\^{}-1 & 会平方条件数，数值不稳 \\
+□ & 手算 2×2 特征值 & 特征多项式 det(A - λI) = 0 \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{A.9 综合案例：SVD
+图像压缩（串联全附录）}\label{a.9-ux7efcux5408ux6848ux4f8bsvd-ux56feux50cfux538bux7f29ux4e32ux8054ux5168ux9644ux5f55}
+
+\textbf{目标}：把一张灰度图当作矩阵 A，用 SVD 保留前 k
+个奇异值，观察压缩率与重构误差。
+
+完整流程：
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \textbf{收敛性判断（马尔可夫链/PageRank）}：状态转移矩阵的最大特征值决定系统是否收敛到稳态；PageRank
-  就是求转移矩阵最大特征值的特征向量（幂迭代）。
+  读灰度图 → 数值矩阵 A（m 行 n 列）；
 \item
-  \textbf{去噪与压缩（SVD）}：保留前 k 个奇异值 =
-  丢掉''不重要的方向''。对一张 100×100 的图，只保留前 10
-  个奇异值，视觉上几乎一样，但数据量从 10000 降到约 2100。
+  做薄 SVD：A = U S Vt（S 是奇异值向量）；
 \item
-  \textbf{求逆与最小二乘（伪逆）}：@BT@A\^{}+ =
-  VΣ\textsuperscript{\{-1\}U}T@BT@ 对任意矩阵（含奇异）都定义良好，是
-  @BT@lstsq@BT@ 的底层路径。
+  取前 k 个：A\_k = U{[}:, :k{]} @ diag(S{[}:k{]}) @ Vt{[}:k, :{]}；
+\item
+  比较：存储量从 m\emph{n 降到 k}(m+n)；误差 = 被丢弃奇异值的平方和。
 \end{enumerate}
 
-\textbf{一句话总结}：特征值/奇异值大小 =
-该方向的重要程度；``取前几个''就是''保留主要信息，丢弃噪声''。
+手算小例：2×2 矩阵 A = {[}{[}1,1{]},{[}1,-1{]}{]}，奇异值都是
+sqrt(2)。若保留 k=1：A\_1 = U1 * sqrt(2) *
+V1\^{}T，会丢掉''反对角信息''------对这张图来说信息全无，说明''前 k
+个''要按奇异值落差选。
+
+参考要点代码（四空格缩进可直接运行）：
+
+\begin{verbatim}
+import numpy as np, matplotlib.pyplot as plt
+A = np.random.default_rng(0).random((60, 60))
+U, S, Vt = np.linalg.svd(A, full_matrices=False)
+for k in [5, 15, 30]:
+    Ak = U[:, :k] @ np.diag(S[:k]) @ Vt[:k, :]
+    print(k, "MSE:", np.mean((A - Ak) ** 2), "压缩比:", A.size / (k * (A.shape[0] + A.shape[1])))
+\end{verbatim}
+
+\textbf{反思}：SVD
+是''数据驱动压缩''的数学核心；学完写一句结论：``奇异值大的方向 =
+主要信息；保留它们的低秩近似 = 最优压缩。''
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{A.8
+例题集（深入练习）}\label{a.8-ux4f8bux9898ux96c6ux6df1ux5165ux7ec3ux4e60}
+
+\textbf{例
+1：特征值代入法}。\(A=\begin{bmatrix}2&1\\1&2\end{bmatrix}\)，特征多项式
+\(\det(A-\lambda I)=\begin{vmatrix}2-\lambda&1\\1&2-\lambda\end{vmatrix}=(2-\lambda)^2-1=0\)，得
+\(\lambda=1,3\)。代入
+\(\lambda=3\)：\(\begin{bmatrix}-1&1\\1&-1\end{bmatrix}v=0\) →
+\(v=(1,1)\)。这就是''先求特征值、再解齐次方程组''的标准流程。
+
+\textbf{例 2：条件数实验（为什么不能直接求逆）}。构造接近奇异的
+\(A=\begin{bmatrix}1&1\\1&1.001\end{bmatrix}\)，条件数约 \(4000\)：\(b\)
+稍微变动，解差很大。代码：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{A }\OperatorTok{=}\NormalTok{ np.array([[}\FloatTok{1.}\NormalTok{, }\FloatTok{1.}\NormalTok{], [}\FloatTok{1.}\NormalTok{, }\FloatTok{1.001}\NormalTok{]])}
+\BuiltInTok{print}\NormalTok{(np.linalg.cond(A))          }\CommentTok{\# 约 4000（病态）}
+\NormalTok{b1 }\OperatorTok{=}\NormalTok{ np.array([}\FloatTok{1.}\NormalTok{, }\FloatTok{1.}\NormalTok{])}\OperatorTok{;}\NormalTok{ b2 }\OperatorTok{=}\NormalTok{ np.array([}\FloatTok{1.}\NormalTok{, }\FloatTok{1.00001}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(np.linalg.solve(A, b1), np.linalg.solve(A, b2))   }\CommentTok{\# 解差异大}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{例 3：SVD 压缩手算}。对
+\(A=\begin{bmatrix}1\\0\\0\\1\end{bmatrix}\)：奇异值 \(1,1\)，任意正交
+\(U,V\)。去掉一个奇异值得到零矩阵------说明''信息量全在奇异值里''。

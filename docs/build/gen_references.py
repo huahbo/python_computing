@@ -133,12 +133,13 @@ def main():
         if not items:
             lines.append("（暂无）")
             continue
-        lines.append("| 资料 | 链接 | 说明 | 用于 |")
-        lines.append("| ---- | ---- | ---- | ---- |")
+        lines.append("| 资料 | 说明 | 用于 |")
+        lines.append("| ---- | ---- | ---- |")
         for e in items:
-            desc = (e["desc"] or "").replace("|", "／")
+            desc = (e["desc"] or "").replace("|", "／").replace("[", "（").replace("]", "）")
             used = "、".join(e["srcs"])
-            lines.append(f"| {e['title']} | {e['url']} | {desc} | {used} |")
+            title = (e["title"] or "").replace("|", "／").replace("[", "（").replace("]", "）")
+            lines.append(f"| [{title}]({e['url']}) | {desc} | {used} |")
     lines.append("")
     lines.append("---")
     lines.append("")
