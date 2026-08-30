@@ -2,130 +2,244 @@
 \chapter{概率统计基础}\label{ux6982ux7387ux7edfux8ba1ux57faux7840}
 
 \begin{quote}
-一句话：概率给''不确定性''建模，统计从数据里''猜''出规律。本附录覆盖描述统计、常用分布、推断（检验/置信区间）、回归与时间序列。
+一句话：概率给''不确定性''建模，统计从数据里''猜''规律。本附录把第 4 章
+Pandas 的描述统计、第 7 章 Statsmodels 的回归/时序，以及第 0
+章成绩统计背后的数学讲清楚。
 \end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \section{C.1
-直觉与描述统计}\label{c.1-ux76f4ux89c9ux4e0eux63cfux8ff0ux7edfux8ba1}
+直觉故事：为什么不能只看平均分}\label{c.1-ux76f4ux89c9ux6545ux4e8bux4e3aux4ec0ux4e48ux4e0dux80fdux53eaux770bux5e73ux5747ux5206}
+
+假设两个班的平均分都是 75。甲班成绩清一色 74\textasciitilde76，乙班一半
+50 分一半 100 分------平均分相同，但乙班的''不确定性''大得多。
+
+所以描述数据至少要看两件事：\textbf{中心（用什么代表）} 和
+\textbf{离散（数据有多散）}，最好再看\textbf{形状（分布）}。
 
 \begin{itemize}
 \tightlist
 \item
-  \textbf{随机变量}：取值带概率的变量。期望 \texttt{E{[}X{]}} =
-  中心位置；方差 \texttt{Var(X)\ =\ E{[}(X-E{[}X{]})²{]}} = 分散程度。
+  均值 \texttt{x̄\ =\ (1/n)Σ\ x\_i}：常见但\textbf{怕极端值}；
 \item
-  \textbf{样本统计量}：从数据算出来的''估计''------均值、中位数、标准差、分位数、相关系数。
+  中位数：排序中间值，稳健；
 \item
-  \textbf{为什么先看分布}：均值会被极端值拉偏；分布形状（偏斜/厚尾）决定该用哪种方法。
+  标准差 \texttt{s\ =\ sqrt(Σ(x\_i\ -\ x̄)²\ /\ (n-1))}：离散程度；
+\item
+  分位数/箱线图：看分布尾巴、离群点。
 \end{itemize}
-
-常用量速查：
-
-{\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
-\toprule\noalign{}
-量 & 定义 & 说明 \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-均值 \texttt{μ\^{}\ =\ (1/n)Σx\_i} & 集中趋势 & 受异常值影响 \\
-中位数 & 排序中间值 & 稳健 \\
-方差/标准差 & \texttt{s²\ =\ Σ(x\_i\ -\ x̄)²/(n-1)} & 离散程度（样本用
-n-1） \\
-协方差/相关 & \texttt{Cov(X,Y)}、\texttt{ρ\ =\ Cov/(σx\ σy)} &
-线性相关方向/强度 \\
-分位数 & 排序后百分比位置 & Q1/Q3/IQR（箱线图） \\
-\end{longtable}
-}
-
-\section{C.2
-常用分布速查}\label{c.2-ux5e38ux7528ux5206ux5e03ux901fux67e5}
-
-{\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
-\toprule\noalign{}
-分布 & 记号 & 用在哪 \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-正态 & \texttt{N(μ,\ σ²)} & 近似很多现象；中心极限定理的主角 \\
-二项 & \texttt{B(n,\ p)} & 成功/失败次数 \\
-泊松 & \texttt{Poisson(λ)} & 一段时间内事件数 \\
-均匀 & \texttt{U(a,\ b)} & 随机数/先验 \\
-t / F / χ² & \texttt{t(n)}, \texttt{F}, \texttt{χ²} &
-小样本推断/方差分析 \\
-\end{longtable}
-}
 
 \begin{quote}
-\textbf{中心极限定理}：大量独立同分布随机变量的均值，近似正态分布------这是很多统计方法（包括回归的置信区间）的底气。
+\textbf{正文见}：\href{../../chapters/00-prep/00-07-综合案例.md}{0
+前置基础 · 07
+综合案例}（成绩统计）、\href{../../chapters/04-pandas/01-基础数据结构.md}{4
+Pandas · 01 基础数据结构}。
 \end{quote}
 
-\section{C.3
-统计推断：检验与置信区间}\label{c.3-ux7edfux8ba1ux63a8ux65adux68c0ux9a8cux4e0eux7f6eux4fe1ux533aux95f4}
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{C.2
+随机变量与分布（讲解）}\label{c.2-ux968fux673aux53d8ux91cfux4e0eux5206ux5e03ux8bb2ux89e3}
+
+\subsection{C.2.1
+期望与方差}\label{c.2.1-ux671fux671bux4e0eux65b9ux5dee}
 
 \begin{itemize}
 \tightlist
 \item
-  \textbf{参数估计}：点估计（均值）→
-  区间估计（置信区间：\texttt{x̄\ ±\ t\_\{α/2\}·s/√n}）。
+  \textbf{期望 \texttt{E{[}X{]}\ =\ Σ\ x·p(x)}}：长期平均。掷骰子，期望
+  \texttt{3.5}，尽管它从不会''等于 3.5''------期望是''中心的裁判''。
 \item
-  \textbf{假设检验}：先立原假设 \texttt{H0}（如''均值=0''），看数据在
-  \texttt{H0} 下多''极端''（p 值）；\texttt{p\ \textless{}\ 0.05} → 拒绝
-  \texttt{H0}。
+  \textbf{方差
+  \texttt{Var(X)\ =\ E{[}(X\ -\ E{[}X{]})²{]}}}：偏离平方的平均；标准差是回到原始量纲。
 \item
-  \textbf{两类错误}：第一类（误拒，α）、第二类（漏拒，β）；功效 = 1-β。
-\item
-  \textbf{常见检验}：t
-  检验（均值）、卡方（拟合/列联）、F/ANOVA（多组均值）、KS（分布）。
-\item
-  \textbf{重要提醒}：p 值小 ≠ 实际重要；报告效应量 + 置信区间。
+  常用口诀：\texttt{Var(X)\ =\ E{[}X²{]}\ -\ (E{[}X{]})²}（手算方便）。
 \end{itemize}
 
-\section{C.4
-回归与方差分析（建模视角）}\label{c.4-ux56deux5f52ux4e0eux65b9ux5deeux5206ux6790ux5efaux6a21ux89c6ux89d2}
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{线性回归}：\texttt{y\ =\ β0\ +\ β1x1\ +\ …\ +\ ε}；OLS
-  最小化残差平方和（附录 A 最小二乘）。
-\item
-  \textbf{假设}：线性、独立、同方差、正态（对推断）；违背时用稳健标准误/变换。
-\item
-  \textbf{\texttt{R²}}：解释变量能解释的变异比例（\texttt{R²\ =\ 1\ -\ SSE/SST}），过大要提防过拟合。
-\item
-  \textbf{ANOVA}：检验多个组的均值是否相等（\texttt{F}
-  检验，组间方差/组内方差）。
-\item
-  \textbf{逻辑回归}：把线性预测过 sigmoid
-  映射成概率：\texttt{P(y=1)\ =\ σ(β\^{}T\ x)}；损失用交叉熵（与附录 E
-  衔接）。
-\end{itemize}
-
-\section{C.5
-时间序列基础}\label{c.5-ux65f6ux95f4ux5e8fux5217ux57faux7840}
+\subsection{C.2.2 常用分布}\label{c.2.2-ux5e38ux7528ux5206ux5e03}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
+\begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
-概念 & 直觉 & 常用工具 \\
+分布 & 记号 & 直觉 & 典型场景 \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-平稳性 & 统计特性不随时间漂移 & 单位根检验（ADF） \\
-自相关/ACF & 与过去的相关 & 确定滞后阶数 \\
-差分 & \texttt{y\_t\ -\ y\_\{t-1\}} 消除趋势 & 转平稳 \\
-移动平均/平滑 & 去噪/看趋势 & \texttt{rolling} \\
-分解 & 趋势 + 季节 + 残差 & \texttt{seasonal\_decompose} \\
-ARIMA & AR（自回归）+ I（差分）+ MA（移动平均误差） & 预测/理解 \\
+正态 & \texttt{N(μ,\ σ²)} & 对称、钟形 &
+测量误差、均值近似（中心极限定理） \\
+二项 & \texttt{B(n,\ p)} & n 次独立试验成功次数 & 点击率、产品质量 \\
+泊松 & \texttt{Poisson(λ)} & 单位时间事件数 & 订单到达、故障次数 \\
+均匀 & \texttt{U(a,b)} & 等概率 & 随机数生成、先验 \\
+t / F / χ² & \texttt{t(n)} 等 & 小样本/方差比 & 检验、ANOVA \\
 \end{longtable}
 }
 
-\section{C.6 Python 对应}\label{c.6-python-ux5bf9ux5e94}
+\textbf{中心极限定理}（一定要记住）：大量独立同分布变量的\textbf{均值}近似正态，与原始分布无关。这解释了为什么''n
+越大，样本均值越稳''，也是回归置信区间、t 检验的依据。
+
+\subsection{C.2.3
+协方差与相关}\label{c.2.3-ux534fux65b9ux5deeux4e0eux76f8ux5173}
+
+\begin{itemize}
+\tightlist
+\item
+  协方差 \texttt{Cov(X,Y)}：两个变量是否''同向变化''（数值与量纲有关）；
+\item
+  相关系数 \texttt{ρ\ =\ Cov\ /\ (σx·σy)}：归一化到
+  \texttt{{[}-1,\ 1{]}}。\texttt{ρ≈1} 强正相关；\texttt{0}
+  不线性相关（注意：可能还有非线性关系！）。
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{C.3
+统计推断：从样本到结论（讲解）}\label{c.3-ux7edfux8ba1ux63a8ux65adux4eceux6837ux672cux5230ux7ed3ux8bbaux8bb2ux89e3}
+
+\subsection{C.3.1
+参数估计与置信区间}\label{c.3.1-ux53c2ux6570ux4f30ux8ba1ux4e0eux7f6eux4fe1ux533aux95f4}
+
+\begin{itemize}
+\tightlist
+\item
+  点估计：用样本统计量猜总体参数（如 \texttt{x̄} 估计 \texttt{μ}）。
+\item
+  区间估计：给出一个范围并说明''可信度''。均值置信区间：
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x̄ ± t\_\{α/2, n{-}1\} · s/√n}
+\end{Highlighting}
+\end{Shaded}
+
+直觉：\texttt{s/√n} 是标准误（``平均值的抖动范围''），乘上 t
+分位数就得到区间宽度。样本越大、标准差越小，区间越窄------这就是''数据越多越确信''的数学表达。
+
+\subsection{C.3.2 假设检验：p
+值到底在说什么}\label{c.3.2-ux5047ux8bbeux68c0ux9a8cp-ux503cux5230ux5e95ux5728ux8bf4ux4ec0ux4e48}
+
+流程： 1. 立原假设 \texttt{H0}（例如''两种教学法平均成绩无差异''）； 2.
+选统计量（\texttt{t}、\texttt{F}、\texttt{χ²}\ldots）； 3. 算 \textbf{p
+值}：在 \texttt{H0} 成立的假设下，看到''这么极端或更极端''数据的概率；
+4. 约定 \texttt{α\ =\ 0.05}：\texttt{p\ \textless{}\ 0.05} 就拒绝
+\texttt{H0}（但\textbf{不等于}''H0 被证伪''或''差异很大''）。
+
+\textbf{常见检验速查} \textbar{} 检验 \textbar{} 回答的问题 \textbar{}
+\textbar{} ---- \textbar{} ---- \textbar{} \textbar{} 单样本 t / 双样本
+t \textbar{} 均值是否等于/不同 \textbar{} \textbar{} 卡方 \textbar{}
+分类是否拟合、组间是否独立 \textbar{} \textbar{} ANOVA (F) \textbar{}
+多组均值是否全相等 \textbar{} \textbar{} KS \textbar{} 分布形状是否一致
+\textbar{}
+
+\begin{quote}
+\textbf{正文见}：\href{../../chapters/03-scipy/04-假设检验工具包.md}{3
+SciPy · 04
+假设检验工具包}、\href{../../chapters/07-statsmodels/01-方差分析与回归.md}{7
+Statsmodels · 01 方差分析与回归}。
+\end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{C.4
+回归与方差分析：建模视角（讲解）}\label{c.4-ux56deux5f52ux4e0eux65b9ux5deeux5206ux6790ux5efaux6a21ux89c6ux89d2ux8bb2ux89e3}
+
+\subsection{C.4.1
+线性回归是''换了个视角的最小二乘''}\label{c.4.1-ux7ebfux6027ux56deux5f52ux662fux6362ux4e86ux4e2aux89c6ux89d2ux7684ux6700ux5c0fux4e8cux4e58}
+
+模型：\texttt{y\ =\ β0\ +\ β1\ x1\ +\ …\ +\ βk\ xk\ +\ ε}。OLS（普通最小二乘）就是求使残差平方和最小的系数------数学上正是附录
+A 的最小二乘 \texttt{β\^{}\ =\ (X\^{}T\ X)\^{}\{-1\}\ X\^{}T\ y}。
+
+要讲清楚的假设（对推断重要）： -
+\textbf{线性}（模型形式）、\textbf{独立}（样本间无系统性相关）、\textbf{同方差}（残差波动均匀）、\textbf{正态性}（残差近似正态）；
+- 违背时：用稳健标准误、变换、加权或改用其他模型。
+
+\subsection{C.4.2
+好模型看什么}\label{c.4.2-ux597dux6a21ux578bux770bux4ec0ux4e48}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{R²\ =\ 1\ -\ SSE/SST}：解释的比例（越高越好，但过高要警惕过拟合）；
+\item
+  \textbf{系数符号与大小}：实际含义（``每多 1 单位 x，y 平均变化 β''）；
+\item
+  \textbf{p 值/置信区间}：这个系数''是否显著不为 0''；
+\item
+  \textbf{残差图}：是否有趋势/异方差（比 R² 更诚实）。
+\end{itemize}
+
+手算小例子：数据 \texttt{(1,2),\ (2,4),\ (3,7)}，用一元回归算出的斜率约
+\texttt{2.5}、截距约 \texttt{-0.5}------意思是''x 每加 1，y 平均加
+2.5''（目测与数据一致）。
+
+\subsection{C.4.3
+ANOVA：多组到底有没有差异}\label{c.4.3-anovaux591aux7ec4ux5230ux5e95ux6709ux6ca1ux6709ux5deeux5f02}
+
+ANOVA 检验
+\texttt{H0:\ μ1\ =\ μ2\ =\ …\ =\ μk}，看的是\textbf{组间方差}与\textbf{组内方差}之比
+\texttt{F}。F 大说明''组之间比组内随机波动更明显''。
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{C.5
+时间序列：和''普通回归''有什么不同（讲解）}\label{c.5-ux65f6ux95f4ux5e8fux5217ux548cux666eux901aux56deux5f52ux6709ux4ec0ux4e48ux4e0dux540cux8bb2ux89e3}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+概念 & 直觉 & 工具 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+平稳性 & 统计特性（均值/方差）不随时间漂移 & ADF 单位根检验 \\
+自相关 ACF & ``现在''和''过去''的相关 & 判断 AR 阶数 \\
+差分 & \texttt{y\_t\ -\ y\_\{t-1\}} & 消除趋势/转平稳 \\
+移动平均/滚动 & 局部平均去噪 & \texttt{rolling} \\
+分解 & 趋势 + 季节 + 残差 & \texttt{seasonal\_decompose} \\
+ARIMA & AR（自回归）+ 差分 + MA & 预测/理解 \\
+\end{longtable}
+}
+
+关键区别：\textbf{时序不能当普通独立样本}------相邻点常相关，因此要先检验平稳性、看自相关，再用
+ARIMA 等专门模型；否则回归的 p 值可能''虚假显著''。
+
+\begin{quote}
+\textbf{正文见}：\href{../../chapters/07-statsmodels/02-时间序列预测.md}{7
+Statsmodels · 02
+时间序列预测}、\href{../../chapters/04-pandas/02-数据分析.md}{4 Pandas ·
+02 数据分析}。
+\end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{C.6 动手例题（选做：手算 +
+验证）}\label{c.6-ux52a8ux624bux4f8bux9898ux9009ux505aux624bux7b97-ux9a8cux8bc1}
+
+\textbf{例：均值、标准差与置信区间}。样本 @BT@{[}68, 91, 55, 76,
+88{]}@BT@： - 均值 @BT@(68+91+55+76+88)/5 = 75.6@BT@； - 样本标准差（用
+n-1）约 @BT@14.0@BT@； - 95\% 置信区间：@BT@75.6 ± t\_\{0.025,4\} ×
+14.0/√5 ≈ 75.6 ± 17.4@BT@ → 约 @BT@{[}58.2,
+93.0{]}@BT@（区间很宽，因为样本只有 5 个）。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{from}\NormalTok{ scipy }\ImportTok{import}\NormalTok{ stats}
+\NormalTok{x }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{68}\NormalTok{, }\DecValTok{91}\NormalTok{, }\DecValTok{55}\NormalTok{, }\DecValTok{76}\NormalTok{, }\DecValTok{88}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(x.mean(), x.std(ddof}\OperatorTok{=}\DecValTok{1}\NormalTok{))}
+\NormalTok{stats.t.interval(}\FloatTok{0.95}\NormalTok{, df}\OperatorTok{=}\BuiltInTok{len}\NormalTok{(x)}\OperatorTok{{-}}\DecValTok{1}\NormalTok{, loc}\OperatorTok{=}\NormalTok{x.mean(), scale}\OperatorTok{=}\NormalTok{stats.sem(x))}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{例：相关性≠因果}。@BT@x = 1..10@BT@，@BT@y = x + 随机噪声@BT@
+相关系数接近 1，但若另有 @BT@z = 城市规模@BT@ 同时影响 x、y，则 x、y
+的''高相关''可能只是共同原因造成------所以建模时要控制混杂变量。
+
+\section{C.7 Python
+对应（速查）}\label{c.7-python-ux5bf9ux5e94ux901fux67e5}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -133,60 +247,102 @@ ARIMA & AR（自回归）+ I（差分）+ MA（移动平均误差） & 预测/�
 \ImportTok{from}\NormalTok{ scipy }\ImportTok{import}\NormalTok{ stats}
 
 \NormalTok{x }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{68}\NormalTok{, }\DecValTok{91}\NormalTok{, }\DecValTok{55}\NormalTok{, }\DecValTok{76}\NormalTok{, }\DecValTok{88}\NormalTok{])}
-\BuiltInTok{print}\NormalTok{(np.mean(x), np.std(x, ddof}\OperatorTok{=}\DecValTok{1}\NormalTok{), np.percentile(x, }\DecValTok{75}\NormalTok{))}
+\NormalTok{np.mean(x)}\OperatorTok{;}\NormalTok{ np.median(x)}\OperatorTok{;}\NormalTok{ np.std(x, ddof}\OperatorTok{=}\DecValTok{1}\NormalTok{)}\OperatorTok{;}\NormalTok{ np.percentile(x, [}\DecValTok{25}\NormalTok{, }\DecValTok{75}\NormalTok{])}
+\NormalTok{pd.Series(x).describe()}
 
-\CommentTok{\# 单样本 t 检验}
-\NormalTok{stats.ttest\_1samp(x, }\DecValTok{60}\NormalTok{)}
+\NormalTok{stats.ttest\_1samp(x, }\DecValTok{60}\NormalTok{)          }\CommentTok{\# 单样本 t 检验}
+\NormalTok{stats.chisquare([}\DecValTok{10}\NormalTok{, }\DecValTok{20}\NormalTok{, }\DecValTok{30}\NormalTok{])      }\CommentTok{\# 卡方拟合}
 
-\CommentTok{\# 线性回归}
-\NormalTok{X }\OperatorTok{=}\NormalTok{ sm.add\_constant(np.array([}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\FloatTok{5.}\NormalTok{]))}
-\NormalTok{model }\OperatorTok{=}\NormalTok{ sm.OLS(np.array([}\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{9}\NormalTok{]), X).fit()}
-\BuiltInTok{print}\NormalTok{(model.summary())   }\CommentTok{\# 看 coef / p / R²}
+\NormalTok{X }\OperatorTok{=}\NormalTok{ sm.add\_constant(np.array([[}\FloatTok{1.}\NormalTok{,}\FloatTok{2.}\NormalTok{],[}\FloatTok{2.}\NormalTok{,}\FloatTok{4.}\NormalTok{],[}\FloatTok{3.}\NormalTok{,}\FloatTok{7.}\NormalTok{]]))}
+\NormalTok{model }\OperatorTok{=}\NormalTok{ sm.OLS(np.array([}\FloatTok{2.}\NormalTok{,}\FloatTok{4.}\NormalTok{,}\FloatTok{7.}\NormalTok{]), X).fit()}
+\NormalTok{model.summary()                    }\CommentTok{\# coef / p / R² / F}
 
-\CommentTok{\# 时间序列分解}
 \ImportTok{from}\NormalTok{ statsmodels.tsa.seasonal }\ImportTok{import}\NormalTok{ seasonal\_decompose}
 \NormalTok{df }\OperatorTok{=}\NormalTok{ pd.read\_csv(}\StringTok{"data.csv"}\NormalTok{, index\_col}\OperatorTok{=}\DecValTok{0}\NormalTok{, parse\_dates}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 \NormalTok{seasonal\_decompose(df[}\StringTok{"sales"}\NormalTok{], model}\OperatorTok{=}\StringTok{"additive"}\NormalTok{).plot()}
 \end{Highlighting}
 \end{Shaded}
 
-\section{C.7 常见误区}\label{c.7-ux5e38ux89c1ux8befux533a}
-
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\begin{longtable}[]{@{}ll@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-误区
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-正确
-\end{minipage} \\
+你想要 & 用哪个 \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-p 值小 = 影响大 & p 值是''在 H0
-下看到这个数据的概率''，与效应量是两回事 \\
-忽视样本量 & 样本大时微小差异也显著；看置信区间宽度 \\
-用均值代替看分布 & 先画直方图/箱线图 \\
-非平稳直接回归 & 时序先检验平稳性/差分 \\
-把相关系数当因果 & 相关 ≠ 因果 \\
+描述统计 & \texttt{Series.describe()} \\
+分布检验 & \texttt{scipy.stats} \\
+回归/ANOVA & \texttt{statsmodels.OLS\ /\ ols} \\
+时序分解 & \texttt{seasonal\_decompose} \\
+ARIMA & \texttt{statsmodels.tsa.arima.model.ARIMA} \\
 \end{longtable}
 }
 
-\section{C.8
-使用章节与下游衔接}\label{c.8-ux4f7fux7528ux7ae0ux8282ux4e0eux4e0bux6e38ux8854ux63a5}
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\begin{itemize}
+\section{C.8 常见误区 +
+用在哪（双向）}\label{c.8-ux5e38ux89c1ux8befux533a-ux7528ux5728ux54eaux53ccux5411}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+误区 & 正确 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+p 值小 = 影响大 & p 值与效应量是两回事；报告置信区间 + 效应量 \\
+只看均值 & 先画直方图/箱线图看分布 \\
+非平稳直接回归 & 先 ADF/差分；否则 p 值失真 \\
+相关系数当因果 & 相关 ≠ 因果 \\
+样本小也硬用正态近似 & 小样本用小样本检验/重抽样 \\
+\end{longtable}
+}
+
+\textbf{使用章节（可点击）} \textbar{} 章 \textbar{} 哪里用到 \textbar{}
+链接 \textbar{} \textbar{} ---- \textbar{} ---- \textbar{} ----
+\textbar{} \textbar{} 0 前置基础 \textbar{} 成绩统计 \textbar{}
+\href{../../chapters/00-prep/00-07-综合案例.md}{07 综合案例} \textbar{}
+\textbar{} 4 Pandas \textbar{} 分组聚合/描述统计 \textbar{}
+\href{../../chapters/04-pandas/01-基础数据结构.md}{01 基础数据结构}
+\textbar{} \textbar{} 7 Statsmodels \textbar{} 回归/ANOVA/时序
+\textbar{} \href{../../chapters/07-statsmodels/01-方差分析与回归.md}{01
+方差分析与回归} \textbar{} \textbar{} 3 SciPy \textbar{} 假设检验
+\textbar{} \href{../../chapters/03-scipy/04-假设检验工具包.md}{04
+假设检验工具包} \textbar{}
+
+\textbf{下游衔接}：intro-mathmodel 第 7 章（权重/评价）、第 8
+章（时间序列）、第 9 章（机器学习统计模型）。
+\textbf{延伸阅读}：statsmodels
+官方文档、ThinkStats2、《概率论与数理统计》（见
+\href{./references.md}{references.md}）。
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{C.9
+补充：假设检验实操清单}\label{c.9-ux8865ux5145ux5047ux8bbeux68c0ux9a8cux5b9eux64cdux6e05ux5355}
+
+做检验前按这个清单走，能避开 80\% 的坑：
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  章节：0 前置基础（成绩统计）、4 Pandas（分组聚合/描述统计）、7
-  Statsmodels（回归/ANOVA/时序）、3 SciPy（假设检验）；
+  \textbf{问题类型}：比较均值？比较分布？多组？时序？→ 选 t / 卡方 /
+  ANOVA / KS / ADF；
 \item
-  下游：intro-mathmodel 第 7 章（权重生成与评价模型）、第 8
-  章（时间序列与投资模型）、第 9 章（机器学习与统计模型）；
+  \textbf{样本独立性}：同一批人前后测 → 配对检验，不是独立样本 t；
 \item
-  参考：statsmodels 官方文档、ThinkStats2、中文《概率论与数理统计》（见
-  references.md）。
-\end{itemize}
+  \textbf{正态性}：小样本看 QQ 图 / Shapiro 检验；明显偏态用非参数（如
+  Mann-Whitney）或自助法；
+\item
+  \textbf{多重比较}：一次做 20 次检验 → 用 Bonferroni / FDR
+  校正，否则''显著''可能是运气；
+\item
+  \textbf{报告}：给出 @BT@p@BT@ 值 + 效应量 + 置信区间，不单独报
+  ``p\textless0.05''。
+\end{enumerate}
+
+\textbf{一句话总结}：检验是''给结论找证据''，证据强度看效应量与区间宽度，不只看
+p 值。

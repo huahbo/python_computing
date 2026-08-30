@@ -2,11 +2,16 @@
 \chapter{通用数学与算法速查}\label{ux901aux7528ux6570ux5b66ux4e0eux7b97ux6cd5ux901fux67e5}
 
 \begin{quote}
-一句话：一个''随手翻''的符号/公式/复杂度/数值稳定性卡片，供所有章节与期末大作业复用。
+本附录是''随手翻''的卡片：常用记号、公式、复杂度、数值稳定性、可视化原则。它服务所有章节；建议上机前翻
+5 分钟，期末大作业前完整过一遍。
 \end{quote}
 
-\section{F.1
-常用记号与希腊字母}\label{f.1-ux5e38ux7528ux8bb0ux53f7ux4e0eux5e0cux814aux5b57ux6bcd}
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{F.1 常用记号与希腊字母（讲解 +
+速查）}\label{f.1-ux5e38ux7528ux8bb0ux53f7ux4e0eux5e0cux814aux5b57ux6bcdux8bb2ux89e3-ux901fux67e5}
+
+数学里很多''看不懂''来自记号。先把它们认熟：
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lllll@{}}
@@ -17,8 +22,7 @@
 \bottomrule\noalign{}
 \endlastfoot
 \texttt{Σ} & 求和 & & \texttt{∏} & 连乘 \\
-\texttt{E{[}X{]}} / \texttt{Var(X)} & 期望/方差 & & \texttt{σ} &
-标准差 \\
+\texttt{E{[}X{]}} & 期望 & & \texttt{Var(X)} & 方差 \\
 \texttt{x\^{}T} & 转置 & & \texttt{grad\ f} & 梯度 \\
 \texttt{∂f/∂x} & 偏导 & & \texttt{∫} & 积分 \\
 \texttt{λ} & 特征值/正则强度 & & \texttt{α} & 学习率 \\
@@ -27,7 +31,12 @@
 \end{longtable}
 }
 
-\section{F.2 常用公式卡}\label{f.2-ux5e38ux7528ux516cux5f0fux5361}
+\textbf{读公式的口诀}：先找''求和/连乘''的范围，再看''指数/对数''在谁身上，最后看变量是矩阵还是标量。
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{F.2
+常用公式卡（速查）}\label{f.2-ux5e38ux7528ux516cux5f0fux5361ux901fux67e5}
 
 \subsection{微积分}\label{ux5faeux79efux5206}
 
@@ -36,9 +45,9 @@
 \item
   \texttt{(x\^{}n)\textquotesingle{}\ =\ n\ x\^{}\{n-1\}}；\texttt{(e\^{}x)\textquotesingle{}\ =\ e\^{}x}；\texttt{(ln\ x)\textquotesingle{}\ =\ 1/x}
 \item
-  泰勒：\texttt{f(x+h)\ ≈\ f(x)\ +\ f\textquotesingle{}(x)\ h\ +\ f\textquotesingle{}\textquotesingle{}(x)\ h²/2}
+  泰勒：\texttt{f(x+h)\ ≈\ f(x)\ +\ f\textquotesingle{}(x)h\ +\ f\textquotesingle{}\textquotesingle{}(x)h²/2}
 \item
-  数值微分（中心差分）：\texttt{f\textquotesingle{}(x)\ ≈\ (f(x+h)-f(x-h))/(2h)}
+  数值微分（中心差分）：\texttt{f\textquotesingle{}(x)\ ≈\ (f(x+h)\ -\ f(x-h))\ /\ (2h)}
 \end{itemize}
 
 \subsection{线性代数}\label{ux7ebfux6027ux4ee3ux6570}
@@ -46,13 +55,12 @@
 \begin{itemize}
 \tightlist
 \item
-  \texttt{A\^{}T}
-  转置；\texttt{(AB)\^{}T\ =\ B\^{}T\ A\^{}T}；\texttt{tr(AB)\ =\ tr(BA)}
+  \texttt{(AB)\^{}T\ =\ B\^{}T\ A\^{}T}；\texttt{tr(AB)\ =\ tr(BA)}
 \item
-  最小二乘：\texttt{x\^{}\ =\ (A\^{}T\ A)\^{}\{-1\}\ A\^{}T\ b}（投影；数值上用
+  最小二乘：\texttt{x\^{}\ =\ (A\^{}T\ A)\^{}\{-1\}\ A\^{}T\ b}（数值上多用
   \texttt{lstsq}）
 \item
-  SVD：\texttt{A\ =\ UΣV\^{}T}；对称矩阵 \texttt{A\ =\ QΛQ\^{}T}
+  SVD：\texttt{A\ =\ UΣV\^{}T}；对称矩阵：\texttt{A\ =\ QΛQ\^{}T}
 \end{itemize}
 
 \subsection{概率统计}\label{ux6982ux7387ux7edfux8ba1}
@@ -62,11 +70,11 @@
 \item
   \texttt{E{[}X{]}\ =\ Σ\ x\ p(x)}；\texttt{Var(X)\ =\ E{[}X²{]}\ -\ (E{[}X{]})²}
 \item
-  样本方差：\texttt{s²\ =\ Σ(x\_i\ -\ x̄)²/(n-1)}
+  样本方差：\texttt{s²\ =\ Σ(x\_i\ -\ x̄)²\ /\ (n-1)}
 \item
   置信区间：\texttt{x̄\ ±\ t\_\{α/2,\ n-1\}\ ·\ s/√n}
 \item
-  线性回归：\texttt{y\ =\ Xβ\ +\ ε}；\texttt{β\^{}\ =\ (X\^{}T\ X)\^{}\{-1\}\ X\^{}T\ y}；\texttt{R²\ =\ 1\ -\ SSE/SST}
+  线性回归：\texttt{y\ =\ Xβ\ +\ ε}，\texttt{β\^{}\ =\ (X\^{}T\ X)\^{}\{-1\}\ X\^{}T\ y}，\texttt{R²\ =\ 1\ -\ SSE/SST}
 \end{itemize}
 
 \subsection{机器学习}\label{ux673aux5668ux5b66ux4e60}
@@ -74,8 +82,8 @@
 \begin{itemize}
 \tightlist
 \item
-  逻辑回归（sigmoid）：\texttt{p\ =\ 1/(1+e\^{}\{-θ\^{}T\ x\})}；损失 =
-  交叉熵
+  逻辑回归（sigmoid）：\texttt{p\ =\ 1\ /\ (1\ +\ e\^{}\{-θ\^{}T\ x\})}；损失
+  = 交叉熵
 \item
   梯度下降：\texttt{θ\ ←\ θ\ -\ α·grad\ L}
 \item
@@ -84,8 +92,12 @@
   \texttt{L\ +\ λ\textbar{}\textbar{}θ\textbar{}\textbar{}₁}
 \end{itemize}
 
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
 \section{F.3
-复杂度与常用算法量级}\label{f.3-ux590dux6742ux5ea6ux4e0eux5e38ux7528ux7b97ux6cd5ux91cfux7ea7}
+复杂度与常用算法量级（速查）}\label{f.3-ux590dux6742ux5ea6ux4e0eux5e38ux7528ux7b97ux6cd5ux91cfux7ea7ux901fux67e5}
+
+为什么''能算''和''算得动''是两回事？看复杂度。
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lll@{}}
@@ -95,70 +107,139 @@
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-矩阵乘 \texttt{(n×n)} & \texttt{O(n³)} & 分治可略快；向量化库已优化 \\
-解方程组（LU） & \texttt{O(n³)} & 避免显式求逆 \\
-特征分解/SVD & 约 \texttt{O(n³)} & 只求前 k 个可加速 \\
+矩阵乘/解方程组（n×n） & \texttt{O(n³)} &
+向量化库已优化；避免显式求逆 \\
+特征分解 / SVD & 约 \texttt{O(n³)} & 只求前 k 个可加速 \\
 FFT & \texttt{O(N\ log\ N)} & 比直接 DFT 的 \texttt{O(N²)} 快得多 \\
-Dijkstra & \texttt{O((V+E)\ log\ V)}（堆） & 稠密/稀疏均可用 \\
-最小生成树 & \texttt{O(E\ log\ E)} & Kruskal \\
+Dijkstra & \texttt{O((V+E)\ log\ V)} & 用堆实现 \\
+最小生成树（Kruskal） & \texttt{O(E\ log\ E)} & 排序为主 \\
 k-Means 一次迭代 & \texttt{O(n·k·d)} & 与样本数线性 \\
-Python 纯循环 & 慢 & 用 NumPy 向量化（广播） \\
+Python 纯循环 & 慢 & 用 NumPy 向量化/广播 \\
 \end{longtable}
 }
 
+\textbf{实践建议}：先写对，再量（\texttt{\%timeit}）；大数据用向量化，循环只在必要时。
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
 \section{F.4
-数值稳定性（科学计算必修）}\label{f.4-ux6570ux503cux7a33ux5b9aux6027ux79d1ux5b66ux8ba1ux7b97ux5fc5ux4fee}
+数值稳定性（科学计算必修，讲解）}\label{f.4-ux6570ux503cux7a33ux5b9aux6027ux79d1ux5b66ux8ba1ux7b97ux5fc5ux4feeux8bb2ux89e3}
+
+浮点数是有限精度的（约 15\textasciitilde16
+位有效小数），所以''数学上对''的公式在电脑上可能''崩''：
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \textbf{浮点误差}：\texttt{1e-16} 量级；比较用 \texttt{np.isclose} /
+  \textbf{比较}：别用 \texttt{==} 比浮点；用 \texttt{np.isclose} /
   \texttt{abs(a-b)\ \textless{}\ 1e-9}。
 \item
-  \textbf{条件数}：矩阵条件数大（病态）时，输入微小变化导致解剧变；先看
-  \texttt{np.linalg.cond(A)}。
+  \textbf{条件数}：\texttt{np.linalg.cond(A)} 大 →
+  病态，解对输入过敏；优先看它再''硬解''。
 \item
-  \textbf{避免灾难性消去}：\texttt{sqrt(x²+1)\ -\ x} 当 x 很大；改用
-  \texttt{1/(sqrt(x²+1)+x)}。
+  \textbf{灾难性消去}：\texttt{sqrt(x²+1)\ -\ x} 在大 \texttt{x}
+  时相减丢精度，改写 \texttt{1/(sqrt(x²+1)+x)}。
 \item
-  \textbf{归一化}：优化/距离/聚类前对特征做标准化（\texttt{StandardScaler}）。
+  \textbf{缩放}：优化/距离/聚类前对特征标准化（\texttt{StandardScaler}）。
 \item
-  \textbf{对数域计算}：小概率连乘/超长乘积取 log；分类用
-  \texttt{log\_proba} 数值更稳。
+  \textbf{对数域}：连乘小概率时取 log，避免下溢；分类看概率用
+  \texttt{log\_proba}。
 \item
-  \textbf{随机可复现}：固定种子（\texttt{random\_state} /
-  \texttt{default\_rng(seed)}）。
+  \textbf{可复现}：固定种子（\texttt{random\_state} /
+  \texttt{np.random.default\_rng(seed)}）。
 \end{enumerate}
 
-\section{F.5 可视化原则（配合第 5
-章）}\label{f.5-ux53efux89c6ux5316ux539fux5219ux914dux5408ux7b2c-5-ux7ae0}
+配一个手算直觉：\texttt{x\ =\ 10\^{}8} 时，\texttt{sqrt(x²+1)\ -\ x}
+用双精度算出来≈\texttt{0}（真正约
+\texttt{5×10\^{}\{-9\}}）------不是数学错了，是浮点''看不见''那么小的差。
 
-\begin{itemize}
-\tightlist
-\item
-  一图一信息；坐标轴标清楚；比较用同一尺度；
-\item
-  柱状图看类别、直方图看分布、散点看关系、折线看趋势；
-\item
-  图上标注单位、图例、样本量；颜色兼顾色盲（避免红绿并列）；
-\item
-  大数字用科学计数法/千分位；时间序列给坐标轴时间标签。
-\end{itemize}
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{F.5
+常用数学与算法''关键词索引''（速查）}\label{f.5-ux5e38ux7528ux6570ux5b66ux4e0eux7b97ux6cd5ux5173ux952eux8bcdux7d22ux5f15ux901fux67e5}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+你想查 & 去哪 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+矩阵/分解/最小二乘 & \href{./A-线性代数与矩阵.md}{附录 A} \\
+导数/积分/优化/插值/FFT/ODE & \href{./B-微积分与数值方法.md}{附录 B} \\
+分布/检验/回归/时序 & \href{./C-概率统计基础.md}{附录 C} \\
+图/路径/中心性/社区 & \href{./D-图论与网络.md}{附录 D} \\
+损失/评估/模型/过拟合 & \href{./E-机器学习基础.md}{附录 E} \\
+记号/公式/复杂度/稳定性 & 本附录 F \\
+全书目 & \href{./G-全书参考文献.md}{附录 G · 全书总参考文献} \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \section{F.6
-使用章节与通用衔接}\label{f.6-ux4f7fux7528ux7ae0ux8282ux4e0eux901aux7528ux8854ux63a5}
+使用章节与通用提示（双向）}\label{f.6-ux4f7fux7528ux7ae0ux8282ux4e0eux901aux7528ux63d0ux793aux53ccux5411}
 
 \begin{itemize}
 \tightlist
 \item
-  章节：全 9 个章节都会用到（符号/公式/复杂度/稳定性）；
+  \textbf{全 9 个章节}都会用到：符号、公式卡、复杂度、数值稳定性；
 \item
-  推荐在上机前 5 分钟翻 F.2/F.4；做期末大作业前翻
-  F.1\textasciitilde F.4；
+  上机前 5 分钟：看 F.2 公式卡 + F.4 稳定性；
 \item
-  参考：Big-O Cheat Sheet、NumPy broadcasting
-  文档、《算法导论》简明版（见 references.md）。
+  期末大作业前：过一遍 F.1\textasciitilde F.4；
+\item
+  与第 5 章结合：图表原则见
+  \href{../../chapters/05-matplotlib/04-综合案例.md}{5 Matplotlib · 04
+  综合案例}。
 \end{itemize}
 
-\backmatter
+\textbf{使用章节（可点击）} \textbar{} 章 \textbar{} 用法 \textbar{}
+链接 \textbar{} \textbar{} ---- \textbar{} ---- \textbar{} ----
+\textbar{} \textbar{} 0 前置基础 \textbar{} 成绩统计公式 \textbar{}
+\href{../../chapters/00-prep/00-07-综合案例.md}{07 综合案例} \textbar{}
+\textbar{} 1 NumPy \textbar{} 数值稳定性/向量化 \textbar{}
+\href{../../chapters/01-numpy/02-数组运算.md}{02 数组运算} \textbar{}
+\textbar{} 3 SciPy \textbar{} 优化/插值上下界 \textbar{}
+\href{../../chapters/03-scipy/02-优化工具包.md}{02 优化工具包}
+\textbar{} \textbar{} 5 Matplotlib \textbar{} 可视化原则 \textbar{}
+\href{../../chapters/05-matplotlib/01-基本绘图.md}{01 基本绘图}
+\textbar{} \textbar{} 8 sklearn \textbar{} 特征缩放/评估 \textbar{}
+\href{../../chapters/08-sklearn/01-数据集的预处理.md}{01 数据集的预处理}
+\textbar{}
+
+\textbf{延伸阅读}：Big-O Cheat Sheet、NumPy broadcasting
+文档、《算法导论》简明版（见 \href{./references.md}{references.md}）。
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{F.7
+术语英中对照（速查）}\label{f.7-ux672fux8bedux82f1ux4e2dux5bf9ux7167ux901fux67e5}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+英文 & 中文 & 出现在 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+matrix / vector & 矩阵 / 向量 & 附录 A \\
+eigenvalue / singular value & 特征值 / 奇异值 & 附录 A、E \\
+least squares & 最小二乘 & 附录 A、C、E \\
+gradient / Hessian & 梯度 / 黑塞矩阵 & 附录 B、E \\
+interpolation / fitting & 插值 / 拟合 & 附录 B \\
+hypothesis test / p-value & 假设检验 / p 值 & 附录 C \\
+confidence interval & 置信区间 & 附录 C \\
+central limit theorem & 中心极限定理 & 附录 C \\
+shortest path / MST & 最短路 / 最小生成树 & 附录 D \\
+centrality / community & 中心性 / 社区 & 附录 D \\
+loss / regularization & 损失 / 正则化 & 附录 E \\
+overfitting / cross-validation & 过拟合 / 交叉验证 & 附录 E \\
+complexity / numerical stability & 复杂度 / 数值稳定性 & 附录 F \\
+\end{longtable}
+}
+
+\textbf{一句话总结}：遇到不认识的名词，先查这张表，再进对应主题读''直觉故事''。

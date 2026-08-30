@@ -21,6 +21,7 @@ def run(cmd, name):
 def main():
     codes = []
     codes.append(run([sys.executable, "build/validate_book.py"], "1) validate_book (links/notebooks)"))
+    codes.append(run([sys.executable, "build/gen_references.py"], "1.5) generate global references (附录 G)"))
     codes.append(run([sys.executable, "build/pdf_build.py"], "2) per-chapter PDFs"))
     codes.append(run([sys.executable, "build/texbook.py", "--full"], "3) full book PDF"))
     if "--tex" in sys.argv:
