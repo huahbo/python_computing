@@ -1,5 +1,7 @@
 # 项目运行说明（Windows 10/11 + VS Code）
 
+> 说明：推荐按课程**第 0 章统一环境**执行（`教学资源/环境配置/environment.yml` + `check_env.py` + VS Code 配置，Python 3.12）；本文件保留为独立快速上手版。
+
 本说明帮助你在 Windows 10/11 + VS Code 环境下运行本课程的期末项目（Project 1 & Project 2）。
 
 ---

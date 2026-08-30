@@ -16,11 +16,13 @@
 
 建议总完成时间：**2–3 周**。
 
+> **前置要求**：完成第 0 章（环境安装 + lab0 + LaTeX 报告）并通过第 1~8 章的 lab/quiz；报告请用课程 LaTeX 模板排版（第 0 章已教）。
+
 ---
 
 ## 一、整体要求
 
-1. 所有代码需使用 **Python 3.8+**，建议在 **Windows 10/11 + VS Code** 环境下完成。
+1. 所有代码需使用 **Python 3.10+**（推荐课程统一环境 `scicomp` / Python 3.12），建议在 **Windows 10/11 + VS Code** 环境下完成（学生自带笔记本电脑，BYOD）。
 2. 所有实验过程（包括关键代码、图表、文字分析）需要整理成一份 **报告（Markdown / Jupyter Notebook / PDF）**。
 3. 代码文件命名规范：
    - Project 1：`project1_ecommerce_analysis.py` 或 `project1.ipynb`
