@@ -11,6 +11,7 @@ Python 科学计算方法入门：用 **NumPy / SymPy / SciPy / Pandas / Matplot
 
 - [绪论：什么是科学计算](./绪论.md)
 - [0 学习指南：环境搭建与学习路径](./0-学习指南.md)
+- [0 前置基础：环境、编程与 LaTeX（第 0 章）](./chapters/00-prep/README.md)
 - [1 NumPy 及其基本使用](./chapters/01-numpy/README.md)（已完成整套样板：正文/案例/误区/练习/上机/参考/教学说明）
 - [2 SymPy 及其基本使用](./chapters/02-sympy/README.md)
 - [3 SciPy 及其基本使用](./chapters/03-scipy/README.md)

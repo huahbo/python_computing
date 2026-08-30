@@ -1,0 +1,2011 @@
+%% 由 build/emit_tex.py 生成（生成物，勿手改）；定制请放 user_style.tex / user_meta.yaml
+\chapter{前置基础：环境、编程与
+LaTeX}\label{ux524dux7f6eux57faux7840ux73afux5883ux7f16ux7a0bux4e0e-latex}
+
+\section{01
+课程导览：学什么、怎么学、怎么考}\label{ux8bfeux7a0bux5bfcux89c8ux5b66ux4ec0ux4e48ux600eux4e48ux5b66ux600eux4e48ux8003}
+
+\begin{quote}
+本节目标：让你在开课前知道这门课的坐标、8 周怎么走、第 0
+章负责什么、作业与考核如何完成。
+\end{quote}
+
+\subsection{本节目标}\label{ux672cux8282ux76eeux6807}
+
+\begin{itemize}
+\tightlist
+\item
+  理解《Python 科学计算》在知识地图中的位置（上游/下游课程）；
+\item
+  记住 8 个主题章与每周的学习循环（上课 2h + 上机 4h）；
+\item
+  知道第 0 章要做什么、什么时候做；
+\item
+  明确三类产出：上机 lab、练习题 quiz、LaTeX 课程报告。
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{1.1
+这门课讲什么}\label{ux8fd9ux95e8ux8bfeux8bb2ux4ec0ux4e48}
+
+本课程用 \textbf{Python 生态}
+完成科学计算、数据分析、统计建模与机器学习小项目：
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+周 & 章 & 主题 & 一句话说明 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & 第 0 章 & 前置基础 & 环境、编程强化、LaTeX 报告 \\
+1 & 第 1 章 & NumPy & 数组、向量化、线性代数、拟合 \\
+2 & 第 2 章 & SymPy & 符号运算、极限/导数/积分、方程求解 \\
+3 & 第 3 章 & SciPy & 数值积分、优化、插值、假设检验、FFT \\
+4 & 第 4 章 & Pandas & 表格数据、清洗、分组、透视、时序 \\
+5 & 第 5 章 & Matplotlib & 可视化、图窗布局、seaborn 美化 \\
+6 & 第 6 章 & NetworkX & 图结构、中心性、最短路、社区发现 \\
+7 & 第 7 章 & Statsmodels & 回归、方差分析、时间序列 \\
+8 & 第 8 章 & scikit-learn & 预处理、有监督/无监督学习 \\
+\end{longtable}
+}
+
+第 0 章不独立成``知识主题''，而是给后面 8
+章\textbf{铺路}：统一环境、补齐 Python 弱点、学会 LaTeX 出报告。
+
+\subsection{1.2
+课程怎么组织}\label{ux8bfeux7a0bux600eux4e48ux7ec4ux7ec7}
+
+\begin{itemize}
+\tightlist
+\item
+  学时：\textbf{48 学时} = 8 周 ×（2h 上课 + 4h 上机）；第 0
+  周为预备周（标准版 2h 上课 + 4h 上机，可在上机课完成）。
+\item
+  每周循环：
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{上课(2h)：精讲本章核心 + 现场演示}
+\NormalTok{   ↓}
+\NormalTok{上机(4h)：0.5h 回顾 → 3h 完成 lab → 0.5h 当场 quiz/总结}
+\NormalTok{   ↓}
+\NormalTok{课后：完成 exercises 作业；自读“常见误区”页；预习下一章}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  详细课表见 \texttt{教学资源/课时安排总表.md}。
+\end{itemize}
+
+\subsection{1.3 第 0
+章怎么学（建议顺序）}\label{ux7b2c-0-ux7ae0ux600eux4e48ux5b66ux5efaux8baeux987aux5e8f}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{课前（30--60 min）}：读 00-01、00-02、00-03，把 Miniconda 与
+  VS Code 装上；
+\item
+  \textbf{第一次上机（4h）}：跟 lab 完成环境自检 → Python 热身 → LaTeX
+  报告；
+\item
+  \textbf{课后（2--3h）}：完成 exercises/quiz.ipynb
+  自测；写一份《学习目标与课程期待》LaTeX 报告（用课程模板，练手）；
+\item
+  \textbf{遇到问题}：先按 00-02
+  常见问题表自查，再问同学/助教；机房网络不行时用在线 LaTeX 平台（见
+  00-05）。
+\end{enumerate}
+
+\subsection{1.4 教材与工具}\label{ux6559ux6750ux4e0eux5de5ux5177}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+载体 & 用途 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{chapters/00-prep/*.md} & \textbf{唯一内容源}（建议随时对照） \\
+网页版（GitHub Pages + docsify） & 在线阅读、侧边栏导航、搜索 \\
+\texttt{教材PDF/} & 每章合订 PDF 与全书 PDF（构建产物） \\
+\texttt{教材TeX/} & 可编译、可手改的 LaTeX 工程（教师/讲义用） \\
+\texttt{教学资源/环境配置/} & 环境文件、自检脚本、VS Code 配置 \\
+\end{longtable}
+}
+
+\subsection{1.5
+作业、考核与提交}\label{ux4f5cux4e1aux8003ux6838ux4e0eux63d0ux4ea4}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{每章 quiz.ipynb}：自动评分（\_GRADES 汇总），当场或课后完成；
+\item
+  \textbf{每章 assignment.md}：课后书面/编程题，含答案要点；
+\item
+  \textbf{lab/ 完成情况}：上机课检查；第 0 章要求提交 环境自检输出 +
+  lab0 报告 PDF；
+\item
+  \textbf{期末大作业}：第 8 周布置，课程结束后 2--3 周内提交，要求用
+  LaTeX 排版报告（这就是为什么第 0 章必须学 LaTeX）。
+\end{enumerate}
+
+\textbf{提交命名规范}（后面 8 章通用）：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{学号\_姓名\_第0章\_lab0.py}
+\NormalTok{学号\_姓名\_第0章\_lab0报告.pdf}
+\NormalTok{学号\_姓名\_第0章\_env\_check.txt}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{1.6 常见问题}\label{ux5e38ux89c1ux95eeux9898}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+问题
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+建议
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+电脑装环境要多久？ & 正常 30--60 min；机房统一预装或提供离线包可压缩到
+10 min \\
+我能用在线编译器代替本地 LaTeX 吗？ &
+可以（Overleaf/LoongTeX），但上课讲的是本地 VS Code
+流程，建议至少会一种 \\
+之前 Python 只学过皮毛，跟得上吗？ & 第 0 章 00-04
+就是为你准备的：先自测再查漏；后面章节会反复用 \\
+这门课一定要写 LaTeX 吗？ & 课程报告与期末大作业要求 PDF 报告，LaTeX
+是推荐方式；不会的话本章就是补课 \\
+\end{longtable}
+}
+
+\subsection{本节小结与思考题}\label{ux672cux8282ux5c0fux7ed3ux4e0eux601dux8003ux9898}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  用自己的话说：为什么科学计算要用 NumPy 而不是普通 Python
+  列表？（提示：类型统一、向量化、连续内存）
+\item
+  你目前 VS Code / Python / LaTeX 各处于什么水平（没装过 / 装过不会用 /
+  熟练）？写下三个薄弱点，第 0 章结束时再回来看。
+\item
+  预告：第 7 章 Statsmodels 与第 8 章 scikit-learn
+  与``数学建模''有何联系？
+\end{enumerate}
+
+\section{02
+统一环境安装与自检}\label{ux7edfux4e00ux73afux5883ux5b89ux88c5ux4e0eux81eaux68c0}
+
+\begin{quote}
+本节目标：按统一标准装好 Python（Miniconda）、VS Code、LaTeX，并用
+\texttt{check\_env.py}
+一次性验证环境可用。本节是后面所有章节的地基，请务必在第一次上机前完成。
+\end{quote}
+
+\subsection{本节目标}\label{ux672cux8282ux76eeux6807-1}
+
+\begin{itemize}
+\tightlist
+\item
+  理解``统一环境''包含哪些组件（Python/包管理器/编辑器/内核/LaTeX）；
+\item
+  在自己电脑上安装 Miniconda、VS Code，并创建课程环境 \texttt{scicomp}；
+\item
+  学会配置国内镜像（conda/pip），加速安装;
+\item
+  会用 \texttt{environment.yml} 一键重建环境；
+\item
+  运行 \texttt{check\_env.py} 自检并截图/保存输出作为第 0 周作业。
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{2.1 环境总览}\label{ux73afux5883ux603bux89c8}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{+{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}+}
+\NormalTok{|  你的项目：chapters/00{-}prep/ |}
+\NormalTok{+{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}+}
+\NormalTok{|  编辑器：VS Code              |}
+\NormalTok{|  Python / Jupyter / LaTeX Workshop |}
+\NormalTok{+{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}+}
+\NormalTok{|  内核：ipykernel               |}
+\NormalTok{+{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}+}
+\NormalTok{|  环境：Miniconda scicomp       |}
+\NormalTok{|  numpy/sympy/scipy/pandas/    |}
+\NormalTok{|  matplotlib/networkx/         |}
+\NormalTok{|  statsmodels/scikit{-}learn     |}
+\NormalTok{+{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}+}
+\NormalTok{|  系统：Windows 10/11          |}
+\NormalTok{+{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}+}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+配图：\texttt{figures/00-prep/env\_stack.png}（同结构示意图）。
+\end{quote}
+
+\subsection{2.2 安装 Miniconda}\label{ux5b89ux88c5-miniconda}
+
+\textbf{为什么推荐 Miniconda 而不是 Anaconda？} 两者内核相同；Anaconda
+预装大量用不到的工具（约 2--3 GB），Miniconda 只带最小核心（约 150--200
+MB），可由课程 \texttt{environment.yml}
+精确安装所需包。对机房/学生机更友好。
+
+\subsubsection{Windows 步骤}\label{windows-ux6b65ux9aa4}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  打开清华镜像站 Miniconda
+  目录：\texttt{https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/}；
+\item
+  下载 \textbf{最新版}
+  \texttt{Miniconda3-latest-Windows-x86\_64.exe}（约 80 MB）；
+\item
+  双击安装：\textbf{为当前用户安装}，勾选 ``Add Miniconda3 to my PATH
+  environment variable''（若没勾，之后从 ``Anaconda Prompt''
+  启动也行）；
+\item
+  安装完成后打开 \textbf{Anaconda Prompt}（或重启终端），验证：
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{conda }\OperatorTok{{-}{-}}\NormalTok{version}
+\NormalTok{python }\OperatorTok{{-}{-}}\NormalTok{version}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{macOS / Linux 备注}\label{macos-linux-ux5907ux6ce8}
+
+\begin{itemize}
+\tightlist
+\item
+  macOS：下载 \texttt{Miniconda3-latest-MacOSX-x86\_64.sh}（Apple
+  Silicon 用 arm64 版本），运行 \texttt{bash\ 文件名}；
+\item
+  Linux：下载
+  \texttt{Miniconda3-latest-Linux-x86\_64.sh}，同样执行；Linux（含
+  CI）请额外安装中文字体与 \texttt{xelatex}（见 00-05）。
+\end{itemize}
+
+\subsection{2.3
+配置国内镜像（可选但强烈推荐）}\label{ux914dux7f6eux56fdux5185ux955cux50cfux53efux9009ux4f46ux5f3aux70c8ux63a8ux8350}
+
+\subsubsection{conda
+使用清华镜像}\label{conda-ux4f7fux7528ux6e05ux534eux955cux50cf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{conda config }\OperatorTok{{-}{-}}\NormalTok{add channels https}\OperatorTok{://}\NormalTok{mirrors}\OperatorTok{.}\FunctionTok{tuna}\OperatorTok{.}\FunctionTok{tsinghua}\OperatorTok{.}\FunctionTok{edu}\OperatorTok{.}\FunctionTok{cn}\OperatorTok{/}\NormalTok{anaconda}\OperatorTok{/}\NormalTok{pkgs}\OperatorTok{/}\NormalTok{main}\OperatorTok{/}
+\NormalTok{conda config }\OperatorTok{{-}{-}}\NormalTok{add channels https}\OperatorTok{://}\NormalTok{mirrors}\OperatorTok{.}\FunctionTok{tuna}\OperatorTok{.}\FunctionTok{tsinghua}\OperatorTok{.}\FunctionTok{edu}\OperatorTok{.}\FunctionTok{cn}\OperatorTok{/}\NormalTok{anaconda}\OperatorTok{/}\NormalTok{pkgs}\OperatorTok{/}\NormalTok{free}\OperatorTok{/}
+\NormalTok{conda config }\OperatorTok{{-}{-}}\NormalTok{set show\_channel\_urls yes}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+若提示 channel 冲突，也可只保留 default 并在安装时加
+\texttt{-c\ https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/}。
+\end{quote}
+
+\subsubsection{pip
+使用清华镜像}\label{pip-ux4f7fux7528ux6e05ux534eux955cux50cf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pip config }\FunctionTok{set}\NormalTok{ global}\OperatorTok{.}\FunctionTok{index}\OperatorTok{{-}}\NormalTok{url https}\OperatorTok{://}\NormalTok{pypi}\OperatorTok{.}\FunctionTok{tuna}\OperatorTok{.}\FunctionTok{tsinghua}\OperatorTok{.}\FunctionTok{edu}\OperatorTok{.}\FunctionTok{cn}\OperatorTok{/}\NormalTok{simple}
+\NormalTok{pip config }\FunctionTok{set}\NormalTok{ global}\OperatorTok{.}\FunctionTok{trusted}\OperatorTok{{-}}\NormalTok{host pypi}\OperatorTok{.}\FunctionTok{tuna}\OperatorTok{.}\FunctionTok{tsinghua}\OperatorTok{.}\FunctionTok{edu}\OperatorTok{.}\FunctionTok{cn}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{2.4
+创建课程统一环境}\label{ux521bux5efaux8bfeux7a0bux7edfux4e00ux73afux5883}
+
+课程已提供环境定义文件：\texttt{教学资源/环境配置/environment.yml}。把它复制到你的课程目录（或直接引用绝对路径），然后：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cd}\NormalTok{ D}\OperatorTok{:}\NormalTok{\textbackslash{}Scientific\_Computing\_Class\textbackslash{}course{-}dist   }\CommentTok{\# 或你的课程目录}
+\NormalTok{conda env create }\OperatorTok{{-}}\NormalTok{f environment}\OperatorTok{.}\FunctionTok{yml}
+\NormalTok{conda activate scicomp}
+\end{Highlighting}
+\end{Shaded}
+
+如果以后想重建（比如学期中途更新）：先
+\texttt{conda\ env\ remove\ -n\ scicomp} 再 create。若你更喜欢 pip：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{conda create }\OperatorTok{{-}}\NormalTok{n scicomp python}\OperatorTok{=}\DecValTok{3.12} \OperatorTok{{-}}\NormalTok{y}
+\NormalTok{conda activate scicomp}
+\NormalTok{pip install }\OperatorTok{{-}}\NormalTok{r requirements}\OperatorTok{.}\FunctionTok{txt}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+环境文件里包含：numpy、sympy、scipy、pandas、matplotlib、seaborn、networkx、statsmodels、scikit-learn、jupyterlab/ipykernel。第
+1\textasciitilde8 章全部够用。
+\end{quote}
+
+\subsection{2.5 安装 VS Code
+与扩展}\label{ux5b89ux88c5-vs-code-ux4e0eux6269ux5c55}
+
+\subsubsection{安装 VS Code}\label{ux5b89ux88c5-vs-code}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  打开 \texttt{https://code.visualstudio.com/}，下载 Windows
+  安装包并安装（默认选项即可）；
+\item
+  安装完成后，打开命令行确认：
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{code }\OperatorTok{{-}{-}}\NormalTok{version}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{安装必需扩展}\label{ux5b89ux88c5ux5fc5ux9700ux6269ux5c55}
+
+在 VS Code 扩展市场（\texttt{Ctrl+Shift+X}）搜索并安装：
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+扩展 & 扩展 ID & 用途 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Python & \texttt{ms-python.python} & 解释器、运行/调试 \\
+Pylance & \texttt{ms-python.pylance} & 类型检查、补全 \\
+Jupyter & \texttt{ms-toolsai.jupyter} & 运行 .ipynb 笔记本 \\
+LaTeX Workshop & \texttt{james-yu.latex-workshop} & LaTeX
+编辑/自动编译 \\
+Rainbow CSV（可选） & \texttt{mechatroner.rainbow-csv} & 方便查看 csv \\
+GitLens（可选） & \texttt{eamodio.gitlens} & 代码历史/协作 \\
+\end{longtable}
+}
+
+也可以在命令行一键安装：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{code }\OperatorTok{{-}{-}}\NormalTok{install{-}extension ms{-}python}\OperatorTok{.}\FunctionTok{python}
+\NormalTok{code }\OperatorTok{{-}{-}}\NormalTok{install{-}extension ms{-}python}\OperatorTok{.}\FunctionTok{pylance}
+\NormalTok{code }\OperatorTok{{-}{-}}\NormalTok{install{-}extension ms{-}toolsai}\OperatorTok{.}\FunctionTok{jupyter}
+\NormalTok{code }\OperatorTok{{-}{-}}\NormalTok{install{-}extension james{-}yu}\OperatorTok{.}\FunctionTok{latex}\OperatorTok{{-}}\NormalTok{workshop}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{导入课程共享配置}\label{ux5bfcux5165ux8bfeux7a0bux5171ux4eabux914dux7f6e}
+
+打开任意课程目录，把 \texttt{教学资源/环境配置/vscode-settings.json}
+的内容合并进你的 \texttt{设置（JSON）}；关键项包括：
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{python.defaultInterpreterPath}：指向 \texttt{scicomp} 环境的
+  Python；
+\item
+  \texttt{jupyter.notebookFileRoot}：项目根目录；
+\item
+  \texttt{latex-workshop.latex.recipes}：\texttt{latexmk\ -xelatex}（中文必须）。
+\end{itemize}
+
+\begin{quote}
+配置片段见 00-03 与 00-05；直接复制文件即可。
+\end{quote}
+
+\subsection{2.6 环境自检}\label{ux73afux5883ux81eaux68c0}
+
+课程提供自检脚本：\texttt{教学资源/环境配置/check\_env.py}。用法：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{conda activate scicomp}
+\NormalTok{python check\_env}\OperatorTok{.}\FunctionTok{py}
+\end{Highlighting}
+\end{Shaded}
+
+预期输出（节选）：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{[OK ] Python 3.12.x (scicomp)}
+\NormalTok{[OK ] numpy 2.x / sympy 1.13 / scipy 1.15 / pandas 2.2 ...}
+\NormalTok{[OK ] matplotlib / networkx / statsmodels / scikit{-}learn}
+\NormalTok{[OK ] xelatex found: C:\textbackslash{}texlive\textbackslash{}2026\textbackslash{}bin\textbackslash{}windows\textbackslash{}xelatex.exe}
+\NormalTok{[OK ] latexmk found}
+\NormalTok{[WARN] git: 未安装（可选）}
+\NormalTok{[OK ] 环境自检通过（0 个必须项失败）}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{提交要求（第 0 周 lab A 部分）}：保存输出为
+\texttt{env\_check.txt}（或截图），命名
+\texttt{学号\_姓名\_第0章\_env\_check.txt}。
+
+\subsection{2.7
+可选：准备课程目录}\label{ux53efux9009ux51c6ux5907ux8bfeux7a0bux76eeux5f55}
+
+建议统一目录（全英文路径）：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{D:\textbackslash{}Scientific\_Computing\_Class\textbackslash{}}
+\NormalTok{+{-} course{-}dist\textbackslash{}        \# 你的工作区（讲义 PDF、notebook、报告）}
+\NormalTok{+{-} report\textbackslash{}             \# 各章报告（LaTeX 工程）}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+使用中文/空格路径会让部分 LaTeX/notebook
+工具报错，\textbf{强烈建议全英文}。
+\end{quote}
+
+\subsection{2.8
+常见问题与排错}\label{ux5e38ux89c1ux95eeux9898ux4e0eux6392ux9519}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+现象
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+原因与解决
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{conda} 不是内部或外部命令 & 未加 PATH；用 Anaconda
+Prompt，或重新安装时勾选 PATH \\
+下载很慢 & 用清华镜像下载安装包；之后 conda/pip 也配镜像 \\
+\texttt{conda\ env\ create} 报错通道冲突 & 注释掉 \texttt{.condarc}
+中自定义 channel 后重试；或改用 pip 安装 \\
+VS Code 找不到 \texttt{scicomp} 解释器 & \texttt{Ctrl+Shift+P} →
+\texttt{Python:\ Select\ Interpreter} → 选
+\texttt{scicomp}；若找不到，重启 VS Code 或 \texttt{conda\ activate}
+后再开 \\
+Jupyter 找不到内核 & 在环境中执行
+\texttt{python\ -m\ ipykernel\ install\ -\/-user\ -\/-name\ scicomp} \\
+\texttt{xelatex} 未找到 & 尚未安装 TeX Live，见 00-05；临时可用
+Overleaf/LoongTeX \\
+中文输出乱码 & 终端用 \texttt{chcp\ 65001} 或 PowerShell；文件本身是
+UTF-8 即可 \\
+\end{longtable}
+}
+
+\subsection{本节小结与思考题}\label{ux672cux8282ux5c0fux7ed3ux4e0eux601dux8003ux9898-1}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  为什么统一环境能减少一半的答疑时间？（提示：问题从``每个人机器不同''变为``版本差异''）
+\item
+  在你自己电脑上跑通 \texttt{check\_env.py}，把输出保存下来。
+\item
+  如果机房已经预装好环境，你还需要做什么？（提示：至少验证
+  \texttt{code}、\texttt{conda}、\texttt{xelatex} 都在）
+\end{enumerate}
+
+\section{03 VS Code 使用与 Jupyter
+工作流}\label{vs-code-ux4f7fux7528ux4e0e-jupyter-ux5de5ux4f5cux6d41}
+
+\begin{quote}
+本节目标：从现在起，你的``写代码''都发生在 VS Code
+里。本节教你怎么打开项目、运行脚本、跑笔记本、查错误、用快捷键，让后面 8
+章不被工具本身耽误。
+\end{quote}
+
+\subsection{本节目标}\label{ux672cux8282ux76eeux6807-2}
+
+\begin{itemize}
+\tightlist
+\item
+  会用 VS Code 打开课程目录并在正确的 Python 环境中运行代码；
+\item
+  会新建与运行 \texttt{.ipynb} 笔记本：运行单元格、重启内核、导出；
+\item
+  会在终端激活 \texttt{scicomp} 环境、运行 \texttt{pip/conda} 命令；
+\item
+  会看``问题''面板与运行输出，能读懂简单报错；
+\item
+  记住最常用的 10 个快捷键。
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{3.1
+打开文件夹与工作区}\label{ux6253ux5f00ux6587ux4ef6ux5939ux4e0eux5de5ux4f5cux533a}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  启动 VS Code → \texttt{文件\ →\ 打开文件夹}（或
+  \texttt{Ctrl+K\ Ctrl+O}）；
+\item
+  选择你的课程目录（例如
+  \texttt{D:\textbackslash{}Scientific\_Computing\_Class\textbackslash{}course-dist}）；
+\item
+  左边资源管理器出现文件树；把 \texttt{chapters/00-prep}
+  等目录展开即可。
+\end{enumerate}
+
+\begin{quote}
+\textbf{工作区 vs
+文件夹}：直接打开文件夹即可；只有需要多根目录时才用``工作区（.code-workspace）''。
+\end{quote}
+
+\subsection{3.2
+解释器与内核（重要！）}\label{ux89e3ux91caux5668ux4e0eux5185ux6838ux91cdux8981}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{解释器}（跑 .py 用）：\texttt{Ctrl+Shift+P} →
+  \texttt{Python:\ Select\ Interpreter} → 选择 \texttt{scicomp}。
+\item
+  \textbf{内核}（跑 notebook 用）：打开 \texttt{.ipynb}
+  后，右上角内核选择器同样选 \texttt{scicomp}；没有该内核时在终端执行：
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{conda activate scicomp}
+\NormalTok{python }\OperatorTok{{-}}\NormalTok{m ipykernel install }\OperatorTok{{-}{-}}\NormalTok{user }\OperatorTok{{-}{-}}\NormalTok{name scicomp}
+\end{Highlighting}
+\end{Shaded}
+
+建议在项目根目录放一个 \texttt{.vscode/settings.json}
+固定解释器（示例，路径按你的机器改）：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{\{}
+  \DataTypeTok{"python.defaultInterpreterPath"}\FunctionTok{:} \StringTok{"C:/Users/你的用户名/miniconda3/envs/scicomp/python.exe"}\FunctionTok{,}
+  \DataTypeTok{"python.terminal.activateEnvironment"}\FunctionTok{:} \KeywordTok{true}\FunctionTok{,}
+  \DataTypeTok{"jupyter.notebookFileRoot"}\FunctionTok{:} \StringTok{"$\{workspaceFolder\}"}
+\FunctionTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{3.3 运行 Python
+脚本}\label{ux8fd0ux884c-python-ux811aux672c}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  新建 \texttt{hello.py}，写：
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{print}\NormalTok{(}\StringTok{"你好，Python 科学计算"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\DecValTok{2} \OperatorTok{**} \DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  三种运行方式：
+
+  \begin{itemize}
+  \tightlist
+  \item
+    右上角的``运行''按钮（Play）；
+  \item
+    右键 → \texttt{在终端中运行\ Python\ 文件}；
+  \item
+    打开集成终端（\texttt{Ctrl+\textasciigrave{}\textasciigrave{}）手动执行}python
+    hello.py`。
+  \end{itemize}
+\item
+  注意终端中的当前目录（\texttt{pwd} /
+  \texttt{cd}），文件路径建议按``相对项目根目录''写。
+\end{enumerate}
+
+\subsection{3.4 Jupyter
+笔记本入门}\label{jupyter-ux7b14ux8bb0ux672cux5165ux95e8}
+
+\subsubsection{新建与运行}\label{ux65b0ux5efaux4e0eux8fd0ux884c}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{文件\ →\ 新建文件}，保存为
+  \texttt{lab0.ipynb}（先保存才能识别为笔记本）；
+\item
+  每格支持 \textbf{代码单元格} 与 \textbf{Markdown 单元格}（用
+  \texttt{M} 切换模式，\texttt{Y} 切回代码）；
+\item
+  运行当前格：\texttt{Shift+Enter}（并跳到下一格）或
+  \texttt{Ctrl+Enter}（停在当前格）。
+\end{itemize}
+
+\subsubsection{会用到的操作}\label{ux4f1aux7528ux5230ux7684ux64cdux4f5c}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+操作
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+快捷键
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+上方插入单元格 & \texttt{A}（命令模式下） \\
+下方插入单元格 & \texttt{B} \\
+删除单元格 & \texttt{Ctrl+Shift+K} 或 \texttt{DD} \\
+保存 & \texttt{Ctrl+S} \\
+重启内核 & \texttt{Ctrl+Shift+P} → \texttt{Jupyter:\ Restart\ Kernel} \\
+全部运行 & \texttt{Run\ All}（工具栏） \\
+导出为 HTML/PDF & 工具栏 → 导出（PDF 推荐用``导出为 HTML 再打印''或先装
+LaTeX 依赖） \\
+\end{longtable}
+}
+
+\subsubsection{笔记本规范（从第 0
+章养成）}\label{ux7b14ux8bb0ux672cux89c4ux8303ux4eceux7b2c-0-ux7ae0ux517bux6210}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  第一格用 Markdown 写标题、姓名、学号、日期；
+\item
+  每个任务前用 Markdown 单元格写清``要做什么''；
+\item
+  一个任务一个代码单元格，避免一个格子塞 200 行；
+\item
+  输出重要的结果用 \texttt{print} 或直接显示，方便老师检查；
+\item
+  运行顺序从上到下；中途改了前面的代码务必``重启内核并全部运行''再提交。
+\end{enumerate}
+
+\subsection{3.5
+终端与包管理}\label{ux7ec8ux7aefux4e0eux5305ux7ba1ux7406}
+
+\begin{itemize}
+\tightlist
+\item
+  在 VS Code 中按 `Ctrl+`` 打开终端；
+\item
+  确认环境：
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{conda env list          }\CommentTok{\# 看有哪些环境}
+\NormalTok{conda activate scicomp  }\CommentTok{\# 激活}
+\FunctionTok{where}\NormalTok{ python            }\CommentTok{\# 确认用的是 scicomp 的 python}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  装/卸包：
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pip install 包名}
+\NormalTok{pip uninstall 包名}
+\NormalTok{conda install }\OperatorTok{{-}}\NormalTok{c conda{-}forge 包名}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+注意：如果终端 \texttt{python} 还是系统 Python，说明没激活环境，请先
+\texttt{conda\ activate\ scicomp}。
+\end{quote}
+
+\subsection{3.6 调试与排错}\label{ux8c03ux8bd5ux4e0eux6392ux9519}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{问题面板}（\texttt{Ctrl+Shift+M}）：显示语法/类型/导入错误；
+\item
+  \textbf{运行与调试}：在行号左侧点击设置断点，按 \texttt{F5}
+  启动调试；\texttt{F10} 单步、\texttt{F11} 进入函数；
+\item
+  \textbf{输出乱码}：终端输入 \texttt{chcp\ 65001} 切换 UTF-8；
+\item
+  \textbf{报错读法}（自右向左读）：
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Traceback (most recent call last):        ← 出错的调用链}
+\NormalTok{  File "lab0.py", line 12, in \textless{}module\textgreater{}    ← 文件与行号}
+\NormalTok{    print(1/0)}
+\NormalTok{ZeroDivisionError: division by zero       ← 最后一行才是真正的错误类型与信息}
+\end{Highlighting}
+\end{Shaded}
+
+常用错误速查：\texttt{NameError}（名字没定义）、\texttt{TypeError}（类型不对）、\texttt{IndexError}（越界）、\texttt{KeyError}（字典缺键）、\texttt{FileNotFoundError}（路径不对）、\texttt{ModuleNotFoundError}（没装包/环境不对）。
+
+\subsection{3.7
+常用快捷键表}\label{ux5e38ux7528ux5febux6377ux952eux8868}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+功能
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+快捷键
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+快速打开文件 & \texttt{Ctrl+P} \\
+命令面板 & \texttt{Ctrl+Shift+P} \\
+切换终端 &
+\texttt{Ctrl+\textasciigrave{}\textasciigrave{}\ \textbar{}\ \textbar{}\ 运行单元格\ \textbar{}}Shift+Enter\texttt{\textbar{}\ \textbar{}\ 注释/取消注释\ \textbar{}}Ctrl+/\texttt{\textbar{}\ \textbar{}\ 格式化文档\ \textbar{}}Shift+Alt+F\texttt{\textbar{}\ \textbar{}\ 全局搜索\ \textbar{}}Ctrl+Shift+F\texttt{\textbar{}\ \textbar{}\ 打开设置\ \textbar{}}Ctrl+,` \\
+\end{longtable}
+}
+
+\subsection{3.8
+本节演示（跟着做一遍）}\label{ux672cux8282ux6f14ux793aux8ddfux7740ux505aux4e00ux904d}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  新建 \texttt{demo.ipynb}；
+\item
+  Markdown 格写标题``我的第一个课程笔记本''；
+\item
+  代码格：
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ sys}
+\BuiltInTok{print}\NormalTok{(sys.executable)          }\CommentTok{\# 看当前解释器}
+\NormalTok{nums }\OperatorTok{=}\NormalTok{ [}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{]}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"平均值:"}\NormalTok{, }\BuiltInTok{sum}\NormalTok{(nums) }\OperatorTok{/} \BuiltInTok{len}\NormalTok{(nums))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  运行后，把 \texttt{sys.executable} 的输出和终端 \texttt{where\ python}
+  对比：应该都是 \texttt{scicomp} 的路径；
+\item
+  交给老师/助教检查输出截图。
+\end{enumerate}
+
+\subsection{常见问题}\label{ux5e38ux89c1ux95eeux9898-1}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+问题
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+解决
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+右键没有``在终端中运行'' & 确认安装了 Python 扩展并已选择解释器 \\
+笔记本运行报``No kernel'' & 重启 VS Code，再选
+\texttt{scicomp}；或执行上面 ipykernel 安装命令 \\
+中文终端乱码 & \texttt{chcp\ 65001}；文件保存用 UTF-8 \\
+运行结果和老师不一样 &
+先检查解释器；再检查每次是否``重启内核并全部运行'' \\
+\end{longtable}
+}
+
+\subsection{本节小结}\label{ux672cux8282ux5c0fux7ed3}
+
+\begin{itemize}
+\tightlist
+\item
+  先选对解释器/内核，再写代码；这两步解决 70\% 的``我电脑报错''。
+\item
+  笔记本 = 代码 + Markdown 说明；按``一个任务一个单元格''组织。
+\item
+  报错不可怕：最后一行 = 错误类型，往上找文件与行号。
+\end{itemize}
+
+\subsubsection{思考题}\label{ux601dux8003ux9898}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \texttt{sys.executable} 输出的路径是 conda
+  的还是系统的？为什么这很重要？
+\item
+  如果你在 VS Code 里运行 \texttt{.py} 成功，但运行 \texttt{.ipynb}
+  失败，最可能的原因是什么？
+\end{enumerate}
+
+\section{04 Python
+编程快速强化}\label{python-ux7f16ux7a0bux5febux901fux5f3aux5316}
+
+\begin{quote}
+本节目标：你已学过语言程序设计课，本节不系统讲语法，而是用``自测 +
+查漏''的方式强化科学计算最常用的 Python
+能力：容器、函数、异常、文件、常用内置函数。先做自测，再针对性看讲解。
+\end{quote}
+
+\subsection{本节目标}\label{ux672cux8282ux76eeux6807-3}
+
+\begin{itemize}
+\tightlist
+\item
+  能解释并操作 list/dict/tuple/set 的常见方法与切片；
+\item
+  熟练使用列表推导式、\texttt{zip}、\texttt{enumerate}、\texttt{sorted}、\texttt{max/min/sum}；
+\item
+  理解函数参数（默认值、\texttt{*args}、\texttt{**kwargs}）、作用域与返回值；
+\item
+  会写 \texttt{try/except}、\texttt{with\ open(...)} 读写文件；
+\item
+  养成命名、注释、\texttt{if\ \_\_name\_\_\ ==\ "\_\_main\_\_"}
+  的工程习惯。
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{4.1 课前自测（10
+分钟，先不看答案）}\label{ux8bfeux524dux81eaux6d4b10-ux5206ux949fux5148ux4e0dux770bux7b54ux6848}
+
+在 \texttt{exercises/quiz.ipynb} 或纸上快速回答：
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \texttt{{[}1,2,3,4,5{]}{[}::-1{]}} 的结果？
+\item
+  \texttt{\{i:\ i*i\ for\ i\ in\ range(4)\}} 的结果？
+\item
+  \texttt{sorted({[}"b","a","c"{]},\ reverse=True)} 的结果？
+\item
+  \texttt{zip({[}1,2{]},{[}3,4{]})} 转成 list 是什么？
+\item
+  定义 \texttt{def\ f(a={[}{]}):\ ...} 有什么风险？
+\item
+  \texttt{try/finally} vs \texttt{try/except} 的区别？
+\item
+  \texttt{with\ open("a.txt")\ as\ f:} 比 \texttt{open/close} 好在哪？
+\item
+  \texttt{*args} 与 \texttt{**kwargs} 分别装什么？
+\item
+  \texttt{"a,b,c".split(",")} 结果？
+\item
+  \texttt{is} 与 \texttt{==} 的区别（举例）？
+\end{enumerate}
+
+\begin{quote}
+答案与详解在 \texttt{exercises/answers.ipynb}。错 3
+题以上，建议把本节的``查漏表''逐条过一遍。
+\end{quote}
+
+\subsection{4.2
+变量与类型：会``拆开''就够了}\label{ux53d8ux91cfux4e0eux7c7bux578bux4f1aux62c6ux5f00ux5c31ux591fux4e86}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+类型 & 常用操作 & 注意 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{int} / \texttt{float} & 算术、\texttt{//}、\texttt{**} &
+浮点比较用 \texttt{abs(a-b)\ \textless{}\ 1e-9} \\
+\texttt{str} & \texttt{format}、f-string、\texttt{split/join} &
+字符串不可变 \\
+\texttt{list} & 追加、切片、推导式 & 可变；\texttt{+} 是新建 \\
+\texttt{tuple} & 解包、做字典键 & 不可变 \\
+\texttt{dict} & 键值、\texttt{get}、遍历 & 键必须可哈希 \\
+\texttt{set} & 去重、交并差 & 无序 \\
+\end{longtable}
+}
+
+一行代码示例：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nums }\OperatorTok{=}\NormalTok{ [}\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{6}\NormalTok{]}
+\BuiltInTok{print}\NormalTok{(nums[}\DecValTok{1}\NormalTok{:}\DecValTok{5}\NormalTok{])            }\CommentTok{\# [1, 4, 1, 5]}
+\BuiltInTok{print}\NormalTok{(nums[::}\OperatorTok{{-}}\DecValTok{1}\NormalTok{])           }\CommentTok{\# 反转}
+\BuiltInTok{print}\NormalTok{(}\BuiltInTok{sum}\NormalTok{(nums), }\BuiltInTok{max}\NormalTok{(nums), }\BuiltInTok{min}\NormalTok{(nums))}
+\BuiltInTok{print}\NormalTok{(}\BuiltInTok{sorted}\NormalTok{(}\BuiltInTok{set}\NormalTok{(nums)))    }\CommentTok{\# 去重排序}
+\BuiltInTok{print}\NormalTok{(\{x: x }\OperatorTok{*}\NormalTok{ x }\ControlFlowTok{for}\NormalTok{ x }\KeywordTok{in}\NormalTok{ nums[:}\DecValTok{5}\NormalTok{]\})}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{4.3 容器查漏表}\label{ux5bb9ux5668ux67e5ux6f0fux8868}
+
+\textbf{切片}：\texttt{{[}start:stop:step{]}}，含头不含尾；\texttt{step}
+为负可倒序；\texttt{{[}::-1{]}} 最常用。
+
+\textbf{列表推导式}：\texttt{{[}表达式\ for\ 项\ in\ 可迭代\ if\ 条件{]}}；不要嵌套太深，超过两层就写循环。
+
+\textbf{字典方法}：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d }\OperatorTok{=}\NormalTok{ \{}\StringTok{"a"}\NormalTok{: }\DecValTok{1}\NormalTok{, }\StringTok{"b"}\NormalTok{: }\DecValTok{2}\NormalTok{\}}
+\BuiltInTok{print}\NormalTok{(d.get(}\StringTok{"c"}\NormalTok{, }\DecValTok{0}\NormalTok{))        }\CommentTok{\# 0，不会 KeyError}
+\ControlFlowTok{for}\NormalTok{ k, v }\KeywordTok{in}\NormalTok{ d.items():      }\CommentTok{\# 遍历键值}
+    \BuiltInTok{print}\NormalTok{(k, v)}
+\BuiltInTok{print}\NormalTok{(d.keys(), d.values())}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{set}：\texttt{set("hello")}
+去重；\texttt{a\ \&\ b}、\texttt{a\ \textbar{}\ b}、\texttt{a\ -\ b}。
+
+\subsection{4.4
+流程控制与推导式}\label{ux6d41ux7a0bux63a7ux5236ux4e0eux63a8ux5bfcux5f0f}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\# 条件表达式（三元）}
+\NormalTok{label }\OperatorTok{=} \StringTok{"及格"} \ControlFlowTok{if}\NormalTok{ score }\OperatorTok{\textgreater{}=} \DecValTok{60} \ControlFlowTok{else} \StringTok{"不及格"}
+
+\CommentTok{\#\# 列表推导（科学计算里最常见的“批量变换”）}
+\NormalTok{scores }\OperatorTok{=}\NormalTok{ [}\DecValTok{68}\NormalTok{, }\DecValTok{91}\NormalTok{, }\DecValTok{55}\NormalTok{, }\DecValTok{76}\NormalTok{, }\DecValTok{88}\NormalTok{]}
+\NormalTok{passed }\OperatorTok{=}\NormalTok{ [s }\ControlFlowTok{for}\NormalTok{ s }\KeywordTok{in}\NormalTok{ scores }\ControlFlowTok{if}\NormalTok{ s }\OperatorTok{\textgreater{}=} \DecValTok{60}\NormalTok{]}
+
+\CommentTok{\#\# 循环里同时拿索引与值}
+\ControlFlowTok{for}\NormalTok{ i, s }\KeywordTok{in} \BuiltInTok{enumerate}\NormalTok{(scores):}
+    \BuiltInTok{print}\NormalTok{(i, s)}
+
+\CommentTok{\#\# 两个列表打包}
+\NormalTok{names }\OperatorTok{=}\NormalTok{ [}\StringTok{"张三"}\NormalTok{, }\StringTok{"李四"}\NormalTok{]}
+\ControlFlowTok{for}\NormalTok{ name, s }\KeywordTok{in} \BuiltInTok{zip}\NormalTok{(names, scores[:}\DecValTok{2}\NormalTok{]):}
+    \BuiltInTok{print}\NormalTok{(name, s)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{4.5
+函数：默认值、不定长、作用域}\label{ux51fdux6570ux9ed8ux8ba4ux503cux4e0dux5b9aux957fux4f5cux7528ux57df}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ report(name, scores, }\OperatorTok{*}\NormalTok{, title}\OperatorTok{=}\StringTok{"成绩"}\NormalTok{, fmt}\OperatorTok{=}\StringTok{"}\SpecialCharTok{\%.1f}\StringTok{"}\NormalTok{):}
+    \CommentTok{"""返回一行摘要字符串。"""}
+\NormalTok{    total }\OperatorTok{=} \BuiltInTok{sum}\NormalTok{(scores)}
+\NormalTok{    avg }\OperatorTok{=}\NormalTok{ total }\OperatorTok{/} \BuiltInTok{len}\NormalTok{(scores) }\ControlFlowTok{if}\NormalTok{ scores }\ControlFlowTok{else} \FloatTok{0.0}
+    \ControlFlowTok{return} \SpecialStringTok{f"[}\SpecialCharTok{\{}\NormalTok{title}\SpecialCharTok{\}}\SpecialStringTok{] }\SpecialCharTok{\{}\NormalTok{name}\SpecialCharTok{\}}\SpecialStringTok{: 总分 }\SpecialCharTok{\{}\NormalTok{total}\SpecialCharTok{\}}\SpecialStringTok{，平均 }\SpecialCharTok{\{}\NormalTok{fmt }\OperatorTok{\%}\NormalTok{ avg}\SpecialCharTok{\}}\SpecialStringTok{"}
+
+\BuiltInTok{print}\NormalTok{(report(}\StringTok{"张三"}\NormalTok{, [}\DecValTok{80}\NormalTok{, }\DecValTok{90}\NormalTok{]))}
+\BuiltInTok{print}\NormalTok{(report(}\StringTok{"李四"}\NormalTok{, [}\DecValTok{70}\NormalTok{, }\DecValTok{75}\NormalTok{], title}\OperatorTok{=}\StringTok{"期末"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+要点：
+
+\begin{itemize}
+\tightlist
+\item
+  默认参数只在\textbf{定义时求值一次}：\texttt{def\ f(a={[}{]})}
+  会共享列表 → 改用
+  \texttt{def\ f(a=None):\ a\ =\ {[}{]}\ if\ a\ is\ None\ else\ a}；
+\item
+  \texttt{*args} 收集位置参数为元组；\texttt{**kwargs}
+  收集关键字参数为字典；
+\item
+  函数内改全局变量要 \texttt{global}（尽量别用）；返回值用
+  \texttt{return}；
+\item
+  写
+  \texttt{docstring}（第一行字符串），是``会写代码''和``写得专业''的分水岭。
+\end{itemize}
+
+\subsection{4.6
+异常、文件与模块}\label{ux5f02ux5e38ux6587ux4ef6ux4e0eux6a21ux5757}
+
+\subsubsection{异常处理}\label{ux5f02ux5e38ux5904ux7406}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ safe\_div(a, b):}
+    \ControlFlowTok{try}\NormalTok{:}
+        \ControlFlowTok{return}\NormalTok{ a }\OperatorTok{/}\NormalTok{ b}
+    \ControlFlowTok{except} \PreprocessorTok{ZeroDivisionError} \ImportTok{as}\NormalTok{ e:}
+        \BuiltInTok{print}\NormalTok{(}\StringTok{"除零啦:"}\NormalTok{, e)}
+        \ControlFlowTok{return} \VariableTok{None}
+    \ControlFlowTok{finally}\NormalTok{:}
+        \ControlFlowTok{pass}   \CommentTok{\# 无论成败都执行（比如关文件）}
+
+\BuiltInTok{print}\NormalTok{(safe\_div(}\DecValTok{10}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(safe\_div(}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+捕获要\textbf{具体}：不要裸 \texttt{except:}；多个错误写
+\texttt{except\ (ValueError,\ KeyError):}。
+\end{quote}
+
+\subsubsection{文件读写}\label{ux6587ux4ef6ux8bfbux5199}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\# 写}
+\ControlFlowTok{with} \BuiltInTok{open}\NormalTok{(}\StringTok{"result.txt"}\NormalTok{, }\StringTok{"w"}\NormalTok{, encoding}\OperatorTok{=}\StringTok{"utf{-}8"}\NormalTok{) }\ImportTok{as}\NormalTok{ f:}
+\NormalTok{    f.write(}\StringTok{"平均分 78.0}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+
+\CommentTok{\#\# 读}
+\ControlFlowTok{with} \BuiltInTok{open}\NormalTok{(}\StringTok{"result.txt"}\NormalTok{, encoding}\OperatorTok{=}\StringTok{"utf{-}8"}\NormalTok{) }\ImportTok{as}\NormalTok{ f:}
+\NormalTok{    lines }\OperatorTok{=}\NormalTok{ f.readlines()}
+\BuiltInTok{print}\NormalTok{(lines)}
+
+\CommentTok{\#\# 读 csv（第 0 章只需 csv 模块；第 4 章再学 pandas）}
+\ImportTok{import}\NormalTok{ csv}
+\ControlFlowTok{with} \BuiltInTok{open}\NormalTok{(}\StringTok{"data/scores.csv"}\NormalTok{, encoding}\OperatorTok{=}\StringTok{"utf{-}8"}\NormalTok{) }\ImportTok{as}\NormalTok{ f:}
+\NormalTok{    rows }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(csv.DictReader(f))}
+\BuiltInTok{print}\NormalTok{(rows[:}\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{模块与包}\label{ux6a21ux5757ux4e0eux5305}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\# 自己的模块}
+\ImportTok{import}\NormalTok{ math}
+\ImportTok{from}\NormalTok{ collections }\ImportTok{import}\NormalTok{ Counter}
+
+\BuiltInTok{print}\NormalTok{(math.pi)}
+\BuiltInTok{print}\NormalTok{(Counter(}\StringTok{"hello world"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  自己写模块：同目录 \texttt{utils.py} 里定义函数，主程序
+  \texttt{from\ utils\ import\ xxx}；
+\item
+  主程序入口：\texttt{if\ \_\_name\_\_\ ==\ "\_\_main\_\_":}（被 import
+  时不执行、直接运行才执行）。
+\end{itemize}
+
+\subsection{4.7
+常用内置函数速查}\label{ux5e38ux7528ux5185ux7f6eux51fdux6570ux901fux67e5}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+函数
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+作用
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+例子
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{len/sum/max/min} & 长度/求和/最值 & \texttt{max(scores)} \\
+\texttt{enumerate} & 带索引遍历 &
+\texttt{for\ i,\ x\ in\ enumerate(v):} \\
+\texttt{zip} & 并行打包 & \texttt{dict(zip(names,\ scores))} \\
+\texttt{sorted} & 返回新排序列表 &
+\texttt{sorted(d.items(),\ key=lambda\ kv:\ kv{[}1{]})} \\
+\texttt{map/filter} & 映射/过滤（可用推导式替代） &
+\texttt{list(map(str,\ nums))} \\
+\texttt{any/all} & 存在/全部 &
+\texttt{any(x\ \textgreater{}\ 0\ for\ x\ in\ nums)} \\
+\texttt{round} & 四舍五入 & \texttt{round(3.14159,\ 2)} \\
+\texttt{isinstance} & 类型判断 &
+\texttt{isinstance(x,\ (int,\ float))} \\
+\end{longtable}
+}
+
+\subsection{4.8 工程习惯（现在养成，后面 8
+章受益）}\label{ux5de5ux7a0bux4e60ux60efux73b0ux5728ux517bux6210ux540eux9762-8-ux7ae0ux53d7ux76ca}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{命名}：变量 \texttt{score\_list}、函数
+  \texttt{compute\_average}；不用 \texttt{a1}、\texttt{data} 满天飞；
+\item
+  \textbf{注释}：解释``为什么''，不抄代码本身；
+\item
+  \textbf{一个文件只做一件事}；能拆函数就不堆在一个 \texttt{main} 里；
+\item
+  \textbf{导入放顶部}；第三方库按字母序排列；
+\item
+  \textbf{结果可复现}：随机数加种子（后面 NumPy
+  章会讲）；路径统一用相对路径；
+\item
+  \textbf{先跑通再优化}：不追求一行神代码。
+\end{enumerate}
+
+\subsection{4.9 本节综合小任务（交给 lab 的 Part
+B）}\label{ux672cux8282ux7efcux5408ux5c0fux4efbux52a1ux4ea4ux7ed9-lab-ux7684-part-b}
+
+题目：读入
+\texttt{lab/data/scores.csv}（字段：学号,姓名,Python,数学,英语），用纯
+Python 完成：
+
+\begin{itemize}
+\tightlist
+\item
+  计算每个人的总分与平均分；
+\item
+  找出平均分最高与最低的学生；
+\item
+  把``总分 ≥ 240''的学生写入 \texttt{result.txt}；
+\item
+  统计 60 分以下的人数。
+\end{itemize}
+
+\begin{quote}
+完整步骤见 \texttt{lab/lab.ipynb} 与 00-07 综合案例。
+\end{quote}
+
+\subsection{常见误区}\label{ux5e38ux89c1ux8befux533a}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+误区
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+正确做法
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{==} 比较小整数没问题，比较浮点数/字符串用 \texttt{is} &
+数值比较一律 \texttt{==}；\texttt{is} 只用于 \texttt{None} \\
+默认参数写 \texttt{={[}{]}} & 用 \texttt{=None} 再在函数内初始化 \\
+直接改列表时产生副作用 & 需要副本时用 \texttt{copy} 或切片
+\texttt{{[}:{]}} \\
+循环里 100 万次逐元素计算 & 后面学 NumPy 向量化（第 1 章核心） \\
+\texttt{except:} 吞掉所有错误 & 捕获具体异常，至少 \texttt{print}
+出来 \\
+\end{longtable}
+}
+
+\subsection{本节小结与思考题}\label{ux672cux8282ux5c0fux7ed3ux4e0eux601dux8003ux9898-2}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  用推导式写出：把 \texttt{scores} 中 60\textasciitilde90
+  分的小数保留两位并去掉重复。
+\item
+  解释 \texttt{def\ add(a,\ b=10):\ return\ a\ +\ b}
+  的默认参数什么时候会被``记住''。
+\item
+  为什么 \texttt{with\ open} 更安全？
+\end{enumerate}
+
+\section{05 LaTeX
+基础与编译}\label{latex-ux57faux7840ux4e0eux7f16ux8bd1}
+
+\begin{quote}
+本节目标：学会``把文字、公式、表格、图片排成一张漂亮的
+PDF''。先了解在线平台（Overleaf、LoongTeX）作为备选，再掌握本地 VS Code
++ TeX Live 的主流流程，最后用课程模板写出你的第一份报告。
+\end{quote}
+
+\subsection{本节目标}\label{ux672cux8282ux76eeux6807-4}
+
+\begin{itemize}
+\tightlist
+\item
+  知道 LaTeX 是什么、课程报告为什么推荐用它；
+\item
+  会用 \textbf{Overleaf / LoongTeX} 在线编译（网络/机房场景备选）；
+\item
+  会安装/检查 TeX Live，并配置 VS Code LaTeX Workshop 一键编译；
+\item
+  会写一个中文文档：标题、章节、数学公式、表格、插图；
+\item
+  会用 \texttt{教学资源/LaTeX模板/} 里的两个模板写作业/实验报告。
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{5.1 为什么课程用
+LaTeX}\label{ux4e3aux4ec0ux4e48ux8bfeux7a0bux7528-latex}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+优点 & 说明 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+排版专业 & 公式、表格、引用自动排版，论文/报告通用 \\
+稳定 & 同一个源码在任何电脑编译结果基本一致 \\
+可版本管理 & \texttt{.tex} 是纯文本，可与 Git 配合 \\
+数学友好 & 科学计算报告充满公式，LaTeX 几乎是标准 \\
+\end{longtable}
+}
+
+代价：有一点点学习成本。\textbf{本章只教 4
+件套}：文档骨架、公式、表格、插图 + 一键编译；其余按需查文档。
+
+\subsection{5.2
+在线平台（备选，推荐至少注册一个）}\label{ux5728ux7ebfux5e73ux53f0ux5907ux9009ux63a8ux8350ux81f3ux5c11ux6ce8ux518cux4e00ux4e2a}
+
+\subsubsection{Overleaf}\label{overleaf}
+
+\begin{itemize}
+\tightlist
+\item
+  网址：\texttt{https://www.overleaf.com/}
+\item
+  优点：浏览器直接写、多人协作、内置大量模板（含中文模板）、无需安装；
+\item
+  缺点：中文支持需选 \texttt{XeLaTeX} 编译器并引入
+  \texttt{ctex}；免费版有编译时长/协作人数限制；国际网络/访问速度一般。
+\end{itemize}
+
+\subsubsection{LoongTeX（龙文）}\label{loongtexux9f99ux6587}
+
+\begin{itemize}
+\tightlist
+\item
+  网址：\texttt{https://www.loongtex.com/}
+\item
+  优点：国产、访问快、中文环境开箱即用（内置 ctex
+  模板）、文档/教程中文友好；
+\item
+  缺点：规模比 Overleaf 小、功能与长期稳定性需以官网为准。
+\end{itemize}
+
+\subsubsection{在线 vs 本地}\label{ux5728ux7ebf-vs-ux672cux5730}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+场景 & 建议 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+机房/公共机没装 TeX Live & 用在线平台应急 \\
+在家、有网、机器带宽好 & 本地 TeX Live + VS Code（本节主流程） \\
+小组协作写一份报告 & Overleaf 协作更省事 \\
+课程期末报告（要控排版） & 本地模板更可控 \\
+\end{longtable}
+}
+
+\begin{quote}
+注意：\textbf{在线平台也要选 XeLaTeX 编译器}，否则中文会报错或乱码。
+\end{quote}
+
+\subsection{5.3 本地安装 TeX
+Live（Windows）}\label{ux672cux5730ux5b89ux88c5-tex-livewindows}
+
+\subsubsection{完整安装（推荐，一次到位）}\label{ux5b8cux6574ux5b89ux88c5ux63a8ux8350ux4e00ux6b21ux5230ux4f4d}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  打开
+  \texttt{https://www.tug.org/texlive/acquire-netinstall.html}，下载
+  \texttt{install-tl-windows.exe}（约 20 MB）；
+\item
+  运行安装程序：选择 \textbf{完整安装}（约 7--8 GB，包含
+  ctex、latexmk、xelatex 等）；网速慢可先在国内 CTAN 镜像下载 ISO
+  再安装；
+\item
+  安装完成后验证：
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{xelatex }\OperatorTok{{-}{-}}\NormalTok{version}
+\NormalTok{latexmk }\OperatorTok{{-}{-}}\NormalTok{version}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{精简安装（硬盘小 /
+网速受限）}\label{ux7cbeux7b80ux5b89ux88c5ux786cux76d8ux5c0f-ux7f51ux901fux53d7ux9650}
+
+\begin{itemize}
+\tightlist
+\item
+  安装时选择 \texttt{scheme-small} 或
+  \texttt{scheme-basic}，缺哪个宏包再 \texttt{tlmgr\ install\ 宏包名}；
+\item
+  \textbf{至少需要}：\texttt{ctex}、\texttt{xecjk}、\texttt{amsmath}、\texttt{graphicx}、\texttt{hyperref}、\texttt{latexmk}、\texttt{xetex}。
+\end{itemize}
+
+\subsubsection{macOS / Linux}\label{macos-linux}
+
+\begin{itemize}
+\tightlist
+\item
+  macOS：\texttt{brew\ install\ -\/-cask\ mactex}（或下载 MacTeX
+  安装包）；
+\item
+  Linux（含
+  CI）：\texttt{sudo\ apt\ install\ texlive-xetex\ texlive-lang-chinese\ texlive-latex-extra\ latexmk\ fonts-noto-cjk}；
+\item
+  若安装不动，直接用 5.2 的在线平台上课。
+\end{itemize}
+
+\subsection{5.4 配置 VS Code + LaTeX
+Workshop}\label{ux914dux7f6e-vs-code-latex-workshop}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  安装扩展 \textbf{LaTeX Workshop}（\texttt{james-yu.latex-workshop}）；
+\item
+  打开设置 JSON（\texttt{Ctrl+Shift+P} →
+  \texttt{Open\ Settings\ (JSON)}），确认/添加：
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{\{}
+  \DataTypeTok{"latex{-}workshop.latex.recipes"}\FunctionTok{:} \OtherTok{[}
+    \FunctionTok{\{} \DataTypeTok{"name"}\FunctionTok{:} \StringTok{"xelatex"}\FunctionTok{,} \DataTypeTok{"tools"}\FunctionTok{:} \OtherTok{[}\StringTok{"latexmk{-}xelatex"}\OtherTok{]} \FunctionTok{\}}
+  \OtherTok{]}\FunctionTok{,}
+  \DataTypeTok{"latex{-}workshop.latex.tools"}\FunctionTok{:} \OtherTok{[}
+    \FunctionTok{\{}
+      \DataTypeTok{"name"}\FunctionTok{:} \StringTok{"latexmk{-}xelatex"}\FunctionTok{,}
+      \DataTypeTok{"command"}\FunctionTok{:} \StringTok{"latexmk"}\FunctionTok{,}
+      \DataTypeTok{"args"}\FunctionTok{:} \OtherTok{[}\StringTok{"{-}xelatex"}\OtherTok{,} \StringTok{"{-}synctex=1"}\OtherTok{,} \StringTok{"{-}interaction=nonstopmode"}\OtherTok{,} \StringTok{"\%DOC\%"}\OtherTok{]}
+    \FunctionTok{\}}
+  \OtherTok{]}\FunctionTok{,}
+  \DataTypeTok{"latex{-}workshop.latex.autoBuild.run"}\FunctionTok{:} \StringTok{"onSave"}\FunctionTok{,}
+  \DataTypeTok{"latex{-}workshop.view.pdf.viewer"}\FunctionTok{:} \StringTok{"tab"}
+\FunctionTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  在 \texttt{.tex}
+  文件首行写魔法注释：\texttt{\%\ !TeX\ program\ =\ xelatex}；
+\item
+  保存后应自动编译并在 VS Code 内预览 PDF；\texttt{Ctrl+Alt+B}
+  手动构建，\texttt{Ctrl+Alt+V} 看 PDF。
+\end{enumerate}
+
+\begin{quote}
+也可以直接用课程模板自带的
+\texttt{.vscode/settings.json}（\texttt{教学资源/LaTeX模板/latex\_vscode\_template/}），拷贝进你的项目即可。
+\end{quote}
+
+\subsection{5.5
+第一份中文文档（最小可编译示例）}\label{ux7b2cux4e00ux4efdux4e2dux6587ux6587ux6863ux6700ux5c0fux53efux7f16ux8bd1ux793aux4f8b}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\% !TeX program = xelatex}
+\BuiltInTok{\textbackslash{}documentclass}\NormalTok{\{}\ExtensionTok{ctexart}\NormalTok{\}}
+\BuiltInTok{\textbackslash{}usepackage}\NormalTok{\{}\ExtensionTok{amsmath}\NormalTok{\}}
+\BuiltInTok{\textbackslash{}usepackage}\NormalTok{\{}\ExtensionTok{graphicx}\NormalTok{\}}
+\BuiltInTok{\textbackslash{}usepackage}\NormalTok{\{}\ExtensionTok{hyperref}\NormalTok{\}}
+
+\FunctionTok{\textbackslash{}title}\NormalTok{\{课程实验报告\}}
+\FunctionTok{\textbackslash{}author}\NormalTok{\{张三}\FunctionTok{\textbackslash{} }\NormalTok{20230001\}}
+\FunctionTok{\textbackslash{}date}\NormalTok{\{2026 年秋季\}}
+
+\KeywordTok{\textbackslash{}begin}\NormalTok{\{}\ExtensionTok{document}\NormalTok{\}}
+\FunctionTok{\textbackslash{}maketitle}
+
+\KeywordTok{\textbackslash{}section}\NormalTok{\{实验目的\}}
+\NormalTok{学会用 XeLaTeX 编译中文文档。}
+
+\KeywordTok{\textbackslash{}section}\NormalTok{\{结果\}}
+\NormalTok{平均分公式：}
+\KeywordTok{\textbackslash{}begin}\NormalTok{\{}\ExtensionTok{equation}\NormalTok{\}}
+\SpecialStringTok{  }\SpecialCharTok{\textbackslash{}bar}\SpecialStringTok{\{x\} = }\SpecialCharTok{\textbackslash{}frac}\SpecialStringTok{\{1\}\{n\}}\SpecialCharTok{\textbackslash{}sum}\SpecialStringTok{\_\{i=1\}\^{}\{n\} x\_i}
+\KeywordTok{\textbackslash{}end}\NormalTok{\{}\ExtensionTok{equation}\NormalTok{\}}
+
+\NormalTok{表格示例：}
+\KeywordTok{\textbackslash{}begin}\NormalTok{\{}\ExtensionTok{table}\NormalTok{\}[h]}
+  \FunctionTok{\textbackslash{}centering}
+  \KeywordTok{\textbackslash{}begin}\NormalTok{\{}\ExtensionTok{tabular}\NormalTok{\}\{|l|c|r|\}}
+    \FunctionTok{\textbackslash{}hline}
+\NormalTok{    姓名 }\OperatorTok{\&}\NormalTok{ Python }\OperatorTok{\&}\NormalTok{ 数学 }\FunctionTok{\textbackslash{}\textbackslash{}}
+    \FunctionTok{\textbackslash{}hline}
+\NormalTok{    张三 }\OperatorTok{\&}\NormalTok{ 88 }\OperatorTok{\&}\NormalTok{ 92 }\FunctionTok{\textbackslash{}\textbackslash{}}
+\NormalTok{    李四 }\OperatorTok{\&}\NormalTok{ 76 }\OperatorTok{\&}\NormalTok{ 81 }\FunctionTok{\textbackslash{}\textbackslash{}}
+    \FunctionTok{\textbackslash{}hline}
+  \KeywordTok{\textbackslash{}end}\NormalTok{\{}\ExtensionTok{tabular}\NormalTok{\}}
+  \FunctionTok{\textbackslash{}caption}\NormalTok{\{成绩表\}}
+\KeywordTok{\textbackslash{}end}\NormalTok{\{}\ExtensionTok{table}\NormalTok{\}}
+
+\NormalTok{图片示例：}
+\KeywordTok{\textbackslash{}begin}\NormalTok{\{}\ExtensionTok{figure}\NormalTok{\}[h]}
+  \FunctionTok{\textbackslash{}centering}
+  \BuiltInTok{\textbackslash{}includegraphics}\NormalTok{[width=0.6}\FunctionTok{\textbackslash{}textwidth}\NormalTok{]\{}\ExtensionTok{example.png}\NormalTok{\}}
+  \FunctionTok{\textbackslash{}caption}\NormalTok{\{结果示意图\}}
+\KeywordTok{\textbackslash{}end}\NormalTok{\{}\ExtensionTok{figure}\NormalTok{\}}
+
+\KeywordTok{\textbackslash{}end}\NormalTok{\{}\ExtensionTok{document}\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+说明：\texttt{ctexart} 让文档支持中文；\texttt{xelatex}
+负责字体；\texttt{\textbackslash{}begin\{equation\}...\textbackslash{}end\{equation\}}
+是编号公式；\texttt{tabular} 是表格；\texttt{includegraphics} 插图。
+\end{quote}
+
+\subsection{5.6
+编译方法与常见错误}\label{ux7f16ux8bd1ux65b9ux6cd5ux4e0eux5e38ux89c1ux9519ux8bef}
+
+\subsubsection{编译命令}\label{ux7f16ux8bd1ux547dux4ee4}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cd}\NormalTok{ 报告目录}
+\NormalTok{latexmk }\OperatorTok{{-}}\NormalTok{xelatex main}\OperatorTok{.}\FunctionTok{tex}       \CommentTok{\# 推荐：自动多遍}
+\CommentTok{\#\# 或手动四连：xelatex main.tex \&\& bibtex main \&\& xelatex main.tex \&\& xelatex main.tex}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{常见错误表}\label{ux5e38ux89c1ux9519ux8befux8868}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+报错/警告
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+原因与解决
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{!\ Package\ ctex\ Error} & 没开 XeLaTeX（用了 pdflatex）→ 改用
+\texttt{latexmk\ -xelatex} \\
+\texttt{Missing\ character:\ There\ is\ no\ ...} &
+字体缺字/空格命令错误；中文必须 xelatex + ctex \\
+\texttt{!\ LaTeX\ Error:\ File}xxx.sty' not
+found\texttt{\textbar{}\ 宏包未安装\ →}tlmgr install
+xxx\texttt{\textbar{}\ \textbar{}}! Undefined control
+sequence\texttt{\textbar{}\ 命令拼写错，或忘了引宏包（如}amsmath\texttt{）\ \textbar{}\ \textbar{}}!
+Undefined
+references\texttt{\textbar{}\ 需要多编译几遍；用}latexmk\texttt{自动处理\ \textbar{}\ \textbar{}\ 图片显示不出\ \textbar{}\ 图片路径相对}.tex\texttt{所在目录；用}\textbackslash includegraphics\texttt{且文件存在\ \textbar{}\ \textbar{}\ 编译卡住/内存\ \textbar{}\ 关闭}-synctex\texttt{；删掉}.aux`
+后再编译 & \\
+\end{longtable}
+}
+
+\subsection{5.7
+使用课程模板}\label{ux4f7fux7528ux8bfeux7a0bux6a21ux677f}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{最简模板} \texttt{latex\_simple/}：一个
+  \texttt{example.tex}，看标题/公式/列表/表格/结论；
+\item
+  \textbf{完整模板} \texttt{latex\_vscode\_template/}：含
+  \texttt{references.bib} 参考文献与 \texttt{figures/}
+  示例图，适合课程讲义/实验报告/期末大作业。
+\end{itemize}
+
+用法（以作业报告为例）：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{1. 把 latex\_vscode\_template 复制为你的报告目录（如 report/week0/）}
+\NormalTok{2. 改 main.tex 标题、作者、日期}
+\NormalTok{3. 写 section\{实验目的\} section\{方法\} section\{结果\} section\{结论\}}
+\NormalTok{4. 插入公式/表格/图片（见 5.5）}
+\NormalTok{5. 保存 → 自动编译 → 导出 main.pdf 提交}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+注意：\textbf{不要手改模板里的宏包配置}，先照抄；想加宏包再按文档加
+\texttt{\textbackslash{}usepackage}。
+\end{quote}
+
+\subsection{5.8
+在线平台的快速入门（备选）}\label{ux5728ux7ebfux5e73ux53f0ux7684ux5febux901fux5165ux95e8ux5907ux9009}
+
+\begin{itemize}
+\tightlist
+\item
+  Overleaf：New Project → 选 \texttt{ctexart} 或任何中文模板 →
+  把编译器切到 \texttt{XeLaTeX}（Menu → Compiler）→
+  编辑左侧源码、右侧实时 PDF；
+\item
+  LoongTeX：注册 → 新建项目（默认中文模板）→ 粘贴 5.5 示例 →
+  编译即可；文档帮助见官网教程。
+\end{itemize}
+
+\subsection{本节小结与思考题}\label{ux672cux8282ux5c0fux7ed3ux4e0eux601dux8003ux9898-3}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  为什么中文必须 XeLaTeX？（提示：字体与编码）
+\item
+  用课程模板写一个 5
+  行的小报告：标题、一段话、一个公式、一个表格，编译成 PDF。
+\item
+  如果机房电脑装不了 TeX Live，你准备用哪条备选路径？
+\end{enumerate}
+
+\section{06
+科学计算工作流与代码规范}\label{ux79d1ux5b66ux8ba1ux7b97ux5de5ux4f5cux6d41ux4e0eux4ee3ux7801ux89c4ux8303}
+
+\begin{quote}
+本节目标：让第 0 章成为你``会做项目''的起点：目录规范、notebook
+组织、代码风格、环境复现、Git 版本管理入门。
+\end{quote}
+
+\subsection{本节目标}\label{ux672cux8282ux76eeux6807-5}
+
+\begin{itemize}
+\tightlist
+\item
+  建立全英文、按主题分层的项目目录；
+\item
+  按``一个任务一个单元格''组织笔记本并保证可复现；
+\item
+  知道科学计算代码的基本规范与命名；
+\item
+  用 \texttt{environment.yml} / \texttt{requirements.txt} 复现环境；
+\item
+  掌握 Git 的 4 个核心命令（选学，期末大作业前会用到）。
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{6.1
+项目目录规范}\label{ux9879ux76eeux76eeux5f55ux89c4ux8303}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{course{-}dist/                    \# 你的工作区}
+\NormalTok{+{-}{-} data/                       \# 原始数据（只读）}
+\NormalTok{+{-}{-} src/ 或 scripts/            \# 可复用 .py 脚本}
+\NormalTok{+{-}{-} notebooks/                  \# 各章 .ipynb}
+\NormalTok{+{-}{-} report/                     \# LaTeX 报告}
+\NormalTok{+{-}{-} output/                     \# 生成结果（图/表/txt）}
+\NormalTok{+{-}{-} environment.yml             \# 环境定义}
+\NormalTok{+{-}{-} README.md}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{路径全英文}：中文/空格路径会让 LaTeX、Jupyter、pandoc
+  等工具出幺蛾子；
+\item
+  数据与代码分离：数据放 \texttt{data/}，结果写
+  \texttt{output/}，不要混在源码目录。
+\end{itemize}
+
+\subsection{6.2 Notebook
+组织（重要）}\label{notebook-ux7ec4ux7ec7ux91cdux8981}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{第一个 Markdown 单元格}：标题、姓名、学号、日期、依赖；
+\item
+  按任务分块：\texttt{\#\#\ 任务\ 1\ 读取数据} → 代码 →
+  输出；\texttt{\#\#\ 任务\ 2\ 统计} → 代码 → 输出；
+\item
+  \textbf{从上往下能一键重跑}：提交前
+  \texttt{Restart\ Kernel\ \&\ Run\ All}，确认没有``靠之前的变量''才能通过；
+\item
+  中间过程用 Markdown 写``这里做了什么''，不要只有代码；
+\item
+  大结果存文件（\texttt{output/result.txt}、\texttt{output/fig.png}），notebook
+  里只留摘要。
+\end{enumerate}
+
+\subsection{6.3
+代码规范（够用版）}\label{ux4ee3ux7801ux89c4ux8303ux591fux7528ux7248}
+
+\begin{itemize}
+\tightlist
+\item
+  命名：函数动词开头（\texttt{compute\_average}）、常量全大写、变量小写下划线；
+\item
+  一个函数一个职责；超过 20 行考虑拆分；
+\item
+  导入置顶：标准库、第三方、本地模块分组；
+\item
+  注释写``为什么''；不要在提交代码里留 \texttt{print(123)} 测试垃圾；
+\item
+  涉及随机结果一定要设种子（\texttt{random.seed} / 后续
+  \texttt{np.random.default\_rng}）。
+\end{itemize}
+
+\subsection{6.4 可复现环境}\label{ux53efux590dux73b0ux73afux5883}
+
+\begin{itemize}
+\tightlist
+\item
+  用课程提供的环境文件重建：\texttt{conda\ env\ create\ -f\ environment.yml}；
+\item
+  也可以用 pip
+  冻结：\texttt{pip\ freeze\ \textgreater{}\ requirements.txt}；
+\item
+  提交作业时注明 Python
+  版本与关键包版本（\texttt{python\ -V}、\texttt{pip\ list} 截取）。
+\end{itemize}
+
+\subsection{6.5 Git
+入门（选学，期末前补）}\label{git-ux5165ux95e8ux9009ux5b66ux671fux672bux524dux8865}
+
+安装 Git for Windows：\texttt{https://git-scm.com/}。四个核心命令：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{git clone https}\OperatorTok{://}\NormalTok{github}\OperatorTok{.}\FunctionTok{com}\OperatorTok{/}\NormalTok{你的账号}\OperatorTok{/}\NormalTok{仓库}\OperatorTok{.}\FunctionTok{git}   \CommentTok{\# 第一次}
+\NormalTok{git add }\OperatorTok{.}
+\NormalTok{git commit }\OperatorTok{{-}}\NormalTok{m }\StringTok{"week0: 环境+报告"}
+\NormalTok{git push}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{.gitignore}：把
+  \texttt{.venv}、\texttt{output/}、\texttt{*.pdf}（如不需要提交）排除；
+\item
+  只提交源码、笔记、报告源码；不要提交大文件（数据 \textgreater{} 50 MB
+  走网盘/云盘）；
+\item
+  每完成一章提交一次，方便回溯与协作。
+\end{itemize}
+
+\subsection{6.6
+提交与打包规范}\label{ux63d0ux4ea4ux4e0eux6253ux5305ux89c4ux8303}
+
+第 0 章提交内容（示例）：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{学号\_姓名\_第0章\_env\_check.txt      \# 环境自检输出}
+\NormalTok{学号\_姓名\_第0章\_lab0.ipynb        \# lab 完成版}
+\NormalTok{学号\_姓名\_第0章\_lab0报告.pdf       \# LaTeX 报告}
+\NormalTok{学号\_姓名\_第0章\_result.txt        \# 数据统计结果}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  命名统一：\texttt{学号\_姓名\_第N章\_类型.扩展名}；
+\item
+  PDF 用课程模板编译，不交 \texttt{.tex} 可以不交（老师按需收源码）。
+\end{itemize}
+
+\subsection{6.7 本节小结}\label{ux672cux8282ux5c0fux7ed3-1}
+
+\begin{itemize}
+\tightlist
+\item
+  工具链稳定 = 项目能跑通的一半；目录规范 = 能被复现的一半；
+\item
+  Notebook 的``可重跑''比``我运行过''更重要；
+\item
+  Git 不是期末考试，但期末大作业小组协作时是``保命''技能。
+\end{itemize}
+
+\subsection{思考题}\label{ux601dux8003ux9898-1}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  为什么数据、代码、输出要分开目录？
+\item
+  什么是``上一次运行留下的变量竟然被下一次用了''的隐藏 bug？如何避免？
+\item
+  假如你 3 周后回来打开两周前的 notebook，哪些做法能让你 5
+  分钟恢复上下文？
+\end{enumerate}
+
+\section{07 综合案例：从成绩单数据到 LaTeX
+报告}\label{ux7efcux5408ux6848ux4f8bux4eceux6210ux7ee9ux5355ux6570ux636eux5230-latex-ux62a5ux544a}
+
+\begin{quote}
+本案例把第 0 章的三件事串成一条线：\textbf{读 CSV 数据 → 用纯 Python
+统计 → 画出简图 → 用 LaTeX 排版成课程报告}。它也是期末大作业（数据分析 +
+报告）的迷你演练。
+\end{quote}
+
+\subsection{本节目标}\label{ux672cux8282ux76eeux6807-6}
+
+\begin{itemize}
+\tightlist
+\item
+  用 \texttt{csv} 模块读取课程成绩单；
+\item
+  用字典、列表、推导式、函数完成统计与排名；
+\item
+  把统计结果写入 \texttt{result.txt}；
+\item
+  用 matplotlib 画一张简单的成绩分布图（预告第 5 章，先用起来）；
+\item
+  用课程 LaTeX 模板把结果排成一份 1--2 页报告，编译出 PDF。
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{7.1 数据}\label{ux6570ux636e}
+
+数据文件：\texttt{lab/data/scores.csv}（20
+名学生，字段：\texttt{学号,姓名,Python,数学,英语}）。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{学号,姓名,Python,数学,英语}
+\NormalTok{20230001,张三,88,92,79}
+\NormalTok{20230002,李四,76,81,85}
+\NormalTok{...}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+数据由 \texttt{build/make\_chap0\_lab.py} 生成，可复现（种子固定）。
+\end{quote}
+
+\subsection{7.2 任务
+1：读取与清洗}\label{ux4efbux52a1-1ux8bfbux53d6ux4e0eux6e05ux6d17}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ csv}
+
+\ControlFlowTok{with} \BuiltInTok{open}\NormalTok{(}\StringTok{"lab/data/scores.csv"}\NormalTok{, encoding}\OperatorTok{=}\StringTok{"utf{-}8"}\NormalTok{) }\ImportTok{as}\NormalTok{ f:}
+\NormalTok{    rows }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(csv.DictReader(f))}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"学生数:"}\NormalTok{, }\BuiltInTok{len}\NormalTok{(rows))}
+\BuiltInTok{print}\NormalTok{(rows[}\DecValTok{0}\NormalTok{])}
+\CommentTok{\#\# 检查是否有空值/非数字}
+\NormalTok{bad }\OperatorTok{=}\NormalTok{ [r }\ControlFlowTok{for}\NormalTok{ r }\KeywordTok{in}\NormalTok{ rows }\ControlFlowTok{if} \KeywordTok{not}\NormalTok{ r[}\StringTok{"Python"}\NormalTok{].strip() }\KeywordTok{or} \KeywordTok{not}\NormalTok{ r[}\StringTok{"数学"}\NormalTok{].strip()]}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"异常行:"}\NormalTok{, bad)}
+\end{Highlighting}
+\end{Shaded}
+
+要求：把成绩转成
+\texttt{float}；发现异常行时打印并跳过（本数据默认无异常，代码要能容错）。
+
+\subsection{7.3 任务
+2：统计与排名}\label{ux4efbux52a1-2ux7edfux8ba1ux4e0eux6392ux540d}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ compute(row):}
+\NormalTok{    py, ma, en }\OperatorTok{=} \BuiltInTok{float}\NormalTok{(row[}\StringTok{"Python"}\NormalTok{]), }\BuiltInTok{float}\NormalTok{(row[}\StringTok{"数学"}\NormalTok{]), }\BuiltInTok{float}\NormalTok{(row[}\StringTok{"英语"}\NormalTok{])}
+\NormalTok{    total }\OperatorTok{=}\NormalTok{ py }\OperatorTok{+}\NormalTok{ ma }\OperatorTok{+}\NormalTok{ en}
+    \ControlFlowTok{return}\NormalTok{ total, total }\OperatorTok{/} \DecValTok{3}
+
+\ControlFlowTok{for}\NormalTok{ r }\KeywordTok{in}\NormalTok{ rows:}
+\NormalTok{    r[}\StringTok{"总分"}\NormalTok{], r[}\StringTok{"平均分"}\NormalTok{] }\OperatorTok{=}\NormalTok{ compute(r)}
+
+\NormalTok{by\_avg }\OperatorTok{=} \BuiltInTok{sorted}\NormalTok{(rows, key}\OperatorTok{=}\KeywordTok{lambda}\NormalTok{ r: r[}\StringTok{"平均分"}\NormalTok{], reverse}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"第一名:"}\NormalTok{, by\_avg[}\DecValTok{0}\NormalTok{][}\StringTok{"姓名"}\NormalTok{], by\_avg[}\DecValTok{0}\NormalTok{][}\StringTok{"平均分"}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"倒数第一:"}\NormalTok{, by\_avg[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{][}\StringTok{"姓名"}\NormalTok{], by\_avg[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{][}\StringTok{"平均分"}\NormalTok{])}
+
+\NormalTok{class\_stats }\OperatorTok{=}\NormalTok{ \{}
+    \StringTok{"Python 平均"}\NormalTok{: }\BuiltInTok{sum}\NormalTok{(}\BuiltInTok{float}\NormalTok{(r[}\StringTok{"Python"}\NormalTok{]) }\ControlFlowTok{for}\NormalTok{ r }\KeywordTok{in}\NormalTok{ rows) }\OperatorTok{/} \BuiltInTok{len}\NormalTok{(rows),}
+    \StringTok{"平均分 ≥ 60 人数"}\NormalTok{: }\BuiltInTok{sum}\NormalTok{(}\DecValTok{1} \ControlFlowTok{for}\NormalTok{ r }\KeywordTok{in}\NormalTok{ rows }\ControlFlowTok{if}\NormalTok{ r[}\StringTok{"平均分"}\NormalTok{] }\OperatorTok{\textgreater{}=} \DecValTok{60}\NormalTok{),}
+    \StringTok{"90 分以上（Python）"}\NormalTok{: }\BuiltInTok{sum}\NormalTok{(}\DecValTok{1} \ControlFlowTok{for}\NormalTok{ r }\KeywordTok{in}\NormalTok{ rows }\ControlFlowTok{if} \BuiltInTok{float}\NormalTok{(r[}\StringTok{"Python"}\NormalTok{]) }\OperatorTok{\textgreater{}=} \DecValTok{90}\NormalTok{),}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+要求：输出总分排名前 3 与最后 3；统计各科平均分、最高分、最低分。
+
+\subsection{7.4 任务
+3：写出结果文件}\label{ux4efbux52a1-3ux5199ux51faux7ed3ux679cux6587ux4ef6}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{with} \BuiltInTok{open}\NormalTok{(}\StringTok{"output/result.txt"}\NormalTok{, }\StringTok{"w"}\NormalTok{, encoding}\OperatorTok{=}\StringTok{"utf{-}8"}\NormalTok{) }\ImportTok{as}\NormalTok{ f:}
+\NormalTok{    f.write(}\StringTok{"== 课程成绩统计 ==}\CharTok{\textbackslash{}n\textbackslash{}n}\StringTok{"}\NormalTok{)}
+    \ControlFlowTok{for}\NormalTok{ name, val }\KeywordTok{in}\NormalTok{ class\_stats.items():}
+\NormalTok{        f.write(}\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{name}\SpecialCharTok{\}}\SpecialStringTok{: }\SpecialCharTok{\{}\NormalTok{val}\SpecialCharTok{:.2f\}}\CharTok{\textbackslash{}n}\SpecialStringTok{"}\NormalTok{)}
+\NormalTok{    f.write(}\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{排名前 3：}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+    \ControlFlowTok{for}\NormalTok{ r }\KeywordTok{in}\NormalTok{ by\_avg[:}\DecValTok{3}\NormalTok{]:}
+\NormalTok{        f.write(}\SpecialStringTok{f"  }\SpecialCharTok{\{}\NormalTok{r[}\StringTok{\textquotesingle{}姓名\textquotesingle{}}\NormalTok{]}\SpecialCharTok{\}}\SpecialStringTok{ 平均 }\SpecialCharTok{\{}\NormalTok{r[}\StringTok{\textquotesingle{}平均分\textquotesingle{}}\NormalTok{]}\SpecialCharTok{:.1f\}}\CharTok{\textbackslash{}n}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\BuiltInTok{open}\NormalTok{(}\StringTok{"output/result.txt"}\NormalTok{, encoding}\OperatorTok{=}\StringTok{"utf{-}8"}\NormalTok{).read())}
+\end{Highlighting}
+\end{Shaded}
+
+注意：先 \texttt{os.makedirs("output",\ exist\_ok=True)}。
+
+\subsection{7.5 任务 4：画一张简图（预告第 5
+章）}\label{ux4efbux52a1-4ux753bux4e00ux5f20ux7b80ux56feux9884ux544aux7b2c-5-ux7ae0}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ matplotlib}
+\NormalTok{matplotlib.use(}\StringTok{"Agg"}\NormalTok{)   }\CommentTok{\# 无界面后端，保存文件不弹窗（上课/机房必备）}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+
+\NormalTok{names }\OperatorTok{=}\NormalTok{ [r[}\StringTok{"姓名"}\NormalTok{] }\ControlFlowTok{for}\NormalTok{ r }\KeywordTok{in}\NormalTok{ rows]}
+\NormalTok{avgs }\OperatorTok{=}\NormalTok{ [r[}\StringTok{"平均分"}\NormalTok{] }\ControlFlowTok{for}\NormalTok{ r }\KeywordTok{in}\NormalTok{ rows]}
+\NormalTok{plt.figure(figsize}\OperatorTok{=}\NormalTok{(}\DecValTok{9}\NormalTok{, }\DecValTok{4}\NormalTok{))}
+\NormalTok{plt.bar(names, avgs)}
+\NormalTok{plt.axhline(}\DecValTok{60}\NormalTok{, color}\OperatorTok{=}\StringTok{"red"}\NormalTok{, linestyle}\OperatorTok{=}\StringTok{"{-}{-}"}\NormalTok{, label}\OperatorTok{=}\StringTok{"及格线 60"}\NormalTok{)}
+\NormalTok{plt.xlabel(}\StringTok{"姓名"}\NormalTok{)}\OperatorTok{;}\NormalTok{ plt.ylabel(}\StringTok{"平均分"}\NormalTok{)}\OperatorTok{;}\NormalTok{ plt.title(}\StringTok{"课程平均分分布"}\NormalTok{)}
+\NormalTok{plt.legend()}
+\NormalTok{plt.savefig(}\StringTok{"output/avg\_scores.png"}\NormalTok{, dpi}\OperatorTok{=}\DecValTok{120}\NormalTok{)}
+\NormalTok{plt.close()}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"已保存 output/avg\_scores.png"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{7.6 任务 5：LaTeX
+报告（核心交付物）}\label{ux4efbux52a1-5latex-ux62a5ux544aux6838ux5fc3ux4ea4ux4ed8ux7269}
+
+用 \texttt{教学资源/LaTeX模板/latex\_vscode\_template/} 复制成
+\texttt{report/week0/}，改 \texttt{main.tex}：
+
+\begin{itemize}
+\tightlist
+\item
+  标题：《第 0 章综合案例：成绩单统计报告》，作者 = 你的学号姓名；
+\item
+  \texttt{\textbackslash{}section\{数据与方法\}}：说明数据来源（20 人、3
+  门课）与统计方法（均值等）；
+\item
+  \texttt{\textbackslash{}section\{结果\}}：一个表格（前 5
+  名），一个公式（平均分公式），一张图（\texttt{avg\_scores.png}）；
+\item
+  \texttt{\textbackslash{}section\{结论\}}：写 2--3 句自己的发现；
+\item
+  编译：\texttt{latexmk\ -xelatex\ main.tex}，得到 \texttt{main.pdf}。
+\end{itemize}
+
+表格示例：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{\textbackslash{}begin}\NormalTok{\{}\ExtensionTok{tabular}\NormalTok{\}\{|l|c|c|\}}
+\FunctionTok{\textbackslash{}hline}
+\NormalTok{姓名 }\OperatorTok{\&}\NormalTok{ Python }\OperatorTok{\&}\NormalTok{ 平均分 }\FunctionTok{\textbackslash{}\textbackslash{}}
+\FunctionTok{\textbackslash{}hline}
+\NormalTok{张三 }\OperatorTok{\&}\NormalTok{ 88 }\OperatorTok{\&}\NormalTok{ 86.3 }\FunctionTok{\textbackslash{}\textbackslash{}}
+\FunctionTok{\textbackslash{}hline}
+\KeywordTok{\textbackslash{}end}\NormalTok{\{}\ExtensionTok{tabular}\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{7.7 任务
+6：自检清单}\label{ux4efbux52a1-6ux81eaux68c0ux6e05ux5355}
+
+\begin{itemize}
+\tightlist
+\item[$\square$]
+  环境自检 \texttt{check\_env.py} 全 OK；
+\item[$\square$]
+  \texttt{python\ lab0.py} 能从头跑通（无报错）；
+\item[$\square$]
+  \texttt{result.txt} 与 \texttt{avg\_scores.png} 生成；
+\item[$\square$]
+  LaTeX 报告编译出 PDF，公式/表格/图都正常；
+\item[$\square$]
+  提交 4 个文件：env\_check.txt、lab0.ipynb（或
+  lab0.py）、result.txt、报告 PDF。
+\end{itemize}
+
+\subsection{7.8 拓展（学完第 4
+章后回看）}\label{ux62d3ux5c55ux5b66ux5b8cux7b2c-4-ux7ae0ux540eux56deux770b}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  用 pandas 重写统计（一行 \texttt{df.mean()} 就能做完）；
+\item
+  用 seaborn 画更美观的分布图；
+\item
+  把报告升级为``每科通过率 + 班级分布直方图 + 简短分析''。
+\end{enumerate}
+
+\subsection{本节小结}\label{ux672cux8282ux5c0fux7ed3-2}
+
+这个案例虽然简单，但走完了科学计算项目的\textbf{完整闭环}：数据 →
+编程统计 → 结果文件 → 可视化 → 排版报告。后面 8
+章会在每一环上逐步替换成更专业的工具（NumPy/Pandas/Matplotlib/\ldots），但``闭环''的思维方式从第
+0 章就开始用了。
+
+\subsection{思考题}\label{ux601dux8003ux9898-2}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  为什么第 0 章用纯 Python 而不是直接上
+  pandas？（提示：先懂原理，再用工具）
+\item
+  如果成绩表有 10 万行，纯 Python 循环还够快吗？第 1 章 NumPy
+  会怎么解决？
+\end{enumerate}
+
+\newpage

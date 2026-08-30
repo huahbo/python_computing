@@ -10,6 +10,7 @@
 
 | 章 | 目录 | 状态 | 备注 |
 | ---- | ---- | ---- | ---- |
+| 0 前置基础 | `chapters/00-prep/` | ✅ 完成 | 3 图、15题quiz、lab 10/10、24 页 PDF；配套 `教学资源/环境配置/` |
 | 1 NumPy | `chapters/01-numpy/` | ✅ 完成 | 6 图、20题+quiz、lab 13/13、24 页 PDF |
 | 2 SymPy | `chapters/02-sympy/` | ✅ 完成 | 3 图、10题+11题quiz、lab 18/18、20 页 PDF |
 | 3 SciPy | `chapters/03-scipy/` | ✅ 完成 | 9 图、16题quiz、lab 13/13、29 页 PDF |
@@ -21,5 +22,6 @@
 
 ## 全校验（2026 汇总）
 
-- `python build/validate_book.py`：chapters=8、notebooks ok=25、labs=8、missing internal links=0、problems=0 ✅
+- `python build/validate_book.py`：chapters=9、notebooks ok=29、labs=9、missing internal links=0、problems=0 ✅
+- 第 0 章：quiz 15 题自动评分答案 15/15；lab0 运行 10/10；全书 PDF 181 页；教材TeX main.pdf 编译通过。
 - 各章 lab 均逐章执行通过；各章合订 PDF 均已生成于 `教材PDF/`。

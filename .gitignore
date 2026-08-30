@@ -24,8 +24,9 @@ docs/build/.texbook_cache.json
 docs/build/.tex_emit_cache.json
 docs/build/_tmp_*.md
 
-# ===== lab 执行时误存到 docs 根的图 =====
+# ===== lab 执行时误存到 docs 根的图 / lab 运行产物 =====
 docs/*.png
+docs/chapters/*/lab/output/
 
 # ===== Python =====
 .venv/

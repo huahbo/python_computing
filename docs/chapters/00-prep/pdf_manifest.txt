@@ -1,0 +1,10 @@
+# 第 0 章 PDF 合订清单（build/pdf_build.py 读取）
+TITLE: 前置基础：环境、编程与 LaTeX
+README.md
+00-01-课程导览与学习路径.md
+00-02-统一环境安装与自检.md
+00-03-VSCode使用与Jupyter工作流.md
+00-04-Python编程快速强化.md
+00-05-LaTeX基础与编译.md
+00-06-科学计算工作流与代码规范.md
+00-07-综合案例.md

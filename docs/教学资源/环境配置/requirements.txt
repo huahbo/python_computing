@@ -1,0 +1,11 @@
+numpy>=2.1
+sympy>=1.13
+scipy>=1.15
+pandas>=2.2
+matplotlib>=3.10
+seaborn>=0.13
+networkx>=3.3
+statsmodels>=0.14
+scikit-learn>=1.6
+jupyterlab>=4
+ipykernel>=6

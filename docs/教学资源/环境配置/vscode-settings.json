@@ -1,0 +1,18 @@
+{
+  "python.defaultInterpreterPath": "C:/Users/你的用户名/miniconda3/envs/scicomp/python.exe",
+  "python.terminal.activateEnvironment": true,
+  "jupyter.notebookFileRoot": "${workspaceFolder}",
+  "python.analysis.extraPaths": ["${workspaceFolder}"],
+  "latex-workshop.latex.recipes": [
+    { "name": "xelatex", "tools": ["latexmk-xelatex"] }
+  ],
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk-xelatex",
+      "command": "latexmk",
+      "args": ["-xelatex", "-synctex=1", "-interaction=nonstopmode", "%DOC%"]
+    }
+  ],
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.view.pdf.viewer": "tab"
+}

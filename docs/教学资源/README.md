@@ -15,6 +15,7 @@
 
 ## 其他资料
 
+- [教学环境配置](./环境配置/README.md)（第 0 章统一环境：environment.yml / check_env.py / vscode-settings.json / requirements.txt）
 - [LaTeX 模板](./LaTeX模板/README.md)（作业报告/讲义/论文，XeLaTeX+ctex，含参考文献示例）
 - 各章 quiz 已并入各章 `exercises/`；旧 quiz（`chapter_*_quiz`）已归档到 `原始资料/`；
 - 原始合并脚本/PDF 见 `原始资料/`。

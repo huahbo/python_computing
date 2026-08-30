@@ -4,6 +4,7 @@ author: Datawhale · 若冰（马世拓）
 date: 2026
 # 章节顺序：目录名对应 docs/chapters/<dir>；标题与文件清单复用该章 pdf_manifest.txt
 chapters:
+  - 00-prep
   - 01-numpy
   - 02-sympy
   - 03-scipy

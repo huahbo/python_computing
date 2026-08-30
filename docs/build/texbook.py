@@ -124,7 +124,7 @@ def build_one(ch, out_pdf):
     with open(tmp, "w", encoding="utf-8") as f:
         f.write(md)
     title, _ = read_manifest(ch)
-    ok = run_pandoc(tmp, out_pdf, title="第 " + ch[:2] + " 章 · " + title)
+    ok = run_pandoc(tmp, out_pdf, title="第 " + str(int(ch[:2])) + " 章 · " + title)
     os.remove(tmp)
     if not ok:
         return False

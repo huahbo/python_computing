@@ -8,7 +8,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def run(cmd, name):
     print(f"\n===== {name} =====")
-    p = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True)
+    p = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True,
+                         encoding="utf-8", errors="replace")
     tail = p.stdout.strip()[-1500:]
     print(tail if tail else "(no stdout)")
     if p.stderr.strip():
