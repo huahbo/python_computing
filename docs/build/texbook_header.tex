@@ -5,3 +5,19 @@
 \fancyhead[L]{\small\color{gray}Python 科学计算（新版教程）}
 \fancyhead[R]{\small\color{gray}\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
+
+% ===== 全局排版：行距/表格/图片/断行（M10 排版精修）=====
+\usepackage{setspace}
+\setstretch{1.15}
+\renewcommand{\arraystretch}{1.18}
+\setlength{\tabcolsep}{4pt}
+\emergencystretch=1.5em
+\clubpenalty=4000
+\widowpenalty=4000
+\RequirePackage{graphicx}
+\setkeys{Gin}{width=\textwidth,keepaspectratio}
+
+% 长表格用 \small 字体，减少列溢出
+\usepackage{longtable}
+\usepackage{etoolbox}
+\AtBeginEnvironment{longtable}{\small}

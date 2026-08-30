@@ -18,9 +18,9 @@
 
 ## 官方文档/参考入口
 
-- SymPy 官方 Solvers：https://docs.sympy.org/latest/modules/solvers/index.html
-- SymPy 官方 lambdify：https://docs.sympy.org/latest/modules/utilities/lambdify.html
-- SymPy 官方 ODE：https://docs.sympy.org/latest/modules/solvers/ode.html
+- SymPy 官方 Solvers：[链接](https://docs.sympy.org/latest/modules/solvers/index.html)
+- SymPy 官方 lambdify：[链接](https://docs.sympy.org/latest/modules/utilities/lambdify.html)
+- SymPy 官方 ODE：[链接](https://docs.sympy.org/latest/modules/solvers/ode.html)
 
 ---
 
@@ -340,7 +340,7 @@ Eq(x(t), K*x0*exp(r*t)/((-K + x0)*(x0*exp(r*t)/(-K + x0) - 1)))
 
 ## 延伸阅读
 
-- SymPy 官方 Solvers 文档：https://docs.sympy.org/latest/modules/solvers/index.html
-- SymPy 官方 Matrix 文档：https://docs.sympy.org/latest/modules/matrices/index.html
-- SymPy 官方 lambdify 参考：https://docs.sympy.org/latest/modules/utilities/lambdify.html
-- SymPy 官方 ODE（dsolve）文档：https://docs.sympy.org/latest/modules/solvers/ode.html
+- SymPy 官方 Solvers 文档：[链接](https://docs.sympy.org/latest/modules/solvers/index.html)
+- SymPy 官方 Matrix 文档：[链接](https://docs.sympy.org/latest/modules/matrices/index.html)
+- SymPy 官方 lambdify 参考：[链接](https://docs.sympy.org/latest/modules/utilities/lambdify.html)
+- SymPy 官方 ODE（dsolve）文档：[链接](https://docs.sympy.org/latest/modules/solvers/ode.html)

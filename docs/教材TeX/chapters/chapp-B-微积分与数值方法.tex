@@ -344,7 +344,8 @@ from scipy import integrate, optimize
 p = np.array([1., 2., 3., 4.]); q = np.array([9., 7., 5., 3.])
 coef = np.polyfit(p, q, 2)
 total = integrate.quad(lambda x: np.polyval(coef, x), 1, 4)[0]
-best = optimize.minimize_scalar(lambda x: -x * np.polyval(coef, x), bounds=(1, 4), method="bounded")
+profit = lambda x: -x * np.polyval(coef, x)
+best = optimize.minimize_scalar(profit, bounds=(1, 4), method="bounded")
 print(total, best.x)
 \end{verbatim}
 

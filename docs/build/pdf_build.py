@@ -29,6 +29,7 @@ PANDOC_OPTS = [
     "-V", "geometry:margin=2.2cm",
     "-V", "colorlinks=true",
     "-V", "linkcolor=blue",
+    "--include-in-header=" + os.path.join(ROOT, "build", "texbook_header.tex"),
 ]
 
 

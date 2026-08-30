@@ -198,7 +198,8 @@ integrate.solve_ivp(lambda t, y: -y, [0, 5], [1.0])
     p = np.array([1., 2., 3., 4.]); q = np.array([9., 7., 5., 3.])
     coef = np.polyfit(p, q, 2)
     total = integrate.quad(lambda x: np.polyval(coef, x), 1, 4)[0]
-    best = optimize.minimize_scalar(lambda x: -x * np.polyval(coef, x), bounds=(1, 4), method="bounded")
+    profit = lambda x: -x * np.polyval(coef, x)
+    best = optimize.minimize_scalar(profit, bounds=(1, 4), method="bounded")
     print(total, best.x)
 
 **反思**：把"数据→模型→积分→优化"串起来，就是科学计算的常用闭环。

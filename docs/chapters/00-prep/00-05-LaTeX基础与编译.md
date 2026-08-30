@@ -27,13 +27,13 @@
 
 ### Overleaf
 
-- 网址：`https://www.overleaf.com/`
+- 网址：`[链接](https://www.overleaf.com/`)
 - 优点：浏览器直接写、多人协作、内置大量模板（含中文模板）、无需安装；
 - 缺点：中文支持需选 `XeLaTeX` 编译器并引入 `ctex`；免费版有编译时长/协作人数限制；国际网络/访问速度一般。
 
 ### LoongTeX（龙文）
 
-- 网址：`https://www.loongtex.com/`
+- 网址：`[链接](https://www.loongtex.com/`)
 - 优点：国产、访问快、中文环境开箱即用（内置 ctex 模板）、文档/教程中文友好；
 - 缺点：规模比 Overleaf 小、功能与长期稳定性需以官网为准。
 
@@ -52,7 +52,7 @@
 
 ### 完整安装（推荐，一次到位）
 
-1. 打开 `https://www.tug.org/texlive/acquire-netinstall.html`，下载 `install-tl-windows.exe`（约 20 MB）；
+1. 打开 `[链接](https://www.tug.org/texlive/acquire-netinstall.html`，下载) `install-tl-windows.exe`（约 20 MB）；
 2. 运行安装程序：选择 **完整安装**（约 7–8 GB，包含 ctex、latexmk、xelatex 等）；网速慢可先在国内 CTAN 镜像下载 ISO 再安装；
 3. 安装完成后验证：
 
@@ -97,7 +97,7 @@ latexmk --version
 3. 在 `.tex` 文件首行写魔法注释：`% !TeX program = xelatex`；
 4. 保存后应自动编译并在 VS Code 内预览 PDF；`Ctrl+Alt+B` 手动构建，`Ctrl+Alt+V` 看 PDF。
 
-> 也可以直接用课程模板自带的 `.vscode/settings.json`（`教学资源/LaTeX模板/latex_vscode_template/`），拷贝进你的项目即可。
+> 也可以直接用课程模板自带的 `.vscode/settings.json`（模板目录 latex_vscode_template/），拷贝进你的项目即可。
 
 ## 5.5 第一份中文文档（最小可编译示例）
 

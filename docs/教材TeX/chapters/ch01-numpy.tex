@@ -7,7 +7,7 @@
 \begin{quote}
 本节对应原版 1.1 的内容，并增补学习目标、常见误区、思考题与延伸阅读。
 配套图：\texttt{figures/01-numpy/reshape.png}、\texttt{figures/01-numpy/broadcast.png}（由
-\texttt{build/make\_chap1\_figures.py} 生成）。
+\texttt{make\_chap1\_figures.py} 生成）。
 \end{quote}
 
 \subsection{本节目标}\label{ux672cux8282ux76eeux6807-7}
@@ -506,13 +506,13 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab}
 \tightlist
 \item
   NumPy
-  官方绝对入门：https://numpy.org/doc/stable/user/absolute\_beginners.html
+  官方绝对入门：\href{https://numpy.org/doc/stable/user/absolute_beginners.html}{链接}
 \item
   NumPy
-  官方广播机制：https://numpy.org/doc/stable/user/basics.broadcasting.html
+  官方广播机制：\href{https://numpy.org/doc/stable/user/basics.broadcasting.html}{链接}
 \item
   SciPy Lecture Notes --
-  NumPy：https://scipy-lectures.org/intro/numpy/index.html
+  NumPy：\href{https://scipy-lectures.org/intro/numpy/index.html}{链接}
 \end{itemize}
 
 \section{02
@@ -786,13 +786,13 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-1}
 \tightlist
 \item
   NumPy 官方 ndarray
-  基础：https://numpy.org/doc/stable/user/quickstart.html
+  基础：\href{https://numpy.org/doc/stable/user/quickstart.html}{链接}
 \item
   NumPy 官方 I/O
-  说明：https://numpy.org/doc/stable/reference/routines.io.html
+  说明：\href{https://numpy.org/doc/stable/reference/routines.io.html}{链接}
 \item
   SciPy Lecture Notes --
-  数组操作：https://scipy-lectures.org/intro/numpy/operations.html
+  数组操作：\href{https://scipy-lectures.org/intro/numpy/operations.html}{链接}
 \end{itemize}
 
 \section{03 线性代数：逆、方程组、分解与
@@ -1083,13 +1083,13 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-2}
 \tightlist
 \item
   NumPy 官方 linalg
-  参考：https://numpy.org/doc/stable/reference/routines.linalg.html
+  参考：\href{https://numpy.org/doc/stable/reference/routines.linalg.html}{链接}
 \item
   NumPy 官方广播与 linalg
-  教程：https://numpy.org/doc/stable/reference/routines.linalg.html\#module-numpy.linalg
+  教程：\href{https://numpy.org/doc/stable/reference/routines.linalg.html\#module-numpy.linalg}{链接}
 \item
   SciPy Lecture Notes --
-  线性代数：https://scipy-lectures.org/intro/scipy.html\#linear-algebra
+  线性代数：\href{https://scipy-lectures.org/intro/scipy.html\#linear-algebra}{链接}
 \end{itemize}
 
 \section{04
@@ -1325,13 +1325,13 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-3}
 \tightlist
 \item
   NumPy 官方 polynomial
-  文档：https://numpy.org/doc/stable/reference/routines.polynomials.html
+  文档：\href{https://numpy.org/doc/stable/reference/routines.polynomials.html}{链接}
 \item
   NumPy 官方 polyfit
-  说明：https://numpy.org/doc/stable/reference/generated/numpy.polyfit.html
+  说明：\href{https://numpy.org/doc/stable/reference/generated/numpy.polyfit.html}{链接}
 \item
   SciPy Lecture Notes --
-  最小二乘：https://scipy-lectures.org/intro/scipy.html\#least-squares-approximation
+  最小二乘：\href{https://scipy-lectures.org/intro/scipy.html\#least-squares-approximation}{链接}
 \end{itemize}
 
 \section{05 综合案例：SVD
@@ -1536,13 +1536,13 @@ A_k = U_{:,1:k}\ \Sigma_{1:k,1:k}\ V_{1:k,:}^T
 \tightlist
 \item
   NumPy 官方
-  SVD：https://numpy.org/doc/stable/reference/generated/numpy.linalg.svd.html
+  SVD：\href{https://numpy.org/doc/stable/reference/generated/numpy.linalg.svd.html}{链接}
 \item
   SciPy
-  相关低秩近似（scipy.sparse.linalg）：https://docs.scipy.org/doc/scipy/reference/sparse.linalg.html
+  相关低秩近似（scipy.sparse.linalg）：\href{https://docs.scipy.org/doc/scipy/reference/sparse.linalg.html}{链接}
 \item
   scikit-learn PCA
-  官方示例（下一章会用到）：https://scikit-learn.org/stable/auto\_examples/index.html\#decomposition
+  官方示例（下一章会用到）：\href{https://scikit-learn.org/stable/auto_examples/index.html\#decomposition}{链接}
 \end{itemize}
 
 \section{06
@@ -1593,8 +1593,8 @@ A_k = U_{:,1:k}\ \Sigma_{1:k,1:k}\ V_{1:k,:}^T
 是奇异值向量，不是对角阵 \\
 8 & 认为 \texttt{eig} 适用于任意矩阵 & 方阵用 \texttt{eig}，任意矩阵用
 \texttt{svd} & \texttt{eig} 数学条件限制 \\
-9 & \texttt{np.random.rand} 不设种子 &
-\texttt{rng\ =\ np.random.default\_rng(42)} & 结果不可复现 \\
+9 & \texttt{np.random.rand} 不设种子 & \texttt{default\_rng(42)} &
+结果不可复现 \\
 10 & 循环里 \texttt{np.append} & 预分配数组或列表收集 & 每次 append
 都会新建数组 \\
 11 & 混淆 \texttt{axis=0/1} & 记``消除哪一维就写哪一维'' &
@@ -1737,9 +1737,10 @@ A_k = U_{:,1:k}\ \Sigma_{1:k,1:k}\ V_{1:k,:}^T
 \tightlist
 \item
   NumPy 官方``NumPy for MATLAB
-  users''：https://numpy.org/doc/stable/user/numpy-for-matlab-users.html
+  users''：\href{https://numpy.org/doc/stable/user/numpy-for-matlab-users.html}{链接}
 \item
-  NumPy 性能建议：https://numpy.org/doc/stable/user/performance.html
+  NumPy
+  性能建议：\href{https://numpy.org/doc/stable/user/performance.html}{链接}
 \end{itemize}
 
 \newpage

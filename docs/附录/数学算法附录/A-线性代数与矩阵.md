@@ -128,7 +128,7 @@ $$x^{*} = \arg\min_x\|Ax-b|_2^2 \quad\Longrightarrow\quad A^TAx = A^Tb$$
 
 ## A.4 动手例题（选做：手算 + 验证）
 
-**例 1：解方程组**。$2x+y=1$、$x+2y=2$。代入得 $x=0, y=1$。验证：`np.linalg.solve([[2,1],[1,2]],[1,2]) = [0, 1]`。
+**例 1：解方程组**。$2x+y=1$、$x+2y=2$。代入得 $x=0, y=1$。验证：`np.linalg.solve` 得 `[0, 1]`。
 
 **例 2：SVD 手算 2×2**。$A=\begin{bmatrix}1&1\\1&-1\end{bmatrix}$。$A^TA=\begin{bmatrix}2&0\\0&2\end{bmatrix}$，奇异值 $\sigma_1=\sigma_2=\sqrt{2}$；$V=I$，$U=\frac{1}{\sqrt2}A$。这说明对称正交型矩阵"只缩放不旋转"，是 SVD 最简单的例子。
 
@@ -229,7 +229,9 @@ sp.Matrix(A).eigenvects()              # SymPy 符号版
     U, S, Vt = np.linalg.svd(A, full_matrices=False)
     for k in [5, 15, 30]:
         Ak = U[:, :k] @ np.diag(S[:k]) @ Vt[:k, :]
-        print(k, "MSE:", np.mean((A - Ak) ** 2), "压缩比:", A.size / (k * (A.shape[0] + A.shape[1])))
+        mse = np.mean((A - Ak) ** 2)
+        ratio = A.size / (k * (A.shape[0] + A.shape[1]))
+        print(k, "MSE:", round(mse, 4), "压缩比:", round(ratio, 1))
 
 **反思**：SVD 是"数据驱动压缩"的数学核心；学完写一句结论："奇异值大的方向 = 主要信息；保留它们的低秩近似 = 最优压缩。"
 

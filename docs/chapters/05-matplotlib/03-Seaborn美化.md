@@ -17,9 +17,9 @@
 
 ## 官方文档/参考入口
 
-- Seaborn 官方教程：https://seaborn.pydata.org/tutorial.html
-- Seaborn 官方 API：https://seaborn.pydata.org/api.html
-- Matplotlib 官方图型画廊：https://matplotlib.org/stable/gallery/index.html
+- Seaborn 官方教程：[链接](https://seaborn.pydata.org/tutorial.html)
+- Seaborn 官方 API：[链接](https://seaborn.pydata.org/api.html)
+- Matplotlib 官方图型画廊：[链接](https://matplotlib.org/stable/gallery/index.html)
 
 ---
 
@@ -189,6 +189,6 @@ FacetGrid axes: 4
 
 ## 延伸阅读
 
-- Seaborn 官方教程：https://seaborn.pydata.org/tutorial.html
-- Seaborn 官方 API：https://seaborn.pydata.org/api.html
-- Matplotlib + Seaborn 结合示例：https://seaborn.pydata.org/examples/index.html
+- Seaborn 官方教程：[链接](https://seaborn.pydata.org/tutorial.html)
+- Seaborn 官方 API：[链接](https://seaborn.pydata.org/api.html)
+- Matplotlib + Seaborn 结合示例：[链接](https://seaborn.pydata.org/examples/index.html)

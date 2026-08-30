@@ -264,7 +264,7 @@ SVD''任意矩阵都能做''，是特征分解的''万能推广''。
 验证）}\label{a.4-ux52a8ux624bux4f8bux9898ux9009ux505aux624bux7b97-ux9a8cux8bc1}
 
 \textbf{例 1：解方程组}。\(2x+y=1\)、\(x+2y=2\)。代入得
-\(x=0, y=1\)。验证：\texttt{np.linalg.solve({[}{[}2,1{]},{[}1,2{]}{]},{[}1,2{]})\ =\ {[}0,\ 1{]}}。
+\(x=0, y=1\)。验证：\texttt{np.linalg.solve} 得 \texttt{{[}0,\ 1{]}}。
 
 \textbf{例 2：SVD 手算
 2×2}。\(A=\begin{bmatrix}1&1\\1&-1\end{bmatrix}\)。\(A^TA=\begin{bmatrix}2&0\\0&2\end{bmatrix}\)，奇异值
@@ -439,7 +439,9 @@ A = np.random.default_rng(0).random((60, 60))
 U, S, Vt = np.linalg.svd(A, full_matrices=False)
 for k in [5, 15, 30]:
     Ak = U[:, :k] @ np.diag(S[:k]) @ Vt[:k, :]
-    print(k, "MSE:", np.mean((A - Ak) ** 2), "压缩比:", A.size / (k * (A.shape[0] + A.shape[1])))
+    mse = np.mean((A - Ak) ** 2)
+    ratio = A.size / (k * (A.shape[0] + A.shape[1]))
+    print(k, "MSE:", round(mse, 4), "压缩比:", round(ratio, 1))
 \end{verbatim}
 
 \textbf{反思}：SVD

@@ -216,7 +216,9 @@ PCA(n_components=2).fit_transform(X)
     Xs = StandardScaler().fit_transform(X)
     Xtr, Xte, ytr, yte = train_test_split(Xs, y, test_size=0.2, random_state=0)
     m = Ridge(alpha=1.0).fit(Xtr, ytr)
-    print(cross_val_score(Ridge(alpha=1.0), Xtr, ytr, cv=5, scoring="neg_mean_squared_error"))
+    scores = cross_val_score(Ridge(alpha=1.0), Xtr, ytr, cv=5,
+                         scoring="neg_mean_squared_error")
+print(scores)
     print(mean_squared_error(yte, m.predict(Xte)) ** 0.5)
 
 **反思**：把附录 E 的"损失/评估/过拟合"变成一套可复用流程，期末大作业与科研都适用。
