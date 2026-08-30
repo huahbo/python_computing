@@ -1,0 +1,196 @@
+%% 由 build/emit_tex.py 生成（生成物，勿手改）；定制请放 user_style.tex / user_meta.yaml
+\chapter{微积分与数值方法}\label{ux5faeux79efux5206ux4e0eux6570ux503cux65b9ux6cd5}
+
+\begin{quote}
+一句话：微积分研究''变化与累积''，数值方法回答''电脑上怎么算''。本章覆盖导数/积分直觉、数值微分积分、插值、优化、傅里叶与常微分方程。
+\end{quote}
+
+\section{B.1
+直觉：导数、积分与泰勒}\label{b.1-ux76f4ux89c9ux5bfcux6570ux79efux5206ux4e0eux6cf0ux52d2}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{导数}：瞬时变化率（\texttt{f\textquotesingle{}(x)\ =\ lim\ dx→0\ (f(x+dx)-f(x))/dx}）；梯度把导数推广到多元：\texttt{grad\ f\ =\ (∂f/∂x1,\ …,\ ∂f/∂xn)}
+  指向上升最快的方向。
+\item
+  \textbf{积分}：累积量（面积/总量）；\texttt{∫\_a\^{}b\ f(x)\ dx}
+  与导数是互逆（微积分基本定理）。
+\item
+  \textbf{泰勒展开}：\texttt{f(x+h)\ ≈\ f(x)\ +\ f\textquotesingle{}(x)h\ +\ f\textquotesingle{}\textquotesingle{}(x)h²/2\ +\ …}------把非线性函数局部''线性化''（后文牛顿法/误差分析都用它）。
+\end{itemize}
+
+\section{B.2
+关键公式速查}\label{b.2-ux5173ux952eux516cux5f0fux901fux67e5}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+主题
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+公式/结论
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+用途
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+微分 &
+\texttt{(x\^{}n)\textquotesingle{}\ =\ n\ x\^{}\{n-1\}}、\texttt{(sin\ x)\textquotesingle{}\ =\ cos\ x}、\texttt{(e\^{}x)\textquotesingle{}\ =\ e\^{}x}
+& 手算/校验 \\
+链式 &
+\texttt{(f(g(x)))\textquotesingle{}\ =\ f\textquotesingle{}(g(x))\ g\textquotesingle{}(x)}
+& 反向传播 \\
+梯度 & \texttt{grad\ f}；方向导数在梯度方向最大 & 梯度下降 \\
+泰勒 & 一阶/二阶近似 & 牛顿法、误差界 \\
+积分 & 基本定理、分部积分 & 概率期望/总面积 \\
+数值积分 & 梯形 \texttt{≈\ (b-a)(f(a)+f(b))/2}；辛普森更高阶 &
+无解析积分时 \\
+数值微分 & 中心差分 \texttt{(f(x+h)-f(x-h))/(2h)} &
+无公式时/\texttt{SciPy.optimize}内部 \\
+\end{longtable}
+}
+
+\section{B.3
+数值方法：算法思路}\label{b.3-ux6570ux503cux65b9ux6cd5ux7b97ux6cd5ux601dux8def}
+
+\subsection{B.3.1
+数值积分与微分}\label{b.3.1-ux6570ux503cux79efux5206ux4e0eux5faeux5206}
+
+\begin{itemize}
+\tightlist
+\item
+  把 \texttt{{[}a,b{]}}
+  分块，块内用低阶多项式近似：梯形（一阶）、辛普森（二阶）、高斯求积（自适应）；误差与步长
+  \texttt{h} 的幂有关。
+\item
+  数值微分怕噪声：慎用；需要时用中心差分或拟合后求导（\texttt{np.polyfit}→\texttt{np.polyder}）。
+\end{itemize}
+
+\subsection{B.3.2
+优化（求极值）}\label{b.3.2-ux4f18ux5316ux6c42ux6781ux503c}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+方法 & 思想 & 适用 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+梯度下降 & 沿负梯度迭代：\texttt{x\ ←\ x\ -\ α·grad\ f(x)} &
+大模型/无二阶信息 \\
+牛顿法 & 用二阶泰勒：\texttt{x\ ←\ x\ -\ H\^{}\{-1\}·grad\ f} &
+二阶信息可用时收敛快 \\
+拟牛顿/BFGS & 近似 \texttt{H\^{}\{-1\}} &
+中规模、\texttt{scipy.optimize.minimize} 默认 \\
+约束优化 & \texttt{min\ f(x)\ s.t.\ g(x)≤0} & 拉格朗日/KKT 条件 \\
+\end{longtable}
+}
+
+\begin{quote}
+收敛性：凸函数梯度下降线性收敛；牛顿法（好初值）二次收敛。\textbf{初值很关键}。
+\end{quote}
+
+\subsection{B.3.3
+插值与拟合}\label{b.3.3-ux63d2ux503cux4e0eux62dfux5408}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{插值}：曲线\textbf{穿过}所有数据点（拉格朗日/样条）；高次可能震荡（龙格现象）。
+\item
+  \textbf{拟合（最小二乘）}：曲线\textbf{逼近}数据（不要求穿过）；由附录
+  A 的 \texttt{lstsq} 实现。
+\item
+  选择：噪声大→拟合；数据精确且要过点→样条插值。
+\end{itemize}
+
+\subsection{B.3.4
+傅里叶变换（FFT）}\label{b.3.4-ux5085ux91ccux53f6ux53d8ux6362fft}
+
+\begin{itemize}
+\tightlist
+\item
+  把信号分解为不同频率的正弦波叠加：\texttt{X(k)\ =\ Σ\ x(n)\ e\^{}\{-2πikn/N\}}；
+\item
+  FFT 复杂度
+  \texttt{O(N\ log\ N)}；看频谱找周期、滤波、平滑（\texttt{scipy.fft\ /\ np.fft}）。
+\end{itemize}
+
+\subsection{B.3.5
+常微分方程（ODE）}\label{b.3.5-ux5e38ux5faeux5206ux65b9ux7a0bode}
+
+\begin{itemize}
+\tightlist
+\item
+  初值问题
+  \texttt{y\textquotesingle{}\ =\ f(t,y),\ y(t0)=y0}：数值解按步长推进（欧拉、RK45
+  等）；
+\item
+  \texttt{scipy.integrate.solve\_ivp} 自动选步长；符号精确解用 SymPy
+  \texttt{dsolve}。
+\end{itemize}
+
+\section{B.4 Python 对应}\label{b.4-python-ux5bf9ux5e94}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np, scipy.integrate }\ImportTok{as}\NormalTok{ si, scipy.optimize }\ImportTok{as}\NormalTok{ so}
+\ImportTok{from}\NormalTok{ scipy }\ImportTok{import}\NormalTok{ interpolate, fft}
+
+\CommentTok{\# 数值积分/微分}
+\NormalTok{si.quad(np.sin, }\DecValTok{0}\NormalTok{, np.pi)          }\CommentTok{\# 数值积分}
+\NormalTok{np.gradient(np.array([}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{9}\NormalTok{]), }\FloatTok{0.1}\NormalTok{)   }\CommentTok{\# 数值微分（中心差分）}
+
+\CommentTok{\# 优化}
+\NormalTok{so.minimize(}\KeywordTok{lambda}\NormalTok{ x: (x[}\DecValTok{0}\NormalTok{]}\OperatorTok{{-}}\DecValTok{2}\NormalTok{)}\OperatorTok{**}\DecValTok{2} \OperatorTok{+}\NormalTok{ (x[}\DecValTok{1}\NormalTok{]}\OperatorTok{+}\DecValTok{1}\NormalTok{)}\OperatorTok{**}\DecValTok{2}\NormalTok{, x0}\OperatorTok{=}\NormalTok{[}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{])   }\CommentTok{\# BFGS}
+
+\CommentTok{\# 插值/拟合}
+\NormalTok{interpolate.interp1d(x, y, kind}\OperatorTok{=}\StringTok{"cubic"}\NormalTok{)}
+\NormalTok{np.polyfit(x, y, }\DecValTok{2}\NormalTok{)}
+
+\CommentTok{\# FFT / ODE}
+\NormalTok{fft.fft(signal)}
+\NormalTok{si.solve\_ivp(}\KeywordTok{lambda}\NormalTok{ t, y: }\OperatorTok{{-}}\NormalTok{y, [}\DecValTok{0}\NormalTok{, }\DecValTok{5}\NormalTok{], [}\FloatTok{1.0}\NormalTok{])   }\CommentTok{\# y\textquotesingle{} = {-}y}
+\end{Highlighting}
+\end{Shaded}
+
+\section{B.5 常见误区}\label{b.5-ux5e38ux89c1ux8befux533a}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+误区 & 正确 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+插值=拟合 & 插值过点、拟合逼近；数据有噪声用拟合 \\
+优化不设初值 & 非凸问题初值决定结果；多试几个/给定范围 \\
+数值微分会放大噪声 & 先平滑/拟合，再求导；或改用解析导数 \\
+以为 FFT 只用于音频 & 任何周期信号/时间序列都能看频谱 \\
+用默认 ODE 求解器硬解刚性问题 & 选 \texttt{method="Radau"} 等刚性方法 \\
+\end{longtable}
+}
+
+\section{B.6
+使用章节与下游衔接}\label{b.6-ux4f7fux7528ux7ae0ux8282ux4e0eux4e0bux6e38ux8854ux63a5}
+
+\begin{itemize}
+\tightlist
+\item
+  章节：2 SymPy（极限/导数/积分/方程/ODE）、3
+  SciPy（积分/优化/插值/FFT/ODE）、1 NumPy（多项式拟合）；
+\item
+  下游：intro-mathmodel 第 2 章（微分方程与动力系统）、第 3
+  章（函数极值与规划模型）、第 6 章（数据处理与拟合模型）；
+\item
+  参考：SciPy Lectures 优化与积分、MIT OCW
+  数值计算、中文《数值分析》（见 references.md）。
+\end{itemize}

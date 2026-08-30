@@ -1,0 +1,195 @@
+%% 由 build/emit_tex.py 生成（生成物，勿手改）；定制请放 user_style.tex / user_meta.yaml
+\chapter{机器学习基础}\label{ux673aux5668ux5b66ux4e60ux57faux7840}
+
+\begin{quote}
+一句话：机器学习就是''从数据里学一个映射''：输入特征 →
+输出预测。本附录讲三大任务（回归/分类/聚类）的数学框架、损失与优化、评估与过拟合、常用模型直觉。
+\end{quote}
+
+\section{E.1 学习范式}\label{e.1-ux5b66ux4e60ux8303ux5f0f}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+任务
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+数据
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+常见模型
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+监督·回归 & \texttt{(x,\ y)}，\texttt{y} 连续 &
+线性回归、岭/Ridge、Lasso、决策树、SVR \\
+监督·分类 & \texttt{(x,\ y)}，\texttt{y} 离散 &
+逻辑回归、决策树、随机森林、SVM、kNN \\
+无监督·聚类 & 只有 \texttt{x} & k-Means、层次聚类、DBSCAN \\
+无监督·降维 & 只有 \texttt{x} & PCA（SVD）、t-SNE、UMAP \\
+强化 & 状态/动作/奖励 & （本课程不展开） \\
+\end{longtable}
+}
+
+统一视角：\textbf{模型 = 假设集 + 损失函数 + 优化算法}。
+
+\section{E.2
+损失函数与优化}\label{e.2-ux635fux5931ux51fdux6570ux4e0eux4f18ux5316}
+
+\subsection{损失函数}\label{ux635fux5931ux51fdux6570}
+
+\begin{itemize}
+\tightlist
+\item
+  回归：均方误差
+  \texttt{L\ =\ (1/n)Σ(y\_i\ -\ f(x\_i))²}（对离群点敏感）；平均绝对误差
+  MAE（稳健）。
+\item
+  分类：交叉熵
+  \texttt{L\ =\ -Σ\ y\_i\ log(p\_i)}（概率越''自信且正确''损失越小）。
+\item
+  聚类：k-Means 用''点到中心的距离平方和''。
+\end{itemize}
+
+\subsection{优化}\label{ux4f18ux5316}
+
+\begin{itemize}
+\tightlist
+\item
+  梯度下降：\texttt{θ\ ←\ θ\ -\ α·grad\ L(θ)}；批量（全量）、小批量、随机（SGD）。
+\item
+  收敛依赖：学习率 \texttt{α}（太大震、太小慢）、凸性、特征缩放。
+\item
+  正则化：\texttt{L2\ (Ridge)} 防系数过大；\texttt{L1\ (Lasso)}
+  鼓励稀疏；本质是加约束的优化（附录 B 的约束/拉格朗日思想）。
+\end{itemize}
+
+\section{E.3
+评估与过拟合}\label{e.3-ux8bc4ux4f30ux4e0eux8fc7ux62dfux5408}
+
+\subsection{关键概念}\label{ux5173ux952eux6982ux5ff5}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{训练/测试划分}：测试集只评估一次；交叉验证（\texttt{k-fold}）更稳。
+\item
+  \textbf{过拟合}：训练好但泛化差（模型太复杂/数据太少）。
+\item
+  \textbf{欠拟合}：训练就不好。
+\item
+  \textbf{偏差-方差}：总误差 ≈ 偏差² + 方差 +
+  噪声；复杂模型低偏差高方差。
+\end{itemize}
+
+\subsection{指标}\label{ux6307ux6807}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+任务 & 指标 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+回归 & MSE、RMSE、MAE、R² \\
+分类 & 准确率、精确率、召回率、F1、ROC/AUC \\
+聚类 & 轮廓系数、CH 指数、DB 指数 \\
+降维 & 解释方差比、重构误差 \\
+\end{longtable}
+}
+
+\begin{quote}
+类别不平衡时\textbf{不要只看准确率}：分类用 F1/AUC；回归用 RMSE
+结合业务解释。
+\end{quote}
+
+\section{E.4
+常用模型直觉}\label{e.4-ux5e38ux7528ux6a21ux578bux76f4ux89c9}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+模型 & 一句话直觉 & 超参数要点 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+线性回归 & 找一条拟合直线的''最可靠斜率'' & 无；注意特征缩放 \\
+Ridge/Lasso & 给系数加惩罚 & 正则强度 α \\
+逻辑回归 & 线性分数 → sigmoid → 概率 & C/惩罚项；特征缩放 \\
+决策树 & 按特征反复二分 & 深度/叶节点数（防过拟合） \\
+随机森林 & 多棵树投票，单树随机 & n\_estimators；max\_depth \\
+SVM & 最大化''分类间隔'' & kernel；C（容忍度） \\
+kNN & 看最近的 k 个邻居 & k；特征缩放（用距离必缩放） \\
+k-Means & 迭代挪中心 & k；初始化（n\_init/seed） \\
+PCA & 找方差最大的正交方向（SVD） & n\_components；先标准化 \\
+\end{longtable}
+}
+
+\section{E.5 Python 对应（scikit-learn
+流程）}\label{e.5-python-ux5bf9ux5e94scikit-learn-ux6d41ux7a0b}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{from}\NormalTok{ sklearn.preprocessing }\ImportTok{import}\NormalTok{ StandardScaler}
+\ImportTok{from}\NormalTok{ sklearn.model\_selection }\ImportTok{import}\NormalTok{ train\_test\_split, cross\_val\_score}
+\ImportTok{from}\NormalTok{ sklearn.linear\_model }\ImportTok{import}\NormalTok{ LogisticRegression}
+\ImportTok{from}\NormalTok{ sklearn.metrics }\ImportTok{import}\NormalTok{ accuracy\_score, f1\_score, roc\_auc\_score}
+\ImportTok{from}\NormalTok{ sklearn.cluster }\ImportTok{import}\NormalTok{ KMeans}
+\ImportTok{from}\NormalTok{ sklearn.decomposition }\ImportTok{import}\NormalTok{ PCA}
+
+\NormalTok{X, y }\OperatorTok{=}\NormalTok{ ...                      }\CommentTok{\# 特征/标签}
+\NormalTok{X }\OperatorTok{=}\NormalTok{ StandardScaler().fit\_transform(X)}
+\NormalTok{Xtr, Xte, ytr, yte }\OperatorTok{=}\NormalTok{ train\_test\_split(X, y, test\_size}\OperatorTok{=}\FloatTok{0.2}\NormalTok{, random\_state}\OperatorTok{=}\DecValTok{0}\NormalTok{)}
+
+\NormalTok{clf }\OperatorTok{=}\NormalTok{ LogisticRegression(C}\OperatorTok{=}\FloatTok{1.0}\NormalTok{, max\_iter}\OperatorTok{=}\DecValTok{1000}\NormalTok{)}
+\NormalTok{clf.fit(Xtr, ytr)}
+\BuiltInTok{print}\NormalTok{(accuracy\_score(yte, clf.predict(Xte)), f1\_score(yte, clf.predict(Xte)))}
+\BuiltInTok{print}\NormalTok{(roc\_auc\_score(yte, clf.predict\_proba(Xte)[:, }\DecValTok{1}\NormalTok{]))}
+
+\NormalTok{kmeans }\OperatorTok{=}\NormalTok{ KMeans(n\_clusters}\OperatorTok{=}\DecValTok{3}\NormalTok{, n\_init}\OperatorTok{=}\DecValTok{10}\NormalTok{, random\_state}\OperatorTok{=}\DecValTok{0}\NormalTok{).fit(X)}
+\NormalTok{pca }\OperatorTok{=}\NormalTok{ PCA(n\_components}\OperatorTok{=}\DecValTok{2}\NormalTok{).fit\_transform(X)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{E.6 常见误区}\label{e.6-ux5e38ux89c1ux8befux533a}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+误区 & 正确 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+不看数据先调模型 & 先 EDA + 清洗 + 特征缩放 \\
+用测试集反复调参 & 用验证集/交叉验证；测试集最后用一次 \\
+类别不平衡只看准确率 & 看 F1/AUC/PR \\
+聚类 k 随便定 & 用肘部法/轮廓系数；结果与初始化有关要固定种子 \\
+PCA 前不标准化 & 方差大的变量会主导；先 \texttt{StandardScaler} \\
+以为模型越复杂越好 & 交叉验证下选''够用''的复杂度 \\
+\end{longtable}
+}
+
+\section{E.7
+使用章节与下游衔接}\label{e.7-ux4f7fux7528ux7ae0ux8282ux4e0eux4e0bux6e38ux8854ux63a5}
+
+\begin{itemize}
+\tightlist
+\item
+  章节：8 sklearn（预处理/监督/无监督/PCA）、5
+  Matplotlib（评估可视化）、3 SciPy（优化）；
+\item
+  数学底子：附录 A（SVD/PCA）、附录 B（优化）、附录
+  C（统计推断/回归）都在这里汇合；
+\item
+  下游：intro-mathmodel 第 9 章（机器学习与统计模型）；
+\item
+  参考：scikit-learn User Guide、mml-book Part
+  II、《机器学习》周志华（见 references.md）。
+\end{itemize}

@@ -1,0 +1,167 @@
+%% 由 build/emit_tex.py 生成（生成物，勿手改）；定制请放 user_style.tex / user_meta.yaml
+\chapter{图论与网络}\label{ux56feux8bbaux4e0eux7f51ux7edc}
+
+\begin{quote}
+一句话：图 = 点 +
+边，是''关系/网络''的通用表示。本附录覆盖图表示、基本量、经典算法（路径/树/中心性/社区）与对应代码。
+\end{quote}
+
+\section{D.1
+直觉：图表示什么}\label{d.1-ux76f4ux89c9ux56feux8868ux793aux4ec0ux4e48}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{节点（顶点）}：实体（人、城市、网页、商品）。
+\item
+  \textbf{边}：关系（朋友、道路、超链接、共同购买）。有向边（关注）与无向边（好友）、加权边（距离/强度）。
+\item
+  图模型能表达''结构''：社团、传播、最短路、枢纽------这正是 NetworkX
+  章要做的事。
+\end{itemize}
+
+\section{D.2
+图的基本表示与速查}\label{d.2-ux56feux7684ux57faux672cux8868ux793aux4e0eux901fux67e5}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+概念
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+定义/公式
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+说明
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+邻接矩阵 \texttt{A} & \texttt{A{[}i{]}{[}j{]}=1\ (或权重)} 若有边 &
+方便矩阵运算；稀疏图费内存 \\
+邻接表 & 每个点存邻居列表 & 节省空间；遍历快 \\
+度 \texttt{deg(v)} & 邻边数（有向图分入度/出度） & 活跃度/重要性基础 \\
+路径/连通 & 点之间能走到；连通分量 & 网络可达性 \\
+树 & 无环连通图；\texttt{n} 个点 \texttt{n-1} 条边 & 骨架/最小生成树 \\
+二部图 & 点分成两类，边只在类间 & 匹配/推荐 \\
+加权图 & 边带权 & 最短路径/流 \\
+\end{longtable}
+}
+
+\section{D.3
+经典算法：思路与用途}\label{d.3-ux7ecfux5178ux7b97ux6cd5ux601dux8defux4e0eux7528ux9014}
+
+\subsection{D.3.1 遍历}\label{d.3.1-ux904dux5386}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{BFS（广度）}：按''层''扩散，找最短路（无权图）。
+\item
+  \textbf{DFS（深度）}：一条路走到黑，检测环、连通分量、拓扑排序。
+\end{itemize}
+
+\subsection{D.3.2 最短路径}\label{d.3.2-ux6700ux77edux8defux5f84}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+算法 & 适用 & 思想 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Dijkstra & 非负权 & 贪心：每次取当前最近点松弛 \\
+Bellman-Ford / 带负权 & 有负权 & 反复松弛 \\
+Floyd-Warshall & 全源 & 动态规划 \texttt{O(n³)} \\
+关键 & 加权/无权 & A* 启发式搜索（估算） \\
+\end{longtable}
+}
+
+\subsection{D.3.3
+树与网络流}\label{d.3.3-ux6811ux4e0eux7f51ux7edcux6d41}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{最小生成树（MST）}：连接所有点且总权重最小（Kruskal 按边排序 +
+  并查集；Prim 加点）。
+\item
+  \textbf{最大流/最小割}：二分匹配、交通流（Ford--Fulkerson）。
+\end{itemize}
+
+\subsection{D.3.4
+中心性与社区}\label{d.3.4-ux4e2dux5fc3ux6027ux4e0eux793eux533a}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{度中心性}：连接的边数。
+\item
+  \textbf{接近中心性}：到所有点的平均距离（信息传播快慢）。
+\item
+  \textbf{介数中心性}：经过该点的最短路径数量（桥梁/瓶颈）。
+\item
+  \textbf{PageRank}：有向图随机游走稳态（重要性传播），是搜索引擎核心向量。
+\item
+  \textbf{社区发现}：把网络分成''内部紧密、外部稀疏''的组（Louvain、谱聚类、标签传播）。
+\end{itemize}
+
+\section{D.4 Python
+对应（NetworkX）}\label{d.4-python-ux5bf9ux5e94networkx}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ networkx }\ImportTok{as}\NormalTok{ nx}
+
+\NormalTok{G }\OperatorTok{=}\NormalTok{ nx.Graph()}
+\NormalTok{G.add\_edges\_from([(}\StringTok{"A"}\NormalTok{,}\StringTok{"B"}\NormalTok{), (}\StringTok{"A"}\NormalTok{,}\StringTok{"C"}\NormalTok{), (}\StringTok{"B"}\NormalTok{,}\StringTok{"D"}\NormalTok{), (}\StringTok{"C"}\NormalTok{,}\StringTok{"D"}\NormalTok{), (}\StringTok{"D"}\NormalTok{,}\StringTok{"E"}\NormalTok{)])}
+
+\NormalTok{nx.shortest\_path(G, }\StringTok{"A"}\NormalTok{, }\StringTok{"E"}\NormalTok{)            }\CommentTok{\# BFS 最短路}
+\NormalTok{nx.dijkstra\_path(G, }\StringTok{"A"}\NormalTok{, }\StringTok{"E"}\NormalTok{, weight}\OperatorTok{=}\StringTok{"w"}\NormalTok{)}
+\NormalTok{nx.minimum\_spanning\_tree(G)}
+\NormalTok{nx.degree\_centrality(G)}
+\NormalTok{nx.betweenness\_centrality(G)}
+\NormalTok{nx.pagerank(G)}
+\NormalTok{nx.community.louvain\_communities(G)}
+
+\CommentTok{\# 可视化}
+\NormalTok{nx.draw(G, with\_labels}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{D.5 常见误区}\label{d.5-ux5e38ux89c1ux8befux533a}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+误区 & 正确 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+以为图只能用邻接矩阵 & 稀疏大图用邻接表；NetworkX 自动选择 \\
+无向图当有向图算 & \texttt{DiGraph} 与 \texttt{Graph}
+分开；看边是否有方向 \\
+用最短路答''哪个点最重要'' & 中心性指标多，先明确''重要''的定义 \\
+忽略权重 & 加权图算法 \texttt{dijkstra\_path} 要指定 \texttt{weight} \\
+社区数固定 & 社区发现需要按分辨率/启发式调参，结果不唯一 \\
+\end{longtable}
+}
+
+\section{D.6
+使用章节与下游衔接}\label{d.6-ux4f7fux7528ux7ae0ux8282ux4e0eux4e0bux6e38ux8854ux63a5}
+
+\begin{itemize}
+\tightlist
+\item
+  章节：6 NetworkX（建图/分析/最短路/社区/综合案例）；
+\item
+  下游：intro-mathmodel 第 4 章（复杂网络与图论模型）；
+\item
+  参考：NetworkX 官方教程、图论教材、intro-mathmodel 第 4 章（见
+  references.md）。
+\end{itemize}

@@ -20,6 +20,7 @@ Python 科学计算方法入门：用 **NumPy / SymPy / SciPy / Pandas / Matplot
 - [6 NetworkX 及其基本使用](./chapters/06-networkx/README.md)
 - [7 Statsmodels 及其基本使用](./chapters/07-statsmodels/README.md)
 - [8 scikit-learn 及其基本使用](./chapters/08-sklearn/README.md)
+- [数学与算法补充（附录 A~F）](./附录/数学算法附录/README.md)
 - [教学资源](./教学资源/README.md)（期末大作业、测验、模板等）
 - [原始资料（旧版，只读）](./原始资料/说明.md)
 

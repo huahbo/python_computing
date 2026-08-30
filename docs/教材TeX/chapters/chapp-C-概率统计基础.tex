@@ -1,0 +1,192 @@
+%% 由 build/emit_tex.py 生成（生成物，勿手改）；定制请放 user_style.tex / user_meta.yaml
+\chapter{概率统计基础}\label{ux6982ux7387ux7edfux8ba1ux57faux7840}
+
+\begin{quote}
+一句话：概率给''不确定性''建模，统计从数据里''猜''出规律。本附录覆盖描述统计、常用分布、推断（检验/置信区间）、回归与时间序列。
+\end{quote}
+
+\section{C.1
+直觉与描述统计}\label{c.1-ux76f4ux89c9ux4e0eux63cfux8ff0ux7edfux8ba1}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{随机变量}：取值带概率的变量。期望 \texttt{E{[}X{]}} =
+  中心位置；方差 \texttt{Var(X)\ =\ E{[}(X-E{[}X{]})²{]}} = 分散程度。
+\item
+  \textbf{样本统计量}：从数据算出来的''估计''------均值、中位数、标准差、分位数、相关系数。
+\item
+  \textbf{为什么先看分布}：均值会被极端值拉偏；分布形状（偏斜/厚尾）决定该用哪种方法。
+\end{itemize}
+
+常用量速查：
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+量 & 定义 & 说明 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+均值 \texttt{μ\^{}\ =\ (1/n)Σx\_i} & 集中趋势 & 受异常值影响 \\
+中位数 & 排序中间值 & 稳健 \\
+方差/标准差 & \texttt{s²\ =\ Σ(x\_i\ -\ x̄)²/(n-1)} & 离散程度（样本用
+n-1） \\
+协方差/相关 & \texttt{Cov(X,Y)}、\texttt{ρ\ =\ Cov/(σx\ σy)} &
+线性相关方向/强度 \\
+分位数 & 排序后百分比位置 & Q1/Q3/IQR（箱线图） \\
+\end{longtable}
+}
+
+\section{C.2
+常用分布速查}\label{c.2-ux5e38ux7528ux5206ux5e03ux901fux67e5}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+分布 & 记号 & 用在哪 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+正态 & \texttt{N(μ,\ σ²)} & 近似很多现象；中心极限定理的主角 \\
+二项 & \texttt{B(n,\ p)} & 成功/失败次数 \\
+泊松 & \texttt{Poisson(λ)} & 一段时间内事件数 \\
+均匀 & \texttt{U(a,\ b)} & 随机数/先验 \\
+t / F / χ² & \texttt{t(n)}, \texttt{F}, \texttt{χ²} &
+小样本推断/方差分析 \\
+\end{longtable}
+}
+
+\begin{quote}
+\textbf{中心极限定理}：大量独立同分布随机变量的均值，近似正态分布------这是很多统计方法（包括回归的置信区间）的底气。
+\end{quote}
+
+\section{C.3
+统计推断：检验与置信区间}\label{c.3-ux7edfux8ba1ux63a8ux65adux68c0ux9a8cux4e0eux7f6eux4fe1ux533aux95f4}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{参数估计}：点估计（均值）→
+  区间估计（置信区间：\texttt{x̄\ ±\ t\_\{α/2\}·s/√n}）。
+\item
+  \textbf{假设检验}：先立原假设 \texttt{H0}（如''均值=0''），看数据在
+  \texttt{H0} 下多''极端''（p 值）；\texttt{p\ \textless{}\ 0.05} → 拒绝
+  \texttt{H0}。
+\item
+  \textbf{两类错误}：第一类（误拒，α）、第二类（漏拒，β）；功效 = 1-β。
+\item
+  \textbf{常见检验}：t
+  检验（均值）、卡方（拟合/列联）、F/ANOVA（多组均值）、KS（分布）。
+\item
+  \textbf{重要提醒}：p 值小 ≠ 实际重要；报告效应量 + 置信区间。
+\end{itemize}
+
+\section{C.4
+回归与方差分析（建模视角）}\label{c.4-ux56deux5f52ux4e0eux65b9ux5deeux5206ux6790ux5efaux6a21ux89c6ux89d2}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{线性回归}：\texttt{y\ =\ β0\ +\ β1x1\ +\ …\ +\ ε}；OLS
+  最小化残差平方和（附录 A 最小二乘）。
+\item
+  \textbf{假设}：线性、独立、同方差、正态（对推断）；违背时用稳健标准误/变换。
+\item
+  \textbf{\texttt{R²}}：解释变量能解释的变异比例（\texttt{R²\ =\ 1\ -\ SSE/SST}），过大要提防过拟合。
+\item
+  \textbf{ANOVA}：检验多个组的均值是否相等（\texttt{F}
+  检验，组间方差/组内方差）。
+\item
+  \textbf{逻辑回归}：把线性预测过 sigmoid
+  映射成概率：\texttt{P(y=1)\ =\ σ(β\^{}T\ x)}；损失用交叉熵（与附录 E
+  衔接）。
+\end{itemize}
+
+\section{C.5
+时间序列基础}\label{c.5-ux65f6ux95f4ux5e8fux5217ux57faux7840}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+概念 & 直觉 & 常用工具 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+平稳性 & 统计特性不随时间漂移 & 单位根检验（ADF） \\
+自相关/ACF & 与过去的相关 & 确定滞后阶数 \\
+差分 & \texttt{y\_t\ -\ y\_\{t-1\}} 消除趋势 & 转平稳 \\
+移动平均/平滑 & 去噪/看趋势 & \texttt{rolling} \\
+分解 & 趋势 + 季节 + 残差 & \texttt{seasonal\_decompose} \\
+ARIMA & AR（自回归）+ I（差分）+ MA（移动平均误差） & 预测/理解 \\
+\end{longtable}
+}
+
+\section{C.6 Python 对应}\label{c.6-python-ux5bf9ux5e94}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np, pandas }\ImportTok{as}\NormalTok{ pd, statsmodels.api }\ImportTok{as}\NormalTok{ sm}
+\ImportTok{from}\NormalTok{ scipy }\ImportTok{import}\NormalTok{ stats}
+
+\NormalTok{x }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{68}\NormalTok{, }\DecValTok{91}\NormalTok{, }\DecValTok{55}\NormalTok{, }\DecValTok{76}\NormalTok{, }\DecValTok{88}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(np.mean(x), np.std(x, ddof}\OperatorTok{=}\DecValTok{1}\NormalTok{), np.percentile(x, }\DecValTok{75}\NormalTok{))}
+
+\CommentTok{\# 单样本 t 检验}
+\NormalTok{stats.ttest\_1samp(x, }\DecValTok{60}\NormalTok{)}
+
+\CommentTok{\# 线性回归}
+\NormalTok{X }\OperatorTok{=}\NormalTok{ sm.add\_constant(np.array([}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\FloatTok{5.}\NormalTok{]))}
+\NormalTok{model }\OperatorTok{=}\NormalTok{ sm.OLS(np.array([}\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{9}\NormalTok{]), X).fit()}
+\BuiltInTok{print}\NormalTok{(model.summary())   }\CommentTok{\# 看 coef / p / R²}
+
+\CommentTok{\# 时间序列分解}
+\ImportTok{from}\NormalTok{ statsmodels.tsa.seasonal }\ImportTok{import}\NormalTok{ seasonal\_decompose}
+\NormalTok{df }\OperatorTok{=}\NormalTok{ pd.read\_csv(}\StringTok{"data.csv"}\NormalTok{, index\_col}\OperatorTok{=}\DecValTok{0}\NormalTok{, parse\_dates}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{seasonal\_decompose(df[}\StringTok{"sales"}\NormalTok{], model}\OperatorTok{=}\StringTok{"additive"}\NormalTok{).plot()}
+\end{Highlighting}
+\end{Shaded}
+
+\section{C.7 常见误区}\label{c.7-ux5e38ux89c1ux8befux533a}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+误区
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+正确
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+p 值小 = 影响大 & p 值是''在 H0
+下看到这个数据的概率''，与效应量是两回事 \\
+忽视样本量 & 样本大时微小差异也显著；看置信区间宽度 \\
+用均值代替看分布 & 先画直方图/箱线图 \\
+非平稳直接回归 & 时序先检验平稳性/差分 \\
+把相关系数当因果 & 相关 ≠ 因果 \\
+\end{longtable}
+}
+
+\section{C.8
+使用章节与下游衔接}\label{c.8-ux4f7fux7528ux7ae0ux8282ux4e0eux4e0bux6e38ux8854ux63a5}
+
+\begin{itemize}
+\tightlist
+\item
+  章节：0 前置基础（成绩统计）、4 Pandas（分组聚合/描述统计）、7
+  Statsmodels（回归/ANOVA/时序）、3 SciPy（假设检验）；
+\item
+  下游：intro-mathmodel 第 7 章（权重生成与评价模型）、第 8
+  章（时间序列与投资模型）、第 9 章（机器学习与统计模型）；
+\item
+  参考：statsmodels 官方文档、ThinkStats2、中文《概率论与数理统计》（见
+  references.md）。
+\end{itemize}

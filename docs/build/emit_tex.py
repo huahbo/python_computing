@@ -66,6 +66,22 @@ def merged_book_md(cfg):
             text = text.replace("images/", f"figures/{ch}/")
             body.append(text.strip() + "\n\n")
         parts.append("\n\n".join(body))
+    # 附录：appendix 原样块 + A~F
+    app_parts = []
+    for ad in cfg.get("appendices") or []:
+        appdir = os.path.join(ROOT, ad["dir"])
+        _, files = tb.read_manifest_dir(appdir)
+        for rel in files:
+            if rel.lower() in ("README.md", "readme.md"):
+                continue
+            src = os.path.join(appdir, rel)
+            if not os.path.isfile(src):
+                continue
+            with open(src, encoding="utf-8") as f:
+                app_parts.append(f.read().strip())
+    if app_parts:
+        parts.append("```{=latex}\n\\appendix\n```")
+        parts.append("\n\n".join(app_parts))
     return "\n\n\\newpage\n\n".join(parts)
 
 
@@ -77,12 +93,39 @@ def copy_figures(ch):
             shutil.copy2(os.path.join(src, f), os.path.join(dst, f))
 
 
-def split_chapters(tex, chapters):
-    """Split the standalone tex body at \\chapter boundaries -> chapter files."""
+def split_chapters(tex, chapters, appendix_names=None):
+    """Split the standalone tex body at chapter boundaries -> chapter files.
+    Returns (main_tex, chapter_chunks, appendix_chunks)."""
     bd = tex.index("\\begin{document}")
     ed = tex.index("\\end{document}")
     preamble = tex[:bd] + "\\begin{document}\n"
     body = tex[bd + len("\\begin{document}"):ed]
+    appendix_names = appendix_names or []
+    if appendix_names:
+        marker = "\\appendix"
+        app_idx = body.find(marker)
+        if app_idx == -1:
+            raise RuntimeError("appendix marker not found in standalone tex body")
+        chapter_body = body[:app_idx]
+        appendix_body = body[app_idx + len(marker):]
+        pos_c = [m.start() for m in re.finditer(r"\\chapter\{", chapter_body)]
+        if len(pos_c) != len(chapters):
+            raise RuntimeError(f"chapter count mismatch: tex={len(pos_c)} cfg={len(chapters)}")
+        chunks_c = []
+        for i, p in enumerate(pos_c):
+            end = pos_c[i + 1] if i + 1 < len(pos_c) else len(chapter_body)
+            chunks_c.append(chapter_body[p:end].rstrip() + "\n")
+        pos_a = [m.start() for m in re.finditer(r"\\chapter\{", appendix_body)]
+        if len(pos_a) != len(appendix_names):
+            raise RuntimeError(f"appendix count mismatch: tex={len(pos_a)} cfg={len(appendix_names)}")
+        chunks_a = []
+        for i, p in enumerate(pos_a):
+            end = pos_a[i + 1] if i + 1 < len(pos_a) else len(appendix_body)
+            chunks_a.append(appendix_body[p:end].rstrip() + "\n")
+        chapter_inputs = "\n".join(["\\input{chapters/ch" + ch + ".tex}" for ch in chapters])
+        appendix_inputs = "\n".join(["\\input{chapters/chapp-" + n + ".tex}" for n in appendix_names])
+        main = preamble + chapter_inputs + "\n\\appendix\n" + appendix_inputs + "\n\\end{document}\n"
+        return main, chunks_c, chunks_a
     pos = [m.start() for m in re.finditer(r"\\chapter\{", body)]
     if len(pos) != len(chapters):
         raise RuntimeError(f"chapter count mismatch: tex={len(pos)} cfg={len(chapters)}")
@@ -92,7 +135,7 @@ def split_chapters(tex, chapters):
         chunks.append(body[p:end].rstrip() + "\n")
     main_body = "\n".join(["\\input{chapters/ch" + ch + ".tex}\n" for ch in chapters])
     main = preamble + main_body + "\n\\end{document}\n"
-    return main, chunks
+    return main, chunks, []
 
 
 def write(path, text, header=True):
@@ -109,6 +152,14 @@ def main():
     os.makedirs(FIGS_DIR, exist_ok=True)
     cfg = tb.load_cfg()
     chapters = cfg["chapters"]
+    appendix_names = []
+    for ad in cfg.get("appendices") or []:
+        appdir = os.path.join(ROOT, ad["dir"])
+        _, files = tb.read_manifest_dir(appdir)
+        for rel in files:
+            if rel.lower() in ("README.md", "readme.md"):
+                continue
+            appendix_names.append(os.path.splitext(rel)[0])
     cache = {}
     if os.path.exists(CACHE):
         with open(CACHE, encoding="utf-8") as f:
@@ -153,7 +204,7 @@ def main():
         tex = f.read()
 
     # 2) split
-    main_tex, chunks = split_chapters(tex, chapters)
+    main_tex, chunks, app_chunks = split_chapters(tex, chapters, appendix_names)
 
     # 3) per-chapter files + manual protection + cache
     for ch, chunk in zip(chapters, chunks):
@@ -177,6 +228,12 @@ def main():
         cache[ch] = {"hash": h, "tex_hash": hashlib.sha256(chunk.encode("utf-8")).hexdigest()}
         copy_figures(ch)
         print(f"[gen] chapters/ch{ch}.tex (+figures/{ch})")
+
+    # 3b) appendix chapter files
+    for name, chunk in zip(appendix_names, app_chunks):
+        out = os.path.join(CHAP_TEX_DIR, f"chapp-{name}.tex")
+        write(out, chunk)
+        print(f"[gen] chapters/chapp-{name}.tex")
 
     # 4) main.tex + meta
     write(MAIN_TEX, main_tex, header=True)

@@ -7,6 +7,7 @@ import os, re, glob, json
 
 ROOT = os.getcwd()
 CHAPTERS = os.path.join(ROOT, "chapters")
+APPENDIXES = os.path.join(ROOT, "附录")
 PATTERN = r'\[([^\]]*)\]\(([^)]+)(?:\s+"[^"]+")?\)'
 
 
@@ -27,6 +28,9 @@ def main():
     chapters = sorted(d for d in os.listdir(CHAPTERS)
                       if os.path.isdir(os.path.join(CHAPTERS, d)))
     missing, problems, nb_count, lab_count = [], [], 0, 0
+    appendix_dirs = sorted(d for d in os.listdir(APPENDIXES)
+                        if os.path.isdir(os.path.join(APPENDIXES, d))
+                        and os.path.exists(os.path.join(APPENDIXES, d, "pdf_manifest.txt")))
 
     for ch in chapters:
         cdir = os.path.join(CHAPTERS, ch)
@@ -52,11 +56,26 @@ def main():
         if os.path.exists(os.path.join(cdir, "lab", "lab.ipynb")):
             lab_count += 1
 
+    appendix_count = 0
+    for ap in appendix_dirs:
+        adir = os.path.join(APPENDIXES, ap)
+        mf = os.path.join(adir, "pdf_manifest.txt")
+        with open(mf, encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#") or line.upper().startswith("TITLE:"):
+                    continue
+                if not os.path.exists(os.path.join(adir, line)):
+                    problems.append(f"appendix {ap}: manifest missing file {line}")
+        for md in glob.glob(os.path.join(adir, "*.md")):
+            check_md_links(md, missing)
+        appendix_count += 1
+
     for md in ["README.md", "绪论.md", "0-学习指南.md", "_sidebar.md",
                "教学资源/README.md", "原始资料/说明.md"]:
         check_md_links(md, missing)
 
-    print(f"chapters: {len(chapters)}  notebooks ok: {nb_count}  labs: {lab_count}")
+    print(f"chapters: {len(chapters)}  appendices: {appendix_count}  notebooks ok: {nb_count}  labs: {lab_count}")
     print(f"missing internal links: {len(missing)}")
     for md, t in missing[:30]:
         print("  ", md, "->", t)

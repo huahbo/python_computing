@@ -1,0 +1,210 @@
+%% 由 build/emit_tex.py 生成（生成物，勿手改）；定制请放 user_style.tex / user_meta.yaml
+\chapter{线性代数与矩阵}\label{ux7ebfux6027ux4ee3ux6570ux4e0eux77e9ux9635}
+
+\begin{quote}
+一句话：矩阵是''线性变换''的记录，线性代数是研究''用好这些变换解决问题''的学科。本章只讲科学计算最常用的部分：矩阵运算、分解、最小二乘与数值稳定性。
+\end{quote}
+
+\section{A.1
+直觉：向量、线性组合与线性变换}\label{a.1-ux76f4ux89c9ux5411ux91cfux7ebfux6027ux7ec4ux5408ux4e0eux7ebfux6027ux53d8ux6362}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{向量}：既有大小又有方向；在数据里，一行记录就是一个向量（\texttt{{[}身高,\ 体重,\ 年龄{]}}）。
+\item
+  \textbf{线性组合}：\texttt{c1·v1\ +\ c2·v2}：把若干向量按比例''混''起来。
+\item
+  \textbf{矩阵 = 线性变换}：\texttt{A} 把向量 \texttt{x} 变成
+  \texttt{Ax}（旋转、拉伸、投影）。矩阵乘法 \texttt{AB} = 先做
+  \texttt{B} 再做
+  \texttt{A}，所以\textbf{矩阵乘法一般不可交换}（\texttt{AB\ ≠\ BA}）。
+\item
+  \textbf{线性方程组 \texttt{Ax\ =\ b}}：问''哪个向量经过 \texttt{A}
+  变换会变成 \texttt{b}``------即把 \texttt{b} 表示为 \texttt{A}
+  的列向量的线性组合。有唯一解 等价于 \texttt{A}
+  可逆（列向量线性无关）。
+\end{itemize}
+
+\section{A.2
+速查：定义与公式}\label{a.2-ux901fux67e5ux5b9aux4e49ux4e0eux516cux5f0f}
+
+\subsection{A.2.1 基本运算}\label{a.2.1-ux57faux672cux8fd0ux7b97}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+概念 & 记号 & 直觉 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+转置 & \texttt{A\^{}T} &
+行列互换；\texttt{(AB)\^{}T\ =\ B\^{}T\ A\^{}T} \\
+内积/点积 & \texttt{x·y\ =\ x\^{}T\ y} & 相似度、投影长度 \\
+范数 &
+\texttt{\textbar{}\textbar{}x\textbar{}\textbar{}\_2\ =\ sqrt(x\^{}T\ x)}
+& 向量长度 \\
+迹 & \texttt{tr(A)\ =\ sum(a\_ii)} & 特征值之和（不随基改变） \\
+逆 & \texttt{A\^{}\{-1\}} & \texttt{A\ A\^{}\{-1\}\ =\ I}；存在 等价于
+满秩 \\
+秩 & \texttt{rank(A)} & 矩阵''真正维度''；列向量中线性无关个数 \\
+\end{longtable}
+}
+
+\subsection{A.2.2 关键量}\label{a.2.2-ux5173ux952eux91cf}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+量
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+定义
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+用途
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+行列式 \texttt{det(A)} & 体积缩放系数 & 可逆性；\texttt{det=0}
+时不可逆 \\
+特征值/特征向量 & \texttt{Av\ =\ λv} &
+只被拉伸不改变方向的向量；用于分解/稳态/收敛 \\
+条件数 \texttt{cond(A)} &
+\texttt{\textbar{}\textbar{}A\textbar{}\textbar{}·\textbar{}\textbar{}A\^{}\{-1\}\textbar{}\textbar{}}
+& 数值稳定性：越大解越''抖'' \\
+谱半径 & 最大 & 特征值的绝对值 \\
+\end{longtable}
+}
+
+\subsection{A.2.3
+常用分解与公式}\label{a.2.3-ux5e38ux7528ux5206ux89e3ux4e0eux516cux5f0f}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+分解 & 形式 & 用途 & 适用 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+LU & \texttt{A\ =\ L\ U} & 解方程组 & 方阵 \\
+Cholesky & \texttt{A\ =\ L\ L\^{}T} & 更快 & 对称正定 \\
+QR & \texttt{A\ =\ Q\ R} & 最小二乘/特征值迭代 & 一般 \\
+特征分解 & \texttt{A\ =\ V\ Λ\ V\^{}\{-1\}} & 分析/对称矩阵 &
+方阵可对角化 \\
+SVD & \texttt{A\ =\ U\ Σ\ V\^{}T} & 降维/压缩/伪逆 &
+\textbf{任意矩阵} \\
+\end{longtable}
+}
+
+最小二乘（超定方程 \texttt{Ax\ ≈\ b}）：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{正规方程：      x\^{} = (A\^{}T A)\^{}\{{-}1\} A\^{}T b}
+\NormalTok{几何解释：      把 b 投影到 A 的列空间}
+\NormalTok{数值稳健：      优先用 QR / SVD / lstsq，避免直接求 (A\^{}T A)\^{}\{{-}1\}}
+\end{Highlighting}
+\end{Shaded}
+
+\section{A.3 算法思路}\label{a.3-ux7b97ux6cd5ux601dux8def}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{高斯消元 → LU}：把解方程组变成''前代 + 回代''，复杂度
+  \texttt{O(n\^{}3)}；有部分主元策略时数值更稳。
+\item
+  \textbf{特征值问题}：找一个''方向''，矩阵作用后只缩放。求
+  \texttt{Av\ =\ λv} 等价于找 \texttt{det(A\ -\ λI)\ =\ 0}
+  的根；对称矩阵特征值全是实数，且特征向量正交（SVD 是它的推广）。
+\item
+  \textbf{SVD}：\texttt{A\ =\ UΣV\^{}T}，其中 \texttt{U}/\texttt{V}
+  是正交阵，\texttt{Σ} 是对角阵（奇异值降序）。奇异值大小 =
+  该方向''重要性''；取前 \texttt{k}
+  个奇异值即得到''最优低秩近似''（Eckart--Young
+  定理）。用途：图像压缩、主成分分析（PCA）、伪逆
+  \texttt{A\^{}+\ =\ VΣ\^{}\{-1\}U\^{}T}。
+\item
+  \textbf{最小二乘的几何}：把 \texttt{b}
+  投影到列空间，误差向量与列空间垂直；\texttt{x\^{}}
+  是离解最近的可行解。加
+  \texttt{λ\textbar{}\textbar{}x\textbar{}\textbar{}\^{}2}（岭回归）可防病态/过拟合。
+\end{enumerate}
+
+\section{A.4 Python 对应}\label{a.4-python-ux5bf9ux5e94}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np, sympy }\ImportTok{as}\NormalTok{ sp}
+
+\NormalTok{A }\OperatorTok{=}\NormalTok{ np.array([[}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{], [}\DecValTok{1}\NormalTok{, }\DecValTok{3}\NormalTok{]])}
+\NormalTok{b }\OperatorTok{=}\NormalTok{ np.array([[}\DecValTok{1}\NormalTok{], [}\DecValTok{2}\NormalTok{]])}
+
+\CommentTok{\# 解方程}
+\NormalTok{np.linalg.solve(A, b)            }\CommentTok{\# 方阵}
+\NormalTok{np.linalg.lstsq(A, b, rcond}\OperatorTok{=}\VariableTok{None}\NormalTok{)  }\CommentTok{\# 最小二乘（推荐）}
+
+\CommentTok{\# 分解}
+\NormalTok{np.linalg.eig(A)                 }\CommentTok{\# 特征值/特征向量}
+\NormalTok{np.linalg.svd(A, full\_matrices}\OperatorTok{=}\VariableTok{False}\NormalTok{)   }\CommentTok{\# U, S, Vt}
+\NormalTok{np.linalg.cholesky(A) }\ControlFlowTok{if}\NormalTok{ np.allclose(A, A.T) }\ControlFlowTok{else} \VariableTok{None}
+\NormalTok{np.linalg.cond(A)                }\CommentTok{\# 条件数}
+
+\CommentTok{\# SymPy 符号版}
+\NormalTok{sp.Matrix(A).eigenvects()}
+\end{Highlighting}
+\end{Shaded}
+
+函数速查：\texttt{inv\ /\ det\ /\ rank\ /\ norm\ /\ eig\ /\ eigh(对称)\ /\ svd\ /\ lstsq\ /\ solve\ /\ cond\ /\ pinv}。
+
+\section{A.5 常见误区}\label{a.5-ux5e38ux89c1ux8befux533a}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+误区
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+正确
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{A\ *\ B} 当矩阵乘 & NumPy 中 \texttt{*} 是逐元素；矩阵乘用
+\texttt{A\ @\ B} 或 \texttt{np.matmul} \\
+直接用 \texttt{inv(A)\ @\ b} & 数值差、慢；用 \texttt{solve} /
+\texttt{lstsq} \\
+以为 SVD 的 \texttt{S} 是矩阵 & 实际是\textbf{奇异值向量}；用
+\texttt{np.diag(S)} 还原 \\
+病态方程无解 & 条件数大≠无解，而是解对输入''过敏''；看 \texttt{cond} \\
+忘记特征值可能是复数 & 非对称矩阵用 \texttt{eig}；要求实值用
+\texttt{eigh}（需对称） \\
+\end{longtable}
+}
+
+\section{A.6
+使用章节与下游衔接}\label{a.6-ux4f7fux7528ux7ae0ux8282ux4e0eux4e0bux6e38ux8854ux63a5}
+
+\begin{itemize}
+\tightlist
+\item
+  章节：1 NumPy（03 线性代数 / 05 SVD 压缩）、2 SymPy（矩阵/特征值）、3
+  SciPy（优化用矩阵）、8 sklearn（PCA/SVD）；
+\item
+  下游：intro-mathmodel 第 1 章（Numpy 与线性代数）、第 3
+  章（线性规划到非线性规划）；
+\item
+  参考：mml-book 第 2/3/4 章、SciPy Lectures、\texttt{numpy.linalg}
+  官方文档（见本目录 references.md）。
+\end{itemize}

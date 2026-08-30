@@ -13,3 +13,8 @@ chapters:
   - 06-networkx
   - 07-statsmodels
   - 08-sklearn
+
+# 附录：数学与算法补充（目录相对 docs/；清单见该目录 pdf_manifest.txt）
+appendices:
+  - dir: 附录/数学算法附录
+appendix_title: 数学与算法补充（附录 A~F）

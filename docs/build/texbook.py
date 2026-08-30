@@ -19,6 +19,7 @@ OUT_DIR = os.path.join(ROOT, "教材PDF")
 PILOT_DIR = os.path.join(OUT_DIR, "_pilot")
 CACHE = os.path.join(ROOT, "build", ".texbook_cache.json")
 BOOK_OUT = os.path.join(OUT_DIR, "Python科学计算_全书.pdf")
+APPENDIX_OUT = os.path.join(OUT_DIR, "数学与算法补充.pdf")
 
 PANDOC_OPTS = [
     "--pdf-engine=xelatex",
@@ -40,9 +41,10 @@ def load_cfg():
         return yaml.safe_load(f)
 
 
-def read_manifest(ch):
-    p = os.path.join(CHAPTERS, ch, "pdf_manifest.txt")
-    title, files = ch, []
+def read_manifest_dir(mdir):
+    """从任意目录读 pdf_manifest.txt（章 / 附录通用）。"""
+    p = os.path.join(mdir, "pdf_manifest.txt")
+    title, files = os.path.basename(mdir), []
     with open(p, encoding="utf-8") as f:
         for line in f:
             line = line.strip()
@@ -53,6 +55,26 @@ def read_manifest(ch):
             else:
                 files.append(line)
     return title, files
+
+
+def read_manifest_dir(mdir):
+    """从任意目录读 pdf_manifest.txt（章 / 附录通用）。"""
+    p = os.path.join(mdir, "pdf_manifest.txt")
+    title, files = os.path.basename(mdir), []
+    with open(p, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if line.upper().startswith("TITLE:"):
+                title = line.split(":", 1)[1].strip()
+            else:
+                files.append(line)
+    return title, files
+
+
+def read_manifest(ch):
+    return read_manifest_dir(os.path.join(CHAPTERS, ch))
 
 
 def md_hash(paths):
@@ -95,11 +117,90 @@ def chapter_md(ch, cfg):
     return "\n\n".join(parts)
 
 
+def appendix_md_for_dir(rel_dir):
+    """把某个附录目录下的 md 原样拼接（不升标题；文件内 # 即一级标题）。"""
+    appdir = os.path.join(ROOT, rel_dir)
+    title, files = read_manifest_dir(appdir)
+    parts = []
+    for rel in files:
+        if rel.lower() in ("README.md", "readme.md"):
+            continue
+        src = os.path.join(appdir, rel)
+        if not os.path.isfile(src):
+            print("[warn] missing", src)
+            continue
+        with open(src, encoding="utf-8") as f:
+            parts.append(f.read().strip())
+    return "\n\n".join(parts)
+
+
+def build_appendix_pdf():
+    cfg = load_cfg()
+    ads = cfg.get("appendices") or []
+    if not ads:
+        print("[skip] no appendices configured")
+        return True
+    parts = []
+    for ad in ads:
+        parts.append(appendix_md_for_dir(ad["dir"]))
+    md = "```{=latex}\n\\appendix\n```\n\n" + "\n\n\\newpage\n\n".join(parts)
+    tmp = os.path.join(ROOT, "build", "_tmp_appendix.md")
+    with open(tmp, "w", encoding="utf-8") as f:
+        f.write(md)
+    ok = run_pandoc(tmp, APPENDIX_OUT, title=cfg.get("appendix_title", "数学与算法补充"))
+    os.remove(tmp)
+    if not ok:
+        return False
+    r = PdfReader(APPENDIX_OUT)
+    print(f"[done] APPENDIX -> {APPENDIX_OUT} ({len(r.pages)} pages)")
+    return True
+
+
+def appendix_md_for_dir(rel_dir):
+    """把某个附录目录下的 md 原样拼接（不升标题；文件内 # 即一级标题）。"""
+    appdir = os.path.join(ROOT, rel_dir)
+    title, files = read_manifest_dir(appdir)
+    parts = []
+    for rel in files:
+        if rel.lower() in ("README.md", "readme.md"):
+            continue
+        src = os.path.join(appdir, rel)
+        if not os.path.isfile(src):
+            print("[warn] missing", src)
+            continue
+        with open(src, encoding="utf-8") as f:
+            parts.append(f.read().strip())
+    return "\n\n".join(parts)
+
+
+def build_appendix_pdf():
+    cfg = load_cfg()
+    ads = cfg.get("appendices") or []
+    if not ads:
+        print("[skip] no appendices configured")
+        return True
+    parts = []
+    for ad in ads:
+        parts.append(appendix_md_for_dir(ad["dir"]))
+    md = "```{=latex}\n\\appendix\n```\n\n" + "\n\n\\newpage\n\n".join(parts)
+    tmp = os.path.join(ROOT, "build", "_tmp_appendix.md")
+    with open(tmp, "w", encoding="utf-8") as f:
+        f.write(md)
+    ok = run_pandoc(tmp, APPENDIX_OUT, title=cfg.get("appendix_title", "数学与算法补充"))
+    os.remove(tmp)
+    if not ok:
+        return False
+    r = PdfReader(APPENDIX_OUT)
+    print(f"[done] APPENDIX -> {APPENDIX_OUT} ({len(r.pages)} pages)")
+    return True
+
+
 def run_pandoc(md_path, out_pdf, title=None):
     cmd = ["pandoc", md_path, "-o", out_pdf] + PANDOC_OPTS
     if title:
         cmd += ["-V", f"title={title}"]
-    proc = subprocess.run(cmd, capture_output=True, text=True)
+    proc = subprocess.run(cmd, capture_output=True, text=True,
+                          encoding="utf-8", errors="replace")
     warn = 0
     for key in ("Missing character", "Missing $", "Error producing PDF",
                 "Could not fetch resource", "replacing image"):
@@ -152,6 +253,28 @@ def build_book(full=False):
             changed.append(ch)
         parts.append(chapter_md(ch, cfg))
         cache[ch] = h
+    # 附录：appendix 后原样拼接（数学与算法补充）
+    app_parts = []
+    for ad in cfg.get("appendices") or []:
+        appdir = os.path.join(ROOT, ad["dir"])
+        srcs = []
+        _, files = read_manifest_dir(appdir)
+        for rel in files:
+            if rel.lower() in ("README.md", "readme.md"):
+                continue
+            p = os.path.join(appdir, rel)
+            if os.path.isfile(p):
+                srcs.append(p)
+        h = md_hash(srcs)
+        if not full and cache.get("__app__" + ad["dir"]) == h and os.path.exists(BOOK_OUT):
+            print("[up-to-date] appendix", ad["dir"])
+        else:
+            changed.append(ad["dir"])
+        app_parts.append(appendix_md_for_dir(ad["dir"]))
+        cache["__app__" + ad["dir"]] = h
+    if app_parts:
+        parts.append("```{=latex}\n\\appendix\n```")
+        parts.extend(app_parts)
     body = "\n\n\\newpage\n\n".join(parts)
     tmp = os.path.join(ROOT, "build", "_tmp_book_all.md")
     with open(tmp, "w", encoding="utf-8") as f:
@@ -195,6 +318,8 @@ def main():
         ok = build_one(ch, out)
         sys.exit(0 if ok else 1)
     ok = build_book(full="--full" in args)
+    if ok:
+        ok = build_appendix_pdf()
     sys.exit(0 if ok else 1)
 
 

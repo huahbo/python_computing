@@ -1,0 +1,8 @@
+# 数学与算法补充 PDF 清单（build/texbook.py --appendices 读取）
+TITLE: 数学与算法补充（附录 A~F）
+A-线性代数与矩阵.md
+B-微积分与数值方法.md
+C-概率统计基础.md
+D-图论与网络.md
+E-机器学习基础.md
+F-通用数学与算法速查.md

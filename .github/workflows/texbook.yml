@@ -33,6 +33,7 @@ jobs:
           name: python-scientific-computing-pdfs
           path: |
             docs/教材PDF/Python科学计算_全书.pdf
+            docs/教材PDF/数学与算法补充.pdf
             docs/教材PDF/0*-*.pdf
           if-no-files-found: error
 

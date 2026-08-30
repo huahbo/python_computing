@@ -1,0 +1,164 @@
+%% 由 build/emit_tex.py 生成（生成物，勿手改）；定制请放 user_style.tex / user_meta.yaml
+\chapter{通用数学与算法速查}\label{ux901aux7528ux6570ux5b66ux4e0eux7b97ux6cd5ux901fux67e5}
+
+\begin{quote}
+一句话：一个''随手翻''的符号/公式/复杂度/数值稳定性卡片，供所有章节与期末大作业复用。
+\end{quote}
+
+\section{F.1
+常用记号与希腊字母}\label{f.1-ux5e38ux7528ux8bb0ux53f7ux4e0eux5e0cux814aux5b57ux6bcd}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+记号 & 含义 & & 记号 & 含义 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{Σ} & 求和 & & \texttt{∏} & 连乘 \\
+\texttt{E{[}X{]}} / \texttt{Var(X)} & 期望/方差 & & \texttt{σ} &
+标准差 \\
+\texttt{x\^{}T} & 转置 & & \texttt{grad\ f} & 梯度 \\
+\texttt{∂f/∂x} & 偏导 & & \texttt{∫} & 积分 \\
+\texttt{λ} & 特征值/正则强度 & & \texttt{α} & 学习率 \\
+\texttt{θ} & 参数/角度 & & \texttt{ε} & 误差/小量 \\
+\texttt{≈} & 约等于 & & \texttt{\textless{}\textless{}} & 远小于 \\
+\end{longtable}
+}
+
+\section{F.2 常用公式卡}\label{f.2-ux5e38ux7528ux516cux5f0fux5361}
+
+\subsection{微积分}\label{ux5faeux79efux5206}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{(x\^{}n)\textquotesingle{}\ =\ n\ x\^{}\{n-1\}}；\texttt{(e\^{}x)\textquotesingle{}\ =\ e\^{}x}；\texttt{(ln\ x)\textquotesingle{}\ =\ 1/x}
+\item
+  泰勒：\texttt{f(x+h)\ ≈\ f(x)\ +\ f\textquotesingle{}(x)\ h\ +\ f\textquotesingle{}\textquotesingle{}(x)\ h²/2}
+\item
+  数值微分（中心差分）：\texttt{f\textquotesingle{}(x)\ ≈\ (f(x+h)-f(x-h))/(2h)}
+\end{itemize}
+
+\subsection{线性代数}\label{ux7ebfux6027ux4ee3ux6570}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{A\^{}T}
+  转置；\texttt{(AB)\^{}T\ =\ B\^{}T\ A\^{}T}；\texttt{tr(AB)\ =\ tr(BA)}
+\item
+  最小二乘：\texttt{x\^{}\ =\ (A\^{}T\ A)\^{}\{-1\}\ A\^{}T\ b}（投影；数值上用
+  \texttt{lstsq}）
+\item
+  SVD：\texttt{A\ =\ UΣV\^{}T}；对称矩阵 \texttt{A\ =\ QΛQ\^{}T}
+\end{itemize}
+
+\subsection{概率统计}\label{ux6982ux7387ux7edfux8ba1}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{E{[}X{]}\ =\ Σ\ x\ p(x)}；\texttt{Var(X)\ =\ E{[}X²{]}\ -\ (E{[}X{]})²}
+\item
+  样本方差：\texttt{s²\ =\ Σ(x\_i\ -\ x̄)²/(n-1)}
+\item
+  置信区间：\texttt{x̄\ ±\ t\_\{α/2,\ n-1\}\ ·\ s/√n}
+\item
+  线性回归：\texttt{y\ =\ Xβ\ +\ ε}；\texttt{β\^{}\ =\ (X\^{}T\ X)\^{}\{-1\}\ X\^{}T\ y}；\texttt{R²\ =\ 1\ -\ SSE/SST}
+\end{itemize}
+
+\subsection{机器学习}\label{ux673aux5668ux5b66ux4e60}
+
+\begin{itemize}
+\tightlist
+\item
+  逻辑回归（sigmoid）：\texttt{p\ =\ 1/(1+e\^{}\{-θ\^{}T\ x\})}；损失 =
+  交叉熵
+\item
+  梯度下降：\texttt{θ\ ←\ θ\ -\ α·grad\ L}
+\item
+  正则化：Ridge
+  \texttt{L\ +\ λ\textbar{}\textbar{}θ\textbar{}\textbar{}²}；Lasso
+  \texttt{L\ +\ λ\textbar{}\textbar{}θ\textbar{}\textbar{}₁}
+\end{itemize}
+
+\section{F.3
+复杂度与常用算法量级}\label{f.3-ux590dux6742ux5ea6ux4e0eux5e38ux7528ux7b97ux6cd5ux91cfux7ea7}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+运算 & 复杂度 & 备注 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+矩阵乘 \texttt{(n×n)} & \texttt{O(n³)} & 分治可略快；向量化库已优化 \\
+解方程组（LU） & \texttt{O(n³)} & 避免显式求逆 \\
+特征分解/SVD & 约 \texttt{O(n³)} & 只求前 k 个可加速 \\
+FFT & \texttt{O(N\ log\ N)} & 比直接 DFT 的 \texttt{O(N²)} 快得多 \\
+Dijkstra & \texttt{O((V+E)\ log\ V)}（堆） & 稠密/稀疏均可用 \\
+最小生成树 & \texttt{O(E\ log\ E)} & Kruskal \\
+k-Means 一次迭代 & \texttt{O(n·k·d)} & 与样本数线性 \\
+Python 纯循环 & 慢 & 用 NumPy 向量化（广播） \\
+\end{longtable}
+}
+
+\section{F.4
+数值稳定性（科学计算必修）}\label{f.4-ux6570ux503cux7a33ux5b9aux6027ux79d1ux5b66ux8ba1ux7b97ux5fc5ux4fee}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{浮点误差}：\texttt{1e-16} 量级；比较用 \texttt{np.isclose} /
+  \texttt{abs(a-b)\ \textless{}\ 1e-9}。
+\item
+  \textbf{条件数}：矩阵条件数大（病态）时，输入微小变化导致解剧变；先看
+  \texttt{np.linalg.cond(A)}。
+\item
+  \textbf{避免灾难性消去}：\texttt{sqrt(x²+1)\ -\ x} 当 x 很大；改用
+  \texttt{1/(sqrt(x²+1)+x)}。
+\item
+  \textbf{归一化}：优化/距离/聚类前对特征做标准化（\texttt{StandardScaler}）。
+\item
+  \textbf{对数域计算}：小概率连乘/超长乘积取 log；分类用
+  \texttt{log\_proba} 数值更稳。
+\item
+  \textbf{随机可复现}：固定种子（\texttt{random\_state} /
+  \texttt{default\_rng(seed)}）。
+\end{enumerate}
+
+\section{F.5 可视化原则（配合第 5
+章）}\label{f.5-ux53efux89c6ux5316ux539fux5219ux914dux5408ux7b2c-5-ux7ae0}
+
+\begin{itemize}
+\tightlist
+\item
+  一图一信息；坐标轴标清楚；比较用同一尺度；
+\item
+  柱状图看类别、直方图看分布、散点看关系、折线看趋势；
+\item
+  图上标注单位、图例、样本量；颜色兼顾色盲（避免红绿并列）；
+\item
+  大数字用科学计数法/千分位；时间序列给坐标轴时间标签。
+\end{itemize}
+
+\section{F.6
+使用章节与通用衔接}\label{f.6-ux4f7fux7528ux7ae0ux8282ux4e0eux901aux7528ux8854ux63a5}
+
+\begin{itemize}
+\tightlist
+\item
+  章节：全 9 个章节都会用到（符号/公式/复杂度/稳定性）；
+\item
+  推荐在上机前 5 分钟翻 F.2/F.4；做期末大作业前翻
+  F.1\textasciitilde F.4；
+\item
+  参考：Big-O Cheat Sheet、NumPy broadcasting
+  文档、《算法导论》简明版（见 references.md）。
+\end{itemize}
+
+\backmatter
