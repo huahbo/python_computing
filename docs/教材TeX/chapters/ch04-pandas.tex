@@ -94,23 +94,26 @@ NumPy 的 \texttt{ndarray}
 \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.width\textquotesingle{}}\NormalTok{, }\DecValTok{100}\NormalTok{)}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.max\_columns\textquotesingle{}}\NormalTok{, }\DecValTok{20}\NormalTok{)}
 
 \NormalTok{s1 }\OperatorTok{=}\NormalTok{ pd.Series([}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{])          }\CommentTok{\# 列表}
 \NormalTok{s2 }\OperatorTok{=}\NormalTok{ pd.Series(np.array([}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{]))  }\CommentTok{\# NumPy 数组}
 \NormalTok{s3 }\OperatorTok{=}\NormalTok{ pd.Series([}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{], index}\OperatorTok{=}\NormalTok{[}\StringTok{\textquotesingle{}a\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}b\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}c\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}d\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}e\textquotesingle{}}\NormalTok{])}
 \NormalTok{s4 }\OperatorTok{=}\NormalTok{ pd.Series(\{}\StringTok{\textquotesingle{}a\textquotesingle{}}\NormalTok{: }\DecValTok{1}\NormalTok{, }\StringTok{\textquotesingle{}b\textquotesingle{}}\NormalTok{: }\DecValTok{2}\NormalTok{, }\StringTok{\textquotesingle{}c\textquotesingle{}}\NormalTok{: }\DecValTok{3}\NormalTok{, }\StringTok{\textquotesingle{}d\textquotesingle{}}\NormalTok{: }\DecValTok{4}\NormalTok{, }\StringTok{\textquotesingle{}e\textquotesingle{}}\NormalTok{: }\DecValTok{5}\NormalTok{\})  }\CommentTok{\# 字典}
+\BuiltInTok{print}\NormalTok{(s3)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{\#\# s3}
-\NormalTok{    a    1}
-\NormalTok{    b    2}
-\NormalTok{    c    3}
-\NormalTok{    d    4}
-\NormalTok{    e    5}
-\NormalTok{    dtype: int64}
+\NormalTok{a    1}
+\NormalTok{b    2}
+\NormalTok{c    3}
+\NormalTok{d    4}
+\NormalTok{e    5}
+\NormalTok{dtype: int64}
 \end{Highlighting}
 \end{Shaded}
 
@@ -135,12 +138,12 @@ NumPy 的 \texttt{ndarray}
 \begin{Highlighting}[]
 \NormalTok{1}
 \NormalTok{1}
-\NormalTok{    a    100}
-\NormalTok{    b      2}
-\NormalTok{    c      3}
-\NormalTok{    d      4}
-\NormalTok{    e      5}
-\NormalTok{    dtype: int64}
+\NormalTok{a    100}
+\NormalTok{b      2}
+\NormalTok{c      3}
+\NormalTok{d      4}
+\NormalTok{e      5}
+\NormalTok{dtype: int64}
 \end{Highlighting}
 \end{Shaded}
 
@@ -163,10 +166,10 @@ NumPy 的 \texttt{ndarray}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{    a    100}
-\NormalTok{    b      2}
-\NormalTok{    c      3}
-\NormalTok{    dtype: int64}
+\NormalTok{a    100}
+\NormalTok{b      2}
+\NormalTok{c      3}
+\NormalTok{dtype: int64}
 \NormalTok{0    1}
 \NormalTok{1    2}
 \NormalTok{2    3}
@@ -186,30 +189,31 @@ NumPy 的 \texttt{ndarray}
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{s6 }\OperatorTok{=}\NormalTok{ s3 }\OperatorTok{+} \DecValTok{10}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}s3 + 10:\textquotesingle{}}\NormalTok{)}
 \BuiltInTok{print}\NormalTok{(s6)}
 
 \NormalTok{s7 }\OperatorTok{=}\NormalTok{ pd.Series([}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{], index}\OperatorTok{=}\NormalTok{[}\StringTok{\textquotesingle{}a\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}c\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}e\textquotesingle{}}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}s3 + s7:\textquotesingle{}}\NormalTok{)}
 \BuiltInTok{print}\NormalTok{(s3 }\OperatorTok{+}\NormalTok{ s7)        }\CommentTok{\# 按共同索引对齐；缺失处为 NaN}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{\#\# s3 + 10}
-\NormalTok{    a    110}
-\NormalTok{    b     12}
-\NormalTok{    c     13}
-\NormalTok{    d     14}
-\NormalTok{    e     15}
-\NormalTok{    dtype: int64}
-
-\NormalTok{\#\# s3 + s7}
-\NormalTok{    a    101.0}
-\NormalTok{    b      NaN}
-\NormalTok{    c      5.0}
-\NormalTok{    d      NaN}
-\NormalTok{    e      8.0}
-\NormalTok{    dtype: float64}
+\NormalTok{s3 + 10:}
+\NormalTok{a    110}
+\NormalTok{b     12}
+\NormalTok{c     13}
+\NormalTok{d     14}
+\NormalTok{e     15}
+\NormalTok{dtype: int64}
+\NormalTok{s3 + s7:}
+\NormalTok{a    101.0}
+\NormalTok{b      NaN}
+\NormalTok{c      5.0}
+\NormalTok{d      NaN}
+\NormalTok{e      8.0}
+\NormalTok{dtype: float64}
 \end{Highlighting}
 \end{Shaded}
 
@@ -226,8 +230,10 @@ NumPy 的 \texttt{ndarray}
 \BuiltInTok{print}\NormalTok{(s3.index)                }\CommentTok{\# Index([\textquotesingle{}a\textquotesingle{}, \textquotesingle{}b\textquotesingle{}, \textquotesingle{}c\textquotesingle{}, \textquotesingle{}d\textquotesingle{}, \textquotesingle{}e\textquotesingle{}], dtype=\textquotesingle{}object\textquotesingle{})}
 \BuiltInTok{print}\NormalTok{(s3.values)               }\CommentTok{\# array([100,   2,   3,   4,   5])}
 \BuiltInTok{print}\NormalTok{(s3.describe())           }\CommentTok{\# 统计摘要}
-\BuiltInTok{print}\NormalTok{(s3.head(}\DecValTok{2}\NormalTok{), s3.tail(}\DecValTok{2}\NormalTok{))  }\CommentTok{\# 头/尾}
-\BuiltInTok{print}\NormalTok{(s3.isnull(), s3.notnull())}
+\BuiltInTok{print}\NormalTok{(s3.head(}\DecValTok{2}\NormalTok{))        }\CommentTok{\# 头}
+\BuiltInTok{print}\NormalTok{(s3.tail(}\DecValTok{2}\NormalTok{))        }\CommentTok{\# 尾}
+\BuiltInTok{print}\NormalTok{(s3.isnull())       }\CommentTok{\# 是否缺失}
+\BuiltInTok{print}\NormalTok{(s3.notnull())      }\CommentTok{\# 是否非缺失}
 \end{Highlighting}
 \end{Shaded}
 
@@ -235,27 +241,33 @@ NumPy 的 \texttt{ndarray}
 \begin{Highlighting}[]
 \NormalTok{Index([\textquotesingle{}a\textquotesingle{}, \textquotesingle{}b\textquotesingle{}, \textquotesingle{}c\textquotesingle{}, \textquotesingle{}d\textquotesingle{}, \textquotesingle{}e\textquotesingle{}], dtype=\textquotesingle{}object\textquotesingle{})}
 \NormalTok{[100   2   3   4   5]}
-\NormalTok{count     5.000000}
-\NormalTok{mean     22.800000}
-\NormalTok{std      43.170592}
-\NormalTok{min       2.000000}
-\NormalTok{25\%       3.000000}
-\NormalTok{50\%       4.000000}
-\NormalTok{75\%       5.000000}
-\NormalTok{max     100.000000}
+\NormalTok{count      5.000000}
+\NormalTok{mean      22.800000}
+\NormalTok{std       43.170592}
+\NormalTok{min        2.000000}
+\NormalTok{25\%        3.000000}
+\NormalTok{50\%        4.000000}
+\NormalTok{75\%        5.000000}
+\NormalTok{max      100.000000}
 \NormalTok{dtype: float64}
-\NormalTok{    a    100}
-\NormalTok{    b      2}
-\NormalTok{    dtype: int64}
-\NormalTok{    d    4}
-\NormalTok{    e    5}
-\NormalTok{    dtype: int64}
-\NormalTok{    a    False}
-\NormalTok{    b    False}
-\NormalTok{    c    False}
-\NormalTok{    d    False}
-\NormalTok{    e    False}
-\NormalTok{    dtype: bool}
+\NormalTok{a    100}
+\NormalTok{b      2}
+\NormalTok{dtype: int64}
+\NormalTok{d    4}
+\NormalTok{e    5}
+\NormalTok{dtype: int64}
+\NormalTok{a    False}
+\NormalTok{b    False}
+\NormalTok{c    False}
+\NormalTok{d    False}
+\NormalTok{e    False}
+\NormalTok{dtype: bool}
+\NormalTok{a    True}
+\NormalTok{b    True}
+\NormalTok{c    True}
+\NormalTok{d    True}
+\NormalTok{e    True}
+\NormalTok{dtype: bool}
 \end{Highlighting}
 \end{Shaded}
 
@@ -266,6 +278,167 @@ counts）统计每个取值出现次数。
 \end{quote}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{案例卡 1：Series 索引对齐------为什么 s3 + s7 会出现
+NaN}\label{ux6848ux4f8bux5361-1series-ux7d22ux5f15ux5bf9ux9f50ux4e3aux4ec0ux4e48-s3-s7-ux4f1aux51faux73b0-nan}
+
+\subsubsection{目标}\label{ux76eeux6807-17}
+
+理解 Pandas 的\textbf{索引对齐}：两个 \texttt{Series}
+相加时，不是按``位置''相加，而是按\textbf{相同的标签}对齐；标签只在一边出现过时，结果那个位置就是
+\texttt{NaN}（缺失）。这个案例让你亲眼看到 NaN 怎么产生，并学会用
+\texttt{fill\_value=0} 或 \texttt{fillna(0)} 把它消除。
+
+\subsubsection{代码}\label{ux4ee3ux7801-19}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.width\textquotesingle{}}\NormalTok{, }\DecValTok{100}\NormalTok{)}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.max\_columns\textquotesingle{}}\NormalTok{, }\DecValTok{20}\NormalTok{)}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\NormalTok{s3 }\OperatorTok{=}\NormalTok{ pd.Series([}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{], index}\OperatorTok{=}\NormalTok{[}\StringTok{\textquotesingle{}a\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}b\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}c\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}d\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}e\textquotesingle{}}\NormalTok{])}
+\NormalTok{s7 }\OperatorTok{=}\NormalTok{ pd.Series([}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{], index}\OperatorTok{=}\NormalTok{[}\StringTok{\textquotesingle{}a\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}c\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}e\textquotesingle{}}\NormalTok{])}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}s3:\textquotesingle{}}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(s3)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}s7:\textquotesingle{}}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(s7)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}s3 + s7 （索引对齐，缺失为 NaN）:\textquotesingle{}}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(s3 }\OperatorTok{+}\NormalTok{ s7)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}s3.add(s7, fill\_value=0) （先补 0 再相加）:\textquotesingle{}}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(s3.add(s7, fill\_value}\OperatorTok{=}\DecValTok{0}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-17}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{s3:}
+\NormalTok{a    1}
+\NormalTok{b    2}
+\NormalTok{c    3}
+\NormalTok{d    4}
+\NormalTok{e    5}
+\NormalTok{dtype: int64}
+\NormalTok{s7:}
+\NormalTok{a    1}
+\NormalTok{c    2}
+\NormalTok{e    3}
+\NormalTok{dtype: int64}
+\NormalTok{s3 + s7 （索引对齐，缺失为 NaN）:}
+\NormalTok{a    2.0}
+\NormalTok{b    NaN}
+\NormalTok{c    5.0}
+\NormalTok{d    NaN}
+\NormalTok{e    8.0}
+\NormalTok{dtype: float64}
+\NormalTok{s3.add(s7, fill\_value=0) （先补 0 再相加）:}
+\NormalTok{a    2.0}
+\NormalTok{b    2.0}
+\NormalTok{c    5.0}
+\NormalTok{d    4.0}
+\NormalTok{e    8.0}
+\NormalTok{dtype: float64}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-17}
+
+\textbf{一句话人话}：把两个带标签的 Series 相加时，Pandas
+先``对上号（相同标签）再加法''；对不上号的位置没有值，就记作 NaN。
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{s3} 的索引是 \texttt{a,b,c,d,e}，\texttt{s7} 的索引是
+  \texttt{a,c,e}；
+\item
+  \texttt{s3\ +\ s7} 时，\texttt{a}、\texttt{c}、\texttt{e}
+  三处两边都有值，正常相加；\texttt{b}、\texttt{d} 只有 \texttt{s3}
+  有，另一边``没有这一格''，所以结果是 \texttt{NaN}；
+\item
+  因为结果里有 \texttt{NaN}，整个结果的 \texttt{dtype} 自动变成
+  \texttt{float64}（整数类型无法表示 NaN）；
+\item
+  \texttt{s3.add(s7,\ fill\_value=0)} 表示``缺失的一边按 0
+  参与运算''，所以 \texttt{b} 得到 \texttt{2+0=2}，\texttt{d} 得到
+  \texttt{4+0=4}；
+\item
+  另一种等价写法是 \texttt{(s3\ +\ s7).fillna(0)}：先按索引对齐算出
+  NaN，再用 \texttt{fillna(0)} 把它们填成 0。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-17}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+需求
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+写法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+说明
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+两个 Series 相加（按索引对齐） & \texttt{s3\ +\ s7} & 缺失标签给 NaN \\
+相加时缺失处补 0 & \texttt{s3.add(s7,\ fill\_value=0)} &
+\texttt{add/sub/mul/div} 都支持 \texttt{fill\_value} \\
+先算出 NaN 再补 0 & \texttt{(s3\ +\ s7).fillna(0)} & \texttt{fillna}
+统一填充 \\
+判断是否 NaN & \texttt{s.isna()} / \texttt{s.notna()} & 返回布尔
+Series \\
+只保留共同索引 & \texttt{(s3\ +\ s7).dropna()} & 丢弃 NaN 位置 \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-17}
+
+\begin{itemize}
+\tightlist
+\item
+  以为 Series 加法是``按位置逐个加''，忽略了它是\textbf{按标签对齐}；
+\item
+  看到 NaN 以为代码出错------其实这是 Pandas 的\textbf{设计语义}，不是
+  bug；
+\item
+  混淆 \texttt{s3.fillna(0)} 与 \texttt{(s3\ +\ s7).fillna(0)}：前者只填
+  \texttt{s3} 自身的缺失值，不是``把两个 Series 缺失补 0 再相加''；
+\item
+  相加出现 NaN 后直接 \texttt{astype(int)}，会因 NaN 报错；应先
+  \texttt{fillna(0)} 再转类型。
+\end{itemize}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-6}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  试试 \texttt{s3.sub(s7,\ fill\_value=0)} 和
+  \texttt{s3.mul(s7,\ fill\_value=0)}，观察输出差异。
+\item
+  把 \texttt{s7} 的索引改成
+  \texttt{{[}\textquotesingle{}a\textquotesingle{},\textquotesingle{}b\textquotesingle{},\textquotesingle{}c\textquotesingle{},\textquotesingle{}d\textquotesingle{},\textquotesingle{}e\textquotesingle{}{]}}，再看
+  \texttt{s3\ +\ s7} 是否还有 NaN。
+\item
+  用 \texttt{pd.concat({[}s3,\ s7{]},\ axis=1)} 把两个 Series 并成一个
+  DataFrame，观察对齐与 NaN。
+\item
+  用
+  \texttt{s3.reindex({[}\textquotesingle{}a\textquotesingle{},\textquotesingle{}c\textquotesingle{},\textquotesingle{}e\textquotesingle{},\textquotesingle{}f\textquotesingle{}{]})}
+  手动规定索引，再和 \texttt{s7} 相加，体会 \texttt{reindex} 的作用。
+\end{enumerate}
 
 \subsection{1.3 DataFrame}\label{dataframe}
 
@@ -352,11 +525,11 @@ counts）统计每个取值出现次数。
 \NormalTok{B    4}
 \NormalTok{C    7}
 \NormalTok{Name: 0, dtype: int64}
-\NormalTok{2}
+\NormalTok{4}
 \NormalTok{1}
 \NormalTok{   A  B  C}
-\NormalTok{0  1  2  3}
-\NormalTok{1  4  5  6}
+\NormalTok{0  1  4  7}
+\NormalTok{1  2  5  8}
 \end{Highlighting}
 \end{Shaded}
 
@@ -478,10 +651,8 @@ counts）统计每个取值出现次数。
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{DatetimeIndex([\textquotesingle{}2023{-}01{-}01\textquotesingle{}, \textquotesingle{}2023{-}01{-}02\textquotesingle{}, \textquotesingle{}2023{-}01{-}03\textquotesingle{}, \textquotesingle{}2023{-}01{-}04\textquotesingle{},}
-\NormalTok{               \textquotesingle{}2023{-}01{-}05\textquotesingle{}],}
-\NormalTok{              dtype=\textquotesingle{}datetime64[ns]\textquotesingle{}, freq=\textquotesingle{}D\textquotesingle{})}
-\NormalTok{[Timestamp(\textquotesingle{}2023{-}01{-}01 00:00:00\textquotesingle{}), Timestamp(\textquotesingle{}2023{-}01{-}01 01:00:00\textquotesingle{}), Timestamp(\textquotesingle{}2023{-}01{-}01 02:00:00\textquotesingle{})]}
+\NormalTok{DatetimeIndex([\textquotesingle{}2023{-}01{-}01\textquotesingle{}, \textquotesingle{}2023{-}01{-}02\textquotesingle{}, \textquotesingle{}2023{-}01{-}03\textquotesingle{}, \textquotesingle{}2023{-}01{-}04\textquotesingle{}, \textquotesingle{}2023{-}01{-}05\textquotesingle{}], dtype=\textquotesingle{}datetime64[ns]\textquotesingle{}, freq=\textquotesingle{}D\textquotesingle{})}
+\NormalTok{DatetimeIndex([\textquotesingle{}2023{-}01{-}01 00:00:00\textquotesingle{}, \textquotesingle{}2023{-}01{-}01 01:00:00\textquotesingle{}, \textquotesingle{}2023{-}01{-}01 02:00:00\textquotesingle{}], dtype=\textquotesingle{}datetime64[ns]\textquotesingle{}, freq=\textquotesingle{}h\textquotesingle{})}
 \NormalTok{DatetimeIndex([\textquotesingle{}2023{-}01{-}01 00:00:00+00:00\textquotesingle{}, \textquotesingle{}2023{-}01{-}02 00:00:00+00:00\textquotesingle{},}
 \NormalTok{               \textquotesingle{}2023{-}01{-}03 00:00:00+00:00\textquotesingle{}, \textquotesingle{}2023{-}01{-}04 00:00:00+00:00\textquotesingle{},}
 \NormalTok{               \textquotesingle{}2023{-}01{-}05 00:00:00+00:00\textquotesingle{}],}
@@ -659,6 +830,9 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-6}
 \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.width\textquotesingle{}}\NormalTok{, }\DecValTok{100}\NormalTok{)}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.max\_columns\textquotesingle{}}\NormalTok{, }\DecValTok{20}\NormalTok{)}
 
 \NormalTok{df }\OperatorTok{=}\NormalTok{ pd.DataFrame(\{}\StringTok{\textquotesingle{}A\textquotesingle{}}\NormalTok{: [}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{],}
                    \StringTok{\textquotesingle{}B\textquotesingle{}}\NormalTok{: [}\DecValTok{10}\NormalTok{, }\DecValTok{20}\NormalTok{, }\DecValTok{20}\NormalTok{, }\DecValTok{30}\NormalTok{, }\DecValTok{40}\NormalTok{],}
@@ -978,6 +1152,184 @@ Z = \frac{X - \mu}{\sigma}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
+\subsection{案例卡 2：groupby
+分组统计------按班级算平均分并排名}\label{ux6848ux4f8bux5361-2groupby-ux5206ux7ec4ux7edfux8ba1ux6309ux73edux7ea7ux7b97ux5e73ux5747ux5206ux5e76ux6392ux540d}
+
+\subsubsection{目标}\label{ux76eeux6807-18}
+
+用 \texttt{groupby} 把学生成绩按``班级''分组，算出各班平均分；再用
+\texttt{.sort\_values} 排序、\texttt{.rank}
+得到排名。同时给每个学生算``在班级内''的名次，理解
+\texttt{groupby(...).rank()} 与``整组排名''的区别。
+
+\subsubsection{代码}\label{ux4ee3ux7801-20}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.width\textquotesingle{}}\NormalTok{, }\DecValTok{100}\NormalTok{)}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.max\_columns\textquotesingle{}}\NormalTok{, }\DecValTok{20}\NormalTok{)}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\NormalTok{df }\OperatorTok{=}\NormalTok{ pd.DataFrame(\{}
+    \StringTok{\textquotesingle{}班级\textquotesingle{}}\NormalTok{: [}\StringTok{\textquotesingle{}一班\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}一班\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}一班\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}二班\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}二班\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}二班\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}三班\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}三班\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}三班\textquotesingle{}}\NormalTok{],}
+    \StringTok{\textquotesingle{}姓名\textquotesingle{}}\NormalTok{: [}\StringTok{\textquotesingle{}张三\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}李四\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}王五\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}赵六\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}钱七\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}孙八\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}周九\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}吴十\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}郑十一\textquotesingle{}}\NormalTok{],}
+    \StringTok{\textquotesingle{}分数\textquotesingle{}}\NormalTok{: [}\DecValTok{88}\NormalTok{, }\DecValTok{92}\NormalTok{, }\DecValTok{75}\NormalTok{, }\DecValTok{80}\NormalTok{, }\DecValTok{85}\NormalTok{, }\DecValTok{78}\NormalTok{, }\DecValTok{95}\NormalTok{, }\DecValTok{90}\NormalTok{, }\DecValTok{82}\NormalTok{],}
+\NormalTok{\})}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}各班平均分（降序）:\textquotesingle{}}\NormalTok{)}
+\NormalTok{mean\_by\_class }\OperatorTok{=}\NormalTok{ df.groupby(}\StringTok{\textquotesingle{}班级\textquotesingle{}}\NormalTok{)[}\StringTok{\textquotesingle{}分数\textquotesingle{}}\NormalTok{].mean().sort\_values(ascending}\OperatorTok{=}\VariableTok{False}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(mean\_by\_class)}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}各班平均分排名（第 1 名 1.0）:\textquotesingle{}}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(mean\_by\_class.rank(ascending}\OperatorTok{=}\VariableTok{False}\NormalTok{))}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}每人班级内排名（分数降序，min 法）:\textquotesingle{}}\NormalTok{)}
+\NormalTok{df[}\StringTok{\textquotesingle{}班级排名\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ df.groupby(}\StringTok{\textquotesingle{}班级\textquotesingle{}}\NormalTok{)[}\StringTok{\textquotesingle{}分数\textquotesingle{}}\NormalTok{].rank(ascending}\OperatorTok{=}\VariableTok{False}\NormalTok{, method}\OperatorTok{=}\StringTok{\textquotesingle{}min\textquotesingle{}}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(df.sort\_values([}\StringTok{\textquotesingle{}班级\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}班级排名\textquotesingle{}}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-18}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{各班平均分（降序）:}
+\NormalTok{班级}
+\NormalTok{三班    89.0}
+\NormalTok{一班    85.0}
+\NormalTok{二班    81.0}
+\NormalTok{Name: 分数, dtype: float64}
+\NormalTok{各班平均分排名（第 1 名 1.0）:}
+\NormalTok{班级}
+\NormalTok{三班    1.0}
+\NormalTok{一班    2.0}
+\NormalTok{二班    3.0}
+\NormalTok{Name: 分数, dtype: float64}
+\NormalTok{每人班级内排名（分数降序，min 法）:}
+\NormalTok{   班级   姓名  分数  班级排名}
+\NormalTok{1  一班   李四  92   1.0}
+\NormalTok{0  一班   张三  88   2.0}
+\NormalTok{2  一班   王五  75   3.0}
+\NormalTok{6  三班   周九  95   1.0}
+\NormalTok{7  三班   吴十  90   2.0}
+\NormalTok{8  三班  郑十一  82   3.0}
+\NormalTok{4  二班   钱七  85   1.0}
+\NormalTok{3  二班   赵六  80   2.0}
+\NormalTok{5  二班   孙八  78   3.0}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-18}
+
+\textbf{一句话人话}：\texttt{groupby}
+把表格按``班级''切成几堆，每堆算一个平均分；\texttt{rank}
+在旁边写上``谁排第几''。
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{df.groupby(\textquotesingle{}班级\textquotesingle{}){[}\textquotesingle{}分数\textquotesingle{}{]}}
+  表示``按班级分组，只看分数这一列''；
+\item
+  \texttt{.mean()} 对每组求平均，返回以``班级''为索引的 Series；
+\item
+  \texttt{.sort\_values(ascending=False)} 让平均分从高到低排列；
+\item
+  \texttt{.rank(ascending=False)} 给这个 Series
+  打排名：分数越高，名次数字越小（第 1 名是 1.0）；
+\item
+  \texttt{df.groupby(\textquotesingle{}班级\textquotesingle{}){[}\textquotesingle{}分数\textquotesingle{}{]}.rank(ascending=False,\ method=\textquotesingle{}min\textquotesingle{})}
+  是``在每个班级内部给每个学生排名''，结果不会把行数压缩，而是新增一列
+  \texttt{班级排名}；
+\item
+  \texttt{method=\textquotesingle{}min\textquotesingle{}}
+  表示并列时取``最小的名次''（如两人并列第 1，则都记 1，下一名从 3
+  开始）。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-18}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+需求
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+写法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+说明
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+按一列分组 &
+\texttt{df.groupby(\textquotesingle{}班级\textquotesingle{})} & 返回
+GroupBy 对象 \\
+分组后对某列求平均 &
+\texttt{df.groupby(\textquotesingle{}班级\textquotesingle{}){[}\textquotesingle{}分数\textquotesingle{}{]}.mean()}
+& 返回 Series \\
+分组后多列多函数 &
+\texttt{df.groupby(\textquotesingle{}班级\textquotesingle{}){[}\textquotesingle{}分数\textquotesingle{}{]}.agg({[}\textquotesingle{}mean\textquotesingle{},\textquotesingle{}sum\textquotesingle{},\textquotesingle{}count\textquotesingle{}{]})}
+& 返回 DataFrame \\
+对结果排序 & \texttt{.sort\_values(ascending=False)} & 或对 DataFrame
+\texttt{sort\_values(\textquotesingle{}分数\textquotesingle{},\ ascending=False)} \\
+对结果排名 & \texttt{.rank(ascending=False)} & 分数越高，名次数字越小 \\
+组内排名 &
+\texttt{df.groupby(\textquotesingle{}班级\textquotesingle{}){[}\textquotesingle{}分数\textquotesingle{}{]}.rank(ascending=False)}
+& 新增列，不压缩行数 \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-18}
+
+\begin{itemize}
+\tightlist
+\item
+  以为
+  \texttt{groupby(\textquotesingle{}班级\textquotesingle{}){[}\textquotesingle{}分数\textquotesingle{}{]}.mean()}
+  返回普通 DataFrame，其实默认返回 Series；
+\item
+  对未排序的 Series 直接 \texttt{.rank()} 结果仍按原索引排列，应先
+  \texttt{.sort\_values()} 再排名；
+\item
+  \texttt{groupby(...).rank()} 默认
+  \texttt{method=\textquotesingle{}average\textquotesingle{}}，并列时会得到
+  1.5 之类的小数；想要``并列同名次''用
+  \texttt{method=\textquotesingle{}min\textquotesingle{}}；
+\item
+  用 \texttt{mean().reset\_index()} 之后才能像普通 DataFrame
+  一样再排序/合并。
+\end{itemize}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-7}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  改用
+  \texttt{df.groupby(\textquotesingle{}班级\textquotesingle{}){[}\textquotesingle{}分数\textquotesingle{}{]}.agg({[}\textquotesingle{}mean\textquotesingle{},\textquotesingle{}std\textquotesingle{},\textquotesingle{}count\textquotesingle{}{]})}，并把结果画成条形图。
+\item
+  加一列 \texttt{科目}，用
+  \texttt{pivot\_table(values=\textquotesingle{}分数\textquotesingle{},\ index=\textquotesingle{}班级\textquotesingle{},\ columns=\textquotesingle{}科目\textquotesingle{},\ aggfunc=\textquotesingle{}mean\textquotesingle{})}
+  得到``班级 × 科目''平均分表。
+\item
+  用
+  \texttt{df.groupby(\textquotesingle{}班级\textquotesingle{}){[}\textquotesingle{}分数\textquotesingle{}{]}.transform(\textquotesingle{}mean\textquotesingle{})}
+  给每个学生补一列``班级平均分''，体会 \texttt{transform} 与
+  \texttt{agg} 的差别。
+\item
+  把 \texttt{df} 改成``一行一人''的长表（含 \texttt{学号}），先
+  \texttt{groupby(\textquotesingle{}姓名\textquotesingle{}){[}\textquotesingle{}分数\textquotesingle{}{]}.sum()}
+  算总分，再做班内排名。
+\end{enumerate}
+
 \subsection{2.5
 透视表（pivot\_table）}\label{ux900fux89c6ux8868pivot_table}
 
@@ -1051,6 +1403,233 @@ rolling}\label{ux65f6ux95f4ux5e8fux5217resample-ux4e0e-rolling}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
+\subsection{案例卡 3：缺失值与异常值清洗------IQR 替换 +
+时间序列重采样}\label{ux6848ux4f8bux5361-3ux7f3aux5931ux503cux4e0eux5f02ux5e38ux503cux6e05ux6d17iqr-ux66ffux6362-ux65f6ux95f4ux5e8fux5217ux91cdux91c7ux6837}
+
+\subsubsection{目标}\label{ux76eeux6807-19}
+
+把一条 14 天的日度数据先``清洗''：\texttt{ffill()} 前向填充缺失值，再用
+IQR
+找出异常值并用中位数替换；最后把它重采样成周均（\texttt{resample(\textquotesingle{}W\textquotesingle{})}）并计算
+3 天滑动平均（\texttt{rolling(3)}）。这是``数据清洗 →
+时间聚合''的典型流程。
+
+\subsubsection{代码}\label{ux4ee3ux7801-21}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.width\textquotesingle{}}\NormalTok{, }\DecValTok{100}\NormalTok{)}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.max\_columns\textquotesingle{}}\NormalTok{, }\DecValTok{20}\NormalTok{)}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\NormalTok{idx }\OperatorTok{=}\NormalTok{ pd.date\_range(}\StringTok{\textquotesingle{}2023{-}01{-}01\textquotesingle{}}\NormalTok{, periods}\OperatorTok{=}\DecValTok{14}\NormalTok{, freq}\OperatorTok{=}\StringTok{\textquotesingle{}D\textquotesingle{}}\NormalTok{)}
+\NormalTok{vals }\OperatorTok{=}\NormalTok{ [}\DecValTok{10}\NormalTok{, }\DecValTok{11}\NormalTok{, }\DecValTok{12}\NormalTok{, np.nan, }\DecValTok{14}\NormalTok{, }\DecValTok{15}\NormalTok{, }\DecValTok{16}\NormalTok{, }\DecValTok{17}\NormalTok{, }\DecValTok{18}\NormalTok{, }\DecValTok{19}\NormalTok{, }\DecValTok{20}\NormalTok{, }\DecValTok{21}\NormalTok{, }\DecValTok{22}\NormalTok{, }\DecValTok{120}\NormalTok{]}
+\NormalTok{s }\OperatorTok{=}\NormalTok{ pd.Series(vals, index}\OperatorTok{=}\NormalTok{idx)}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}原始 Series:\textquotesingle{}}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(s)}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}前向填充（ffill）后:\textquotesingle{}}\NormalTok{)}
+\NormalTok{s }\OperatorTok{=}\NormalTok{ s.ffill()}
+\BuiltInTok{print}\NormalTok{(s)}
+
+\NormalTok{Q1 }\OperatorTok{=}\NormalTok{ s.quantile(}\FloatTok{0.25}\NormalTok{)}
+\NormalTok{Q3 }\OperatorTok{=}\NormalTok{ s.quantile(}\FloatTok{0.75}\NormalTok{)}
+\NormalTok{IQR }\OperatorTok{=}\NormalTok{ Q3 }\OperatorTok{{-}}\NormalTok{ Q1}
+\NormalTok{lo, hi }\OperatorTok{=}\NormalTok{ Q1 }\OperatorTok{{-}} \FloatTok{1.5} \OperatorTok{*}\NormalTok{ IQR, Q3 }\OperatorTok{+} \FloatTok{1.5} \OperatorTok{*}\NormalTok{ IQR}
+\NormalTok{mask }\OperatorTok{=}\NormalTok{ (s }\OperatorTok{\textless{}}\NormalTok{ lo) }\OperatorTok{|}\NormalTok{ (s }\OperatorTok{\textgreater{}}\NormalTok{ hi)}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}Q1, Q3, IQR, 下界, 上界:\textquotesingle{}}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\BuiltInTok{round}\NormalTok{(Q1, }\DecValTok{4}\NormalTok{), }\BuiltInTok{round}\NormalTok{(Q3, }\DecValTok{4}\NormalTok{), }\BuiltInTok{round}\NormalTok{(IQR, }\DecValTok{4}\NormalTok{), }\BuiltInTok{round}\NormalTok{(lo, }\DecValTok{4}\NormalTok{), }\BuiltInTok{round}\NormalTok{(hi, }\DecValTok{4}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}异常值:\textquotesingle{}}\NormalTok{, s[mask].tolist())}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}用中位数替换异常值后:\textquotesingle{}}\NormalTok{)}
+\NormalTok{s.loc[mask] }\OperatorTok{=}\NormalTok{ s.median()}
+\BuiltInTok{print}\NormalTok{(s)}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}周均 (resample W):\textquotesingle{}}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(s.resample(}\StringTok{\textquotesingle{}W\textquotesingle{}}\NormalTok{).mean().}\BuiltInTok{round}\NormalTok{(}\DecValTok{4}\NormalTok{))}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}3 天滑动平均 (rolling 3):\textquotesingle{}}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(s.rolling(}\DecValTok{3}\NormalTok{).mean().}\BuiltInTok{round}\NormalTok{(}\DecValTok{4}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-19}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{原始 Series:}
+\NormalTok{2023{-}01{-}01     10.0}
+\NormalTok{2023{-}01{-}02     11.0}
+\NormalTok{2023{-}01{-}03     12.0}
+\NormalTok{2023{-}01{-}04      NaN}
+\NormalTok{2023{-}01{-}05     14.0}
+\NormalTok{2023{-}01{-}06     15.0}
+\NormalTok{2023{-}01{-}07     16.0}
+\NormalTok{2023{-}01{-}08     17.0}
+\NormalTok{2023{-}01{-}09     18.0}
+\NormalTok{2023{-}01{-}10     19.0}
+\NormalTok{2023{-}01{-}11     20.0}
+\NormalTok{2023{-}01{-}12     21.0}
+\NormalTok{2023{-}01{-}13     22.0}
+\NormalTok{2023{-}01{-}14    120.0}
+\NormalTok{Freq: D, dtype: float64}
+\NormalTok{前向填充（ffill）后:}
+\NormalTok{2023{-}01{-}01     10.0}
+\NormalTok{2023{-}01{-}02     11.0}
+\NormalTok{2023{-}01{-}03     12.0}
+\NormalTok{2023{-}01{-}04     12.0}
+\NormalTok{2023{-}01{-}05     14.0}
+\NormalTok{2023{-}01{-}06     15.0}
+\NormalTok{2023{-}01{-}07     16.0}
+\NormalTok{2023{-}01{-}08     17.0}
+\NormalTok{2023{-}01{-}09     18.0}
+\NormalTok{2023{-}01{-}10     19.0}
+\NormalTok{2023{-}01{-}11     20.0}
+\NormalTok{2023{-}01{-}12     21.0}
+\NormalTok{2023{-}01{-}13     22.0}
+\NormalTok{2023{-}01{-}14    120.0}
+\NormalTok{Freq: D, dtype: float64}
+\NormalTok{Q1, Q3, IQR, 下界, 上界:}
+\NormalTok{12.5 19.75 7.25 1.625 30.625}
+\NormalTok{异常值: [120.0]}
+\NormalTok{用中位数替换异常值后:}
+\NormalTok{2023{-}01{-}01    10.0}
+\NormalTok{2023{-}01{-}02    11.0}
+\NormalTok{2023{-}01{-}03    12.0}
+\NormalTok{2023{-}01{-}04    12.0}
+\NormalTok{2023{-}01{-}05    14.0}
+\NormalTok{2023{-}01{-}06    15.0}
+\NormalTok{2023{-}01{-}07    16.0}
+\NormalTok{2023{-}01{-}08    17.0}
+\NormalTok{2023{-}01{-}09    18.0}
+\NormalTok{2023{-}01{-}10    19.0}
+\NormalTok{2023{-}01{-}11    20.0}
+\NormalTok{2023{-}01{-}12    21.0}
+\NormalTok{2023{-}01{-}13    22.0}
+\NormalTok{2023{-}01{-}14    16.5}
+\NormalTok{Freq: D, dtype: float64}
+\NormalTok{周均 (resample W):}
+\NormalTok{2023{-}01{-}01    10.0000}
+\NormalTok{2023{-}01{-}08    13.8571}
+\NormalTok{2023{-}01{-}15    19.4167}
+\NormalTok{Freq: W{-}SUN, dtype: float64}
+\NormalTok{3 天滑动平均 (rolling 3):}
+\NormalTok{2023{-}01{-}01        NaN}
+\NormalTok{2023{-}01{-}02        NaN}
+\NormalTok{2023{-}01{-}03    11.0000}
+\NormalTok{2023{-}01{-}04    11.6667}
+\NormalTok{2023{-}01{-}05    12.6667}
+\NormalTok{2023{-}01{-}06    13.6667}
+\NormalTok{2023{-}01{-}07    15.0000}
+\NormalTok{2023{-}01{-}08    16.0000}
+\NormalTok{2023{-}01{-}09    17.0000}
+\NormalTok{2023{-}01{-}10    18.0000}
+\NormalTok{2023{-}01{-}11    19.0000}
+\NormalTok{2023{-}01{-}12    20.0000}
+\NormalTok{2023{-}01{-}13    21.0000}
+\NormalTok{2023{-}01{-}14    19.8333}
+\NormalTok{Freq: D, dtype: float64}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-19}
+
+\textbf{一句话人话}：先把``空缺''和``离谱的数值''补好，再把一天一天的数值聚成一周一周，并画一条平滑的
+3 天平均。
+
+\begin{itemize}
+\tightlist
+\item
+  最后一天 \texttt{120} 是人为放的异常值，正常数据应在 10--22 之间；
+\item
+  \texttt{s.ffill()} 用``上一个有效值''填充缺失：1 月 4 日缺，就用 1 月
+  3 日的 \texttt{12} 填上；
+\item
+  \texttt{quantile(0.25)} / \texttt{quantile(0.75)}
+  是下/上四分位数；\texttt{IQR\ =\ Q3\ -\ Q1}；
+\item
+  IQR 规则：\texttt{{[}Q1\ -\ 1.5*IQR,\ Q3\ +\ 1.5*IQR{]}}
+  之外视为异常。本例下界 1.625、上界 30.625，\texttt{120} 被标记为异常；
+\item
+  \texttt{s.loc{[}mask{]}\ =\ s.median()} 把异常值替换成全体中位数
+  \texttt{16.5}；
+\item
+  \texttt{s.resample(\textquotesingle{}W\textquotesingle{}).mean()}
+  把日度数据按``周''（W-SUN，周日为一周结束）聚合，输出每周均值；
+\item
+  \texttt{s.rolling(3).mean()} 在每个日期取连续 3 天窗口求均值，所以前 2
+  个位置是 \texttt{NaN}。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-19}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+需求 & 写法 & 说明 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+前向填充 & \texttt{s.ffill()} & 用上一个有效值补缺失 \\
+后向填充 & \texttt{s.bfill()} & 用下一个有效值补缺失 \\
+四分位数 & \texttt{s.quantile(0.25)} / \texttt{s.quantile(0.75)} &
+下/上四分位 \\
+IQR 异常判据 & \texttt{s\ \textless{}\ Q1\ -\ 1.5*IQR} 或
+\texttt{s\ \textgreater{}\ Q3\ +\ 1.5*IQR} & 布尔掩码 \\
+替换异常值 & \texttt{s.loc{[}mask{]}\ =\ s.median()} & 用中位数覆盖 \\
+降频聚合 &
+\texttt{s.resample(\textquotesingle{}W\textquotesingle{}).mean()} & 日
+-\textgreater{} 周均值 \\
+滑动窗口 & \texttt{s.rolling(3).mean()} & 3 天移动平均 \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-19}
+
+\begin{itemize}
+\tightlist
+\item
+  没先 \texttt{s.isna().sum()} 看缺失位置，就盲目
+  \texttt{ffill()}，可能漏掉``开头就缺''的问题；
+\item
+  IQR 中的 \texttt{1.5} 是常用倍数，不是固定不变；换成 \texttt{3}
+  会更宽松、\texttt{1} 更严格；
+\item
+  \texttt{resample(\textquotesingle{}W\textquotesingle{})}
+  是\textbf{聚合}，会减少行数；\texttt{rolling(3)}
+  是\textbf{滑动窗口}，行数不变（前 2 行为 NaN）；
+\item
+  用 \texttt{s.loc{[}mask{]}\ =\ ...} 条件赋值前，确认 \texttt{mask}
+  是与 \texttt{s} 等长的布尔 Series，否则会因标签不匹配出错。
+\end{itemize}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-8}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  把``替换为中位数''换成
+  \texttt{s.clip(Q1\ -\ 1.5*IQR,\ Q3\ +\ 1.5*IQR)}
+  的``截断''法，比较结果。
+\item
+  把数据改成 60 天，分别用
+  \texttt{resample(\textquotesingle{}M\textquotesingle{}).mean()} 与
+  \texttt{rolling(7).mean()} 观察差异。
+\item
+  用 \texttt{s.plot()}
+  画原始、清洗后、周均、滑窗四条线（记得配置中文字体）。
+\item
+  试试旧写法
+  \texttt{s.fillna(method=\textquotesingle{}ffill\textquotesingle{})}，观察弃用提示，体会新版
+  \texttt{s.ffill()} 的推荐。
+\end{enumerate}
+
 \subsection{2.7 apply vs
 向量化（性能提示）}\label{apply-vs-ux5411ux91cfux5316ux6027ux80fdux63d0ux793a}
 
@@ -1062,20 +1641,22 @@ rolling}\label{ux65f6ux95f4ux5e8fux5217resample-ux4e0e-rolling}
 
 \NormalTok{t0 }\OperatorTok{=}\NormalTok{ time.perf\_counter()}\OperatorTok{;}\NormalTok{ r1 }\OperatorTok{=}\NormalTok{ s.}\BuiltInTok{apply}\NormalTok{(}\KeywordTok{lambda}\NormalTok{ x: x }\OperatorTok{*} \DecValTok{2} \OperatorTok{+} \DecValTok{1}\NormalTok{)}\OperatorTok{;}\NormalTok{ t1 }\OperatorTok{=}\NormalTok{ time.perf\_counter()}
 \NormalTok{r2 }\OperatorTok{=}\NormalTok{ s }\OperatorTok{*} \DecValTok{2} \OperatorTok{+} \DecValTok{1}\OperatorTok{;}\NormalTok{ t2 }\OperatorTok{=}\NormalTok{ time.perf\_counter()}
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f\textquotesingle{}apply: }\SpecialCharTok{\{}\NormalTok{t1}\OperatorTok{{-}}\NormalTok{t0}\SpecialCharTok{:.4f\}}\SpecialStringTok{s   vec: }\SpecialCharTok{\{}\NormalTok{t2}\OperatorTok{{-}}\NormalTok{t1}\SpecialCharTok{:.4f\}}\SpecialStringTok{s\textquotesingle{}}\NormalTok{)}
+\NormalTok{vec\_faster }\OperatorTok{=}\NormalTok{ (t2 }\OperatorTok{{-}}\NormalTok{ t1) }\OperatorTok{\textless{}}\NormalTok{ (t1 }\OperatorTok{{-}}\NormalTok{ t0)}
 \BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}结果一致:\textquotesingle{}}\NormalTok{, np.allclose(r1.values, r2.values))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}向量化比 apply 更快:\textquotesingle{}}\NormalTok{, vec\_faster)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{apply: 0.0486s   vec: 0.0010s}
 \NormalTok{结果一致: True}
+\NormalTok{向量化比 apply 更快: True}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{quote}
-实测向量化比 \texttt{apply} 快约 40--50 倍。优先用列/Series
+为让输出跨机器稳定，这里只打印``向量化是否更快''的布尔结果；实际运行中向量化通常比
+\texttt{apply} 快数十倍。优先用列/Series
 的向量化写法，只在无法向量化时才用 \texttt{apply}。
 \end{quote}
 
@@ -1171,10 +1752,19 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-7}
 某课程有 20 名学生、3 个班、3
 门科目（语文/数学/英语）。原始数据为``长表''：一行表示一名学生在某科目的一次成绩。数据中有缺失值、重复行和个别异常分数，需要先清洗，再按班级统计平均分，并画出图表供老师分析。
 
+\subsubsection{目标}\label{ux76eeux6807-20}
+
+把本章知识串成一条完整流水线：\textbf{构造数据 → 清洗（缺失/重复/异常）→
+groupby / pivot\_table 统计 → matplotlib
+可视化}，并学会为配图配置中文字体、让图表保存到
+\texttt{figures/04-pandas/} 目录。
+
 统一绘图字体（避免中文缺字）：
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 \ImportTok{import}\NormalTok{ matplotlib}
 \NormalTok{matplotlib.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
 \NormalTok{matplotlib.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
@@ -1278,12 +1868,11 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-7}
 \NormalTok{三班    86.3}
 \NormalTok{二班    78.0}
 \NormalTok{Name: 分数, dtype: float64}
-
 \NormalTok{科目    数学    英语    语文}
 \NormalTok{班级}
-\NormalTok{一班    81.1    82.5    80.0}
-\NormalTok{三班    85.0    86.6    87.3}
-\NormalTok{二班    77.7    78.1    78.3}
+\NormalTok{一班  81.1  82.5  80.0}
+\NormalTok{三班  85.0  86.6  87.3}
+\NormalTok{二班  77.7  78.1  78.3}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1291,6 +1880,33 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-7}
 说明：透视表的行按中文 Unicode 排序为 一班、三班、二班；三班（基础分
 85）平均最高，二班（基础分 78）最低。
 \end{quote}
+
+\subsubsection{讲解（零基础）}\label{ux8bb2ux89e3ux96f6ux57faux7840}
+
+\textbf{一句话人话}：先把数据变干净，再按班级``算总和/平均''，最后把结果画成图；三步里每一步都不难，关键是选对
+Pandas 方法。
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  构造数据：用 \texttt{rng\ =\ np.random.default\_rng(42)}
+  固定随机种子，保证每次生成的``学生成绩''一样；\texttt{round(score,\ 1)}
+  让分数保留 1 位小数。
+\item
+  清洗：\texttt{dropna(subset={[}\textquotesingle{}分数\textquotesingle{}{]})}
+  删掉缺分数的行；\texttt{drop\_duplicates()} 删重复行；Q1/Q3/IQR
+  找出离群分数并用全体中位数替换。
+\item
+  统计：\texttt{groupby(\textquotesingle{}班级\textquotesingle{}){[}\textquotesingle{}分数\textquotesingle{}{]}.mean()}
+  得到各班平均分；\texttt{pivot\_table(...)} 得到``班级 ×
+  科目''矩阵，便于横向比较。
+\item
+  可视化：\texttt{plt.rcParams{[}\textquotesingle{}font.sans-serif\textquotesingle{}{]}\ =\ {[}\textquotesingle{}Microsoft\ YaHei\textquotesingle{},\ \textquotesingle{}SimHei\textquotesingle{},\ \textquotesingle{}DejaVu\ Sans\textquotesingle{}{]}}
+  让中文正常显示；\texttt{ax.bar}、\texttt{ax.hist}、\texttt{ax.plot}
+  分别画柱状、直方图与折线；\texttt{fig.savefig(\textquotesingle{}figures/04-pandas/...png\textquotesingle{})}
+  把图存到 \texttt{figures/04-pandas/}。
+\end{enumerate}
 
 \subsection{4. 可视化}\label{ux53efux89c6ux5316-2}
 
@@ -1307,9 +1923,11 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-7}
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ os}
 \ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
 \NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
 \NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{os.makedirs(}\StringTok{\textquotesingle{}images\textquotesingle{}}\NormalTok{, exist\_ok}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 
 \NormalTok{fig, ax }\OperatorTok{=}\NormalTok{ plt.subplots(figsize}\OperatorTok{=}\NormalTok{(}\FloatTok{7.2}\NormalTok{, }\FloatTok{4.0}\NormalTok{))}
 \NormalTok{subjects }\OperatorTok{=}\NormalTok{ piv.columns.tolist()}
@@ -1342,6 +1960,8 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-7}
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ os}
+\NormalTok{os.makedirs(}\StringTok{\textquotesingle{}images\textquotesingle{}}\NormalTok{, exist\_ok}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 \NormalTok{fig, ax }\OperatorTok{=}\NormalTok{ plt.subplots(figsize}\OperatorTok{=}\NormalTok{(}\FloatTok{7.2}\NormalTok{, }\FloatTok{4.0}\NormalTok{))}
 \ControlFlowTok{for}\NormalTok{ (cls, g), c }\KeywordTok{in} \BuiltInTok{zip}\NormalTok{(df.groupby(}\StringTok{\textquotesingle{}班级\textquotesingle{}}\NormalTok{), colors):}
 \NormalTok{    ax.hist(g[}\StringTok{\textquotesingle{}分数\textquotesingle{}}\NormalTok{], bins}\OperatorTok{=}\DecValTok{12}\NormalTok{, alpha}\OperatorTok{=}\FloatTok{0.55}\NormalTok{, label}\OperatorTok{=}\NormalTok{cls, color}\OperatorTok{=}\NormalTok{c)}
@@ -1366,6 +1986,8 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-7}
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ os}
+\NormalTok{os.makedirs(}\StringTok{\textquotesingle{}images\textquotesingle{}}\NormalTok{, exist\_ok}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 \NormalTok{rng }\OperatorTok{=}\NormalTok{ np.random.default\_rng(}\DecValTok{7}\NormalTok{)}
 \NormalTok{idx }\OperatorTok{=}\NormalTok{ pd.date\_range(}\StringTok{\textquotesingle{}2023{-}01{-}01\textquotesingle{}}\NormalTok{, periods}\OperatorTok{=}\DecValTok{60}\NormalTok{, freq}\OperatorTok{=}\StringTok{\textquotesingle{}D\textquotesingle{}}\NormalTok{)}
 \NormalTok{trend }\OperatorTok{=}\NormalTok{ np.linspace(}\DecValTok{0}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{60}\NormalTok{)}
@@ -1405,6 +2027,72 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-7}
   时间序列图说明：\texttt{resample(\textquotesingle{}W\textquotesingle{})}
   把日数据聚合成周均，\texttt{rolling(7)} 得到平滑的 7
   日移动平均，二者都可用于观察趋势。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-20}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+需求
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+写法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+说明
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+固定随机种子 & \texttt{rng\ =\ np.random.default\_rng(42)} &
+结果可复现 \\
+去缺失行 &
+\texttt{df.dropna(subset={[}\textquotesingle{}分数\textquotesingle{}{]})}
+& 只按指定列判断 \\
+去重复行 & \texttt{df.drop\_duplicates()} & 默认保留首次 \\
+IQR 异常掩码 &
+\texttt{(df{[}\textquotesingle{}分数\textquotesingle{}{]}\ \textless{}\ Q1-1.5*IQR)\ \textbar{}\ (df{[}\textquotesingle{}分数\textquotesingle{}{]}\ \textgreater{}\ Q3+1.5*IQR)}
+& 布尔筛选 \\
+分组平均 &
+\texttt{df.groupby(\textquotesingle{}班级\textquotesingle{}){[}\textquotesingle{}分数\textquotesingle{}{]}.mean()}
+& 返回 Series \\
+透视表 &
+\texttt{df.pivot\_table(values=\textquotesingle{}分数\textquotesingle{},\ index=\textquotesingle{}班级\textquotesingle{},\ columns=\textquotesingle{}科目\textquotesingle{},\ aggfunc=\textquotesingle{}mean\textquotesingle{})}
+& 行列交叉表格 \\
+中文绘图字体 &
+\texttt{plt.rcParams{[}\textquotesingle{}font.sans-serif\textquotesingle{}{]}={[}\textquotesingle{}Microsoft\ YaHei\textquotesingle{},\textquotesingle{}SimHei\textquotesingle{},\textquotesingle{}DejaVu\ Sans\textquotesingle{}{]}}
+& 防止中文缺字 \\
+保存图片 &
+\texttt{fig.savefig(\textquotesingle{}figures/04-pandas/case\_scores.png\textquotesingle{})}
+& 需先
+\texttt{os.makedirs(\textquotesingle{}images\textquotesingle{},\ exist\_ok=True)} \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-20}
+
+\begin{itemize}
+\tightlist
+\item
+  未固定随机种子导致每次运行结果不同，课堂演示/作业对不上；
+\item
+  \texttt{dropna()} 不加 \texttt{subset}
+  会把``任何一列有缺失''的行都删掉；
+\item
+  IQR 的界限为 \texttt{{[}Q1-1.5*IQR,\ Q3+1.5*IQR{]}}，漏乘 \texttt{1.5}
+  会把正常值当异常；
+\item
+  在临时目录运行
+  \texttt{fig.savefig(\textquotesingle{}figures/04-pandas/...\textquotesingle{})}
+  时，若 \texttt{figures/04-pandas/} 不存在会报
+  \texttt{FileNotFoundError}（先
+  \texttt{os.makedirs(\textquotesingle{}images\textquotesingle{},\ exist\_ok=True)}）；
+\item
+  matplotlib 中文乱码是没配置 \texttt{font.sans-serif}，不是数据的问题。
 \end{itemize}
 
 \subsection{拓展任务}\label{ux62d3ux5c55ux4efbux52a1-4}
@@ -1510,6 +2198,10 @@ iloc}\label{ux539fux7406ux7ea7ux96beux70b9loc-vs-iloc}
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
 \NormalTok{s }\OperatorTok{=}\NormalTok{ pd.Series([}\DecValTok{10}\NormalTok{, }\DecValTok{20}\NormalTok{, }\DecValTok{30}\NormalTok{], index}\OperatorTok{=}\NormalTok{[}\StringTok{\textquotesingle{}a\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}b\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}c\textquotesingle{}}\NormalTok{])}
 \BuiltInTok{print}\NormalTok{(s.loc[}\StringTok{\textquotesingle{}b\textquotesingle{}}\NormalTok{])     }\CommentTok{\# 20（按标签）}
 \BuiltInTok{print}\NormalTok{(s.iloc[}\DecValTok{1}\NormalTok{])      }\CommentTok{\# 20（按位置）}

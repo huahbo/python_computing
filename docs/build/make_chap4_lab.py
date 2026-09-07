@@ -207,6 +207,134 @@ plt.savefig("case_scores_lab.png")
 print("已保存 case_scores_lab.png")
 """)
 
+md("""## Part 8 案例卡跟练
+
+针对本章新增的 3 个精讲案例卡，各安排“跟练 / 变形 / 综合任务”3 格，共 9 格。完成后再回到“提交清单”。""")
+
+# 案例卡 1：Series 索引对齐——跟练
+code("""# 案例1 跟练：add(fill_value=0) 与 (s3+s7).fillna(0)
+import numpy as np
+import pandas as pd
+pd.set_option("display.width", 100)
+np.set_printoptions(precision=4, suppress=True)
+
+s3 = pd.Series([1, 2, 3, 4, 5], index=list("abcde"))
+s7 = pd.Series([1, 2, 3], index=list("ace"))
+print("add(fill_value=0):")
+print(s3.add(s7, fill_value=0))
+print("(s3+s7).fillna(0):")
+print((s3 + s7).fillna(0))
+""")
+
+# 案例卡 1：变形
+code("""# 案例1 变形：同索引相加不再有 NaN
+import pandas as pd
+
+s3b = pd.Series([1, 2, 3, 4, 5], index=list("abcde"))
+s7b = pd.Series([10, 20, 30, 40, 50], index=list("abcde"))
+print(s3b + s7b)
+print("NaN 数量:", (s3b + s7b).isna().sum())
+""")
+
+# 案例卡 1：综合
+code("""# 案例1 综合：concat 成 DataFrame + 补 0
+import pandas as pd
+
+s3 = pd.Series([1, 2, 3, 4, 5], index=list("abcde"))
+s7 = pd.Series([1, 2, 3], index=list("ace"))
+dfb = pd.concat([s3, s7], axis=1)
+dfb.columns = ["s3", "s7"]
+print(dfb)
+print("ffill 后:")
+print(dfb.ffill())
+print("fillna(0) 后:")
+print(dfb.fillna(0))
+""")
+
+# 案例卡 2：groupby 分组统计——跟练
+code("""# 案例2 跟练：agg 多函数统计并按平均分排序
+import pandas as pd
+
+_df = pd.DataFrame({"班级": ["一班", "一班", "一班", "二班", "二班", "二班", "三班", "三班", "三班"],
+                    "分数": [88, 92, 75, 80, 85, 78, 95, 90, 82]})
+g = _df.groupby("班级")["分数"].agg(["mean", "std", "count"])
+print(g.sort_values("mean", ascending=False).round(4))
+""")
+
+# 案例卡 2：变形
+code("""# 案例2 变形：班级内排名 method='min'
+import pandas as pd
+
+_df = pd.DataFrame({"班级": ["一班", "一班", "一班", "二班", "二班", "二班", "三班", "三班", "三班"],
+                    "分数": [88, 92, 75, 80, 85, 78, 95, 90, 82]})
+_df["班内排名"] = _df.groupby("班级")["分数"].rank(ascending=False, method="min")
+print(_df.sort_values(["班级", "班内排名"]))
+""")
+
+# 案例卡 2：综合
+code("""# 案例2 综合：pivot_table 班级 x 科目 + 每科排名
+import pandas as pd
+
+_df = pd.DataFrame({"班级": ["一班", "一班", "二班", "二班"],
+                    "科目": ["语文", "数学", "语文", "数学"],
+                    "分数": [85, 92, 78, 88]})
+piv = _df.pivot_table(values="分数", index="班级", columns="科目", aggfunc="mean").round(1)
+print(piv)
+print(piv.rank(ascending=False))
+""")
+
+# 案例卡 3：缺失与异常清洗 + 时间序列——跟练
+code("""# 案例3 跟练：60 天数据 resample + rolling
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(3)
+idx = pd.date_range("2023-03-01", periods=60, freq="D")
+s = pd.Series(rng.normal(50, 5, 60), index=idx)
+print("周均前 3 项:")
+print(s.resample("W").mean().head(3).round(4))
+print("7 日滑窗最后 3 项:")
+print(s.rolling(7).mean().tail(3).round(4))
+""")
+
+# 案例卡 3：变形
+code("""# 案例3 变形：IQR clip 截断法
+import pandas as pd
+import numpy as np
+
+s = pd.Series([10, 11, 12, 13, 14, 15, 120],
+              index=pd.date_range("2023-01-01", periods=7, freq="D"))
+Q1, Q3 = s.quantile([0.25, 0.75])
+IQR = Q3 - Q1
+lo, hi = Q1 - 1.5 * IQR, Q3 + 1.5 * IQR
+print("原始:", s.tolist())
+print("界限:", round(lo, 4), round(hi, 4))
+print("clip 后:", s.clip(lo, hi).tolist())
+""")
+
+# 案例卡 3：综合
+code("""# 案例3 综合：清洗后按周聚合（模拟“缺一天 + 一个异常值”）
+import numpy as np
+import pandas as pd
+
+idx = pd.date_range("2023-05-01", periods=30, freq="D")
+vals = [20 + (i % 7) for i in range(30)]
+vals[5] = np.nan
+vals[20] = 200
+s = pd.Series([float(v) for v in vals], index=idx)
+print("缺失数:", s.isna().sum())
+s = s.ffill()
+Q1, Q3 = s.quantile([0.25, 0.75])
+IQR = Q3 - Q1
+mask = (s < Q1 - 1.5 * IQR) | (s > Q3 + 1.5 * IQR)
+print("异常值:", s[mask].tolist())
+s.loc[mask] = s.median()
+print("周均:")
+print(s.resample("W").mean().round(4))
+print("7 日滑窗最后 3 项:")
+print(s.rolling(7).mean().tail(3).round(4))
+""")
+
 md("""## 提交清单
 
 - [ ] 所有 TODO 均已填写并运行；
@@ -214,6 +342,7 @@ md("""## 提交清单
 - [ ] Part 3 的 IQR 异常值处理已输出；
 - [ ] Part 6 的 resample / rolling 结果已输出；
 - [ ] Part 7 已生成 case_scores_lab.png 并写 3 句结论；
+- [ ] Part 8 的 9 格案例卡跟练已运行并记录输出；
 - [ ] 导出为 html / 保留 ipynb 提交。
 
 **延伸**：完成 exercises/ 的 quiz 与 assignment；阅读 ../06-常见误区与技巧.md。""")

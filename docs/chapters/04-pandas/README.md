@@ -17,6 +17,15 @@ Pandas 是 Python 数据分析的事实标准：它以 `Series`（一维带标�
 5. 会用 `describe`、`groupby`、`agg`、`pivot_table`、`merge`/`concat` 做统计、分组与透视分析。
 6. 会用 `date_range`、`resample`、`rolling` 处理时间序列数据，并能用 matplotlib 把分析结果可视化。
 
+## 案例索引
+
+| 案例卡 | 所在节 | 技术点 | 难度 |
+| ---- | ---- | ---- | ---- |
+| 1. Series 索引对齐——为什么 s3 + s7 会出现 NaN | [01 基础数据结构](./01-基础数据结构.md) | Series 索引对齐、NaN、fillna/fill_value | ★☆☆ |
+| 2. groupby 分组统计——按班级算平均分并排名 | [02 数据分析](./02-数据分析.md) | groupby、sort_values、rank | ★★☆ |
+| 3. 缺失值与异常值清洗——IQR 替换 + 时间序列重采样 | [02 数据分析](./02-数据分析.md) | ffill、IQR、resample、rolling | ★★☆ |
+| 4. 学生成绩分析与可视化（综合） | [03 综合案例](./03-综合案例.md) | 清洗→分组/透视→可视化 | ★★★ |
+
 ## 先修要求与运行环境
 
 - 熟悉 Python 基础语法与 NumPy（第 1 章）；建议先学 [聪明办法学 Python](https://github.com/datawhalechina/learn-python-the-smart-way-v2) 与第 1 章 numpy。
@@ -34,9 +43,9 @@ pip install openpyxl xlrd
 
 | 小节 | 文件 | 内容 |
 | ---- | ---- | ---- |
-| 01 基础数据结构 | [01-基础数据结构.md](./01-基础数据结构.md) | Series 创建/访问/运算、DataFrame 创建/索引/切片/筛选、date_range |
-| 02 数据分析 | [02-数据分析.md](./02-数据分析.md) | 重复/缺失/异常值、规约、统计描述、groupby、pivot_table、时间序列 |
-| 03 综合案例 | [03-综合案例.md](./03-综合案例.md) | 学生成绩分析：清洗→分组/透视→可视化（3 张配图） |
+| 01 基础数据结构 | [01-基础数据结构.md](./01-基础数据结构.md) | Series 创建/访问/运算、DataFrame 创建/索引/切片/筛选、date_range + 案例卡 1（索引对齐） |
+| 02 数据分析 | [02-数据分析.md](./02-数据分析.md) | 重复/缺失/异常值、规约、统计描述、groupby、pivot_table、时间序列 + 案例卡 2/3 |
+| 03 综合案例 | [03-综合案例.md](./03-综合案例.md) | 学生成绩分析：清洗→分组/透视→可视化（3 张配图）+ 案例卡 4（综合） |
 | 04 常见误区与技巧 | [04-常见误区与技巧.md](./04-常见误区与技巧.md) | 易错点表、loc/iloc 辨析、性能与调试、自测清单 |
 
 ## 数学预备与附录

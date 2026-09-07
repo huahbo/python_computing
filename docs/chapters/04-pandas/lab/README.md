@@ -6,12 +6,12 @@
 
 | 文件 | 说明 |
 | ---- | ---- |
-| lab.ipynb | 上机实验 notebook（22 个单元：7 个 Part，含 TODO 与检查项） |
+| lab.ipynb | 上机实验 notebook（32 个单元：8 个 Part，含 TODO 与检查项） |
 
 ## 如何开始
 
 1. 打开 lab.ipynb（JupyterLab / VS Code）；
-2. 按顺序运行 Part 1 → Part 7；
+2. 按顺序运行 Part 1 → Part 8；
 3. 完成所有 TODO，记录输出；
 4. 在末尾「提交清单」逐项打钩；
 5. 导出（可选）后提交 .ipynb。
@@ -29,11 +29,14 @@
 | 5 | 数据规约与统计描述 | 10 min |
 | 6 | 时间序列：resample / rolling | 10 min |
 | 7 | 综合任务（成绩分析与可视化） | 20 min |
+| 8 | 案例卡跟练（索引对齐 / 分组排名 / 清洗+重采样） | 15 min |
+
+> Part 8 共 9 格：案例卡 1（Series 索引对齐）、案例卡 2（groupby 分组统计）、案例卡 3（缺失/异常清洗 + 时间序列）各含“跟练 / 变形 / 综合任务”3 格。
 
 ## 教师说明
 
 - 可作为一次 2–3 学时的上机课；
-- 检查重点：Part 2 布尔筛选括号、Part 3 IQR 处理、Part 4 pivot_table、Part 6 resample/rolling、Part 7 中文图表输出；
+- 检查重点：Part 2 布尔筛选括号、Part 3 IQR 处理、Part 4 pivot_table、Part 6 resample/rolling、Part 7 中文图表输出、Part 8 案例卡跟练（索引对齐 / 分组排名 / 清洗+重采样）；
 - 可要求学生把每个 Part 的输出截图附在报告里。
 
 ## 配套
