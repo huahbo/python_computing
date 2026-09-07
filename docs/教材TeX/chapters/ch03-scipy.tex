@@ -73,6 +73,9 @@ Scipy及其基本使用}\label{ux7b2c-3-ux7ae0-scipyux53caux5176ux57faux672cux4f
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
 \KeywordTok{def}\NormalTok{ trapezoidal\_rule(f, a, b, n):}
 \NormalTok{    h }\OperatorTok{=}\NormalTok{ (b }\OperatorTok{{-}}\NormalTok{ a) }\OperatorTok{/}\NormalTok{ n}
 \NormalTok{    s }\OperatorTok{=} \FloatTok{0.5} \OperatorTok{*}\NormalTok{ (f(a) }\OperatorTok{+}\NormalTok{ f(b))}
@@ -110,21 +113,146 @@ Scipy及其基本使用}\label{ux7b2c-3-ux7ae0-scipyux53caux5176ux57faux672cux4f
 \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
 \ImportTok{from}\NormalTok{ scipy.integrate }\ImportTok{import}\NormalTok{ quad}
-\BuiltInTok{print}\NormalTok{(quad(}\KeywordTok{lambda}\NormalTok{ x: x}\OperatorTok{**}\DecValTok{2}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{))}
-\BuiltInTok{print}\NormalTok{(quad(}\KeywordTok{lambda}\NormalTok{ x: np.exp(}\OperatorTok{{-}}\NormalTok{x}\OperatorTok{**}\DecValTok{2}\NormalTok{), }\OperatorTok{{-}}\NormalTok{np.inf, np.inf))}
+
+\NormalTok{v1, e1 }\OperatorTok{=}\NormalTok{ quad(}\KeywordTok{lambda}\NormalTok{ x: x}\OperatorTok{**}\DecValTok{2}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\NormalTok{v2, e2 }\OperatorTok{=}\NormalTok{ quad(}\KeywordTok{lambda}\NormalTok{ x: np.exp(}\OperatorTok{{-}}\NormalTok{x}\OperatorTok{**}\DecValTok{2}\NormalTok{), }\OperatorTok{{-}}\NormalTok{np.inf, np.inf)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"( }\SpecialCharTok{\{}\NormalTok{v1}\SpecialCharTok{:.6f\}}\SpecialStringTok{, }\SpecialCharTok{\{}\NormalTok{e1}\SpecialCharTok{:.2e\}}\SpecialStringTok{ )"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"( }\SpecialCharTok{\{}\NormalTok{v2}\SpecialCharTok{:.6f\}}\SpecialStringTok{, }\SpecialCharTok{\{}\NormalTok{e2}\SpecialCharTok{:.2e\}}\SpecialStringTok{ )"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{(0.33333333333333337, 3.700743415417189e{-}15)}
-\NormalTok{(1.7724538509055159, 1.2386316961910534e{-}10)}
+\NormalTok{( 0.333333, 3.70e{-}15 )}
+\NormalTok{( 1.772454, 1.42e{-}08 )}
 \end{Highlighting}
 \end{Shaded}
 
 第二个例子是高斯积分
 \(\int_{-\infty}^{+\infty} e^{-x^2} dx = \sqrt{\pi}\approx1.77245\)，\texttt{quad}
-也擅长处理无穷积分。
+也擅长处理无穷积分。 \#\#\# 案例卡 1：用 quad
+求定积分并和数值微积分结果对照
+
+\subsubsection{目标}\label{ux76eeux6807-14}
+
+用 \texttt{scipy.integrate.quad} 求 \(\int_0^1 x^2 dx\)（理论值
+\(1/3\)），再用手工梯形法（\texttt{trapezoid}）在不同分割数下对照，直观看到：\texttt{quad}
+一次就给到高精度，而固定步长梯形法需要不断加密才能靠近。
+
+\subsubsection{代码}\label{ux4ee3ux7801-16}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{from}\NormalTok{ scipy.integrate }\ImportTok{import}\NormalTok{ quad, trapezoid}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\KeywordTok{def}\NormalTok{ f(x):}
+    \ControlFlowTok{return}\NormalTok{ x}\OperatorTok{**}\DecValTok{2}
+
+\NormalTok{val, err }\OperatorTok{=}\NormalTok{ quad(f, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\NormalTok{x10 }\OperatorTok{=}\NormalTok{ np.linspace(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{11}\NormalTok{)}
+\NormalTok{x100 }\OperatorTok{=}\NormalTok{ np.linspace(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{101}\NormalTok{)}
+\NormalTok{x1000 }\OperatorTok{=}\NormalTok{ np.linspace(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1001}\NormalTok{)}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"quad      ="}\NormalTok{, }\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{val}\SpecialCharTok{:.8f\}}\SpecialStringTok{"}\NormalTok{, }\StringTok{"  err ="}\NormalTok{, }\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{err}\SpecialCharTok{:.2e\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"trapezoid n=10   ="}\NormalTok{, }\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{trapezoid(f(x10), x10)}\SpecialCharTok{:.8f\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"trapezoid n=100  ="}\NormalTok{, }\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{trapezoid(f(x100), x100)}\SpecialCharTok{:.8f\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"trapezoid n=1000 ="}\NormalTok{, }\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{trapezoid(f(x1000), x1000)}\SpecialCharTok{:.8f\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"理论值 1/3        ="}\NormalTok{, }\SpecialStringTok{f"}\SpecialCharTok{\{}\DecValTok{1}\OperatorTok{/}\DecValTok{3}\SpecialCharTok{:.8f\}}\SpecialStringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-14}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{quad      = 0.33333333   err = 3.70e{-}15}
+\NormalTok{trapezoid n=10   = 0.33500000}
+\NormalTok{trapezoid n=100  = 0.33335000}
+\NormalTok{trapezoid n=1000 = 0.33333350}
+\NormalTok{理论值 1/3        = 0.33333333}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-14}
+
+\textbf{一句话人话}：\texttt{quad}
+像``聪明的测量员''，哪里弯曲得厉害就自动多量几次；梯形法像``平均每次分成几段''，分得越细才越准。
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{f(x)\ =\ x**2} 是被积函数，\texttt{quad(f,\ 0,\ 1)} 的
+  \texttt{0}、\texttt{1} 是上下限，\texttt{val} 是积分值、\texttt{err}
+  是误差估计。
+\item
+  \texttt{np.linspace(0,\ 1,\ 11)} 把区间切成 10
+  段，\texttt{trapezoid(f(x10),\ x10)}
+  用这些离散点做梯形面积求和，所以``n=10''表示 10 段。
+\item
+  对比结果：\texttt{quad} 直接到 \texttt{0.33333333}（差约
+  \(10^{-15}\)），而梯形法在 n=10 时是 \texttt{0.33500000}，n=1000 才到
+  \texttt{0.33333350}------这说明自适应积分``省力又准''。
+\item
+  理论值 \texttt{1/3\ =\ 0.33333333}（保留 8 位小数），和 \texttt{quad}
+  一致。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-14}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+需求 & 写法 & 返回 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+一维定积分 & \texttt{quad(func,\ a,\ b)} & \texttt{(value,\ error)} \\
+无穷积分 & \texttt{quad(func,\ -np.inf,\ np.inf)} &
+\texttt{(value,\ error)} \\
+离散数据积分 & \texttt{trapezoid(y,\ x)} & 标量 \\
+等高精度输出 & \texttt{f"\{v:.8f\}"} / \texttt{round(v,\ 8)} &
+字符串/浮点 \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-14}
+
+\begin{itemize}
+\tightlist
+\item
+  忘记 \texttt{quad} 返回的是元组，直接 \texttt{quad(...)} 当数值用；
+\item
+  把 \texttt{trapezoid(y,\ x)} 的参数顺序写成
+  \texttt{trapezoid(x,\ y)}；
+\item
+  用 \texttt{np.linspace(0,\ 1,\ 10)} 却以为自己有 10 段，实际是 10
+  个点、9 段；
+\item
+  不设 \texttt{np.set\_printoptions(precision=4,\ suppress=True)}
+  导致数组/小数输出不整洁。
+\end{itemize}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-3}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  把被积函数换成 \texttt{f(x)\ =\ np.exp(-x**2)}，看看 \texttt{quad}
+  和梯形法各差多少。
+\item
+  用 \texttt{quad(f,\ 0,\ 1,\ epsabs=1e-10)} 指定绝对误差，观察
+  \texttt{err} 变化。
+\item
+  把区间改成 \texttt{0} 到 \texttt{2}，理论值变成 \(8/3\)，验证
+  \texttt{quad}。
+\item
+  用 \texttt{scipy.integrate.nquad} 算
+  \(\int_0^1\int_0^1 x y\,dx\,dy\)，和 \texttt{quad} 逐次积分结果对比。
+\end{enumerate}
 
 \subsubsection{\texorpdfstring{1.1.3 二重积分
 \texttt{dblquad}}{1.1.3 二重积分 dblquad}}\label{ux4e8cux91cdux79efux5206-dblquad}
@@ -203,13 +331,13 @@ ODE：\texttt{odeint}}{1.2.1 一阶 ODE：odeint}}\label{ux4e00ux9636-odeodeint}
 \NormalTok{y0 }\OperatorTok{=}\NormalTok{ [}\DecValTok{1}\NormalTok{]}
 \NormalTok{t }\OperatorTok{=}\NormalTok{ np.arange(}\DecValTok{0}\NormalTok{, }\DecValTok{10}\NormalTok{, }\FloatTok{0.1}\NormalTok{)}
 \NormalTok{y }\OperatorTok{=}\NormalTok{ odeint(dy\_dt, y0, t)}
-\BuiltInTok{print}\NormalTok{(}\StringTok{"len ="}\NormalTok{, }\BuiltInTok{len}\NormalTok{(y), }\StringTok{"   y(0)="}\NormalTok{, y[}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{], }\StringTok{"   y(9.9)="}\NormalTok{, y[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"len = }\SpecialCharTok{\{}\BuiltInTok{len}\NormalTok{(y)}\SpecialCharTok{\}}\SpecialStringTok{   y(0) = }\SpecialCharTok{\{}\NormalTok{y[}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{]}\SpecialCharTok{\}}\SpecialStringTok{   y(9.9) = }\SpecialCharTok{\{}\NormalTok{y[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{]}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{len = 100   y(0)= 1.0   y(9.9)= 1.6678897279551907}
+\NormalTok{len = 100   y(0) = 1.0   y(9.9) = 1.6678897279551907}
 \end{Highlighting}
 \end{Shaded}
 
@@ -257,7 +385,7 @@ ODE：三阶方程}\label{ux9ad8ux9636-odeux4e09ux9636ux65b9ux7a0b}
     \ControlFlowTok{return}\NormalTok{ [y2, y3, }\OperatorTok{{-}}\NormalTok{y1 }\OperatorTok{{-}}\NormalTok{ y2 }\OperatorTok{{-}}\NormalTok{ y3]}
 
 \NormalTok{y }\OperatorTok{=}\NormalTok{ odeint(third\_order, [}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{], t)}
-\BuiltInTok{print}\NormalTok{(}\StringTok{"y(9.9) ="}\NormalTok{, y[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{], }\StringTok{"  y\textquotesingle{}(9.9) ="}\NormalTok{, y[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{], }\StringTok{"  y\textquotesingle{}\textquotesingle{}(9.9) ="}\NormalTok{, y[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"y(9.9) = }\SpecialCharTok{\{}\NormalTok{y[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{]}\SpecialCharTok{:.8f\}}\SpecialStringTok{   y\textquotesingle{}(9.9) = }\SpecialCharTok{\{}\NormalTok{y[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{]}\SpecialCharTok{:.8f\}}\SpecialStringTok{   y\textquotesingle{}\textquotesingle{}(9.9) = }\SpecialCharTok{\{}\NormalTok{y[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{]}\SpecialCharTok{:.8f\}}\SpecialStringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -315,8 +443,8 @@ ODE：三阶方程}\label{ux9ad8ux9636-odeux4e09ux9636ux65b9ux7a0b}
 \NormalTok{x }\OperatorTok{=}\NormalTok{ np.linspace(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{20}\NormalTok{)}
 \NormalTok{y }\OperatorTok{=}\NormalTok{ np.zeros((}\DecValTok{2}\NormalTok{, x.size))}
 \NormalTok{sol }\OperatorTok{=}\NormalTok{ solve\_bvp(fun, bc, x, y)}
-\BuiltInTok{print}\NormalTok{(}\StringTok{"sol.x.size ="}\NormalTok{, sol.x.size, }\StringTok{"   y\_mid ="}\NormalTok{, }\BuiltInTok{round}\NormalTok{(sol.y[}\DecValTok{0}\NormalTok{,}\DecValTok{10}\NormalTok{], }\DecValTok{6}\NormalTok{))}
-\BuiltInTok{print}\NormalTok{(}\StringTok{"truth x\^{}3  ="}\NormalTok{, }\BuiltInTok{round}\NormalTok{(x[}\DecValTok{10}\NormalTok{]}\OperatorTok{**}\DecValTok{3}\NormalTok{, }\DecValTok{6}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"sol.x.size = }\SpecialCharTok{\{}\NormalTok{sol}\SpecialCharTok{.}\NormalTok{x}\SpecialCharTok{.}\NormalTok{size}\SpecialCharTok{\}}\SpecialStringTok{   y\_mid = }\SpecialCharTok{\{}\BuiltInTok{round}\NormalTok{(sol.y[}\DecValTok{0}\NormalTok{,}\DecValTok{10}\NormalTok{], }\DecValTok{6}\NormalTok{)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"truth x\^{}3  = }\SpecialCharTok{\{}\BuiltInTok{round}\NormalTok{(x[}\DecValTok{10}\NormalTok{]}\OperatorTok{**}\DecValTok{3}\NormalTok{, }\DecValTok{6}\NormalTok{)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -473,6 +601,8 @@ Levenberg-Marquardt）从初值出发迭代。
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 \ImportTok{from}\NormalTok{ scipy.optimize }\ImportTok{import}\NormalTok{ fsolve}
 
 \KeywordTok{def}\NormalTok{ func(x):}
@@ -484,7 +614,7 @@ Levenberg-Marquardt）从初值出发迭代。
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{[24.73863375]}
+\NormalTok{[24.7386]}
 \end{Highlighting}
 \end{Shaded}
 
@@ -513,7 +643,7 @@ Levenberg-Marquardt）从初值出发迭代。
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{[{-}0.82287566 {-}1.82287566] True The solution converged.}
+\NormalTok{[{-}0.8229 {-}1.8229] True The solution converged.}
 \end{Highlighting}
 \end{Shaded}
 
@@ -616,7 +746,7 @@ q）求\textbf{根}，二者用途不同，切勿混淆。
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{[0.99997307 2.00003382] 1.869184419935774e{-}09 True}
+\NormalTok{[1. 2.] 1.869184419935774e{-}09 True}
 \end{Highlighting}
 \end{Shaded}
 
@@ -754,8 +884,139 @@ q）求\textbf{根}，二者用途不同，切勿混淆。
 \end{Highlighting}
 \end{Shaded}
 
-真实参数为 \((2,3,1)\)，拟合值在其附近；\texttt{pcov}
-对角线开方可作参数标准误的近似。
+\subsection{案例卡 2：用 curve\_fit
+拟合实验数据并解释参数含义}\label{ux6848ux4f8bux5361-2ux7528-curve_fit-ux62dfux5408ux5b9eux9a8cux6570ux636eux5e76ux89e3ux91caux53c2ux6570ux542bux4e49}
+
+\subsubsection{目标}\label{ux76eeux6807-15}
+
+给一组``随指数衰减''的噪声数据，用 \texttt{curve\_fit} 拟合模型
+\(y=A e^{-k t}+C\) 得到 \texttt{A}、\texttt{k}、\texttt{C}，并读
+\texttt{pcov} 拿到参数标准误，从而解释每个参数的\textbf{物理含义}。
+
+\subsubsection{代码}\label{ux4ee3ux7801-17}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{from}\NormalTok{ scipy.optimize }\ImportTok{import}\NormalTok{ curve\_fit}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\KeywordTok{def}\NormalTok{ decay(t, A, k, C):}
+    \ControlFlowTok{return}\NormalTok{ A}\OperatorTok{*}\NormalTok{np.exp(}\OperatorTok{{-}}\NormalTok{k}\OperatorTok{*}\NormalTok{t) }\OperatorTok{+}\NormalTok{ C}
+
+\NormalTok{rng }\OperatorTok{=}\NormalTok{ np.random.default\_rng(}\DecValTok{7}\NormalTok{)}
+\NormalTok{t }\OperatorTok{=}\NormalTok{ np.linspace(}\DecValTok{0}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{60}\NormalTok{)}
+\NormalTok{y }\OperatorTok{=}\NormalTok{ decay(t, }\FloatTok{5.0}\NormalTok{, }\FloatTok{1.5}\NormalTok{, }\FloatTok{0.5}\NormalTok{) }\OperatorTok{+}\NormalTok{ rng.normal(}\DecValTok{0}\NormalTok{, }\FloatTok{0.08}\NormalTok{, t.size)}
+
+\NormalTok{popt, pcov }\OperatorTok{=}\NormalTok{ curve\_fit(decay, t, y, p0}\OperatorTok{=}\NormalTok{[}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{])}
+\NormalTok{perr }\OperatorTok{=}\NormalTok{ np.sqrt(np.diag(pcov))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"A ="}\NormalTok{, }\BuiltInTok{round}\NormalTok{(popt[}\DecValTok{0}\NormalTok{], }\DecValTok{4}\NormalTok{), }\StringTok{"  k ="}\NormalTok{, }\BuiltInTok{round}\NormalTok{(popt[}\DecValTok{1}\NormalTok{], }\DecValTok{4}\NormalTok{), }\StringTok{"  C ="}\NormalTok{, }\BuiltInTok{round}\NormalTok{(popt[}\DecValTok{2}\NormalTok{], }\DecValTok{4}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"stderr ="}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(perr, }\DecValTok{4}\NormalTok{))}
+\NormalTok{residuals }\OperatorTok{=}\NormalTok{ y }\OperatorTok{{-}}\NormalTok{ decay(t, }\OperatorTok{*}\NormalTok{popt)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"RMSE ="}\NormalTok{, }\BuiltInTok{round}\NormalTok{(}\BuiltInTok{float}\NormalTok{(np.sqrt(np.mean(residuals}\OperatorTok{**}\DecValTok{2}\NormalTok{))), }\DecValTok{4}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-15}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{A = 5.0274   k = 1.5355   C = 0.4946}
+\NormalTok{stderr = [0.0454 0.0257 0.0131]}
+\NormalTok{RMSE = 0.0693}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-15}
+
+\textbf{一句话人话}：\texttt{curve\_fit}
+就是``先写出公式形状，再让计算机微调那几个系数，使曲线尽量贴近实验点''。
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{decay(t,\ A,\ k,\ C)} 是模型：\texttt{A} 是初始幅度（\(t=0\)
+  时几乎等于 \(A+C\)），\texttt{k}
+  是衰减速率（越大衰减越快），\texttt{C}
+  是最终基线（衰减结束后接近的值）。
+\item
+  \texttt{rng.normal(0,\ 0.08,\ t.size)}
+  给每个时间点加测量噪声，所以不能直接``插值''把所有点连起来；拟合是``容忍噪声''。
+\item
+  \texttt{p0={[}1,\ 1,\ 0{]}}
+  是初值：非线性最小二乘需要合理的起点，否则可能不收敛。
+\item
+  \texttt{popt} 是拟合后参数，\texttt{pcov}
+  是参数协方差矩阵，\texttt{np.sqrt(np.diag(pcov))}
+  得到每个参数的标准误（约等于拟合值的不确定度）。
+\item
+  \texttt{RMSE\ =\ 0.0693} 与噪声标准差 0.08
+  同量级，说明拟合没有``过拟合''噪声。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-15}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+需求
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+写法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+说明
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+非线性最小二乘拟合 & \texttt{curve\_fit(func,\ x,\ y,\ p0=...)} & 返回
+\texttt{(popt,\ pcov)} \\
+参数标准误 & \texttt{np.sqrt(np.diag(pcov))} & 协方差矩阵主对角线开方 \\
+残差平方根误差 & \texttt{np.sqrt(np.mean((y\ -\ func(x,\ *popt))**2))} &
+RMSE \\
+初值设置 & \texttt{p0={[}...{]}} & 尽量接近真实值 \\
+提高迭代上限 & \texttt{maxfev=50000} & 复杂模型防``达到最大调用次数'' \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-15}
+
+\begin{itemize}
+\tightlist
+\item
+  不给 \texttt{p0} 或 \texttt{p0}
+  离真值太远，导致不收敛或收敛到错误参数；
+\item
+  把 \texttt{curve\_fit} 的结果当成``一定正确''，应同时看
+  \texttt{pcov}/标准误；
+\item
+  对含噪声数据用样条插值``穿点''，而不是拟合；两者语义不同（见案例 3）；
+\item
+  忘记 \texttt{decay(t,\ *popt)} 中的
+  \texttt{*}，传成单个数组导致维度错误。
+\end{itemize}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-4}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  把模型改成 \texttt{y\ =\ A*np.exp(-k*t)}（去掉 \texttt{C}），看
+  \texttt{C} 消失后拟合结果是否稳定。
+\item
+  把噪声标准差改成 \texttt{0.5}，观察标准误变大、RMSE 变大。
+\item
+  用 \texttt{maxfev=50000} 重新拟合，并打印 \texttt{popt} 与
+  \texttt{perr}。
+\item
+  换一个``双指数''模型
+  \(A_1 e^{-k_1 t}+A_2 e^{-k_2 t}+C\)，尝试拟合并解释参数。
+\end{enumerate}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -911,6 +1172,7 @@ q）求\textbf{根}，二者用途不同，切勿混淆。
 \begin{Shaded}
 \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 \NormalTok{x }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{])}
 \NormalTok{y }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{0}\NormalTok{, }\FloatTok{0.8}\NormalTok{, }\FloatTok{0.9}\NormalTok{, }\FloatTok{0.1}\NormalTok{, }\OperatorTok{{-}}\FloatTok{0.8}\NormalTok{, }\OperatorTok{{-}}\DecValTok{1}\NormalTok{])}
 \BuiltInTok{print}\NormalTok{(np.interp([}\FloatTok{0.5}\NormalTok{, }\FloatTok{2.5}\NormalTok{, }\FloatTok{4.5}\NormalTok{], x, y))}
@@ -941,7 +1203,7 @@ q）求\textbf{根}，二者用途不同，切勿混淆。
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{[ 0.4   0.5  {-}0.9 ]}
+\NormalTok{[ 0.4  0.5 {-}0.9]}
 \NormalTok{[ 0.4583  0.575  {-}1.0333]}
 \end{Highlighting}
 \end{Shaded}
@@ -1049,7 +1311,140 @@ q）求\textbf{根}，二者用途不同，切勿混淆。
 \end{longtable}
 }
 
-一句话：\textbf{插值信任每一个点，拟合容忍噪声}。若采样点本身有测量误差，优先拟合；若是光滑函数的真实采样，插值能给出``补全''效果。
+\subsection{案例卡 3：一维插值 vs 多项式拟合------缺失值用 CubicSpline
+补全}\label{ux6848ux4f8bux5361-3ux4e00ux7ef4ux63d2ux503c-vs-ux591aux9879ux5f0fux62dfux5408ux7f3aux5931ux503cux7528-cubicspline-ux8865ux5168}
+
+\subsubsection{目标}\label{ux76eeux6807-16}
+
+对一条光滑曲线（\(y=\sin x\)）采样 10 个点并故意挖掉 2
+个，分别用三次样条插值（\texttt{CubicSpline}）和 3
+次多项式拟合（\texttt{np.polyfit}）去补全缺失点，并比较整段误差：理解``插值贴点、拟合平滑''在补缺失值上的差异。
+
+\subsubsection{代码}\label{ux4ee3ux7801-18}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{from}\NormalTok{ scipy.interpolate }\ImportTok{import}\NormalTok{ CubicSpline}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\NormalTok{rng }\OperatorTok{=}\NormalTok{ np.random.default\_rng(}\DecValTok{3}\NormalTok{)}
+\NormalTok{x }\OperatorTok{=}\NormalTok{ np.linspace(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\OperatorTok{*}\NormalTok{np.pi, }\DecValTok{10}\NormalTok{)}
+\NormalTok{y\_true }\OperatorTok{=}\NormalTok{ np.sin(x)}
+\NormalTok{y\_obs }\OperatorTok{=}\NormalTok{ y\_true }\OperatorTok{+}\NormalTok{ rng.normal(}\DecValTok{0}\NormalTok{, }\FloatTok{0.05}\NormalTok{, x.size)}
+\NormalTok{mask\_ok }\OperatorTok{=}\NormalTok{ np.ones(x.size, dtype}\OperatorTok{=}\BuiltInTok{bool}\NormalTok{)}
+\NormalTok{mask\_ok[[}\DecValTok{3}\NormalTok{, }\DecValTok{6}\NormalTok{]] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{x\_ok }\OperatorTok{=}\NormalTok{ x[mask\_ok]}\OperatorTok{;}\NormalTok{ y\_ok }\OperatorTok{=}\NormalTok{ y\_obs[mask\_ok]}
+
+\NormalTok{cs }\OperatorTok{=}\NormalTok{ CubicSpline(x\_ok, y\_ok)}
+\NormalTok{coef }\OperatorTok{=}\NormalTok{ np.polyfit(x\_ok, y\_ok, }\DecValTok{3}\NormalTok{)}
+\NormalTok{poly }\OperatorTok{=}\NormalTok{ np.poly1d(coef)}
+\NormalTok{x\_miss }\OperatorTok{=}\NormalTok{ x[}\OperatorTok{\textasciitilde{}}\NormalTok{mask\_ok]}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"缺失点 x ="}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(x\_miss, }\DecValTok{4}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"CubicSpline 补全 ="}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(cs(x\_miss), }\DecValTok{4}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"poly3 拟合补全 ="}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(poly(x\_miss), }\DecValTok{4}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"真实值 ="}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(y\_true[}\OperatorTok{\textasciitilde{}}\NormalTok{mask\_ok], }\DecValTok{4}\NormalTok{))}
+\NormalTok{grid }\OperatorTok{=}\NormalTok{ np.linspace(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\OperatorTok{*}\NormalTok{np.pi, }\DecValTok{500}\NormalTok{)}
+\NormalTok{rmse\_s }\OperatorTok{=}\NormalTok{ np.sqrt(np.mean((cs(grid) }\OperatorTok{{-}}\NormalTok{ np.sin(grid))}\OperatorTok{**}\DecValTok{2}\NormalTok{))}
+\NormalTok{rmse\_p }\OperatorTok{=}\NormalTok{ np.sqrt(np.mean((poly(grid) }\OperatorTok{{-}}\NormalTok{ np.sin(grid))}\OperatorTok{**}\DecValTok{2}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"RMSE(样条) ="}\NormalTok{, }\BuiltInTok{round}\NormalTok{(}\BuiltInTok{float}\NormalTok{(rmse\_s), }\DecValTok{4}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"RMSE(3次多项式) ="}\NormalTok{, }\BuiltInTok{round}\NormalTok{(}\BuiltInTok{float}\NormalTok{(rmse\_p), }\DecValTok{4}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-16}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{缺失点 x = [2.0944 4.1888]}
+\NormalTok{CubicSpline 补全 = [ 0.8895 {-}0.8448]}
+\NormalTok{poly3 拟合补全 = [ 0.6857 {-}0.759 ]}
+\NormalTok{真实值 = [ 0.866 {-}0.866]}
+\NormalTok{RMSE(样条) = 0.0511}
+\NormalTok{RMSE(3次多项式) = 0.0958}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-16}
+
+\textbf{一句话人话}：插值像``用直尺/曲线板把已知点连起来''，缺失点用相邻点推；拟合像``用一条整体趋势线去平均所有点''，缺失点由全局趋势推。
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{y\_obs\ =\ y\_true\ +\ rng.normal(0,\ 0.05,\ x.size)}：先给真值加一点噪声，让问题更真实（但仍是``光滑采样
+  + 小噪声''，更适合插值）。
+\item
+  \texttt{mask\_ok{[}{[}3,\ 6{]}{]}\ =\ False}：把第 4、7
+  个点设为``缺失''，\texttt{x\_ok}/\texttt{y\_ok} 只保留未缺失点。
+\item
+  \texttt{CubicSpline(x\_ok,\ y\_ok)}：用未缺失点构造三次样条，它在缺失点处给出的
+  \texttt{0.8895}、\texttt{-0.8448} 贴近真实
+  \texttt{0.866}、\texttt{-0.866}。
+\item
+  \texttt{np.polyfit(x\_ok,\ y\_ok,\ 3)}：用 3 次多项式拟合未缺失点，再
+  \texttt{np.poly1d} 转成可调用对象 \texttt{poly}；它在缺失点处给
+  \texttt{0.6857}、\texttt{-0.759}，偏差更大。
+\item
+  整段 500 个点的 RMSE：样条 \texttt{0.0511}，3 次多项式
+  \texttt{0.0958}。因为真值是光滑 \texttt{sin}，局部分段的样条比单片 3
+  次多项式更贴合；若噪声很大，则拟合更稳。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-16}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+需求 & 写法 & 说明 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+一维三次样条插值 & \texttt{CubicSpline(x,\ y)} & 函数可调用，返回
+\texttt{cs(xnew)} \\
+多项式拟合 & \texttt{np.polyfit(x,\ y,\ deg)} & 返回系数数组 \\
+多项式转函数 & \texttt{np.poly1d(coef)} & 返回可调用对象 \\
+布尔缺失掩码 & \texttt{mask\ =\ \textasciitilde{}np.isnan(arr)} &
+选非缺失点 \\
+整段误差 & \texttt{rmse\ =\ sqrt(mean((f(x)-true)**2))} &
+评价插值/拟合质量 \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-16}
+
+\begin{itemize}
+\tightlist
+\item
+  对有噪声的数据做样条插值：插值会``穿过噪声''，此时应改用
+  \texttt{curve\_fit}/\texttt{polyfit}；
+\item
+  认为插值能``外推''缺失区间：\texttt{CubicSpline}
+  边界外可能明显失真，重点应放在区间内；
+\item
+  \texttt{polyfit} 的阶数过高（如 9 次）会出现龙格现象（端点震荡）；
+\item
+  用 \texttt{np.polyfit} 时忘记 \texttt{x\_ok}/\texttt{y\_ok}
+  必须等长且无 NaN。
+\end{itemize}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-5}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  把噪声标准差改成 \texttt{0.4}，看样条和多项式哪个更像``过拟合噪声''。
+\item
+  缺失点换成 \texttt{mask\_ok{[}{[}2,\ 7{]}{]}}，比较样条补全值变化。
+\item
+  用
+  \texttt{interp1d(...,\ kind=\textquotesingle{}linear\textquotesingle{})}
+  补全，和 \texttt{CubicSpline} 对比精度。
+\item
+  把多项式次数从 3 改到 9，画出整段曲线观察端点震荡。
+\end{enumerate}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -1188,6 +1583,7 @@ Shapiro-Wilk 与 Anderson-Darling 检验。
 \begin{Shaded}
 \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 \ImportTok{from}\NormalTok{ scipy.stats }\ImportTok{import}\NormalTok{ shapiro}
 
 \NormalTok{rng }\OperatorTok{=}\NormalTok{ np.random.default\_rng(}\DecValTok{1}\NormalTok{)}
@@ -1353,7 +1749,7 @@ HSD}\label{ux4e8bux540eux591aux91cdux6bd4ux8f83statsmodels-tukey-hsd}
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{Multiple Comparison of Means {-} Tukey HSD, FWER=0.05}
-\NormalTok{===================================================}
+\NormalTok{==================================================}
 \NormalTok{group1 group2 meandiff p{-}adj  lower  upper  reject}
 \NormalTok{{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
 \NormalTok{     A      B   0.4926 0.0045 0.1287 0.8566   True}
@@ -1519,6 +1915,7 @@ p=0.0268），说明组内噪声相较于组间差异较小。这比 ANOVA
 \begin{Shaded}
 \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 \ImportTok{from}\NormalTok{ scipy.fft }\ImportTok{import}\NormalTok{ fft, fftfreq}
 
 \NormalTok{fs }\OperatorTok{=} \DecValTok{1000}          \CommentTok{\# 采样率 Hz}
@@ -1583,19 +1980,19 @@ p=0.0268），说明组内噪声相较于组间差异较小。这比 ANOVA
 \NormalTok{sig2 }\OperatorTok{=} \FloatTok{0.7}\OperatorTok{*}\NormalTok{np.sin(}\DecValTok{2}\OperatorTok{*}\NormalTok{np.pi}\OperatorTok{*}\DecValTok{50}\OperatorTok{*}\NormalTok{t) }\OperatorTok{+}\NormalTok{ np.sin(}\DecValTok{2}\OperatorTok{*}\NormalTok{np.pi}\OperatorTok{*}\DecValTok{200}\OperatorTok{*}\NormalTok{t)}
 \NormalTok{Y2 }\OperatorTok{=}\NormalTok{ rfft(sig2)}
 \NormalTok{f2 }\OperatorTok{=}\NormalTok{ rfftfreq(}\BuiltInTok{len}\NormalTok{(t), }\DecValTok{1}\OperatorTok{/}\NormalTok{fs)}
-\NormalTok{top }\OperatorTok{=}\NormalTok{ np.argsort(np.}\BuiltInTok{abs}\NormalTok{(Y2))[}\OperatorTok{{-}}\DecValTok{3}\NormalTok{:][::}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]}
+\NormalTok{top }\OperatorTok{=}\NormalTok{ np.argsort(np.}\BuiltInTok{abs}\NormalTok{(Y2))[}\OperatorTok{{-}}\DecValTok{2}\NormalTok{:][::}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]}
 \BuiltInTok{print}\NormalTok{(}\StringTok{"top freqs ="}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(f2[top], }\DecValTok{1}\NormalTok{), }\StringTok{"  amps ="}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(np.}\BuiltInTok{abs}\NormalTok{(Y2[top]), }\DecValTok{1}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{top freqs = [200.  50.  50.1]   amps = [500.  350. 199.8]}
+\NormalTok{top freqs = [200.  50.]   amps = [500. 350.]}
 \end{Highlighting}
 \end{Shaded}
 
-\texttt{top} 中出现 50.1 Hz 是因为 50 Hz
-附近存在频谱泄漏（非整数周期），属正常现象。
+两个主频 200 Hz、50 Hz
+恰好落在整数周期上，因此没有明显泄漏（若频率不是整数周期，峰值两侧会出现旁瓣）。
 
 \subsubsection{5.4.1 低通滤波}\label{ux4f4eux901aux6ee4ux6ce2}
 
@@ -1641,7 +2038,7 @@ p=0.0268），说明组内噪声相较于组间差异较小。这比 ANOVA
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{highpass last3 = [{-}0.4903 {-}0.9695 {-}0.1156]}
-\NormalTok{bandpass last3 = [ 0.0658  0.0332  0.0031]}
+\NormalTok{bandpass last3 = [0.0658 0.0332 0.0031]}
 \NormalTok{bandstop last3 = [{-}0.9061 {-}1.4789 {-}0.628 ]}
 \end{Highlighting}
 \end{Shaded}
@@ -1762,6 +2159,7 @@ s）数据丢失。需要：
 \begin{Shaded}
 \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 \ImportTok{from}\NormalTok{ scipy.interpolate }\ImportTok{import}\NormalTok{ CubicSpline}
 
 \NormalTok{rng }\OperatorTok{=}\NormalTok{ np.random.default\_rng(}\DecValTok{42}\NormalTok{)}
@@ -1866,7 +2264,7 @@ Hz）与建模时的真实频率完全一致；低频小峰来自去趋势后的
 \BuiltInTok{print}\NormalTok{(}\StringTok{"参数标准误 ="}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(perr, }\DecValTok{4}\NormalTok{))}
 \NormalTok{resid }\OperatorTok{=}\NormalTok{ y\_filled }\OperatorTok{{-}}\NormalTok{ model(t, }\OperatorTok{*}\NormalTok{popt)}
 \BuiltInTok{print}\NormalTok{(}\StringTok{"RMSE ="}\NormalTok{, }\BuiltInTok{round}\NormalTok{(}\BuiltInTok{float}\NormalTok{(np.sqrt(np.mean(resid}\OperatorTok{**}\DecValTok{2}\NormalTok{))), }\DecValTok{4}\NormalTok{))}
-\BuiltInTok{print}\NormalTok{(}\StringTok{"f1 估计 ="}\NormalTok{, }\BuiltInTok{round}\NormalTok{(popt[}\DecValTok{3}\NormalTok{], }\DecValTok{3}\NormalTok{), }\StringTok{"   f2 估计 ="}\NormalTok{, }\BuiltInTok{round}\NormalTok{(popt[}\DecValTok{6}\NormalTok{], }\DecValTok{3}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"f1 估计 = }\SpecialCharTok{\{}\NormalTok{popt[}\DecValTok{3}\NormalTok{]}\SpecialCharTok{:.3f\}}\SpecialStringTok{   f2 估计 = }\SpecialCharTok{\{}\NormalTok{popt[}\DecValTok{6}\NormalTok{]}\SpecialCharTok{:.3f\}}\SpecialStringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1875,7 +2273,7 @@ Hz）与建模时的真实频率完全一致；低频小峰来自去趋势后的
 \NormalTok{拟合参数 = [ 1.9931  0.499   1.2042  5.0003 {-}0.0108  0.2977 12.0033 {-}0.064 ]}
 \NormalTok{参数标准误 = [0.008  0.0028 0.0057 0.0005 0.0094 0.0057 0.0021 0.0382]}
 \NormalTok{RMSE = 0.2009}
-\NormalTok{f1 估计 = 5.0   f2 估计 = 12.003}
+\NormalTok{f1 估计 = 5.000   f2 估计 = 12.003}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1987,6 +2385,30 @@ p
 \item
   用 statsmodels 对三段时间做单因素 ANOVA + Tukey 事后比较。
 \end{enumerate}
+
+\subsection{关键设计（增强）}\label{ux5173ux952eux8bbeux8ba1ux589eux5f3a}
+
+本案例特意做了三处``可复现工程化''处理，适合作为课堂讲评点：
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{固定输出格式}：第 1 个代码块开头用
+  \texttt{np.set\_printoptions(precision=4,\ suppress=True)}，让后面所有
+  NumPy 数组打印统一到 4 位有效数字，跨机器/版本更稳；
+\item
+  \textbf{统一浮点格式}：每个数值都用 \texttt{round(...,4)} 或
+  \texttt{:.4f}/\texttt{:.3f} 输出，避免直接打印完整浮点（如
+  \texttt{0.200908...}）造成对比困难；
+\item
+  \textbf{容错初值与迭代上限}：\texttt{curve\_fit} 用接近真值的
+  \texttt{p0}，并设
+  \texttt{maxfev=50000}，防止复杂模型``达到最大调用次数''而失败；
+\item
+  \textbf{先补缺失再分析}：先用 \texttt{CubicSpline} 把 NaN
+  段补成连续曲线，再进行 FFT / 拟合 / 积分 /
+  检验，保证整条流水线输入一致。
+\end{itemize}
 
 \subsection{延伸阅读}\label{ux5ef6ux4f38ux9605ux8bfb-15}
 

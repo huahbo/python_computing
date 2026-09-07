@@ -6,13 +6,13 @@
 
 | 文件 | 说明 |
 | ---- | ---- |
-| `lab.ipynb` | 上机实验 notebook（21 个单元：6 个 Part，含 TODO 与检查项） |
+| `lab.ipynb` | 上机实验 notebook（31 个单元：7 个 Part，含 TODO 与检查项） |
 | `sensor_lab.png` | 运行 Part 6 后生成的图像（示例） |
 
 ## 如何开始
 
 1. 打开 `lab.ipynb`（JupyterLab / VS Code）；
-2. 按顺序运行 Part 1 → Part 6；
+2. 按顺序运行 Part 1 → Part 7；
 3. 完成所有 `# TODO`，记录输出；
 4. 在末尾 `提交清单` 逐项打钩；
 5. 导出（可选）后提交 `.ipynb`。
@@ -27,11 +27,12 @@
 | 4 | 假设检验工具包 | 15 min |
 | 5 | 傅里叶变换与滤波 | 15 min |
 | 6 | 综合任务（传感器信号分析） | 25 min |
+| 7 | 案例卡跟练（9 个 cell：跟练/变形/综合任务） | 20 min |
 
 ## 教师说明
 
 - 可作为一次 2–3 学时的上机课；
-- 检查重点：Part 1 的 `solve_ivp` 输出、Part 2 的 Rosenbrock/curve_fit、Part 4 的 Tukey 表、Part 5 的相关系数、Part 6 的拟合与图；
+- 检查重点：Part 1 的 `solve_ivp` 输出、Part 2 的 Rosenbrock/curve_fit、Part 4 的 Tukey 表、Part 5 的相关系数、Part 6 的拟合与图、Part 7 的 9 个案例卡跟练 cell；
 - 可要求学生把每个 Part 的输出截图附在报告里。
 
 ## 配套

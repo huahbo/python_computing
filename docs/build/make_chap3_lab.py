@@ -32,7 +32,7 @@ from scipy.integrate import quad, dblquad, trapezoid
 import numpy as np
 
 val, err = quad(lambda x: x**2, 0, 1)
-print("quad ∫0^1 x^2 dx =", val, "err =", err)
+print("quad int_0^1 x^2 dx =", val, "err =", err)
 
 dbl = dblquad(lambda y, x: x*y, 0, 1, lambda x: 0, lambda x: x)[0]
 print("dblquad =", dbl)
@@ -224,6 +224,148 @@ plt.tight_layout(); plt.savefig("sensor_lab.png")
 print("已保存 sensor_lab.png")
 """)
 
+md("""## Part 7 案例卡跟练（新增）
+
+复现 01–03 三个精讲案例卡：每个案例含“跟练 cell”（复现+改参数）、“变形 cell”（换数据/场景）、“综合任务 cell”（串 2 个技术点）。""")
+
+code("""# 案例 1 跟练：复现 quad + trapezoid，换成高斯被积函数
+import numpy as np
+from scipy.integrate import quad, trapezoid
+
+def g(x):
+    return np.exp(-x**2)
+
+val, err = quad(g, 0, 1)
+x = np.linspace(0, 1, 1000)
+trap = trapezoid(g(x), x)
+print("quad =", round(val, 6), "  err =", round(err, 6))
+print("trapezoid n=1000 =", round(trap, 6))
+""")
+
+code("""# 案例 1 变形：自由落体速度 v=gt，用 quad 求位移
+import numpy as np
+from scipy.integrate import quad
+
+g = 9.8
+def v(t):
+    return g*t
+
+dist, err = quad(v, 0, 3)
+print("位移 =", round(float(dist), 4), "  理论 =", round(0.5*g*9, 4))
+""")
+
+code("""# 案例 1 综合：trapezoid + quad + curve_fit（积分 + 拟合）
+import numpy as np
+from scipy.integrate import quad, trapezoid
+from scipy.optimize import curve_fit
+
+rng = np.random.default_rng(11)
+t = np.linspace(0, 5, 50)
+def v(t, a, v0):
+    return a*t + v0
+y = v(t, 2.0, 0.5) + rng.normal(0, 0.1, t.size)
+popt, _ = curve_fit(v, t, y, p0=[1, 0])
+print("拟合 a, v0 =", np.round(popt, 4))
+area_raw = trapezoid(y, t)
+def vfit(x):
+    return popt[0]*x + popt[1]
+area_fit, _ = quad(vfit, 0, 5)
+print("trapezoid 位移 =", round(float(area_raw), 4))
+print("quad 拟合位移   =", round(float(area_fit), 4))
+""")
+
+code("""# 案例 2 跟练：复现指数衰减拟合，换成 A=3, k=2, C=0
+import numpy as np
+from scipy.optimize import curve_fit
+
+def decay(t, A, k, C):
+    return A*np.exp(-k*t) + C
+
+rng = np.random.default_rng(12)
+t = np.linspace(0, 5, 40)
+y = decay(t, 3, 2, 0) + rng.normal(0, 0.05, t.size)
+popt, pcov = curve_fit(decay, t, y, p0=[1, 1, 0.2])
+perr = np.sqrt(np.diag(pcov))
+print("A,k,C =", np.round(popt, 4), "  标准误 =", np.round(perr, 4))
+""")
+
+code("""# 案例 2 变形：药物浓度模型 C(t)=C0*exp(-k*t)
+import numpy as np
+from scipy.optimize import curve_fit
+
+rng = np.random.default_rng(13)
+t = np.linspace(0, 8, 40)
+def conc(t, C0, k):
+    return C0*np.exp(-k*t)
+y = conc(t, 10, 0.4) + rng.normal(0, 0.2, t.size)
+popt, pcov = curve_fit(conc, t, y, p0=[1, 1])
+print("C0, k =", np.round(popt, 4))
+print("半衰期 =", round(-np.log(0.5)/popt[1], 4), "小时")
+""")
+
+code("""# 案例 2 综合：先 CubicSpline 补缺失，再 curve_fit（拟合 + 插值）
+import numpy as np
+from scipy.interpolate import CubicSpline
+from scipy.optimize import curve_fit
+
+rng = np.random.default_rng(21)
+t = np.linspace(0, 5, 20)
+def decay(t, A, k, C):
+    return A*np.exp(-k*t) + C
+y = decay(t, 4, 1.2, 0.3) + rng.normal(0, 0.05, t.size)
+y2 = y.copy(); y2[[5, 9]] = np.nan
+mask = ~np.isnan(y2)
+cs = CubicSpline(t[mask], y2[mask])
+y2_filled = y2.copy(); y2_filled[~mask] = cs(t[~mask])
+popt, pcov = curve_fit(decay, t, y2_filled, p0=[1, 1, 0])
+print("样条补全后 A,k,C =", np.round(popt, 4))
+""")
+
+code("""# 案例 3 跟练：复现 CubicSpline vs polyfit 补缺失，换缺失位置
+import numpy as np
+from scipy.interpolate import CubicSpline
+
+rng = np.random.default_rng(3)
+x = np.linspace(0, 2*np.pi, 10)
+y_true = np.sin(x)
+y_obs = y_true + rng.normal(0, 0.05, x.size)
+mask_ok = np.ones(x.size, dtype=bool)
+mask_ok[[2, 7]] = False
+x_ok = x[mask_ok]; y_ok = y_obs[mask_ok]
+cs = CubicSpline(x_ok, y_ok)
+print("缺失点 =", np.round(x[~mask_ok], 4))
+print("CubicSpline 补全 =", np.round(cs(x[~mask_ok]), 4))
+""")
+
+code("""# 案例 3 变形：日气温数据缺失，用 CubicSpline 补全
+import numpy as np
+from scipy.interpolate import CubicSpline
+
+t = np.arange(0, 24, 1)
+T = 18 + 6*np.sin(2*np.pi*(t-8)/24)   # 简化日变化
+T_obs = T.copy(); T_obs[10] = np.nan
+mask = ~np.isnan(T_obs)
+cs = CubicSpline(t[mask], T_obs[mask])
+print("t=10 补全 =", round(float(cs(10)), 4), "  真值 =", round(float(T[10]), 4))
+""")
+
+code("""# 案例 3 综合：CubicSpline 补缺失后 rfft 找主频（插值 + FFT）
+import numpy as np
+from scipy.interpolate import CubicSpline
+from scipy.fft import rfft, rfftfreq
+
+fs = 200; T = 1.0; N = int(fs*T)
+t = np.linspace(0, T, N, endpoint=False)
+y = np.sin(2*np.pi*5*t)
+y_obs = y.copy(); y_obs[100:103] = np.nan
+mask = ~np.isnan(y_obs)
+cs = CubicSpline(t[mask], y_obs[mask])
+y_fill = y_obs.copy(); y_fill[~mask] = cs(t[~mask])
+Y = rfft(y_fill); freqs = rfftfreq(N, 1/fs)
+top = np.argsort(np.abs(Y))[-1:][::-1]
+print("补全后主频 =", round(float(freqs[top[0]]), 2), "Hz")
+""")
+
 md("""## 提交清单
 
 - [ ] 所有 TODO 均已填写并运行；
@@ -232,6 +374,7 @@ md("""## 提交清单
 - [ ] Part 4 的 Tukey 表已记录（若安装 statsmodels）；
 - [ ] Part 5 的高通滤波 TODO 已完成；
 - [ ] Part 6 已生成 sensor_lab.png 并写 3 句结论；
+- [ ] Part 7 的 9 个跟练/变形/综合 cell 已运行；
 - [ ] 导出为 html / 保留 ipynb 提交。
 
 **延伸**：完成 exercises/ 的 16 道题与 06 的拓展任务。""")
