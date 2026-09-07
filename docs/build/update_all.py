@@ -3,6 +3,12 @@
 """One-command update: validate -> per-chapter PDFs -> full book PDF."""
 import os, sys, subprocess
 
+# 避免 Windows 控制台 GBK 编码打印中文/替换字符崩溃
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -20,7 +26,12 @@ def run(cmd, name):
 
 def main():
     codes = []
+    codes.append(run([sys.executable, "build/gen_manifest.py"], "0.5) regenerate chapter manifests"))
     codes.append(run([sys.executable, "build/validate_book.py"], "1) validate_book (links/notebooks)"))
+    code_cmd = [sys.executable, "build/validate_code.py", "--quiet"]
+    if "--strict-code" in sys.argv:
+        code_cmd.append("--strict")
+    codes.append(run(code_cmd, "1.2) validate code blocks" + (" (STRICT)" if "--strict-code" in sys.argv else " (warn-only)")))
     codes.append(run([sys.executable, "build/gen_references.py"], "1.5) generate global references (附录 G)"))
     codes.append(run([sys.executable, "build/pdf_build.py"], "2) per-chapter PDFs"))
     codes.append(run([sys.executable, "build/texbook.py", "--full"], "3) full book PDF"))

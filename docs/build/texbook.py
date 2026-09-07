@@ -32,6 +32,7 @@ PANDOC_OPTS = [
     "-V", "toc-title=目录",
     "--highlight-style=tango",
     "--include-in-header=" + os.path.join(ROOT, "build", "texbook_header.tex"),
+    "--include-in-header=" + os.path.join(ROOT, "build", "cover.tex"),
     "--resource-path=" + ROOT,
 ]
 
@@ -85,6 +86,31 @@ def md_hash(paths):
     return h.hexdigest()
 
 
+def chapter_no(ch):
+    """从目录名前缀提取章号，如 '01-numpy' -> 1；非数字返回 None。"""
+    m = re.match(r"^(\d{2})-", ch)
+    return int(m.group(1)) if m else None
+
+
+def latex_escape(s):
+    """把标题转义成安全的 LaTeX 文本（用于手工 chaptercover 调用）。"""
+    rep = {
+        "\\": "\\textbackslash{}",
+        "&": "\\&",
+        "%": "\\%",
+        "$": "\\$",
+        "#": "\\#",
+        "_": "\\_",
+        "{": "\\{",
+        "}": "\\}",
+        "~": "\\textasciitilde{}",
+        "^": "\\textasciicircum{}",
+    }
+    for k, v in rep.items():
+        s = s.replace(k, v)
+    return s
+
+
 def shift_heading(text):
     """把节文件内所有标题上移一级：# -> ##, ## -> ### ..."""
     out = []
@@ -98,7 +124,14 @@ def shift_heading(text):
 
 def chapter_md(ch, cfg):
     title, files = read_manifest(ch)
-    parts = [f"# {title}", ""]
+    parts = []
+    num = chapter_no(ch)
+    if num is not None:
+        # 每章章扉页（大号“第 N 章”），随后 \chapter 标题也带编号
+        parts.append(f"```{{=latex}}\n\\chaptercover{{{num}}}{{{latex_escape(title)}}}\n```\n")
+        parts.append(f"# 第 {num} 章 · {title}\n")
+    else:
+        parts.append(f"# {title}\n")
     for rel in files:
         if rel.lower() in ("README.md", "readme.md"):
             continue  # 章首页是站点索引，不进入书正文
@@ -195,8 +228,9 @@ def build_appendix_pdf():
     return True
 
 
-def run_pandoc(md_path, out_pdf, title=None):
+def run_pandoc(md_path, out_pdf, title=None, extra_opts=None):
     cmd = ["pandoc", md_path, "-o", out_pdf] + PANDOC_OPTS
+    cmd += (extra_opts or [])
     if title:
         cmd += ["-V", f"title={title}"]
     proc = subprocess.run(cmd, capture_output=True, text=True,
@@ -279,7 +313,14 @@ def build_book(full=False):
     tmp = os.path.join(ROOT, "build", "_tmp_book_all.md")
     with open(tmp, "w", encoding="utf-8") as f:
         f.write(body)
-    ok = run_pandoc(tmp, BOOK_OUT, title=cfg.get("title", "Python 科学计算"))
+    cover_body = os.path.join(ROOT, "build", "_tmp_cover_body.tex")
+    with open(cover_body, "w", encoding="utf-8") as f:
+        subt = cfg.get("subtitle", "从 NumPy 到 scikit-learn 的完整实践教程")
+        f.write("\\bookcover{" + cfg.get("title", "Python 科学计算") + "}{" + subt + "}{" + cfg.get("author", "") + "}{" + str(cfg.get("date", "")) + "}\n")
+    ok = run_pandoc(tmp, BOOK_OUT, title=cfg.get("title", "Python 科学计算"),
+                    extra_opts=["--include-before-body=" + cover_body,
+                                "--include-in-header=" + os.path.join(ROOT, "build", "no_maketitle.tex")])
+    os.remove(cover_body)
     os.remove(tmp)
     if not ok:
         return False

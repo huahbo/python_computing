@@ -22,6 +22,11 @@ jobs:
       - name: Install Python deps
         run: pip install pypdf pyyaml
 
+      # 代码自动验证：NumPy 章严格要求（输出必须与正文一致），其余章先报警告
+      - name: Validate NumPy code blocks
+        working-directory: docs
+        run: python build/validate_code.py --quiet --strict 01-numpy
+
       # 模式 A（默认）+ 模式 B（可编辑 TeX 工程，只生成不编译）
       - name: Build book + per-chapter PDFs + TeX project
         working-directory: docs
@@ -43,6 +48,7 @@ jobs:
           name: python-scientific-computing-tex
           path: |
             docs/教材TeX/main.tex
+            docs/教材TeX/cover.tex
             docs/教材TeX/chapters/
             docs/教材TeX/figures/
             docs/教材TeX/user_style.tex

@@ -1,3 +1,4 @@
+# 第 7 章 PDF 合订清单（build/pdf_build.py 读取）
 TITLE: Statsmodels及其基本使用
 README.md
 01-方差分析与回归.md

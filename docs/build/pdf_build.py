@@ -30,6 +30,7 @@ PANDOC_OPTS = [
     "-V", "colorlinks=true",
     "-V", "linkcolor=blue",
     "--include-in-header=" + os.path.join(ROOT, "build", "texbook_header.tex"),
+    "--include-in-header=" + os.path.join(ROOT, "build", "cover.tex"),
 ]
 
 
@@ -89,6 +90,16 @@ def build_chapter(chapter):
     tmp = tempfile.mkdtemp(prefix="pdfbuild_")
     try:
         parts = []
+        # 章扉页：大号“第 N 章” + 章名（由 cover.tex 定义）
+        num = chapter[:2]
+        if num.isdigit() and title:
+            BT = chr(96)
+            cover_md = os.path.join(tmp, "_chapter_cover.md")
+            with open(cover_md, "w", encoding="utf-8") as f:
+                f.write(BT*3 + "{=latex}" + chr(10) + chr(92) + "chaptercover{" + str(int(num)) + "}{" + title + "}" + chr(10) + BT*3 + chr(10))
+            cover_pdf = os.path.join(tmp, "_chapter_cover.pdf")
+            md_to_pdf(cover_md, cover_pdf)
+            parts.append(cover_pdf)
         for rel in manifest:
             src = os.path.join(CHAPTERS_DIR, chapter, rel)
             if not os.path.isfile(src):

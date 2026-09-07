@@ -1,0 +1,34 @@
+% ===== 封面 / 章扉页（build/cover.tex；由 build 脚本自动引入，可直接改本文件定制）=====
+% 不要在此删除 \maketitle：单章/附录 PDF 仍需要默认标题页；全书由 no_maketitle.tex 关闭。
+\definecolor{courseblue}{RGB}{0, 82, 155}
+\definecolor{coursegray}{RGB}{120, 120, 120}
+
+\newcommand{\bookcover}[4]{%
+  \begin{titlepage}
+  \thispagestyle{empty}
+  \centering
+  \vspace*{1.6cm}
+  {\color{courseblue}\rule{\linewidth}{4pt}}\\[16pt]
+  {\Huge\bfseries #1}\\[10pt]
+  {\Large\itshape #2}\\[14pt]
+  {\color{courseblue}\rule{\linewidth}{1.2pt}}\\[22pt]
+  {\large #3}\\[6pt]
+  {\large #4}\\[10pt]
+  {\small\color{coursegray}（Markdown 单一事实源 · Pandoc + XeLaTeX 自动排版）}\\[8pt]
+  \vfill
+  {\small\color{coursegray}配套：每章合订 PDF / 可编译 LaTeX 工程 / GitHub Pages 在线版}
+  \end{titlepage}
+}
+
+\newcommand{\chaptercover}[2]{%
+  \clearpage
+  \thispagestyle{empty}
+  \centering
+  \vspace*{2.2cm}
+  {\color{courseblue}\rule{\linewidth}{3pt}}\\[18pt]
+  {\Huge\bfseries 第 #1 章}\\[18pt]
+  {\LARGE\bfseries #2}\\[24pt]
+  {\color{coursegray}\rule{0.55\linewidth}{0.5pt}}\\[16pt]
+  {\small 本章配套：正文小节 / 上机 lab / 练习 quiz / 常见误区与技巧}
+  \newpage
+}

@@ -102,3 +102,11 @@ python build/texbook.py --full              # 强制全量重建
 - 产物：`教材PDF/Python科学计算_全书.pdf`（162 页，8 章）；`教材PDF/_pilot/01-numpy-pilot.pdf`（21 页）。
 - 告警检测：Missing character / Missing $ / Could not fetch resource / replacing image / Error producing PDF。
 - CI：`.github/workflows/texbook.yml`（push 到 docs/chapters/build 或手动触发；Ubuntu + pandoc + texlive-xetex + texlive-lang-chinese + fonts-noto-cjk；**尚未在 GitHub 云端试跑**，如字体/包差异可调）.
+
+## M11 增量记录（封面/章扉页/编号 + 自动化 + NumPy 案例卡）
+
+- 封面：`build/cover.tex` 定义 `\bookcover`（全书封面）与 `\chaptercover`（章扉页）；texbook/pdf_build/emit_tex 三套构建统一引用；全书用 `no_maketitle.tex` 关闭 pandoc 默认标题页，用 `--include-before-body` 插入自制封面，页码从 TOC 起连续。
+- 章节编号：目录 `01-numpy` 前两位自动转“第 N 章 · 章名”；章封面用非 titlepage 实现（避免页码重置），`chapter_md()` 在每章前插入 `\chaptercover`。
+- 内容维护自动化：`gen_manifest.py`（自动生成各章 `pdf_manifest.txt`）、`validate_code.py`（顺序执行各章代码并核验相邻 `text` 输出；默认 warn，`--strict` 失败）、`update_all.py` 已接入；CI 对 `01-numpy` 强制 strict。
+- 案例卡：标准骨架（目标/代码/运行结果/讲解/主要用法API/常见错误/拓展），标题 = 技术点；第 1 章已落地 11 个案例卡，`validate_code --strict 01-numpy` = 0 问题。
+- 警告/数学：pandoc 只认 `$…$`/`$$…$$`；禁用 `\\(…\\)`/`\\[…\\]`（会被当作转义括号，导致 TeX 缺字）；代码注释内用 ASCII（`in`/`pi`）避免中文数学符号缺字。

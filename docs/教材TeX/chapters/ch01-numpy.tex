@@ -1,13 +1,15 @@
 %% 由 build/emit_tex.py 生成（生成物，勿手改）；定制请放 user_style.tex / user_meta.yaml
-\chapter{Numpy及其基本使用}\label{numpyux53caux5176ux57faux672cux4f7fux7528}
+\chapter{第 1 章 ·
+Numpy及其基本使用}\label{ux7b2c-1-ux7ae0-numpyux53caux5176ux57faux672cux4f7fux7528}
 
 \section{01
 数组基础：创建、属性、索引、广播与随机数}\label{ux6570ux7ec4ux57faux7840ux521bux5efaux5c5eux6027ux7d22ux5f15ux5e7fux64adux4e0eux968fux673aux6570}
 
 \begin{quote}
-本节对应原版 1.1 的内容，并增补学习目标、常见误区、思考题与延伸阅读。
+本节目标：把 Python 列表升级为 NumPy
+数组，并掌握创建、属性、索引切片、视图/拷贝、广播与随机数。
 配套图：\texttt{figures/01-numpy/reshape.png}、\texttt{figures/01-numpy/broadcast.png}（由
-\texttt{make\_chap1\_figures.py} 生成）。
+\texttt{build/make\_chap1\_figures.py} 生成）。
 \end{quote}
 
 \subsection{本节目标}\label{ux672cux8282ux76eeux6807-7}
@@ -73,6 +75,7 @@ Python 列表方便但``慢''，且不能直接做向量化运算。NumPy 的
 \begin{Shaded}
 \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 
 \NormalTok{x }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{])        }\CommentTok{\# 一维数组}
 \NormalTok{y }\OperatorTok{=}\NormalTok{ np.array([[}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{], [}\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{6}\NormalTok{]]) }\CommentTok{\# 二维数组（矩阵）}
@@ -107,7 +110,6 @@ Python 列表方便但``慢''，且不能直接做向量化运算。NumPy 的
 \NormalTok{x2 }\OperatorTok{=}\NormalTok{ x.astype(np.float64)}
 \BuiltInTok{print}\NormalTok{(x2.dtype, x2.itemsize) }\CommentTok{\# float64 8}
 
-\CommentTok{\#\# 与 Python 列表互转}
 \NormalTok{lst }\OperatorTok{=}\NormalTok{ x.tolist()      }\CommentTok{\# 或 list(x)}
 \NormalTok{arr }\OperatorTok{=}\NormalTok{ np.array(lst)}
 \end{Highlighting}
@@ -443,6 +445,337 @@ indexing，拷贝）}\label{ux82b1ux5f0fux7d22ux5f15fancy-indexingux62f7ux8d1d}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
+\subsection{案例卡
+1：学生成绩表------创建、切片、花式索引与视图陷阱}\label{ux6848ux4f8bux5361-1ux5b66ux751fux6210ux7ee9ux8868ux521bux5efaux5207ux7247ux82b1ux5f0fux7d22ux5f15ux4e0eux89c6ux56feux9677ux9631}
+
+\subsubsection{目标}\label{ux76eeux6807}
+
+把一张``学生 × 科目''成绩表放入
+\texttt{ndarray}，用切片、花式索引、布尔筛选快速完成任务，并观察视图与拷贝的区别。
+
+\subsubsection{代码}\label{ux4ee3ux7801}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\CommentTok{\#\# 4 名学生，3 门课（语文 / 数学 / 英语）}
+\NormalTok{scores }\OperatorTok{=}\NormalTok{ np.array([}
+\NormalTok{    [}\DecValTok{85}\NormalTok{, }\DecValTok{92}\NormalTok{, }\DecValTok{78}\NormalTok{],}
+\NormalTok{    [}\DecValTok{67}\NormalTok{, }\DecValTok{73}\NormalTok{, }\DecValTok{60}\NormalTok{],}
+\NormalTok{    [}\DecValTok{95}\NormalTok{, }\DecValTok{88}\NormalTok{, }\DecValTok{90}\NormalTok{],}
+\NormalTok{    [}\DecValTok{72}\NormalTok{, }\DecValTok{80}\NormalTok{, }\DecValTok{83}\NormalTok{],}
+\NormalTok{])}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"形状:"}\NormalTok{, scores.shape)              }\CommentTok{\# (4, 3)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"第 2 名学生:"}\NormalTok{, scores[}\DecValTok{1}\NormalTok{])          }\CommentTok{\# 行索引 1}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"第 1、3 名学生:"}\NormalTok{, scores[[}\DecValTok{0}\NormalTok{, }\DecValTok{2}\NormalTok{]])  }\CommentTok{\# 花式索引：拷贝}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"数学成绩:"}\NormalTok{, scores[:, }\DecValTok{1}\NormalTok{])          }\CommentTok{\# 列切片}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"数学 \textless{} 75 的学生:"}\NormalTok{, scores[scores[:, }\DecValTok{1}\NormalTok{] }\OperatorTok{\textless{}} \DecValTok{75}\NormalTok{])}
+
+\CommentTok{\#\# 基础切片返回视图：改视图会改原表}
+\NormalTok{view }\OperatorTok{=}\NormalTok{ scores[}\DecValTok{0}\NormalTok{:}\DecValTok{2}\NormalTok{, :]}
+\NormalTok{view[}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{] }\OperatorTok{=} \DecValTok{99}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"基础切片改动原表（第 0 行第 0 列）:"}\NormalTok{, scores[}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{])}
+
+\CommentTok{\#\# copy() 才是独立副本}
+\NormalTok{copy\_ }\OperatorTok{=}\NormalTok{ scores.copy()}
+\NormalTok{copy\_[}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{] }\OperatorTok{=} \DecValTok{50}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"copy 后原表不变:"}\NormalTok{, scores[}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{])}
+
+\CommentTok{\#\# 花式索引返回拷贝：改“取出的行”不影响原表}
+\NormalTok{row }\OperatorTok{=}\NormalTok{ scores[[}\DecValTok{0}\NormalTok{]]}
+\NormalTok{row[}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{] }\OperatorTok{=} \DecValTok{1}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"花式索引是拷贝，改行不影响原表:"}\NormalTok{, scores[}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{形状: (4, 3)}
+\NormalTok{第 2 名学生: [67 73 60]}
+\NormalTok{第 1、3 名学生: [[85 92 78]}
+\NormalTok{ [95 88 90]]}
+\NormalTok{数学成绩: [92 73 88 80]}
+\NormalTok{数学 \textless{} 75 的学生: [[67 73 60]]}
+\NormalTok{基础切片改动原表（第 0 行第 0 列）: 99}
+\NormalTok{copy 后原表不变: 99}
+\NormalTok{花式索引是拷贝，改行不影响原表: 99}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \texttt{scores.shape} 是
+  \texttt{(4,\ 3)}，第一维是``行/学生''，第二维是``列/科目''。
+\item
+  \texttt{scores{[}1{]}} 取第 2 名学生（索引从 0
+  开始），\texttt{scores{[}:,\ 1{]}} 取``数学''整列。
+\item
+  \texttt{scores{[}{[}0,\ 2{]}{]}}
+  用整数列表做\textbf{花式索引}：返回\textbf{拷贝}，所以之后改取出的行不会影响原表。
+\item
+  \texttt{scores{[}scores{[}:,\ 1{]}\ \textless{}\ 75{]}}
+  是\textbf{布尔掩码}：先算每行``数学 \textless{}
+  75''的真假，再留下对应行。
+\item
+  \textbf{最易踩坑}：\texttt{scores{[}0:2,\ :{]}}
+  是\textbf{基础切片}，返回视图；\texttt{view{[}0,\ 0{]}\ =\ 99}
+  会直接把原表改成 99。要独立副本显式 \texttt{.copy()}。
+\end{enumerate}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+需求
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+写法
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+取第 i 行 & \texttt{arr{[}i{]}} \\
+取第 j 列 & \texttt{arr{[}:,\ j{]}} \\
+取指定行/列组合 & 花式索引
+\texttt{arr{[}{[}i1,\ i2{]},\ {[}j1,\ j2{]}{]}}；交叉组合用
+\texttt{np.ix\_} \\
+条件筛选 & \texttt{arr{[}mask{]}}；多条件
+\texttt{arr{[}(cond1)\ \&\ (cond2){]}} \\
+独立副本 & \texttt{arr.copy()}（或 \texttt{arr{[}\ \ {]}.copy()}） \\
+判断是否共享内存 & \texttt{arr.base\ is\ not\ None} 或
+\texttt{np.may\_share\_memory(a,\ b)} \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef}
+
+\begin{itemize}
+\tightlist
+\item
+  用 \texttt{and}/\texttt{or} 连接数组条件 → 必须
+  \texttt{\&}/\texttt{\textbar{}} 且加括号；
+\item
+  以为切片是拷贝，导致``改了一下原数据全变了''；
+\item
+  把 \texttt{len(arr)} 当维数：二维数组 \texttt{len} 只给第一维长度，用
+  \texttt{arr.ndim}/\texttt{arr.shape}。
+\end{itemize}
+
+\subsubsection{拓展}\label{ux62d3ux5c55}
+
+\begin{itemize}
+\tightlist
+\item
+  给成绩低于 60 的所有课程置
+  0（答案：\texttt{scores{[}scores\ \textless{}\ 60{]}\ =\ 0}）；
+\item
+  用 \texttt{np.argsort} 给三位学生按``数学''排名。
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{案例卡 2：对每列做 z-score
+标准化------广播}\label{ux6848ux4f8bux5361-2ux5bf9ux6bcfux5217ux505a-z-score-ux6807ux51c6ux5316ux5e7fux64ad}
+
+\subsubsection{目标}\label{ux76eeux6807-1}
+
+对成绩矩阵做``每列独立标准化''：\texttt{z\ =\ (x\ -\ 列均值)\ /\ 列标准差}，体会广播：均值/标准差是长度为
+3 的向量，自动与 \texttt{(3,3)} 矩阵对齐。
+
+\subsubsection{代码}\label{ux4ee3ux7801-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\NormalTok{data }\OperatorTok{=}\NormalTok{ np.array([}
+\NormalTok{    [}\FloatTok{90.0}\NormalTok{, }\FloatTok{80.0}\NormalTok{, }\FloatTok{70.0}\NormalTok{],}
+\NormalTok{    [}\FloatTok{70.0}\NormalTok{, }\FloatTok{60.0}\NormalTok{, }\FloatTok{50.0}\NormalTok{],}
+\NormalTok{    [}\FloatTok{50.0}\NormalTok{, }\FloatTok{40.0}\NormalTok{, }\FloatTok{30.0}\NormalTok{],}
+\NormalTok{])}
+
+\NormalTok{mean }\OperatorTok{=}\NormalTok{ data.mean(axis}\OperatorTok{=}\DecValTok{0}\NormalTok{)   }\CommentTok{\# 每列均值：axis=0 表示“沿第 0 轴折叠”}
+\NormalTok{std }\OperatorTok{=}\NormalTok{ data.std(axis}\OperatorTok{=}\DecValTok{0}\NormalTok{)     }\CommentTok{\# 每列标准差}
+\NormalTok{z }\OperatorTok{=}\NormalTok{ (data }\OperatorTok{{-}}\NormalTok{ mean) }\OperatorTok{/}\NormalTok{ std    }\CommentTok{\# 广播：(3,3) {-} (3,) → (3,3)}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"均值:"}\NormalTok{, mean)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"标准差:"}\NormalTok{, std)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"标准化后:"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(z)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{均值: [70. 60. 50.]}
+\NormalTok{标准差: [16.3299 16.3299 16.3299]}
+\NormalTok{标准化后:}
+\NormalTok{[[ 1.2247  1.2247  1.2247]}
+\NormalTok{ [ 0.      0.      0.    ]}
+\NormalTok{ [{-}1.2247 {-}1.2247 {-}1.2247]]}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-1}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{data.mean(axis=0)} 返回 3 个数（每列一个）；\texttt{axis=0}
+  记住口诀：\textbf{``消除第 0 维，保留第 1
+  维''}，所以结果是每列的结果。
+\item
+  \texttt{(data\ -\ mean)} 中 \texttt{mean} 形状为
+  \texttt{(3,)}，广播时被当作 \texttt{(1,3)}，自动拉伸到
+  \texttt{(3,3)}。
+\item
+  z-score 后每列均值 ≈ 0、标准差 ≈ 1，后续做
+  PCA、聚类、回归前常做这一步。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-1}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{np.mean(a,\ axis=k)}、\texttt{np.std(a,\ axis=k)}；
+\item
+  \texttt{(a\ -\ mean)\ /\ std} 就是向量化标准化；
+\item
+  若想返回``整矩阵展平后的均值''，不要传 \texttt{axis}。
+\end{itemize}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-1}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{axis=0} 和 \texttt{axis=1} 记反 → 用``消除哪一维''记忆；
+\item
+  使用 \texttt{data.std()}（不带 axis）得到单一标准差，不是每列标准差；
+\item
+  忘记 \texttt{np.set\_printoptions}
+  导致输出小数位过多，书本/作业里建议在开头设置一次。
+\end{itemize}
+
+\subsubsection{拓展}\label{ux62d3ux5c55-1}
+
+\begin{itemize}
+\tightlist
+\item
+  对``每个学生独立标准化''（每行）应如何改？（提示：\texttt{axis=1}）
+\item
+  把标准差为 0 的列单独处理，避免除以 0。
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{案例卡
+3：蒙特卡洛估算圆周率------向量化随机数}\label{ux6848ux4f8bux5361-3ux8499ux7279ux5361ux6d1bux4f30ux7b97ux5706ux5468ux7387ux5411ux91cfux5316ux968fux673aux6570}
+
+\subsubsection{目标}\label{ux76eeux6807-2}
+
+在单位正方形内随机撒点，落在单位圆内的比例 ≈ \(\pi/4\)。用
+\texttt{default\_rng} + 向量化布尔掩码，百万个点也可以瞬间算完。
+
+\subsubsection{代码}\label{ux4ee3ux7801-2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+
+\NormalTok{rng }\OperatorTok{=}\NormalTok{ np.random.default\_rng(}\DecValTok{42}\NormalTok{)   }\CommentTok{\# 固定种子，结果可复现}
+\NormalTok{n }\OperatorTok{=} \DecValTok{1\_000\_000}
+\NormalTok{pts }\OperatorTok{=}\NormalTok{ rng.random((n, }\DecValTok{2}\NormalTok{))          }\CommentTok{\# n 个 (x, y)，x,y in [0,1)}
+
+\NormalTok{inside }\OperatorTok{=}\NormalTok{ (pts[:, }\DecValTok{0}\NormalTok{] }\OperatorTok{**} \DecValTok{2} \OperatorTok{+}\NormalTok{ pts[:, }\DecValTok{1}\NormalTok{] }\OperatorTok{**} \DecValTok{2}\NormalTok{) }\OperatorTok{\textless{}=} \DecValTok{1}   \CommentTok{\# 点到原点距离 ≤ 1}
+\NormalTok{pi\_est }\OperatorTok{=} \DecValTok{4} \OperatorTok{*}\NormalTok{ inside.mean()        }\CommentTok{\# 面积比：圆面积 / 正方形面积 = pi/4}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"inside 比例:"}\NormalTok{, inside.mean())}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"pi 估计:"}\NormalTok{, pi\_est)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"pi 真值:"}\NormalTok{, np.pi)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{inside 比例: 0.785745}
+\NormalTok{pi 估计: 3.14298}
+\NormalTok{pi 真值: 3.141592653589793}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-2}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{rng.random((n,\ 2))} 生成 \texttt{n} 行 2
+  列；\texttt{{[}:,\ 0{]}} 是 x 坐标、\texttt{{[}:,\ 1{]}} 是 y 坐标。
+\item
+  \texttt{inside} 是布尔数组：每个点``在圆内''为
+  True，\texttt{inside.mean()} 即比例。
+\item
+  随机数要\textbf{固定种子}才能复现同一结果，课堂演示、作业批改都建议这么做。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-2}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{np.random.default\_rng(seed)} → 固定种子；
+\item
+  \texttt{rng.random((n,\ 2))} → 均匀分布 \texttt{{[}0,\ 1)}；
+\item
+  \texttt{rng.integers} / \texttt{rng.normal} / \texttt{rng.uniform} /
+  \texttt{rng.choice} 等。
+\end{itemize}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-2}
+
+\begin{itemize}
+\tightlist
+\item
+  用旧接口 \texttt{np.random.seed} +
+  \texttt{np.random.rand}（新版不推荐，但仍可用）；
+\item
+  不设种子 → 每次结果不同，作业无法复现；
+\item
+  把``圆内''写成 \texttt{\textless{}\ 1} 而不是
+  \texttt{\textless{}=\ 1}（对连续点无影响，但边界点语义不同）。
+\end{itemize}
+
+\subsubsection{拓展}\label{ux62d3ux5c55-2}
+
+\begin{itemize}
+\tightlist
+\item
+  撒 100 万点是否一定比 1 万点更接近 pi？试试不同 \texttt{n}；
+\item
+  用 3D 蒙特卡洛估算球体积，验证``高维时样本需求激增''。
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
 \subsection{常见误区}\label{ux5e38ux89c1ux8befux533a-1}
 
 \begin{enumerate}
@@ -477,7 +810,7 @@ indexing，拷贝）}\label{ux82b1ux5f0fux7d22ux5f15fancy-indexingux62f7ux8d1d}
 \item
   \texttt{np.arange(10){[}::2{]}} 与
   \texttt{np.arange(10).reshape(5,2){[}:,0{]}} 是否共享内存？用
-  `\texttt{.base} 验证。
+  \texttt{.base} 验证。
 \item
   解释 \texttt{np.ix\_} 与同时传入两个顺序索引的区别。
 \item
@@ -516,10 +849,10 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab}
 \end{itemize}
 
 \section{02
-数组运算：向量、矩阵、逻辑筛选与统计}\label{ux6570ux7ec4ux8fd0ux7b97ux5411ux91cfux77e9ux9635ux903bux8f91ux7b5bux9009ux4e0eux7edfux8ba1}
+数组运算：向量、矩阵、逻辑筛选、统计与文件存取}\label{ux6570ux7ec4ux8fd0ux7b97ux5411ux91cfux77e9ux9635ux903bux8f91ux7b5bux9009ux7edfux8ba1ux4e0eux6587ux4ef6ux5b58ux53d6}
 
 \begin{quote}
-本节对应原版 1.2 的内容，并增补学习目标、常见误区、思考题与延伸阅读。
+本节目标：熟练进行逐元素运算、点积/叉积、逻辑筛选、矩阵运算、按轴统计与结果存取。
 配套图：\texttt{figures/01-numpy/vector\_ops.png}。
 \end{quote}
 
@@ -559,6 +892,7 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab}
 \begin{Shaded}
 \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 
 \NormalTok{v }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{])}
 \NormalTok{w }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{])}
@@ -566,7 +900,7 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab}
 \BuiltInTok{print}\NormalTok{(v }\OperatorTok{{-}}\NormalTok{ w)     }\CommentTok{\# [{-}1  2]}
 \BuiltInTok{print}\NormalTok{(}\DecValTok{2} \OperatorTok{*}\NormalTok{ v)     }\CommentTok{\# [4 6]}
 \BuiltInTok{print}\NormalTok{(v }\OperatorTok{*}\NormalTok{ w)     }\CommentTok{\# 逐元素乘 [6 3]}
-\BuiltInTok{print}\NormalTok{(v }\OperatorTok{/}\NormalTok{ w)     }\CommentTok{\# 逐元素除 [0.66666667 3.        ]}
+\BuiltInTok{print}\NormalTok{(v }\OperatorTok{/}\NormalTok{ w)     }\CommentTok{\# 逐元素除 [0.6667 3.    ]}
 \BuiltInTok{print}\NormalTok{(v }\OperatorTok{**} \DecValTok{2}\NormalTok{)    }\CommentTok{\# 逐元素平方 [4 9]}
 \end{Highlighting}
 \end{Shaded}
@@ -623,12 +957,9 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab}
 \begin{Highlighting}[]
 \NormalTok{x }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{1}\NormalTok{, }\OperatorTok{{-}}\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\OperatorTok{{-}}\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{])}
 
-\CommentTok{\#\# 布尔掩码}
-\BuiltInTok{print}\NormalTok{(x[x }\OperatorTok{\textgreater{}} \DecValTok{0}\NormalTok{])          }\CommentTok{\# [1 3 5]}
+\BuiltInTok{print}\NormalTok{(x[x }\OperatorTok{\textgreater{}} \DecValTok{0}\NormalTok{])              }\CommentTok{\# [1 3 5]}
 \BuiltInTok{print}\NormalTok{(x[(x }\OperatorTok{\textgreater{}} \DecValTok{1}\NormalTok{) }\OperatorTok{\&}\NormalTok{ (x }\OperatorTok{\textless{}} \DecValTok{5}\NormalTok{)])  }\CommentTok{\# [3]}
-
-\CommentTok{\#\# np.where：条件成立取第一项，否则取第二项}
-\BuiltInTok{print}\NormalTok{(np.where(x }\OperatorTok{\textgreater{}} \DecValTok{0}\NormalTok{, x, }\DecValTok{0}\NormalTok{))   }\CommentTok{\# [1 0 3 0 5]}
+\BuiltInTok{print}\NormalTok{(np.where(x }\OperatorTok{\textgreater{}} \DecValTok{0}\NormalTok{, x, }\DecValTok{0}\NormalTok{)) }\CommentTok{\# [1 0 3 0 5]}
 \end{Highlighting}
 \end{Shaded}
 
@@ -657,10 +988,10 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab}
 \NormalTok{A }\OperatorTok{=}\NormalTok{ np.array([[}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{], [}\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{]])}
 \NormalTok{B }\OperatorTok{=}\NormalTok{ np.array([[}\DecValTok{5}\NormalTok{, }\DecValTok{6}\NormalTok{], [}\DecValTok{7}\NormalTok{, }\DecValTok{8}\NormalTok{]])}
 
-\BuiltInTok{print}\NormalTok{(A }\OperatorTok{+}\NormalTok{ B)      }\CommentTok{\# 矩阵加法 [[ 6  8][10 12]]}
+\BuiltInTok{print}\NormalTok{(A }\OperatorTok{+}\NormalTok{ B)      }\CommentTok{\# 矩阵加法}
 \BuiltInTok{print}\NormalTok{(A }\OperatorTok{{-}}\NormalTok{ B)      }\CommentTok{\# 矩阵减法}
-\BuiltInTok{print}\NormalTok{(A }\OperatorTok{*}\NormalTok{ B)      }\CommentTok{\# 注意：逐元素乘 [[ 5 12][21 32]]}
-\BuiltInTok{print}\NormalTok{(A }\OperatorTok{@}\NormalTok{ B)      }\CommentTok{\# √ 矩阵乘 [[19 22][43 50]]}
+\BuiltInTok{print}\NormalTok{(A }\OperatorTok{*}\NormalTok{ B)      }\CommentTok{\# 注意：逐元素乘}
+\BuiltInTok{print}\NormalTok{(A }\OperatorTok{@}\NormalTok{ B)      }\CommentTok{\# √ 矩阵乘}
 \BuiltInTok{print}\NormalTok{(np.matmul(A, B))   }\CommentTok{\# 同 @}
 \end{Highlighting}
 \end{Shaded}
@@ -681,7 +1012,7 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab}
 
 \NormalTok{S.}\BuiltInTok{sum}\NormalTok{(axis}\OperatorTok{=}\DecValTok{0}\NormalTok{)      }\CommentTok{\# 每列和 [253 270 255]（三门课总分）}
 \NormalTok{S.}\BuiltInTok{sum}\NormalTok{(axis}\OperatorTok{=}\DecValTok{1}\NormalTok{)      }\CommentTok{\# 每行和 [255 253 270]（每个学生总分）}
-\NormalTok{S.mean(axis}\OperatorTok{=}\DecValTok{0}\NormalTok{)     }\CommentTok{\# 每列均值 [84.33 90. 85. ]}
+\NormalTok{S.mean(axis}\OperatorTok{=}\DecValTok{0}\NormalTok{)     }\CommentTok{\# 每列均值}
 \NormalTok{S.}\BuiltInTok{max}\NormalTok{(axis}\OperatorTok{=}\DecValTok{1}\NormalTok{)      }\CommentTok{\# 每行最大值}
 \NormalTok{S.std()            }\CommentTok{\# 全体标准差}
 \end{Highlighting}
@@ -712,20 +1043,317 @@ argmax）}\label{ux67e5ux627ewhere-argmax}
 \begin{Highlighting}[]
 \NormalTok{a }\OperatorTok{=}\NormalTok{ np.array([[}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{], [}\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{]])}
 
-\CommentTok{\#\# 文本}
 \NormalTok{np.savetxt(}\StringTok{"result.txt"}\NormalTok{, a, fmt}\OperatorTok{=}\StringTok{"}\SpecialCharTok{\%.2f}\StringTok{"}\NormalTok{, delimiter}\OperatorTok{=}\StringTok{","}\NormalTok{)}
 \NormalTok{b }\OperatorTok{=}\NormalTok{ np.loadtxt(}\StringTok{"result.txt"}\NormalTok{, delimiter}\OperatorTok{=}\StringTok{","}\NormalTok{)}
 
-\CommentTok{\#\# 二进制（推荐：更快、保留 dtype）}
-\NormalTok{np.save(}\StringTok{"a.npy"}\NormalTok{, a)}
+\NormalTok{np.save(}\StringTok{"a.npy"}\NormalTok{, a)      }\CommentTok{\# 二进制（推荐：更快、保留 dtype）}
 \NormalTok{c }\OperatorTok{=}\NormalTok{ np.load(}\StringTok{"a.npy"}\NormalTok{)}
 
-\CommentTok{\#\# 多数组压缩保存}
 \NormalTok{np.savez\_compressed(}\StringTok{"data.npz"}\NormalTok{, x}\OperatorTok{=}\NormalTok{a, y}\OperatorTok{=}\NormalTok{b)}
 \NormalTok{d }\OperatorTok{=}\NormalTok{ np.load(}\StringTok{"data.npz"}\NormalTok{)}
 \NormalTok{d[}\StringTok{"x"}\NormalTok{], d[}\StringTok{"y"}\NormalTok{]}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{quote}
+文本格式 \texttt{savetxt} 直观但慢、且可能丢精度；大数组优先二进制
+\texttt{np.save}/\texttt{np.savez\_compressed}。
+\end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{案例卡
+1：传感器滑动平均------滑窗视图与向量化}\label{ux6848ux4f8bux5361-1ux4f20ux611fux5668ux6ed1ux52a8ux5e73ux5747ux6ed1ux7a97ux89c6ux56feux4e0eux5411ux91cfux5316}
+
+\subsubsection{目标}\label{ux76eeux6807-3}
+
+对一串传感器读数做``窗口大小为 3''的移动平均，用
+\texttt{numpy.lib.stride\_tricks.sliding\_window\_view}
+一步生成全部窗口，避免显式 \texttt{for} 循环。
+
+\subsubsection{代码}\label{ux4ee3ux7801-3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\NormalTok{x }\OperatorTok{=}\NormalTok{ np.array([}\FloatTok{1.0}\NormalTok{, }\FloatTok{3.0}\NormalTok{, }\FloatTok{2.0}\NormalTok{, }\FloatTok{5.0}\NormalTok{, }\FloatTok{4.0}\NormalTok{, }\FloatTok{6.0}\NormalTok{, }\FloatTok{2.0}\NormalTok{])}
+
+\CommentTok{\#\# sliding\_window\_view 返回“视图”（不复制数据），形状 = 原长 {-} 窗口 + 1}
+\NormalTok{w }\OperatorTok{=}\NormalTok{ np.lib.stride\_tricks.sliding\_window\_view(x, }\DecValTok{3}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"窗口矩阵:"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(w)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"移动平均:"}\NormalTok{, w.mean(axis}\OperatorTok{=}\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{窗口矩阵:}
+\NormalTok{[[1. 3. 2.]}
+\NormalTok{ [3. 2. 5.]}
+\NormalTok{ [2. 5. 4.]}
+\NormalTok{ [5. 4. 6.]}
+\NormalTok{ [4. 6. 2.]]}
+\NormalTok{移动平均: [2.     3.3333 3.6667 5.     4.    ]}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-3}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{sliding\_window\_view(x,\ 3)} 得到 \texttt{(5,\ 3)}
+  的窗口矩阵：第 i 行 = \texttt{x{[}i:i+3{]}}。
+\item
+  \texttt{w.mean(axis=1)} 对每行（每个窗口）求均值，即移动平均。
+\item
+  这是\textbf{视图}，不复制数据；适合窗口大、数据长的场景。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-3}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{numpy.lib.stride\_tricks.sliding\_window\_view(a,\ window\_size)}；
+\item
+  配合 \texttt{mean}/\texttt{std}/\texttt{diff}
+  等做平滑、差分、局部统计；
+\item
+  需要``截断首尾''时用 \texttt{np.convolve} 或
+  \texttt{pandas.Series.rolling}。
+\end{itemize}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-3}
+
+\begin{itemize}
+\tightlist
+\item
+  忘记这是视图，修改窗口会改原数组；
+\item
+  把它当``卷积''：窗口求均值与卷积核为 \texttt{1/w}
+  的卷积在边界处理上不同；
+\item
+  对 \texttt{mean(axis=1)} 写成 \texttt{axis=0}，得到每列统计。
+\end{itemize}
+
+\subsubsection{拓展}\label{ux62d3ux5c55-3}
+
+\begin{itemize}
+\tightlist
+\item
+  改成``指数加权移动平均''（提示：\texttt{np.convolve} + 权重向量）；
+\item
+  对二维图像做 3×3 局部均值滤波（提示：两层滑窗）。
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{案例卡 2：成绩排名与补考改分------argsort /
+where}\label{ux6848ux4f8bux5361-2ux6210ux7ee9ux6392ux540dux4e0eux8865ux8003ux6539ux5206argsort-where}
+
+\subsubsection{目标}\label{ux76eeux6807-4}
+
+给一组成绩排名（从高到低），并把不及格（\textless{} 62）的学生分数改为
+65。核心是 \texttt{argsort} 的``索引排序''和 \texttt{np.where}
+的条件替换。
+
+\subsubsection{代码}\label{ux4ee3ux7801-4}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\NormalTok{scores }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{85}\NormalTok{, }\DecValTok{92}\NormalTok{, }\DecValTok{78}\NormalTok{, }\DecValTok{60}\NormalTok{, }\DecValTok{95}\NormalTok{, }\DecValTok{88}\NormalTok{])}
+
+\CommentTok{\#\# argsort({-}scores)：分数取负后从小到大排，等价于原分数从大到小的索引}
+\NormalTok{order }\OperatorTok{=}\NormalTok{ np.argsort(}\OperatorTok{{-}}\NormalTok{scores)}
+
+\CommentTok{\#\# 为每位学生计算名次（1 表示最高分）}
+\NormalTok{ranks }\OperatorTok{=}\NormalTok{ np.empty(}\DecValTok{6}\NormalTok{, dtype}\OperatorTok{=}\BuiltInTok{int}\NormalTok{)}
+\NormalTok{ranks[order] }\OperatorTok{=}\NormalTok{ np.arange(}\DecValTok{1}\NormalTok{, }\DecValTok{7}\NormalTok{)}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"从高到低:"}\NormalTok{, scores[order])}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"每位学生的排名(对应原位置):"}\NormalTok{, ranks)}
+
+\CommentTok{\#\# 条件替换：\textless{} 62 的分数补考改成 65}
+\NormalTok{fixed }\OperatorTok{=}\NormalTok{ np.where(scores }\OperatorTok{\textless{}} \DecValTok{62}\NormalTok{, }\DecValTok{65}\NormalTok{, scores)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"60 分补考为 65 后:"}\NormalTok{, fixed)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-4}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{从高到低: [95 92 88 85 78 60]}
+\NormalTok{每位学生的排名(对应原位置): [4 2 5 6 1 3]}
+\NormalTok{60 分补考为 65 后: [85 92 78 65 95 88]}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-4}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{np.argsort(-scores)}
+  返回``排序后的原索引''：\texttt{order{[}0{]}} 是最高分所在位置。
+\item
+  \texttt{scores{[}order{]}} 按 \texttt{order}
+  重新取值，就得到从高到低的成绩序列。
+\item
+  排名时：\texttt{ranks{[}order{]}\ =\ np.arange(1,\ 7)}，意思是``第 1
+  名放在 order{[}0{]} 的位置''，这是 NumPy 里``按位置反填''的常用技巧。
+\item
+  \texttt{np.where(cond,\ a,\ b)} 等价于``条件成立取 a，否则取
+  b''，但对数组\textbf{逐元素}执行。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-4}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{np.argsort(a)}：升序索引；\texttt{np.argsort(-a)}：降序索引；
+\item
+  \texttt{np.where(cond,\ x,\ y)}：条件替换/筛选；
+\item
+  \texttt{np.sort(a)} 返回新数组，\texttt{a.sort()} 原地排序；
+\item
+  简化排名可用 \texttt{scipy.stats.rankdata} 或
+  \texttt{pandas.Series.rank}。
+\end{itemize}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-4}
+
+\begin{itemize}
+\tightlist
+\item
+  混淆 \texttt{np.sort} 与
+  \texttt{np.argsort}：前者给排序后的值，后者给排序后的索引；
+\item
+  用 \texttt{scores{[}scores\ \textless{}\ 62{]}\ =\ 65} 也能改分，但
+  \texttt{np.where} 写法更显式、且不改变原数组；
+\item
+  排名时正序/逆序写反。
+\end{itemize}
+
+\subsubsection{拓展}\label{ux62d3ux5c55-4}
+
+\begin{itemize}
+\tightlist
+\item
+  若有并列分数，如何让并列者名次相同（提示：研究
+  \texttt{scipy.stats.rankdata} 的 \texttt{method}）；
+\item
+  按``数学成绩''排名后只输出前 3 名学生名单。
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{案例卡
+3：成绩表另存与回读------文本与二进制}\label{ux6848ux4f8bux5361-3ux6210ux7ee9ux8868ux53e6ux5b58ux4e0eux56deux8bfbux6587ux672cux4e0eux4e8cux8fdbux5236}
+
+\subsubsection{目标}\label{ux76eeux6807-5}
+
+把学生成绩矩阵保存成 \texttt{CSV}（文本）与
+\texttt{.npz}（二进制压缩），再读回来，比较两种方式。
+
+\subsubsection{代码}\label{ux4ee3ux7801-5}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+
+\NormalTok{data }\OperatorTok{=}\NormalTok{ np.array([[}\DecValTok{85}\NormalTok{, }\DecValTok{92}\NormalTok{, }\DecValTok{78}\NormalTok{], [}\DecValTok{67}\NormalTok{, }\DecValTok{73}\NormalTok{, }\DecValTok{60}\NormalTok{]], dtype}\OperatorTok{=}\BuiltInTok{int}\NormalTok{)}
+
+\CommentTok{\#\# 文本：CSV，可被 Excel 打开}
+\NormalTok{np.savetxt(}\StringTok{"\_numpy\_scores.csv"}\NormalTok{, data, fmt}\OperatorTok{=}\StringTok{"}\SpecialCharTok{\%d}\StringTok{"}\NormalTok{, delimiter}\OperatorTok{=}\StringTok{","}\NormalTok{)}
+\NormalTok{loaded }\OperatorTok{=}\NormalTok{ np.loadtxt(}\StringTok{"\_numpy\_scores.csv"}\NormalTok{, delimiter}\OperatorTok{=}\StringTok{","}\NormalTok{)}
+
+\CommentTok{\#\# 二进制：更快、保留 dtype，且可压缩多个数组}
+\NormalTok{np.savez\_compressed(}\StringTok{"\_numpy\_scores.npz"}\NormalTok{, data}\OperatorTok{=}\NormalTok{data)}
+\NormalTok{d }\OperatorTok{=}\NormalTok{ np.load(}\StringTok{"\_numpy\_scores.npz"}\NormalTok{)}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"loadtxt:"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(loaded)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"npz data:"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(d[}\StringTok{"data"}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-5}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{loadtxt:}
+\NormalTok{[[85. 92. 78.]}
+\NormalTok{ [67. 73. 60.]]}
+\NormalTok{npz data:}
+\NormalTok{[[85 92 78]}
+\NormalTok{ [67 73 60]]}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-5}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{np.savetxt} 输出文本，\texttt{fmt="\%d"}
+  保证整数格式；\texttt{loadtxt} 读回后默认转成 \texttt{float64}。
+\item
+  \texttt{np.savez\_compressed} 把多个数组打进一个 \texttt{.npz}，读回用
+  \texttt{d{[}"data"{]}}；保留 \texttt{dtype}，且体积更小、速度更快。
+\item
+  实际项目中：\textbf{中间结果用二进制 npz 快存快取；给
+  Excel/同学看的导出 CSV}。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-5}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{np.savetxt(path,\ a,\ fmt=...,\ delimiter=...)} /
+  \texttt{np.loadtxt(path,\ delimiter=...)}；
+\item
+  \texttt{np.save} / \texttt{np.load}（单数组 .npy）；
+\item
+  \texttt{np.savez\_compressed} / \texttt{np.load}（多数组 .npz）。
+\end{itemize}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-5}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{savetxt} 对高精度 float 默认保留
+  \texttt{\%.18e}，导致文件很大且不可读------指定 \texttt{fmt}；
+\item
+  \texttt{loadtxt} 读文本遇到表头会报错，表头用 \texttt{skiprows=1}；
+\item
+  用 \texttt{np.savez\_compressed} 后忘记用 \texttt{d{[}"key"{]}}
+  取出，直接 \texttt{print(d)} 只能看到键。
+\end{itemize}
+
+\subsubsection{拓展}\label{ux62d3ux5c55-5}
+
+\begin{itemize}
+\tightlist
+\item
+  把 CSV 读成``带表头 + 中文列名''的表格，应改用
+  \texttt{pandas.read\_csv}（第 4 章）；
+\item
+  逐列比较二进制与文本读回的精度差异。
+\end{itemize}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -749,6 +1377,9 @@ argmax）}\label{ux67e5ux627ewhere-argmax}
 \item
   \textbf{\texttt{np.dot} 语义在多维下容易混淆}：明确用 \texttt{@}
   更直观。
+\item
+  \textbf{用 \texttt{np.save} 存文本}：二进制文件没有扩展名也可以
+  \texttt{np.load}，但 CSV 用 \texttt{savetxt} 再 \texttt{loadtxt}。
 \end{enumerate}
 
 \subsection{思考题}\label{ux601dux8003ux9898-4}
@@ -799,7 +1430,8 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-1}
 SVD}\label{ux7ebfux6027ux4ee3ux6570ux9006ux65b9ux7a0bux7ec4ux5206ux89e3ux4e0e-svd}
 
 \begin{quote}
-本节对应原版 1.3 的内容，并增补学习目标、常见误区、思考题与延伸阅读。
+本节目标：用 \texttt{numpy.linalg}
+做逆/伪逆、秩、行列式、范数、解方程组、最小二乘与常用矩阵分解。
 配套图：\texttt{figures/01-numpy/cond\_sensitivity.png}、\texttt{figures/01-numpy/svd\_compression.png}。
 \end{quote}
 
@@ -839,12 +1471,11 @@ SVD}\label{ux7ebfux6027ux4ee3ux6570ux9006ux65b9ux7a0bux7ec4ux5206ux89e3ux4e0e-sv
 \begin{Shaded}
 \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 
 \NormalTok{A }\OperatorTok{=}\NormalTok{ np.array([[}\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{], [}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{]])}
 \NormalTok{A\_inv }\OperatorTok{=}\NormalTok{ np.linalg.inv(A)}
 \BuiltInTok{print}\NormalTok{(A\_inv)}
-\CommentTok{\#\# [[ 0.4 {-}0.2]}
-\CommentTok{\#\#  [{-}0.2  0.6]]}
 \BuiltInTok{print}\NormalTok{(A }\OperatorTok{@}\NormalTok{ A\_inv)      }\CommentTok{\# ≈ 单位矩阵}
 \end{Highlighting}
 \end{Shaded}
@@ -872,7 +1503,7 @@ SVD}\label{ux7ebfux6027ux4ee3ux6570ux9006ux65b9ux7a0bux7ec4ux5206ux89e3ux4e0e-sv
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{A }\OperatorTok{=}\NormalTok{ np.array([[}\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{], [}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{]])}
-\BuiltInTok{print}\NormalTok{(np.linalg.det(A))    }\CommentTok{\# 5.0（近似）}
+\BuiltInTok{print}\NormalTok{(np.linalg.det(A))    }\CommentTok{\# 5.000000000000001（浮点近似）}
 \end{Highlighting}
 \end{Shaded}
 
@@ -906,7 +1537,7 @@ SVD}\label{ux7ebfux6027ux4ee3ux6570ux9006ux65b9ux7a0bux7ec4ux5206ux89e3ux4e0e-sv
 \NormalTok{A }\OperatorTok{=}\NormalTok{ np.array([[}\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{], [}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{]])   }\CommentTok{\# 系数矩阵}
 \NormalTok{b }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{9}\NormalTok{, }\DecValTok{8}\NormalTok{])             }\CommentTok{\# 常数向量}
 \NormalTok{x }\OperatorTok{=}\NormalTok{ np.linalg.solve(A, b)}
-\BuiltInTok{print}\NormalTok{(x)          }\CommentTok{\# [2. 3.]，即 x=2, y=3}
+\BuiltInTok{print}\NormalTok{(x)          }\CommentTok{\# [2. 3.]}
 \BuiltInTok{print}\NormalTok{(A }\OperatorTok{@}\NormalTok{ x)      }\CommentTok{\# ≈ [9. 8.]}
 \end{Highlighting}
 \end{Shaded}
@@ -969,7 +1600,7 @@ SVD}\label{ux7ebfux6027ux4ee3ux6570ux9006ux65b9ux7a0bux7ec4ux5206ux89e3ux4e0e-sv
 \NormalTok{w, v }\OperatorTok{=}\NormalTok{ np.linalg.eig(A)}
 \BuiltInTok{print}\NormalTok{(w)          }\CommentTok{\# [3. 1.] 特征值}
 \BuiltInTok{print}\NormalTok{(v)          }\CommentTok{\# 列向量为对应特征向量}
-\BuiltInTok{print}\NormalTok{(A }\OperatorTok{@}\NormalTok{ v[:, }\DecValTok{0}\NormalTok{] }\OperatorTok{==}\NormalTok{ w[}\DecValTok{0}\NormalTok{] }\OperatorTok{*}\NormalTok{ v[:, }\DecValTok{0}\NormalTok{])   }\CommentTok{\# 验证 Av = λv}
+\BuiltInTok{print}\NormalTok{(A }\OperatorTok{@}\NormalTok{ v[:, }\DecValTok{0}\NormalTok{] }\OperatorTok{==}\NormalTok{ w[}\DecValTok{0}\NormalTok{] }\OperatorTok{*}\NormalTok{ v[:, }\DecValTok{0}\NormalTok{])   }\CommentTok{\# 验证 Av = λv（近似相等）}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1026,6 +1657,201 @@ QR 在最小二乘、特征值算法稳定实现中广泛使用。
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
+\subsection{案例卡
+1：解线性方程组------投入产出/电路问题}\label{ux6848ux4f8bux5361-1ux89e3ux7ebfux6027ux65b9ux7a0bux7ec4ux6295ux5165ux4ea7ux51faux7535ux8defux95eeux9898}
+
+\subsubsection{目标}\label{ux76eeux6807-6}
+
+求解下面的二元一次方程组（可看成``两个部门投入产出平衡''或``两环路电流方程''）：
+
+\[
+\begin{cases} 2x + y = 5 \\ x + 3y = 10 \end{cases}
+\]
+
+用 \texttt{np.linalg.solve} 一次性求出 \((x, y)\)，并验证
+\texttt{Ax\ =\ b}。
+
+\subsubsection{代码}\label{ux4ee3ux7801-6}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\NormalTok{A }\OperatorTok{=}\NormalTok{ np.array([[}\FloatTok{2.0}\NormalTok{, }\FloatTok{1.0}\NormalTok{],}
+\NormalTok{              [}\FloatTok{1.0}\NormalTok{, }\FloatTok{3.0}\NormalTok{]])}
+\NormalTok{b }\OperatorTok{=}\NormalTok{ np.array([}\FloatTok{5.0}\NormalTok{, }\FloatTok{10.0}\NormalTok{])}
+
+\NormalTok{x }\OperatorTok{=}\NormalTok{ np.linalg.solve(A, b)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"解:"}\NormalTok{, x)            }\CommentTok{\# x=[1, 3]}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"验证 Ax:"}\NormalTok{, A }\OperatorTok{@}\NormalTok{ x)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"det:"}\NormalTok{, np.linalg.det(A))   }\CommentTok{\# 近似 5}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-6}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{解: [1. 3.]}
+\NormalTok{验证 Ax: [ 5. 10.]}
+\NormalTok{det: 5.000000000000001}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-6}
+
+\begin{itemize}
+\tightlist
+\item
+  把方程组写成矩阵形式 \(Ax = b\)：\(A\) 是系数矩阵，\(b\)
+  是常数向量，解 \(x = A^{-1}b\)。
+\item
+  \texttt{np.linalg.solve} 内部用 LU 分解，比直接 \texttt{inv(A)\ @\ b}
+  更稳定、更快。
+\item
+  \texttt{det(A)=5\textbackslash{}neq0}，说明有唯一解；若 det 接近
+  0，说明系数矩阵病态（见 3.2.3）。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-6}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{np.linalg.solve(A,\ b)}：方阵且非奇异时解唯一；
+\item
+  \texttt{np.linalg.inv(A)}：求逆（一般不要直接用 \texttt{inv@b}
+  解方程）；
+\item
+  \texttt{np.linalg.det(A)}：行列式；
+\item
+  \texttt{np.linalg.matrix\_rank(A)}：秩。
+\end{itemize}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-6}
+
+\begin{itemize}
+\tightlist
+\item
+  方程个数与未知数个数不相等 → 用 \texttt{lstsq} 而不是 \texttt{solve}；
+\item
+  \texttt{b} 写成行向量 \texttt{{[}{[}5,10{]}{]}} 而不是列向量
+  \texttt{{[}5,10{]}}（1D 会自动处理，但 2D 会报错）；
+\item
+  忽略条件数，认为 \texttt{solve} 返回成功就一定可靠。
+\end{itemize}
+
+\subsubsection{拓展}\label{ux62d3ux5c55-6}
+
+\begin{itemize}
+\tightlist
+\item
+  若把第 2 个方程改成与第 1 个线性相关，观察 \texttt{solve} 报错与
+  \texttt{det=0}；
+\item
+  把该问题推广到 3 个未知数，并解释``三个平面交于一点''。
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{案例卡
+2：最小二乘拟合------身高预测体重}\label{ux6848ux4f8bux5361-2ux6700ux5c0fux4e8cux4e58ux62dfux5408ux8eabux9ad8ux9884ux6d4bux4f53ux91cd}
+
+\subsubsection{目标}\label{ux76eeux6807-7}
+
+用一组（身高，体重）数据拟合线性关系 \(y = a x + b\)（\(x\) 身高，\(y\)
+体重），用 \texttt{np.linalg.lstsq} 求出 \((a, b)\)，并与
+\texttt{np.polyfit} 对照。
+
+\subsubsection{代码}\label{ux4ee3ux7801-7}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\NormalTok{rng }\OperatorTok{=}\NormalTok{ np.random.default\_rng(}\DecValTok{7}\NormalTok{)}
+\NormalTok{height }\OperatorTok{=}\NormalTok{ np.linspace(}\DecValTok{150}\NormalTok{, }\DecValTok{190}\NormalTok{, }\DecValTok{20}\NormalTok{)            }\CommentTok{\# 20 个身高样本}
+\NormalTok{weight\_true }\OperatorTok{=} \FloatTok{0.8} \OperatorTok{*}\NormalTok{ height }\OperatorTok{{-}} \DecValTok{70}               \CommentTok{\# 真实线性关系}
+\NormalTok{weight }\OperatorTok{=}\NormalTok{ weight\_true }\OperatorTok{+}\NormalTok{ rng.normal(}\DecValTok{0}\NormalTok{, }\DecValTok{3}\NormalTok{, height.size)  }\CommentTok{\# 加测量噪声}
+
+\CommentTok{\#\# 设计矩阵：第 1 列全是 1（截距项），第 2 列是身高}
+\NormalTok{X }\OperatorTok{=}\NormalTok{ np.column\_stack([np.ones(height.size), height])}
+\NormalTok{coef, res, rank\_, sv }\OperatorTok{=}\NormalTok{ np.linalg.lstsq(X, weight, rcond}\OperatorTok{=}\VariableTok{None}\NormalTok{)}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"coef (截距, 斜率):"}\NormalTok{, coef)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"残差平方和:"}\NormalTok{, res[}\DecValTok{0}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"rank:"}\NormalTok{, rank\_)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"来自 np.polyfit 的对照:"}\NormalTok{, np.polyfit(height, weight, }\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-7}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{coef (截距, 斜率): [{-}60.2551   0.7371]}
+\NormalTok{残差平方和: 92.68917264143425}
+\NormalTok{rank: 2}
+\NormalTok{来自 np.polyfit 的对照: [  0.7371 {-}60.2551]}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-7}
+
+\begin{itemize}
+\tightlist
+\item
+  预测模型：\(y \approx 0.7371 x - 60.2551\)，即身高每高 1
+  cm，体重平均约增加 0.737 kg。
+\item
+  \texttt{lstsq} 返回 4
+  个值：系数、残差平方和、矩阵秩、奇异值；\texttt{rcond=None}
+  使用默认截断阈值。
+\item
+  \texttt{np.polyfit(height,\ weight,\ 1)} 与 \texttt{lstsq}
+  结果一致（系数顺序不同：\texttt{polyfit} 是降幂，所以先斜率后截距）。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-7}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{np.linalg.lstsq(X,\ y,\ rcond=None)}；
+\item
+  \texttt{np.polyfit(x,\ y,\ deg)} 是一元多项式最小二乘（本质也是
+  \texttt{lstsq}）；
+\item
+  残差越小、且系数在``生物学/物理上说得通''，拟合才可信。
+\end{itemize}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-7}
+
+\begin{itemize}
+\tightlist
+\item
+  忘记在 \texttt{X} 中加``全 1 列'' → 截距项被强制为 0；
+\item
+  用 1D 线性回归却把 \texttt{X} 写成 \texttt{(n,)} 而非 \texttt{(n,1)}；
+\item
+  只看训练集残差，不看测试集（见 04 章过拟合）。
+\end{itemize}
+
+\subsubsection{拓展}\label{ux62d3ux5c55-7}
+
+\begin{itemize}
+\tightlist
+\item
+  加入``年龄''作为第二特征，做多元回归（\texttt{X} 加一列）；
+\item
+  用 \texttt{np.linalg.svd} 手写求解
+  \texttt{lstsq}，理解最小二乘与伪逆的关系。
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
 \subsection{常见误区}\label{ux5e38ux89c1ux8befux533a-3}
 
 \begin{enumerate}
@@ -1047,6 +1873,9 @@ QR 在最小二乘、特征值算法稳定实现中广泛使用。
   \textbf{\texttt{full\_matrices=False}
   与非默认的区别}：不关心零奇异值/补全正交基时，用
   \texttt{full\_matrices=False} 更省内存。
+\item
+  \textbf{直接 \texttt{np.linalg.inv(A)\ @\ b}}：数值上不如
+  \texttt{np.linalg.solve(A,\ b)} 稳定，且多一次矩阵求逆。
 \end{enumerate}
 
 \subsection{思考题}\label{ux601dux8003ux9898-5}
@@ -1096,7 +1925,8 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-2}
 多项式与拟合：poly1d、求根与最小二乘拟合}\label{ux591aux9879ux5f0fux4e0eux62dfux5408poly1dux6c42ux6839ux4e0eux6700ux5c0fux4e8cux4e58ux62dfux5408}
 
 \begin{quote}
-本节对应原版 1.4 的内容，并增补学习目标、常见误区、思考题与延伸阅读。
+本节目标：用 \texttt{np.poly1d} 构造/运算多项式，会求导、积分、求根；用
+\texttt{np.polyfit} 做最小二乘拟合，并理解过拟合。
 配套图：\texttt{figures/01-numpy/polyfit.png}。
 \end{quote}
 
@@ -1131,19 +1961,12 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-2}
 \begin{Shaded}
 \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 
 \CommentTok{\#\# 2x\^{}2 + 3x + 1}
 \NormalTok{p }\OperatorTok{=}\NormalTok{ np.poly1d([}\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{])}
 \BuiltInTok{print}\NormalTok{(p)          }\CommentTok{\# 2 x\^{}2 + 3 x + 1}
 \BuiltInTok{print}\NormalTok{(p(}\DecValTok{5}\NormalTok{))       }\CommentTok{\# 66}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{   2}
-\NormalTok{2 x + 3 x + 1}
-\NormalTok{66}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1157,18 +1980,9 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-2}
 \BuiltInTok{print}\NormalTok{(p }\OperatorTok{+}\NormalTok{ q)      }\CommentTok{\# 加法}
 \BuiltInTok{print}\NormalTok{(p }\OperatorTok{{-}}\NormalTok{ q)      }\CommentTok{\# 减法}
 \BuiltInTok{print}\NormalTok{(p }\OperatorTok{*}\NormalTok{ q)      }\CommentTok{\# 乘法（系数卷积）}
-\BuiltInTok{print}\NormalTok{(p }\OperatorTok{/}\NormalTok{ q)      }\CommentTok{\# 除法 → (商, 余数) 元组}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \NormalTok{quotient, remainder }\OperatorTok{=}\NormalTok{ p }\OperatorTok{/}\NormalTok{ q    }\CommentTok{\# poly1d 直接除返回 (商, 余数) 元组}
-\BuiltInTok{print}\NormalTok{(quotient)   }\CommentTok{\# 商}
-\BuiltInTok{print}\NormalTok{(remainder)  }\CommentTok{\# 余数}
-
-\CommentTok{\#\# 也可用 numpy.polydiv（传入系数）}
-\NormalTok{q\_, r\_ }\OperatorTok{=}\NormalTok{ np.polydiv(p.coeffs, q.coeffs)}
+\BuiltInTok{print}\NormalTok{(quotient)}
+\BuiltInTok{print}\NormalTok{(remainder)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1211,10 +2025,9 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-2}
 \NormalTok{y }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{28}\NormalTok{, }\DecValTok{65}\NormalTok{], dtype}\OperatorTok{=}\BuiltInTok{float}\NormalTok{)   }\CommentTok{\# 恰好是 x\^{}3 + 1}
 
 \NormalTok{coef }\OperatorTok{=}\NormalTok{ np.polyfit(x, y, }\DecValTok{3}\NormalTok{)       }\CommentTok{\# 3 次多项式最小二乘}
-\BuiltInTok{print}\NormalTok{(coef)                      }\CommentTok{\# [ 1.  0. {-}0.  1.]}
+\BuiltInTok{print}\NormalTok{(np.}\BuiltInTok{round}\NormalTok{(coef, }\DecValTok{4}\NormalTok{))         }\CommentTok{\# [ 1.  0. {-}0.  1.]（浮点误差约 1e{-}14）}
 \NormalTok{p }\OperatorTok{=}\NormalTok{ np.poly1d(coef)}
-\BuiltInTok{print}\NormalTok{(p)                         }\CommentTok{\# 1 x\^{}3 + 0 x\^{}2 + 0 x + 1}
-\BuiltInTok{print}\NormalTok{(np.polyval(coef, }\FloatTok{2.5}\NormalTok{))     }\CommentTok{\# 16.625}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"p(2.5) ="}\NormalTok{, }\BuiltInTok{round}\NormalTok{(np.polyval(coef, }\FloatTok{2.5}\NormalTok{), }\DecValTok{4}\NormalTok{))   }\CommentTok{\# 16.625}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1228,13 +2041,12 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-2}
 \NormalTok{np.random.seed(}\DecValTok{7}\NormalTok{)}
 \KeywordTok{def}\NormalTok{ f(x): }\ControlFlowTok{return} \DecValTok{2} \OperatorTok{*}\NormalTok{ x }\OperatorTok{**} \DecValTok{2} \OperatorTok{{-}} \DecValTok{3} \OperatorTok{*}\NormalTok{ x }\OperatorTok{+} \DecValTok{1}
 \NormalTok{x }\OperatorTok{=}\NormalTok{ np.linspace(}\OperatorTok{{-}}\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{40}\NormalTok{)}
-\NormalTok{y }\OperatorTok{=}\NormalTok{ f(x) }\OperatorTok{+}\NormalTok{ np.random.normal(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\NormalTok{, x.size)   }\CommentTok{\# 加噪声}
+\NormalTok{y }\OperatorTok{=}\NormalTok{ f(x) }\OperatorTok{+}\NormalTok{ np.random.normal(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\NormalTok{, x.size)}
 
 \ControlFlowTok{for}\NormalTok{ deg }\KeywordTok{in}\NormalTok{ (}\DecValTok{1}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{5}\NormalTok{):}
 \NormalTok{    coef }\OperatorTok{=}\NormalTok{ np.polyfit(x, y, deg)}
-    \BuiltInTok{print}\NormalTok{(deg, }\StringTok{":"}\NormalTok{, coef)}
+    \BuiltInTok{print}\NormalTok{(deg, }\StringTok{":"}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(coef, }\DecValTok{4}\NormalTok{))}
 
-\CommentTok{\#\# 绘图}
 \NormalTok{xs }\OperatorTok{=}\NormalTok{ np.linspace(}\OperatorTok{{-}}\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{200}\NormalTok{)}
 \NormalTok{plt.scatter(x, y, s}\OperatorTok{=}\DecValTok{16}\NormalTok{, label}\OperatorTok{=}\StringTok{"data"}\NormalTok{)}
 \ControlFlowTok{for}\NormalTok{ deg, c, ls }\KeywordTok{in}\NormalTok{ [(}\DecValTok{1}\NormalTok{, }\StringTok{"grey"}\NormalTok{, }\StringTok{"{-}{-}"}\NormalTok{), (}\DecValTok{3}\NormalTok{, }\StringTok{"orange"}\NormalTok{, }\StringTok{"{-}."}\NormalTok{), (}\DecValTok{5}\NormalTok{, }\StringTok{"green"}\NormalTok{, }\StringTok{"{-}"}\NormalTok{)]:}
@@ -1269,10 +2081,121 @@ NumPy 1.x 之后的 \texttt{np.polynomial} 提供更现代、更稳定的
 \end{Shaded}
 
 \begin{quote}
-\texttt{np.poly1d}
-是旧接口（系数降幂、基于\texttt{np.poly}），大量教程/教材仍在使用；新代码可优先考虑
+\texttt{np.poly1d} 是旧接口（系数降幂、基于
+\texttt{np.poly}），大量教程/教材仍在使用；新代码可优先考虑
 \texttt{np.polynomial}。本讲义两者都给出，以兼容常见场景。
 \end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{案例卡 1：噪声数据的``多项式拟合 +
+训练/测试误差''------一次、二次、五次对比}\label{ux6848ux4f8bux5361-1ux566aux58f0ux6570ux636eux7684ux591aux9879ux5f0fux62dfux5408-ux8badux7ec3ux6d4bux8bd5ux8befux5deeux4e00ux6b21ux4e8cux6b21ux4e94ux6b21ux5bf9ux6bd4}
+
+\subsubsection{目标}\label{ux76eeux6807-8}
+
+对``已知二次函数 + 正态噪声''的数据分别用 1、2、5
+次多项式拟合，比较训练集与独立测试集的
+RMSE，直观看到\textbf{次数越高不代表越好}。
+
+\subsubsection{代码}\label{ux4ee3ux7801-8}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\NormalTok{rng }\OperatorTok{=}\NormalTok{ np.random.default\_rng(}\DecValTok{7}\NormalTok{)}
+\KeywordTok{def}\NormalTok{ f(x): }\ControlFlowTok{return} \DecValTok{2} \OperatorTok{*}\NormalTok{ x }\OperatorTok{**} \DecValTok{2} \OperatorTok{{-}} \DecValTok{3} \OperatorTok{*}\NormalTok{ x }\OperatorTok{+} \DecValTok{1}
+
+\NormalTok{x }\OperatorTok{=}\NormalTok{ np.linspace(}\OperatorTok{{-}}\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{40}\NormalTok{)}
+\NormalTok{y }\OperatorTok{=}\NormalTok{ f(x) }\OperatorTok{+}\NormalTok{ rng.normal(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\NormalTok{, x.size)}
+
+\KeywordTok{def}\NormalTok{ rmse(coef, xx, yy):}
+    \ControlFlowTok{return}\NormalTok{ np.sqrt(np.mean((np.polyval(coef, xx) }\OperatorTok{{-}}\NormalTok{ yy) }\OperatorTok{**} \DecValTok{2}\NormalTok{))}
+
+\CommentTok{\#\# 全量看一眼系数}
+\ControlFlowTok{for}\NormalTok{ deg }\KeywordTok{in}\NormalTok{ (}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{5}\NormalTok{):}
+    \BuiltInTok{print}\NormalTok{(}\StringTok{"deg"}\NormalTok{, deg, }\StringTok{"coef:"}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(np.polyfit(x, y, deg), }\DecValTok{4}\NormalTok{))}
+
+\CommentTok{\#\# 前 28 个点训练，后 12 个点独立测试}
+\NormalTok{x\_train, y\_train }\OperatorTok{=}\NormalTok{ x[:}\DecValTok{28}\NormalTok{], y[:}\DecValTok{28}\NormalTok{]}
+\NormalTok{x\_test,  y\_test  }\OperatorTok{=}\NormalTok{ x[}\DecValTok{28}\NormalTok{:], y[}\DecValTok{28}\NormalTok{:]}
+\ControlFlowTok{for}\NormalTok{ deg }\KeywordTok{in}\NormalTok{ (}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{5}\NormalTok{):}
+\NormalTok{    c }\OperatorTok{=}\NormalTok{ np.polyfit(x\_train, y\_train, deg)}
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"deg=}\SpecialCharTok{\{}\NormalTok{deg}\SpecialCharTok{\}}\SpecialStringTok{  train RMSE=}\SpecialCharTok{\{}\NormalTok{rmse(c, x\_train, y\_train)}\SpecialCharTok{:.3f\}}\SpecialStringTok{  test RMSE=}\SpecialCharTok{\{}\NormalTok{rmse(c, x\_test, y\_test)}\SpecialCharTok{:.3f\}}\SpecialStringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-8}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{deg 1 coef: [{-}1.0864  4.1331]}
+\NormalTok{deg 2 coef: [ 2.2266 {-}3.313  {-}0.1869]}
+\NormalTok{deg 5 coef: [{-}0.0503  0.0661  0.4681  1.8231 {-}4.2196  0.0869]}
+\NormalTok{deg=1  train RMSE=2.395  test RMSE=14.206}
+\NormalTok{deg=2  train RMSE=1.578  test RMSE=2.936}
+\NormalTok{deg=5  train RMSE=1.428  test RMSE=98.279}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-8}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{一次}：欠拟合，训练/测试误差都大（模型太简单）；
+\item
+  \textbf{二次}：正好对应当前模型，训练误差略高于五次，但测试误差最小（2.936）------\textbf{选对模型}；
+\item
+  \textbf{五次}：训练误差最低（1.428）但测试误差暴增到
+  98.279------\textbf{过拟合}，它在``背噪声''。
+\item
+  结论：\textbf{选次数必须看独立测试集/交叉验证，而不是训练误差}。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-8}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{np.polyfit(x,\ y,\ deg)}：最小二乘多项式系数（降幂）；
+\item
+  \texttt{np.polyval(coef,\ x)}：用系数在 \texttt{x} 处求值；
+\item
+  \texttt{np.poly1d(coef)}：包装成多项式对象，支持
+  \texttt{deriv()}/\texttt{integ()}/\texttt{roots()}；
+\item
+  \texttt{np.polynomial.Polynomial}：新版接口（系数常数项在前）。
+\end{itemize}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-8}
+
+\begin{itemize}
+\tightlist
+\item
+  系数顺序搞反：\texttt{poly1d({[}a,\ b,\ c{]})} 表示
+  \(a x^2 + b x + c\)；\texttt{Polynomial} 是常数项在前；
+\item
+  用``训练集 RMSE 最小''选模型 → 必然选最高次，必须用测试集/交叉验证；
+\item
+  数据点少于或等于次数时，多项式会``精确穿过所有点''（插值），此时训练误差为
+  0 但毫无预测能力。
+\end{itemize}
+
+\subsubsection{拓展}\label{ux62d3ux5c55-8}
+
+\begin{itemize}
+\tightlist
+\item
+  用 \texttt{np.linalg.lstsq} 重写上面的拟合，体会 \texttt{polyfit}
+  只是它的特例；
+\item
+  用 \texttt{sklearn.model\_selection.train\_test\_split}
+  随机划分训练/测试集，重复 10 次看 RMSE 分布；
+\item
+  给 5 次拟合加 \(\ell_2\) 正则（岭回归），观察测试误差如何变化。
+\end{itemize}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -1292,6 +2215,9 @@ NumPy 1.x 之后的 \texttt{np.polynomial} 提供更现代、更稳定的
 \item
   \textbf{把 \texttt{polyfit}
   当精确解}：它是数值最小二乘，数据含噪声时系数有误差。
+\item
+  \textbf{直接用 \texttt{np.polyval}
+  外推太远}：多项式在训练范围外可能剧烈振荡。
 \end{enumerate}
 
 \subsection{思考题}\label{ux601dux8003ux9898-6}
@@ -1335,16 +2261,24 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-3}
 \end{itemize}
 
 \section{05 综合案例：SVD
-图像压缩与实验数据拟合}\label{ux7efcux5408ux6848ux4f8bsvd-ux56feux50cfux538bux7f29ux4e0eux5b9eux9a8cux6570ux636eux62dfux5408}
+低秩近似与最小二乘拟合（含过拟合）}\label{ux7efcux5408ux6848ux4f8bsvd-ux4f4eux79e9ux8fd1ux4f3cux4e0eux6700ux5c0fux4e8cux4e58ux62dfux5408ux542bux8fc7ux62dfux5408}
 
 \begin{quote}
-本章新增综合案例，用于把 01--04 的知识串起来：\textbf{形状/广播 +
-线性代数 + 拟合 + 可视化}。 所有代码均可在 NumPy ≥ 1.24
-环境直接运行；配图由 \texttt{build/make\_chap1\_figures.py} 生成。
+本章新增综合案例，把 01--04 的知识串起来：\textbf{形状/广播 + 线性代数 +
+拟合 + 可视化}。 所有代码均可在 NumPy ≥ 1.24 环境直接运行；配图由
+\texttt{build/make\_chap1\_figures.py} 生成。
 \end{quote}
 
-\subsection{案例 1：用 SVD
-压缩一张``图像''}\label{ux6848ux4f8b-1ux7528-svd-ux538bux7f29ux4e00ux5f20ux56feux50cf}
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{案例 1：SVD 低秩近似------用 3.3\% 的存储量近似一张 120×120
+合成图}\label{ux6848ux4f8b-1svd-ux4f4eux79e9ux8fd1ux4f3cux7528-3.3-ux7684ux5b58ux50a8ux91cfux8fd1ux4f3cux4e00ux5f20-120120-ux5408ux6210ux56fe}
+
+\subsubsection{目标}\label{ux76eeux6807-9}
+
+把一张 120×120 的合成``灰度图''看作矩阵，用 SVD 只保留前 \(k\)
+个奇异值，观察``压缩率 vs 重构误差''，理解 SVD
+是图像压缩、PCA、数据降维的共同原理。
 
 \subsubsection{背景}\label{ux80ccux666f}
 
@@ -1362,14 +2296,14 @@ A_k = U_{:,1:k}\ \Sigma_{1:k,1:k}\ V_{1:k,:}^T
 
 存储量从 \(m n\) 减少到 \(k(m+n+1)\)，当 \(k\ll \min(m,n)\) 时压缩明显。
 
-\subsubsection{代码：生成合成图像并做低秩近似}\label{ux4ee3ux7801ux751fux6210ux5408ux6210ux56feux50cfux5e76ux505aux4f4eux79e9ux8fd1ux4f3c}
+\subsubsection{代码}\label{ux4ee3ux7801-9}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
-\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 
-\CommentTok{\#\# 1) 生成一张“灰度图”（120x120，含图案与明暗渐变）}
+\CommentTok{\#\# 1) 生成一张“合成灰度图”（120x120，含正弦图案、高斯亮斑与渐变）}
 \NormalTok{x }\OperatorTok{=}\NormalTok{ np.linspace(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{120}\NormalTok{)}\OperatorTok{;}\NormalTok{ y }\OperatorTok{=}\NormalTok{ np.linspace(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{120}\NormalTok{)}
 \NormalTok{X, Y }\OperatorTok{=}\NormalTok{ np.meshgrid(x, y)}
 \NormalTok{img }\OperatorTok{=}\NormalTok{ (np.sin(}\DecValTok{6} \OperatorTok{*}\NormalTok{ X) }\OperatorTok{*}\NormalTok{ np.cos(}\DecValTok{6} \OperatorTok{*}\NormalTok{ Y)}
@@ -1390,6 +2324,8 @@ A_k = U_{:,1:k}\ \Sigma_{1:k,1:k}\ V_{1:k,:}^T
 \end{Highlighting}
 \end{Shaded}
 
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-9}
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{rank= 2  MSE=0.00087  存储量=482 / 原图=14400 (3.3\%)}
@@ -1404,19 +2340,56 @@ A_k = U_{:,1:k}\ \Sigma_{1:k,1:k}\ V_{1:k,:}^T
 \caption{SVD 图像压缩}
 \end{figure}
 
-\subsubsection{分析}\label{ux5206ux6790}
+\subsubsection{讲解}\label{ux8bb2ux89e3-9}
 
 \begin{itemize}
 \tightlist
 \item
-  rank=2 时仅用 3.3\% 的存储量，MSE≈0.0009（肉眼几乎无差别）；
+  \texttt{np.linalg.svd(img,\ full\_matrices=False)} 返回
+  \texttt{U\ (120,120)}、\texttt{S\ (120,)}、\texttt{Vt\ (120,120)}；\texttt{S}
+  是\textbf{奇异值向量}（降序），不是对角矩阵。
 \item
-  rank=6 之后误差已低于打印精度；
+  重构公式
+  \texttt{U{[}:,\ :k{]}\ @\ np.diag(S{[}:k{]})\ @\ Vt{[}:k,\ :{]}}：只取前
+  \(k\) 个奇异值对应的``列/行''，就得到最优低秩近似。
 \item
-  说明\textbf{自然图像的能量高度集中在前几个奇异值}------这正是图像压缩、PCA、数据降维的共同原理。
+  rank=2 时仅用 3.3\% 的存储量，MSE≈0.0009（肉眼几乎无差别）；rank=6
+  之后误差已低于打印精度。
+\item
+  为什么效果好？\textbf{自然图像的能量高度集中在前几个奇异值}（低频/整体结构），后面的奇异值对应高频细节与噪声。
 \end{itemize}
 
-\subsubsection{拓展任务}\label{ux62d3ux5c55ux4efbux52a1}
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-9}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{np.linalg.svd(M,\ full\_matrices=False)}：经济型 SVD；
+\item
+  \texttt{np.diag(S{[}:k{]})}：把奇异值向量转成对角阵；
+\item
+  \texttt{np.mean((img\ -\ A\_k)\ **\ 2)}：MSE 重构误差；
+\item
+  若要``压缩数量''，可先保存
+  \texttt{U{[}:,\ :k{]}}、\texttt{S{[}:k{]}}、\texttt{Vt{[}:k,\ :{]}}，用时再重建。
+\end{itemize}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-9}
+
+\begin{itemize}
+\tightlist
+\item
+  直接 \texttt{U\ @\ S\ @\ Vt} 会报错：\texttt{S} 不是对角矩阵；
+\item
+  忘记 \texttt{full\_matrices=False} 可能得到很大的
+  \texttt{U}/\texttt{Vt}（补全正交基），浪费内存；
+\item
+  只看 MSE 不看视觉：MSE 很低不等于``视觉无损''，反之亦然；
+\item
+  把``压缩率''理解成文件压缩率：这里的``存储量''是\textbf{矩阵元素个数}，不含编码/位深。
+\end{itemize}
+
+\subsubsection{拓展}\label{ux62d3ux5c55-9}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -1429,67 +2402,70 @@ A_k = U_{:,1:k}\ \Sigma_{1:k,1:k}\ V_{1:k,:}^T
   对一张真实图片（PIL 读取灰度化）重复实验，观察``压缩率 vs 视觉质量'';
 \item
   把 \texttt{img} 换成随机噪声图，观察奇异值衰减是否还那么快？为什么？
+\item
+  画出 \texttt{S}
+  的对数谱（\texttt{plt.plot(np.log10(S))}），看``能量集中在前几个奇异值''。
 \end{enumerate}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsection{案例
-2：实验数据的最小二乘拟合}\label{ux6848ux4f8b-2ux5b9eux9a8cux6570ux636eux7684ux6700ux5c0fux4e8cux4e58ux62dfux5408}
+2：模拟实验数据的最小二乘拟合------模型正确时能恢复参数，过拟合会在测试集原形毕露}\label{ux6848ux4f8b-2ux6a21ux62dfux5b9eux9a8cux6570ux636eux7684ux6700ux5c0fux4e8cux4e58ux62dfux5408ux6a21ux578bux6b63ux786eux65f6ux80fdux6062ux590dux53c2ux6570ux8fc7ux62dfux5408ux4f1aux5728ux6d4bux8bd5ux96c6ux539fux5f62ux6bd5ux9732}
+
+\subsubsection{目标}\label{ux76eeux6807-10}
+
+用``已知二次模型 + 高斯噪声''模拟一批实验数据，分别做 2 次与 5
+次多项式拟合，比较\textbf{训练集}与\textbf{独立测试集}的
+RMSE，体会``模型设定正确时最小二乘能恢复参数，次数越高越容易背噪声''。
 
 \subsubsection{背景}\label{ux80ccux666f-1}
 
 物理实验得到一组 \((x_i, y_i)\)，理论公式是二次函数，但测量有噪声。用
 \texttt{np.polyfit} 求 \(y = a x^2 + b x + c\)
-的最佳系数，并评估拟合质量。
+的最佳系数，并评估拟合质量。（为便于课堂复现，这里用\textbf{模拟数据}而非真实仪器读数。）
 
-\subsubsection{代码}\label{ux4ee3ux7801}
+\subsubsection{代码}\label{ux4ee3ux7801-10}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
-\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 
 \NormalTok{np.random.seed(}\DecValTok{7}\NormalTok{)}
 \KeywordTok{def}\NormalTok{ theory(x): }\ControlFlowTok{return} \DecValTok{2} \OperatorTok{*}\NormalTok{ x }\OperatorTok{**} \DecValTok{2} \OperatorTok{{-}} \DecValTok{3} \OperatorTok{*}\NormalTok{ x }\OperatorTok{+} \DecValTok{1}
 
 \NormalTok{x }\OperatorTok{=}\NormalTok{ np.linspace(}\OperatorTok{{-}}\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{40}\NormalTok{)}
-\NormalTok{y }\OperatorTok{=}\NormalTok{ theory(x) }\OperatorTok{+}\NormalTok{ np.random.normal(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\NormalTok{, x.size)   }\CommentTok{\# 加噪声}
+\NormalTok{y }\OperatorTok{=}\NormalTok{ theory(x) }\OperatorTok{+}\NormalTok{ np.random.normal(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\NormalTok{, x.size)}
 
-\NormalTok{coef2 }\OperatorTok{=}\NormalTok{ np.polyfit(x, y, }\DecValTok{2}\NormalTok{)      }\CommentTok{\# 二次拟合}
-\NormalTok{coef5 }\OperatorTok{=}\NormalTok{ np.polyfit(x, y, }\DecValTok{5}\NormalTok{)      }\CommentTok{\# 五次拟合（对比）}
-\BuiltInTok{print}\NormalTok{(}\StringTok{"二次系数 (a,b,c):"}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(coef2, }\DecValTok{3}\NormalTok{))}
-\BuiltInTok{print}\NormalTok{(}\StringTok{"五次系数:"}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(coef5, }\DecValTok{3}\NormalTok{))}
+\KeywordTok{def}\NormalTok{ rmse(c, xx, yy):}
+    \ControlFlowTok{return}\NormalTok{ np.sqrt(np.mean((np.polyval(c, xx) }\OperatorTok{{-}}\NormalTok{ yy) }\OperatorTok{**} \DecValTok{2}\NormalTok{))}
 
-\CommentTok{\#\# 残差（RMSE）}
-\NormalTok{rmse2 }\OperatorTok{=}\NormalTok{ np.sqrt(np.mean((np.polyval(coef2, x) }\OperatorTok{{-}}\NormalTok{ y) }\OperatorTok{**} \DecValTok{2}\NormalTok{))}
-\NormalTok{rmse5 }\OperatorTok{=}\NormalTok{ np.sqrt(np.mean((np.polyval(coef5, x) }\OperatorTok{{-}}\NormalTok{ y) }\OperatorTok{**} \DecValTok{2}\NormalTok{))}
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"RMSE(deg2)=}\SpecialCharTok{\{}\NormalTok{rmse2}\SpecialCharTok{:.3f\}}\SpecialStringTok{  RMSE(deg5)=}\SpecialCharTok{\{}\NormalTok{rmse5}\SpecialCharTok{:.3f\}}\SpecialStringTok{"}\NormalTok{)}
+\CommentTok{\#\# 前 28 个点训练，后 12 个点独立测试}
+\NormalTok{x\_train, y\_train }\OperatorTok{=}\NormalTok{ x[:}\DecValTok{28}\NormalTok{], y[:}\DecValTok{28}\NormalTok{]}
+\NormalTok{x\_test,  y\_test  }\OperatorTok{=}\NormalTok{ x[}\DecValTok{28}\NormalTok{:], y[}\DecValTok{28}\NormalTok{:]}
+
+\NormalTok{coef2 }\OperatorTok{=}\NormalTok{ np.polyfit(x\_train, y\_train, }\DecValTok{2}\NormalTok{)   }\CommentTok{\# 与理论模型一致}
+\NormalTok{coef5 }\OperatorTok{=}\NormalTok{ np.polyfit(x\_train, y\_train, }\DecValTok{5}\NormalTok{)   }\CommentTok{\# 模型更复杂（可能过拟合）}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"train deg2 coef:"}\NormalTok{, coef2)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"train deg5 coef:"}\NormalTok{, coef5)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"RMSE train:"}\NormalTok{, }\BuiltInTok{round}\NormalTok{(rmse(coef2, x\_train, y\_train), }\DecValTok{3}\NormalTok{),}
+      \BuiltInTok{round}\NormalTok{(rmse(coef5, x\_train, y\_train), }\DecValTok{3}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"RMSE test :"}\NormalTok{, }\BuiltInTok{round}\NormalTok{(rmse(coef2, x\_test, y\_test), }\DecValTok{3}\NormalTok{),}
+      \BuiltInTok{round}\NormalTok{(rmse(coef5, x\_test, y\_test), }\DecValTok{3}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-10}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{二次系数 (a,b,c): [ 2.123 {-}3.231  0.616]}
-\NormalTok{五次系数: [{-}0.010  0.210 {-}0.278  1.206 {-}2.469  1.162]}
-\NormalTok{RMSE(deg2)=2.116  RMSE(deg5)=2.026}
+\NormalTok{train deg2 coef: [ 1.8416 {-}3.4436  0.8602]}
+\NormalTok{train deg5 coef: [{-}0.9174 {-}1.5886  1.2521  4.336  {-}2.8519  0.5595]}
+\NormalTok{RMSE train: 1.967 1.646}
+\NormalTok{RMSE test : 3.111 139.106}
 \end{Highlighting}
 \end{Shaded}
-
-\subsubsection{分析}\label{ux5206ux6790-1}
-
-\begin{itemize}
-\tightlist
-\item
-  二次拟合系数接近真实值
-  \((2, -3, 1)\)，说明模型设定正确时最小二乘能恢复参数；
-\item
-  五次拟合在训练数据上的 RMSE 略低（2.026 vs
-  2.116），说明``次数越高越能贴合训练数据''------但这是\textbf{过拟合的征兆}；
-\item
-  把前 28 个点作训练、后 12
-  个点作\textbf{独立测试}时：\texttt{deg2\ 测试\ RMSE≈3.11}，而
-  \texttt{deg5\ 测试\ RMSE≈139.1}！过拟合在测试集上暴露无遗。因此选次数必须看独立测试集/交叉验证，而不是训练误差。
-\end{itemize}
 
 \begin{figure}
 \centering
@@ -1497,19 +2473,67 @@ A_k = U_{:,1:k}\ \Sigma_{1:k,1:k}\ V_{1:k,:}^T
 \caption{polyfit 示例}
 \end{figure}
 
-\subsubsection{拓展任务}\label{ux62d3ux5c55ux4efbux52a1-1}
+\subsubsection{讲解}\label{ux8bb2ux89e3-10}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{二次拟合系数接近真实值
+  \((2, -3, 1)\)}（1.84、-3.44、0.86，噪声不大时能恢复参数），说明``模型设定正确''时最小二乘有效；
+\item
+  \textbf{五次拟合在训练集上的 RMSE 更低}（1.646 vs
+  1.967）------它能更紧地贴合训练数据；
+\item
+  但在\textbf{独立测试集}上：\texttt{deg2\ RMSE=3.111}，而
+  \texttt{deg5\ RMSE≈139.1}！五次多项式在训练范围外/区间间\textbf{剧烈振荡}，过拟合暴露无遗。
+\item
+  结论：\textbf{选模型/次数必须看独立测试集或交叉验证，而不是训练误差}。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-10}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{np.polyfit(x,\ y,\ deg)}：最小二乘多项式系数（降幂）；
+\item
+  \texttt{np.polyval(coef,\ x)}：多项式求值；
+\item
+  \texttt{np.sqrt(np.mean((pred\ -\ y)\ **\ 2))}：RMSE（均方根误差）；
+\item
+  \texttt{np.linalg.lstsq}：更通用的最小二乘（见 03 章案例 2）。
+\end{itemize}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-10}
+
+\begin{itemize}
+\tightlist
+\item
+  用训练 RMSE 选次数 → 一定选高次；
+\item
+  测试集与训练集有重叠 / 测试集太小 → 评估不可靠；
+\item
+  把``模拟数据''当成真实实验数据汇报 → 应写明数据来源与噪声假设；
+\item
+  不做残差分析，直接相信一个``很低''的测试 RMSE。
+\end{itemize}
+
+\subsubsection{拓展}\label{ux62d3ux5c55-10}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  划分训练/测试集（如 70/30），比较 deg=2 与 deg=5 在测试集上的
-  RMSE（本案例中 deg2≈3.11，deg5≈139.1）；
+  划分训练/测试集时使用
+  \texttt{sklearn.model\_selection.train\_test\_split}（随机划分，代替前
+  28/后 12）；
 \item
   用 \texttt{np.linalg.lstsq} 重写拟合，体会与 \texttt{polyfit} 的关系；
 \item
-  打印 95\% 置信区间（提示：用 \texttt{np.polyfit} 的 cov 参数或
-  scipy.stats）。
+  打印 95\% 置信区间（提示：用 \texttt{np.polyfit} 的 \texttt{cov}
+  参数或 \texttt{scipy.stats}）；
+\item
+  增加 \(\ell_2\) 正则（Ridge）看测试误差能否下降。
 \end{enumerate}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
@@ -1609,6 +2633,9 @@ A_k = U_{:,1:k}\ \Sigma_{1:k,1:k}\ V_{1:k,:}^T
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
 \NormalTok{a }\OperatorTok{=}\NormalTok{ np.arange(}\DecValTok{6}\NormalTok{)}
 \NormalTok{b }\OperatorTok{=}\NormalTok{ a.reshape(}\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{)     }\CommentTok{\# 视图}
 \NormalTok{b[}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{] }\OperatorTok{=} \DecValTok{99}
@@ -1616,6 +2643,7 @@ A_k = U_{:,1:k}\ \Sigma_{1:k,1:k}\ V_{1:k,:}^T
 
 \NormalTok{c }\OperatorTok{=}\NormalTok{ a.copy()}
 \NormalTok{c[}\DecValTok{0}\NormalTok{] }\OperatorTok{=} \DecValTok{0}                \CommentTok{\# 不影响 a}
+\BuiltInTok{print}\NormalTok{(a[}\DecValTok{0}\NormalTok{])             }\CommentTok{\# 99}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1646,6 +2674,8 @@ A_k = U_{:,1:k}\ \Sigma_{1:k,1:k}\ V_{1:k,:}^T
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+
 \NormalTok{A }\OperatorTok{=}\NormalTok{ np.zeros((}\DecValTok{4}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{6}\NormalTok{))}
 \NormalTok{B }\OperatorTok{=}\NormalTok{ np.zeros((}\DecValTok{3}\NormalTok{, }\DecValTok{6}\NormalTok{))}
 \ControlFlowTok{try}\NormalTok{:}
@@ -1664,6 +2694,7 @@ A_k = U_{:,1:k}\ \Sigma_{1:k,1:k}\ V_{1:k,:}^T
 \subsection{4. 性能技巧}\label{ux6027ux80fdux6280ux5de7}
 
 \begin{itemize}
+\tightlist
 \item
   \textbf{向量化优先}：能一次
   \texttt{a{[}np.newaxis,\ :{]}\ +\ b{[}:,\ np.newaxis{]}}
@@ -1680,14 +2711,21 @@ A_k = U_{:,1:k}\ \Sigma_{1:k,1:k}\ V_{1:k,:}^T
 \item
   \textbf{\texttt{np.lib.stride\_tricks.sliding\_window\_view}}
   做滑窗（移动平均/卷积）时避免显式复制：
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
 \NormalTok{x }\OperatorTok{=}\NormalTok{ np.arange(}\DecValTok{10}\NormalTok{)}
 \NormalTok{w }\OperatorTok{=}\NormalTok{ np.lib.stride\_tricks.sliding\_window\_view(x, }\DecValTok{3}\NormalTok{)}
 \BuiltInTok{print}\NormalTok{(w.mean(axis}\OperatorTok{=}\DecValTok{1}\NormalTok{))   }\CommentTok{\# 窗口大小为 3 的移动平均}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{itemize}
+\tightlist
 \item
   \textbf{大数组用 \texttt{np.savez\_compressed}} 存储；文本
   \texttt{savetxt} 慢且丢精度。
@@ -1707,7 +2745,8 @@ A_k = U_{:,1:k}\ \Sigma_{1:k,1:k}\ V_{1:k,:}^T
 \item
   复杂布尔条件拆成中间变量（\texttt{mask1\ =\ ...;\ mask2\ =\ ...}）；
 \item
-  随机/拟合问题\textbf{固定种子}，便于复现与讨论；
+  随机/拟合问题\textbf{固定种子}（建议
+  \texttt{default\_rng(seed)}），便于复现与讨论；
 \item
   用 \texttt{np.isnan} / \texttt{np.isinf} 检查异常值。
 \end{enumerate}

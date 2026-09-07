@@ -51,7 +51,11 @@ def merged_book_md(cfg):
     parts = []
     for ch in cfg["chapters"]:
         title, _ = chapter_meta(ch)
-        body = [f"# {title}", ""]
+        num = tb.chapter_no(ch)
+        if num is not None:
+            body = [f"# 第 {num} 章 · {title}", ""]
+        else:
+            body = [f"# {title}", ""]
         title0, files = tb.read_manifest(ch)
         for rel in files:
             if rel.lower() in ("README.md", "readme.md"):
@@ -93,12 +97,12 @@ def copy_figures(ch):
             shutil.copy2(os.path.join(src, f), os.path.join(dst, f))
 
 
-def split_chapters(tex, chapters, appendix_names=None):
+def split_chapters(tex, chapters, appendix_names=None, pre_body=None, chapter_covers=None):
     """Split the standalone tex body at chapter boundaries -> chapter files.
     Returns (main_tex, chapter_chunks, appendix_chunks)."""
     bd = tex.index("\\begin{document}")
     ed = tex.index("\\end{document}")
-    preamble = tex[:bd] + "\\begin{document}\n"
+    preamble = tex[:bd] + "\n\\input{cover.tex}\n" + "\\begin{document}\n"
     body = tex[bd + len("\\begin{document}"):ed]
     appendix_names = appendix_names or []
     if appendix_names:
@@ -122,9 +126,15 @@ def split_chapters(tex, chapters, appendix_names=None):
         for i, p in enumerate(pos_a):
             end = pos_a[i + 1] if i + 1 < len(pos_a) else len(appendix_body)
             chunks_a.append(appendix_body[p:end].rstrip() + "\n")
-        chapter_inputs = "\n".join(["\\input{chapters/ch" + ch + ".tex}" for ch in chapters])
         appendix_inputs = "\n".join(["\\input{chapters/chapp-" + n + ".tex}" for n in appendix_names])
-        main = preamble + chapter_inputs + "\n\\appendix\n" + appendix_inputs + "\n\\end{document}\n"
+        cover_lines = ""
+        if chapter_covers:
+            for (num, ttl), ch in zip(chapter_covers, chapters):
+                cover_lines += f"\\chaptercover{{{num}}}{{{tb.latex_escape(ttl)}}}\n"
+                cover_lines += f"\\input{{chapters/ch{ch}.tex}}\n"
+        else:
+            cover_lines = "\n".join(["\\input{chapters/ch" + ch + ".tex}" for ch in chapters]) + "\n"
+        main = preamble + (pre_body or "") + cover_lines + "\n\\appendix\n" + appendix_inputs + "\n\\end{document}\n"
         return main, chunks_c, chunks_a
     pos = [m.start() for m in re.finditer(r"\\chapter\{", body)]
     if len(pos) != len(chapters):
@@ -133,8 +143,14 @@ def split_chapters(tex, chapters, appendix_names=None):
     for i, p in enumerate(pos):
         end = pos[i + 1] if i + 1 < len(pos) else len(body)
         chunks.append(body[p:end].rstrip() + "\n")
-    main_body = "\n".join(["\\input{chapters/ch" + ch + ".tex}\n" for ch in chapters])
-    main = preamble + main_body + "\n\\end{document}\n"
+    cover_lines = ""
+    if chapter_covers:
+        for (num, ttl), ch in zip(chapter_covers, chapters):
+            cover_lines += f"\\chaptercover{{{num}}}{{{tb.latex_escape(ttl)}}}\n"
+            cover_lines += f"\\input{{chapters/ch{ch}.tex}}\n"
+    else:
+        cover_lines = "\n".join(["\\input{chapters/ch" + ch + ".tex}\n" for ch in chapters])
+    main = preamble + (pre_body or "") + cover_lines + "\n\\end{document}\n"
     return main, chunks, []
 
 
@@ -147,11 +163,13 @@ def write(path, text, header=True):
 
 def main():
     args = sys.argv[1:]
+    force = "--force" in args
     os.makedirs(TEX_DIR, exist_ok=True)
     os.makedirs(CHAP_TEX_DIR, exist_ok=True)
     os.makedirs(FIGS_DIR, exist_ok=True)
     cfg = tb.load_cfg()
     chapters = cfg["chapters"]
+    shutil.copy2(os.path.join(ROOT, "build", "cover.tex"), os.path.join(TEX_DIR, "cover.tex"))
     appendix_names = []
     for ad in cfg.get("appendices") or []:
         appdir = os.path.join(ROOT, ad["dir"])
@@ -204,7 +222,14 @@ def main():
         tex = f.read()
 
     # 2) split
-    main_tex, chunks, app_chunks = split_chapters(tex, chapters, appendix_names)
+    pre_body = f"\\bookcover{{{cfg.get('title','Python 科学计算')}}}{{{cfg.get('subtitle','从 NumPy 到 scikit-learn 的完整实践教程')}}}{{{cfg.get('author','')}}}{{{cfg.get('date','')}}}\n\\tableofcontents\n"
+    chapter_covers = []
+    for ch in chapters:
+        ttl, _ = tb.read_manifest(ch)
+        num = tb.chapter_no(ch)
+        chapter_covers.append((str(num) if num is not None else "", ttl))
+    main_tex, chunks, app_chunks = split_chapters(tex, chapters, appendix_names,
+                                                  pre_body=pre_body, chapter_covers=chapter_covers)
 
     # 3) per-chapter files + manual protection + cache
     for ch, chunk in zip(chapters, chunks):
@@ -216,7 +241,7 @@ def main():
             with open(out, encoding="utf-8") as f:
                 cur = f.read()
             cur_h = hashlib.sha256(cur.encode("utf-8")).hexdigest()
-            if old.get("tex_hash") and cur_h != old.get("tex_hash") and old.get("hash") == h:
+            if (not force) and old.get("tex_hash") and cur_h != old.get("tex_hash") and old.get("hash") == h:
                 print(f"[manual-preserved] {ch} (md unchanged)")
                 cache[ch] = old
                 copy_figures(ch)
@@ -244,9 +269,10 @@ def main():
     write(os.path.join(TEX_DIR, "README.md"),
           "# 教材TeX（可编译 LaTeX 工程）\n\n"
           "- 由 build/emit_tex.py 生成；章节/正文/图均来自 chapters/。\n"
-          "- 可手改：user_style.tex（宏包/页眉/封面）、user_meta.yaml（标题/作者/日期）。\n"
+          "- 封面：cover.tex（由 build/cover.tex 生成，含有书封面与章扉页命令，可手改）。\n"
+          "- 可手改：user_style.tex（宏包/页眉）、user_meta.yaml（标题/作者/日期）。\n"
           "- 编译：cd 教材TeX && latexmk -xelatex main.tex。\n"
-          "- 刷新：python build/emit_tex.py [--check|--compile]。\n"
+          "- 刷新：python build/emit_tex.py [--check|--compile|--force]（--force 强制重建所有章）。\n"
           "- 手改且 md 未变的章节会保留（备份 _manual_backup/）。\n")
     with open(CACHE, "w", encoding="utf-8") as f:
         json.dump(cache, f, ensure_ascii=False, indent=1)
