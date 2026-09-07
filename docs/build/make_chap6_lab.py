@@ -84,6 +84,50 @@ print("degree:", WG.degree())
 print("strength(weighted degree):", WG.degree(weight='weight'))
 """)
 
+
+md("""## 案例卡 1 跟练 / 变形 / 综合任务（班级社交网）
+
+对应讲义案例卡 1：用 nx.Graph 建“班级社交网”。""")
+
+code("""# 案例卡1 跟练：复现班级社交网，观察度与点强度
+Gc = nx.Graph()
+Gc.add_nodes_from([
+    ('小明', {'cls':'一班', 'interest':'数学'}),
+    ('小红', {'cls':'一班', 'interest':'编程'}),
+    ('小刚', {'cls':'一班', 'interest':'物理'}),
+    ('小丽', {'cls':'二班', 'interest':'语文'}),
+    ('小华', {'cls':'二班', 'interest':'美术'}),
+])
+Gc.add_weighted_edges_from([
+    ('小明','小红',3), ('小明','小刚',2), ('小红','小刚',4),
+    ('小刚','小丽',1), ('小丽','小华',5),
+])
+print('nodes:', Gc.number_of_nodes(), 'edges:', Gc.number_of_edges())
+print('degree:', sorted(dict(Gc.degree()).items(), key=lambda x: (-x[1], x[0])))
+print('strength:', sorted(dict(Gc.degree(weight='weight')).items(), key=lambda x: (-x[1], x[0])))
+# TODO: 加一条"小华--小红(权重2)"的边，再打印 degree，观察小华是否变重要
+""")
+
+code("""# 案例卡1 变形：按属性筛选 + 转邻接矩阵验证对称
+Gc.add_edge('小华', '小红', weight=2)
+print('加边后 nodes/edges:', Gc.number_of_nodes(), Gc.number_of_edges())
+print('一班学生:', [n for n, d in Gc.nodes(data=True) if d.get('cls')=='一班'])
+A = nx.to_numpy_array(Gc, nodelist=sorted(Gc.nodes()), weight='weight')
+print('邻接矩阵形状:', A.shape)
+print('矩阵对称:', bool((A == A.T).all()))
+""")
+
+code("""# 案例卡1 综合任务：用生成器造不同网络并对比度
+P = nx.path_graph(5)
+S = nx.star_graph(4)
+Cg = nx.cycle_graph(5)
+print('path_graph(5)度数:', sorted(dict(P.degree()).values()))
+print('star_graph(4)中心度:', dict(S.degree()))
+print('cycle_graph(5)度数:', sorted(dict(Cg.degree()).values()))
+centers = [n for n, d in S.degree() if d == 4]
+print('star中心节点:', centers)
+""")
+
 md("""## Part 4 图的分析指标""")
 
 code("""# TODO 4.1 度/聚类/传递性/中心性
@@ -99,6 +143,48 @@ print("betweenness:", nx.betweenness_centrality(G2))
 print("closeness:", nx.closeness_centrality(G2))
 print("average_shortest_path_length:", nx.average_shortest_path_length(G2))
 print("diameter:", nx.diameter(G2))
+""")
+
+
+md("""## 案例卡 2 跟练 / 变形 / 综合任务（中心性分析）
+
+对应讲义案例卡 2：谁是班里最重要的人（度/介数/接近）。""")
+
+code("""# 案例卡2 跟练：重建"桥梁"社交网，打印度/介数/接近
+Cc = nx.Graph()
+Cc.add_edges_from([
+    ('小明','小红'), ('小明','小刚'), ('小红','小刚'), ('小刚','小丽'),
+    ('小丽','小华'), ('小丽','小强'), ('小华','小强'), ('小华','小芳'), ('小强','小芳'),
+])
+bc = nx.betweenness_centrality(Cc)
+cc = nx.closeness_centrality(Cc)
+print('degree:', dict(Cc.degree()))
+print('betweenness:', {k: round(v,4) for k,v in bc.items()})
+print('closeness:', {k: round(v,4) for k,v in cc.items()})
+# TODO: 把"小明"和"小芳"直接连起来，观察小丽/小刚的介数如何变化
+""")
+
+code("""# 案例卡2 变形：在 karate_club 上排序，找出三种中心性的前3
+Kc = nx.karate_club_graph()
+bck = nx.betweenness_centrality(Kc)
+cck = nx.closeness_centrality(Kc)
+degk = dict(Kc.degree())
+print('karate按度前3:', sorted(degk.items(), key=lambda x: (-x[1], x[0]))[:3])
+print('karate按介数前3:', [(n, round(v,4)) for n,v in sorted(bck.items(), key=lambda x: (-x[1], x[0]))[:3]])
+print('karate按接近前3:', [(n, round(v,4)) for n,v in sorted(cck.items(), key=lambda x: (-x[1], x[0]))[:3]])
+""")
+
+code("""# 案例卡2 综合任务：中心性与社区结合，找"桥"节点
+from networkx.algorithms import community as nxcom
+Kc = nx.karate_club_graph()
+comms = nxcom.greedy_modularity_communities(Kc)
+print('社区数:', len(comms), '大小:', [len(c) for c in comms])
+bck = nx.betweenness_centrality(Kc)
+top_bridge = sorted(bck.items(), key=lambda x: (-x[1], x[0]))[0]
+print('介数最高节点:', top_bridge)
+n0 = top_bridge[0]
+print('它的邻居:', sorted(list(Kc.neighbors(n0))))
+# TODO: 判断该节点是否"跨社区"（其邻居分布在多个社区）
 """)
 
 md("""## Part 5 遍历、最短路径与最小生成树""")
@@ -135,6 +221,56 @@ T = nx.minimum_spanning_tree(Mw)
 print("MST edges:", sorted(T.edges(data='weight')))
 print("MST total weight:", sum(w for _, _, w in T.edges(data='weight')))
 print("MST edge count:", T.number_of_edges())
+""")
+
+
+md("""## 案例卡 3 跟练 / 变形 / 综合任务（加权最短路径）
+
+对应讲义案例卡 3：地铁换乘总时间最少路线。""")
+
+code("""# 案例卡3 跟练：地铁加权网 + Dijkstra 最少时间
+Mc = nx.Graph()
+Mc.add_weighted_edges_from([
+    ('中央公园','城东',3), ('中央公园','大学城',2), ('城东','大学城',1),
+    ('城东','火车站',4), ('大学城','火车站',2), ('大学城','机场',1),
+    ('火车站','机场',3), ('火车站','科技园',2), ('机场','科技园',4),
+])
+print('dijkstra_path:', nx.dijkstra_path(Mc, '中央公园', '科技园', weight='weight'))
+print('dijkstra_len:', nx.dijkstra_path_length(Mc, '中央公园', '科技园', weight='weight'))
+print('single_source:', {k: round(v,4) for k,v in sorted(nx.single_source_dijkstra_path_length(Mc,'中央公园',weight='weight').items())})
+# TODO: 新增"机场-城东"直连(2分钟)，看看最短路会不会变
+""")
+
+code("""# 案例卡3 变形：无权 vs 带权；Floyd-Warshall 全源矩阵
+print('无权最短路径:', nx.shortest_path(Mc, '中央公园', '科技园'))
+print('无权最短边数:', nx.shortest_path_length(Mc, '中央公园', '科技园'))
+FW = nx.floyd_warshall_numpy(Mc, weight='weight')
+names = sorted(Mc.nodes())
+print('Floyd矩阵形状:', FW.shape)
+print('中央公园->科技园:', FW[names.index('中央公园'), names.index('科技园')])
+# TODO: 比较"边数最少"与"时间最少"两条路线是否一致
+""")
+
+code("""# 案例卡3 综合任务：MST 与最短路径对比 + 保存路线图
+T = nx.minimum_spanning_tree(Mc, weight='weight')
+print('MST边:', sorted(T.edges(data='weight')))
+print('MST总权重:', sum(w for _, _, w in T.edges(data='weight')))
+print('最短路径 vs MST 目标不同')
+path = nx.dijkstra_path(Mc, '中央公园', '科技园', weight='weight')
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+plt.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'SimHei', 'DejaVu Sans']
+plt.rcParams['axes.unicode_minus'] = False
+pos = nx.spring_layout(Mc, seed=42, k=0.9)
+plt.figure(figsize=(6.0, 4.4))
+nx.draw_networkx_edges(Mc, pos, alpha=0.3, edge_color='#999999', width=1.2)
+nx.draw_networkx_edges(Mc, pos, edgelist=list(zip(path[:-1], path[1:])), edge_color='#c0392b', width=3.0)
+nx.draw_networkx_nodes(Mc, pos, node_size=500, node_color='#dff3e0', edgecolors='#3a8f4f')
+nx.draw_networkx_labels(Mc, pos, font_size=10, font_family='Microsoft YaHei')
+plt.title('地铁最少时间路线')
+plt.axis('off'); plt.tight_layout(); plt.savefig('case3_metro_lab.png')
+print('已保存 case3_metro_lab.png')
 """)
 
 md("""## Part 6 综合任务：空手道俱乐部

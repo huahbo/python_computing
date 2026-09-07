@@ -108,6 +108,78 @@ fig.tight_layout()
 fig.savefig(os.path.join(OUT, "network_case_communities.png"))
 plt.close(fig)
 
+
+# ---------------------------------------------------------------
+# 4) case1_class_network.png : 班级社交网 (Graph + attributes + degree)
+# ---------------------------------------------------------------
+G = nx.Graph()
+G.add_nodes_from([
+    ('小明', {'cls': '一班', 'interest': '数学'}),
+    ('小红', {'cls': '一班', 'interest': '编程'}),
+    ('小刚', {'cls': '一班', 'interest': '物理'}),
+    ('小丽', {'cls': '二班', 'interest': '语文'}),
+    ('小华', {'cls': '二班', 'interest': '美术'}),
+])
+G.add_weighted_edges_from([
+    ('小明','小红',3), ('小明','小刚',2), ('小红','小刚',4),
+    ('小刚','小丽',1), ('小丽','小华',5),
+])
+pos = nx.spring_layout(G, seed=42, k=0.8)
+fig, ax = plt.subplots(figsize=(6.4, 4.6))
+nx.draw_networkx_nodes(G, pos, node_size=800, node_color='#cfe3f7', edgecolors='#2f6fb3', ax=ax)
+nx.draw_networkx_edges(G, pos, width=2.0, edge_color='#4b8bbe', ax=ax)
+nx.draw_networkx_labels(G, pos, font_size=11, font_family='Microsoft YaHei', ax=ax)
+ax.set_title('班级社交网', fontsize=13)
+ax.axis('off')
+fig.tight_layout()
+fig.savefig(os.path.join(OUT, 'case1_class_network.png'))
+plt.close(fig)
+
+# 5) case2_centrality.png : 三种中心性条形对比
+C = nx.Graph()
+C.add_edges_from([
+    ('小明','小红'), ('小明','小刚'), ('小红','小刚'), ('小刚','小丽'),
+    ('小丽','小华'), ('小丽','小强'), ('小华','小强'), ('小华','小芳'), ('小强','小芳'),
+])
+bc = nx.betweenness_centrality(C)
+cc = nx.closeness_centrality(C)
+names = sorted(C.nodes())
+deg_v = [C.degree(n) for n in names]
+bc_v = [round(bc[n],4) for n in names]
+cc_v = [round(cc[n],4) for n in names]
+fig, axes = plt.subplots(1, 3, figsize=(11.0, 3.6))
+axes[0].bar(names, deg_v, color='#4b8bbe'); axes[0].set_ylabel('度'); axes[0].set_title('度')
+axes[1].bar(names, bc_v, color='#e07b39'); axes[1].set_ylabel('介数中心性'); axes[1].set_title('介数中心性')
+axes[2].bar(names, cc_v, color='#3a8f4f'); axes[2].set_ylabel('接近中心性'); axes[2].set_title('接近中心性')
+for ax in axes:
+    ax.tick_params(axis='x', rotation=30, labelsize=8)
+fig.suptitle('班级社交网：三种中心性对比')
+fig.tight_layout()
+fig.savefig(os.path.join(OUT, 'case2_centrality.png'))
+plt.close(fig)
+
+# 6) case3_metro.png : 加权地铁网 + 最短时间路线
+M = nx.Graph()
+M.add_weighted_edges_from([
+    ('中央公园','城东',3), ('中央公园','大学城',2), ('城东','大学城',1),
+    ('城东','火车站',4), ('大学城','火车站',2), ('大学城','机场',1),
+    ('火车站','机场',3), ('火车站','科技园',2), ('机场','科技园',4),
+])
+path = nx.dijkstra_path(M, '中央公园', '科技园', weight='weight')
+path_edges = list(zip(path[:-1], path[1:]))
+pos = nx.spring_layout(M, seed=42, k=0.9)
+fig, ax = plt.subplots(figsize=(7.0, 5.0))
+nx.draw_networkx_nodes(M, pos, node_size=650, node_color='#dff3e0', edgecolors='#3a8f4f', ax=ax)
+nx.draw_networkx_edges(M, pos, alpha=0.35, edge_color='#999999', width=1.2, ax=ax)
+nx.draw_networkx_edges(M, pos, edgelist=path_edges, edge_color='#c0392b', width=3.0, ax=ax)
+nx.draw_networkx_labels(M, pos, font_size=11, font_family='Microsoft YaHei', ax=ax)
+ax.set_title('地铁网：中央公园 -> 科技园 最少时间路线', fontsize=13)
+ax.axis('off')
+fig.tight_layout()
+fig.savefig(os.path.join(OUT, 'case3_metro.png'))
+plt.close(fig)
+
+
 print("figures saved to", OUT)
 for f in sorted(os.listdir(OUT)):
     print("  ", f)

@@ -445,6 +445,223 @@ NetworkX 自带许多``造图''模板，适合课堂演示与随机网络实验�
 \end{Highlighting}
 \end{Shaded}
 
+\subsection{案例卡 1：用 nx.Graph
+建``班级社交网''------节点/边/属性/度}\label{ux6848ux4f8bux5361-1ux7528-nx.graph-ux5efaux73edux7ea7ux793eux4ea4ux7f51ux8282ux70b9ux8fb9ux5c5eux6027ux5ea6}
+
+\subsubsection{目标}\label{ux76eeux6807-24}
+
+把 5 位同学当成``节点''，把``一起学习/讨论''当成``边''，用
+\texttt{nx.Graph}
+建一张班级社交网。你会顺带掌握：给节点挂属性、给边加权重（每周讨论次数）、看每个节点的\textbf{度}（直接朋友数）与\textbf{点强度}（加权度=朋友往来总次数）。
+
+\subsubsection{代码}\label{ux4ee3ux7801-25}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ networkx }\ImportTok{as}\NormalTok{ nx}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ os}
+
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\CommentTok{\#\# 1) 建空图}
+\NormalTok{G }\OperatorTok{=}\NormalTok{ nx.Graph()}
+
+\CommentTok{\#\# 2) 一次加多个节点，并给每个节点挂属性(班级/兴趣)}
+\NormalTok{students }\OperatorTok{=}\NormalTok{ [}
+\NormalTok{    (}\StringTok{\textquotesingle{}小明\textquotesingle{}}\NormalTok{, \{}\StringTok{\textquotesingle{}cls\textquotesingle{}}\NormalTok{: }\StringTok{\textquotesingle{}一班\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}interest\textquotesingle{}}\NormalTok{: }\StringTok{\textquotesingle{}数学\textquotesingle{}}\NormalTok{\}),}
+\NormalTok{    (}\StringTok{\textquotesingle{}小红\textquotesingle{}}\NormalTok{, \{}\StringTok{\textquotesingle{}cls\textquotesingle{}}\NormalTok{: }\StringTok{\textquotesingle{}一班\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}interest\textquotesingle{}}\NormalTok{: }\StringTok{\textquotesingle{}编程\textquotesingle{}}\NormalTok{\}),}
+\NormalTok{    (}\StringTok{\textquotesingle{}小刚\textquotesingle{}}\NormalTok{, \{}\StringTok{\textquotesingle{}cls\textquotesingle{}}\NormalTok{: }\StringTok{\textquotesingle{}一班\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}interest\textquotesingle{}}\NormalTok{: }\StringTok{\textquotesingle{}物理\textquotesingle{}}\NormalTok{\}),}
+\NormalTok{    (}\StringTok{\textquotesingle{}小丽\textquotesingle{}}\NormalTok{, \{}\StringTok{\textquotesingle{}cls\textquotesingle{}}\NormalTok{: }\StringTok{\textquotesingle{}二班\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}interest\textquotesingle{}}\NormalTok{: }\StringTok{\textquotesingle{}语文\textquotesingle{}}\NormalTok{\}),}
+\NormalTok{    (}\StringTok{\textquotesingle{}小华\textquotesingle{}}\NormalTok{, \{}\StringTok{\textquotesingle{}cls\textquotesingle{}}\NormalTok{: }\StringTok{\textquotesingle{}二班\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}interest\textquotesingle{}}\NormalTok{: }\StringTok{\textquotesingle{}美术\textquotesingle{}}\NormalTok{\}),}
+\NormalTok{]}
+\NormalTok{G.add\_nodes\_from(students)}
+
+\CommentTok{\#\# 3) 加边，weight 表示每周一起讨论的次数}
+\NormalTok{G.add\_weighted\_edges\_from([}
+\NormalTok{    (}\StringTok{\textquotesingle{}小明\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}小红\textquotesingle{}}\NormalTok{, }\DecValTok{3}\NormalTok{),}
+\NormalTok{    (}\StringTok{\textquotesingle{}小明\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}小刚\textquotesingle{}}\NormalTok{, }\DecValTok{2}\NormalTok{),}
+\NormalTok{    (}\StringTok{\textquotesingle{}小红\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}小刚\textquotesingle{}}\NormalTok{, }\DecValTok{4}\NormalTok{),}
+\NormalTok{    (}\StringTok{\textquotesingle{}小刚\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}小丽\textquotesingle{}}\NormalTok{, }\DecValTok{1}\NormalTok{),}
+\NormalTok{    (}\StringTok{\textquotesingle{}小丽\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}小华\textquotesingle{}}\NormalTok{, }\DecValTok{5}\NormalTok{),}
+\NormalTok{])}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}节点数:\textquotesingle{}}\NormalTok{, G.number\_of\_nodes(), }\StringTok{\textquotesingle{}  边数:\textquotesingle{}}\NormalTok{, G.number\_of\_edges())}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}节点及属性:\textquotesingle{}}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ n, data }\KeywordTok{in}\NormalTok{ G.nodes(data}\OperatorTok{=}\VariableTok{True}\NormalTok{):}
+    \BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{} \textquotesingle{}}\NormalTok{, n, data)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}边及权重:\textquotesingle{}}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ u, v, w }\KeywordTok{in}\NormalTok{ G.edges(data}\OperatorTok{=}\StringTok{\textquotesingle{}weight\textquotesingle{}}\NormalTok{):}
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f\textquotesingle{}  }\SpecialCharTok{\{}\NormalTok{u}\SpecialCharTok{\}}\SpecialStringTok{ {-}{-} }\SpecialCharTok{\{}\NormalTok{v}\SpecialCharTok{\}}\SpecialStringTok{ : }\SpecialCharTok{\{}\NormalTok{w}\SpecialCharTok{\}}\SpecialStringTok{\textquotesingle{}}\NormalTok{)}
+
+\CommentTok{\#\# 4) 度 与 点强度(加权度)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}每个节点的度(降序):\textquotesingle{}}\NormalTok{, }\BuiltInTok{sorted}\NormalTok{(}\BuiltInTok{dict}\NormalTok{(G.degree()).items(), key}\OperatorTok{=}\KeywordTok{lambda}\NormalTok{ x: (}\OperatorTok{{-}}\NormalTok{x[}\DecValTok{1}\NormalTok{], x[}\DecValTok{0}\NormalTok{])))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}每个节点的加权度/点强度(降序):\textquotesingle{}}\NormalTok{,}
+      \BuiltInTok{sorted}\NormalTok{(}\BuiltInTok{dict}\NormalTok{(G.degree(weight}\OperatorTok{=}\StringTok{\textquotesingle{}weight\textquotesingle{}}\NormalTok{)).items(), key}\OperatorTok{=}\KeywordTok{lambda}\NormalTok{ x: (}\OperatorTok{{-}}\NormalTok{x[}\DecValTok{1}\NormalTok{], x[}\DecValTok{0}\NormalTok{])))}
+
+\CommentTok{\#\# 5) 画出来(jupyter 里可直接显示；脚本环境保存到 figures/06{-}networkx/)}
+\NormalTok{os.makedirs(}\StringTok{\textquotesingle{}images\textquotesingle{}}\NormalTok{, exist\_ok}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{pos }\OperatorTok{=}\NormalTok{ nx.spring\_layout(G, seed}\OperatorTok{=}\DecValTok{42}\NormalTok{, k}\OperatorTok{=}\FloatTok{0.8}\NormalTok{)}
+\NormalTok{plt.figure(figsize}\OperatorTok{=}\NormalTok{(}\FloatTok{6.4}\NormalTok{, }\FloatTok{4.6}\NormalTok{))}
+\NormalTok{nx.draw\_networkx\_nodes(G, pos, node\_size}\OperatorTok{=}\DecValTok{800}\NormalTok{, node\_color}\OperatorTok{=}\StringTok{\textquotesingle{}\#cfe3f7\textquotesingle{}}\NormalTok{, edgecolors}\OperatorTok{=}\StringTok{\textquotesingle{}\#2f6fb3\textquotesingle{}}\NormalTok{)}
+\NormalTok{nx.draw\_networkx\_edges(G, pos, width}\OperatorTok{=}\FloatTok{2.0}\NormalTok{, edge\_color}\OperatorTok{=}\StringTok{\textquotesingle{}\#4b8bbe\textquotesingle{}}\NormalTok{)}
+\NormalTok{nx.draw\_networkx\_labels(G, pos, font\_size}\OperatorTok{=}\DecValTok{11}\NormalTok{, font\_family}\OperatorTok{=}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.title(}\StringTok{\textquotesingle{}班级社交网\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.axis(}\StringTok{\textquotesingle{}off\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.tight\_layout()}
+\NormalTok{plt.savefig(}\StringTok{\textquotesingle{}figures/06{-}networkx/case1\_class\_network.png\textquotesingle{}}\NormalTok{, dpi}\OperatorTok{=}\DecValTok{150}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}已保存 figures/06{-}networkx/case1\_class\_network.png\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.close()}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果(已运行核验)}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-23}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{节点数: 5   边数: 5}
+\NormalTok{节点及属性:}
+\NormalTok{  小明 \{\textquotesingle{}cls\textquotesingle{}: \textquotesingle{}一班\textquotesingle{}, \textquotesingle{}interest\textquotesingle{}: \textquotesingle{}数学\textquotesingle{}\}}
+\NormalTok{  小红 \{\textquotesingle{}cls\textquotesingle{}: \textquotesingle{}一班\textquotesingle{}, \textquotesingle{}interest\textquotesingle{}: \textquotesingle{}编程\textquotesingle{}\}}
+\NormalTok{  小刚 \{\textquotesingle{}cls\textquotesingle{}: \textquotesingle{}一班\textquotesingle{}, \textquotesingle{}interest\textquotesingle{}: \textquotesingle{}物理\textquotesingle{}\}}
+\NormalTok{  小丽 \{\textquotesingle{}cls\textquotesingle{}: \textquotesingle{}二班\textquotesingle{}, \textquotesingle{}interest\textquotesingle{}: \textquotesingle{}语文\textquotesingle{}\}}
+\NormalTok{  小华 \{\textquotesingle{}cls\textquotesingle{}: \textquotesingle{}二班\textquotesingle{}, \textquotesingle{}interest\textquotesingle{}: \textquotesingle{}美术\textquotesingle{}\}}
+\NormalTok{边及权重:}
+\NormalTok{  小明 {-}{-} 小红 : 3}
+\NormalTok{  小明 {-}{-} 小刚 : 2}
+\NormalTok{  小红 {-}{-} 小刚 : 4}
+\NormalTok{  小刚 {-}{-} 小丽 : 1}
+\NormalTok{  小丽 {-}{-} 小华 : 5}
+\NormalTok{每个节点的度(降序): [(\textquotesingle{}小刚\textquotesingle{}, 3), (\textquotesingle{}小丽\textquotesingle{}, 2), (\textquotesingle{}小明\textquotesingle{}, 2), (\textquotesingle{}小红\textquotesingle{}, 2), (\textquotesingle{}小华\textquotesingle{}, 1)]}
+\NormalTok{每个节点的加权度/点强度(降序): [(\textquotesingle{}小刚\textquotesingle{}, 7), (\textquotesingle{}小红\textquotesingle{}, 7), (\textquotesingle{}小丽\textquotesingle{}, 6), (\textquotesingle{}小华\textquotesingle{}, 5), (\textquotesingle{}小明\textquotesingle{}, 5)]}
+\NormalTok{已保存 figures/06{-}networkx/case1\_class\_network.png}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-23}
+
+\textbf{一句话人话}：先画一张``人=点、一起学习=连线''的网；每条线还能记一个数（每周讨论几次），这样不但知道``谁朋友多''，还知道``谁和朋友来往最勤''。
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \texttt{G\ =\ nx.Graph()} 建一张\textbf{无向图}：朋友关系不分方向，A
+  和 B 是朋友就等于 B 和 A 是朋友。
+\item
+  \texttt{G.add\_nodes\_from(students)} 里每个元素是
+  \texttt{(节点名,\ 属性字典)}，所以一次就能把``班级、兴趣''挂在节点上；查看时用
+  \texttt{G.nodes(data=True)} 会得到 \texttt{(节点,\ 属性字典)} 对。
+\item
+  \texttt{G.add\_weighted\_edges\_from(...)} 的每个元素是
+  \texttt{(起点,\ 终点,\ 权重)}；\texttt{weight} 是 NetworkX
+  约定好的边属性名，后面
+  \texttt{degree(weight=\textquotesingle{}weight\textquotesingle{})}
+  才能自动读到它。
+\item
+  \texttt{G.degree()} 是\textbf{直接邻居数}：小明连小红、小刚，所以是
+  2；小刚连小明、小红、小丽，是 3。
+\item
+  \texttt{G.degree(weight=\textquotesingle{}weight\textquotesingle{})}
+  是把``每条边的权重相加''，等于\textbf{点强度}：小刚=2+4+1=7，小红=3+4=7，小丽=1+5=6，小华=5，小明=3+2=5。所以小刚虽然度最高，但``来往总次数''第一的是小刚和小红并列。
+\item
+  \texttt{nx.spring\_layout(G,\ seed=42)} 给节点随机选初始位置，固定
+  \texttt{seed=42} 才能每次画出同一张布局；保存到
+  \texttt{figures/06-networkx/} 前先
+  \texttt{os.makedirs(\textquotesingle{}images\textquotesingle{},\ exist\_ok=True)}，避免目录不存在报错。
+\end{enumerate}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={班级社交网}]{figures/06-networkx/case1_class_network.png}}
+\caption{班级社交网}
+\end{figure}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-24}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+需求
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+写法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+说明
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+建空无向图 & \texttt{nx.Graph()} & 边无方向 \\
+加单个/多个节点 & \texttt{add\_node} / \texttt{add\_nodes\_from} &
+可带属性 \\
+加单条/多条边 & \texttt{add\_edge} / \texttt{add\_edges\_from} &
+无向图自动补反向 \\
+加带权边 & \texttt{add\_weighted\_edges\_from({[}(u,\ v,\ w){]})} &
+属性名 \texttt{weight} \\
+查看节点/边属性 & \texttt{G.nodes(data=True)} /
+\texttt{G.edges(data=True)} & 得到 \texttt{(节点,\ dict)} /
+\texttt{(u,\ v,\ dict)} \\
+度 & \texttt{G.degree()} / \texttt{G.degree(node)} & 直接邻居数 \\
+点强度 &
+\texttt{G.degree(weight=\textquotesingle{}weight\textquotesingle{})} &
+加权度 \\
+画图 & \texttt{nx.draw\_networkx\_*} + \texttt{plt.savefig} &
+需配中文字体 \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-24}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  以为 \texttt{add\_edge(u,\ v,\ 10)} 的第三个参数是权重 → 错误；正解是
+  \texttt{add\_edge(u,\ v,\ weight=10)} 或
+  \texttt{add\_weighted\_edges\_from}。
+\item
+  忘记
+  \texttt{G.degree(weight=\textquotesingle{}weight\textquotesingle{})}
+  的 \texttt{weight} 参数名要跟边属性名一致；如果边属性叫
+  \texttt{time}，就要写
+  \texttt{weight=\textquotesingle{}time\textquotesingle{}}。
+\item
+  用 \texttt{plt.show()} 在无界面环境会卡住/无反应 → 脚本/作业里用
+  \texttt{plt.savefig(...)}；\texttt{spring\_layout} 不传 \texttt{seed}
+  每次布局都不同，作业截图容易对不上。
+\item
+  \texttt{sorted(G.degree())} 返回的是按节点名排列的
+  \texttt{(节点,\ 度)} 列表；想按度数排序要
+  \texttt{key=lambda\ x:\ (-x{[}1{]},\ x{[}0{]})}。
+\end{enumerate}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-12}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  新加一位同学 \texttt{小强} 与 \texttt{小华} 连一条权重 2
+  的边，再打印度与点强度，看谁变成``朋友最多''。
+\item
+  把每条边的权重改成``共同爱好数''，分别打印度与点强度，观察两者排名是否一致。
+\item
+  用
+  \texttt{nx.to\_numpy\_array(G,\ nodelist=sorted(G.nodes()),\ weight=\textquotesingle{}weight\textquotesingle{})}
+  得到邻接矩阵，验证它是对称矩阵。
+\item
+  给每个节点补一个 \texttt{age}
+  属性，然后筛选出``一班''的学生（答案：\texttt{{[}n\ for\ n,\ d\ in\ G.nodes(data=True)\ if\ d.get(\textquotesingle{}cls\textquotesingle{})==\textquotesingle{}一班\textquotesingle{}{]}}）。
+\end{enumerate}
+
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsection{常见误区}\label{ux5e38ux89c1ux8befux533a-17}
@@ -874,6 +1091,191 @@ True。若用只有单向边、但有``只能从 A 到 B''的图，强连通会�
 3 个社区，Q≈0.41。
 \end{quote}
 
+\subsection{案例卡
+2：中心性分析------谁是班里最重要的人（度/介数/接近）}\label{ux6848ux4f8bux5361-2ux4e2dux5fc3ux6027ux5206ux6790ux8c01ux662fux73edux91ccux6700ux91cdux8981ux7684ux4ebaux5ea6ux4ecbux6570ux63a5ux8fd1}
+
+\subsubsection{目标}\label{ux76eeux6807-25}
+
+用``人=点、关系=边''的社交网，造一个``两个圈子 +
+一个桥梁人物''的小班集体，分别计算\textbf{度}（直接朋友数）、\textbf{介数中心性}（多少条最短路要经过你）、\textbf{接近中心性}（到所有人平均距离多近），再判断``谁最不可或缺''。
+
+\subsubsection{代码}\label{ux4ee3ux7801-26}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ networkx }\ImportTok{as}\NormalTok{ nx}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ os}
+
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\CommentTok{\#\# 1) 建一张 7 人社交网：左圈(小明/小红/小刚) + 右圈(小华/小强/小芳)，小丽是桥梁}
+\NormalTok{C }\OperatorTok{=}\NormalTok{ nx.Graph()}
+\NormalTok{C.add\_edges\_from([}
+\NormalTok{    (}\StringTok{\textquotesingle{}小明\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}小红\textquotesingle{}}\NormalTok{), (}\StringTok{\textquotesingle{}小明\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}小刚\textquotesingle{}}\NormalTok{), (}\StringTok{\textquotesingle{}小红\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}小刚\textquotesingle{}}\NormalTok{), (}\StringTok{\textquotesingle{}小刚\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}小丽\textquotesingle{}}\NormalTok{),}
+\NormalTok{    (}\StringTok{\textquotesingle{}小丽\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}小华\textquotesingle{}}\NormalTok{), (}\StringTok{\textquotesingle{}小丽\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}小强\textquotesingle{}}\NormalTok{), (}\StringTok{\textquotesingle{}小华\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}小强\textquotesingle{}}\NormalTok{), (}\StringTok{\textquotesingle{}小华\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}小芳\textquotesingle{}}\NormalTok{), (}\StringTok{\textquotesingle{}小强\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}小芳\textquotesingle{}}\NormalTok{),}
+\NormalTok{])}
+
+\NormalTok{bc }\OperatorTok{=}\NormalTok{ nx.betweenness\_centrality(C)}
+\NormalTok{cc }\OperatorTok{=}\NormalTok{ nx.closeness\_centrality(C)}
+\NormalTok{deg }\OperatorTok{=} \BuiltInTok{dict}\NormalTok{(C.degree())}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}节点数:\textquotesingle{}}\NormalTok{, C.number\_of\_nodes(), }\StringTok{\textquotesingle{}  边数:\textquotesingle{}}\NormalTok{, C.number\_of\_edges())}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}度:\textquotesingle{}}\NormalTok{, deg)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}介数中心性:\textquotesingle{}}\NormalTok{, \{k: }\BuiltInTok{round}\NormalTok{(v, }\DecValTok{4}\NormalTok{) }\ControlFlowTok{for}\NormalTok{ k, v }\KeywordTok{in}\NormalTok{ bc.items()\})}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}接近中心性:\textquotesingle{}}\NormalTok{, \{k: }\BuiltInTok{round}\NormalTok{(v, }\DecValTok{4}\NormalTok{) }\ControlFlowTok{for}\NormalTok{ k, v }\KeywordTok{in}\NormalTok{ cc.items()\})}
+
+\CommentTok{\#\# 3) 三种中心性的前三名}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}按度最高的3人:\textquotesingle{}}\NormalTok{, }\BuiltInTok{sorted}\NormalTok{(deg.items(), key}\OperatorTok{=}\KeywordTok{lambda}\NormalTok{ x: (}\OperatorTok{{-}}\NormalTok{x[}\DecValTok{1}\NormalTok{], x[}\DecValTok{0}\NormalTok{]))[:}\DecValTok{3}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}按介数最高的3人:\textquotesingle{}}\NormalTok{, [(k, }\BuiltInTok{round}\NormalTok{(v,}\DecValTok{4}\NormalTok{)) }\ControlFlowTok{for}\NormalTok{ k, v }\KeywordTok{in} \BuiltInTok{sorted}\NormalTok{(bc.items(), key}\OperatorTok{=}\KeywordTok{lambda}\NormalTok{ x: (}\OperatorTok{{-}}\NormalTok{x[}\DecValTok{1}\NormalTok{], x[}\DecValTok{0}\NormalTok{]))[:}\DecValTok{3}\NormalTok{]])}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}按接近最高的3人:\textquotesingle{}}\NormalTok{, [(k, }\BuiltInTok{round}\NormalTok{(v,}\DecValTok{4}\NormalTok{)) }\ControlFlowTok{for}\NormalTok{ k, v }\KeywordTok{in} \BuiltInTok{sorted}\NormalTok{(cc.items(), key}\OperatorTok{=}\KeywordTok{lambda}\NormalTok{ x: (}\OperatorTok{{-}}\NormalTok{x[}\DecValTok{1}\NormalTok{], x[}\DecValTok{0}\NormalTok{]))[:}\DecValTok{3}\NormalTok{]])}
+
+\CommentTok{\#\# 4) 画成 1x3 条形图对比}
+\NormalTok{names }\OperatorTok{=} \BuiltInTok{sorted}\NormalTok{(C.nodes())}
+\NormalTok{deg\_v }\OperatorTok{=}\NormalTok{ [C.degree(n) }\ControlFlowTok{for}\NormalTok{ n }\KeywordTok{in}\NormalTok{ names]}
+\NormalTok{bc\_v }\OperatorTok{=}\NormalTok{ [}\BuiltInTok{round}\NormalTok{(bc[n], }\DecValTok{4}\NormalTok{) }\ControlFlowTok{for}\NormalTok{ n }\KeywordTok{in}\NormalTok{ names]}
+\NormalTok{cc\_v }\OperatorTok{=}\NormalTok{ [}\BuiltInTok{round}\NormalTok{(cc[n], }\DecValTok{4}\NormalTok{) }\ControlFlowTok{for}\NormalTok{ n }\KeywordTok{in}\NormalTok{ names]}
+\NormalTok{fig, axes }\OperatorTok{=}\NormalTok{ plt.subplots(}\DecValTok{1}\NormalTok{, }\DecValTok{3}\NormalTok{, figsize}\OperatorTok{=}\NormalTok{(}\FloatTok{11.0}\NormalTok{, }\FloatTok{3.6}\NormalTok{))}
+\NormalTok{axes[}\DecValTok{0}\NormalTok{].bar(names, deg\_v, color}\OperatorTok{=}\StringTok{\textquotesingle{}\#4b8bbe\textquotesingle{}}\NormalTok{)}\OperatorTok{;}\NormalTok{ axes[}\DecValTok{0}\NormalTok{].set\_ylabel(}\StringTok{\textquotesingle{}度\textquotesingle{}}\NormalTok{)}\OperatorTok{;}\NormalTok{ axes[}\DecValTok{0}\NormalTok{].set\_title(}\StringTok{\textquotesingle{}度\textquotesingle{}}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{1}\NormalTok{].bar(names, bc\_v, color}\OperatorTok{=}\StringTok{\textquotesingle{}\#e07b39\textquotesingle{}}\NormalTok{)}\OperatorTok{;}\NormalTok{ axes[}\DecValTok{1}\NormalTok{].set\_ylabel(}\StringTok{\textquotesingle{}介数中心性\textquotesingle{}}\NormalTok{)}\OperatorTok{;}\NormalTok{ axes[}\DecValTok{1}\NormalTok{].set\_title(}\StringTok{\textquotesingle{}介数中心性\textquotesingle{}}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{2}\NormalTok{].bar(names, cc\_v, color}\OperatorTok{=}\StringTok{\textquotesingle{}\#3a8f4f\textquotesingle{}}\NormalTok{)}\OperatorTok{;}\NormalTok{ axes[}\DecValTok{2}\NormalTok{].set\_ylabel(}\StringTok{\textquotesingle{}接近中心性\textquotesingle{}}\NormalTok{)}\OperatorTok{;}\NormalTok{ axes[}\DecValTok{2}\NormalTok{].set\_title(}\StringTok{\textquotesingle{}接近中心性\textquotesingle{}}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ ax }\KeywordTok{in}\NormalTok{ axes:}
+\NormalTok{    ax.tick\_params(axis}\OperatorTok{=}\StringTok{\textquotesingle{}x\textquotesingle{}}\NormalTok{, rotation}\OperatorTok{=}\DecValTok{30}\NormalTok{, labelsize}\OperatorTok{=}\DecValTok{8}\NormalTok{)}
+\NormalTok{fig.suptitle(}\StringTok{\textquotesingle{}班级社交网：三种中心性对比\textquotesingle{}}\NormalTok{)}
+\NormalTok{fig.tight\_layout()}
+\NormalTok{fig.savefig(}\StringTok{\textquotesingle{}figures/06{-}networkx/case2\_centrality.png\textquotesingle{}}\NormalTok{, dpi}\OperatorTok{=}\DecValTok{150}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}已保存 figures/06{-}networkx/case2\_centrality.png\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.close(fig)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果(已运行核验)}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-24}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{节点数: 7   边数: 9}
+\NormalTok{度: \{\textquotesingle{}小明\textquotesingle{}: 2, \textquotesingle{}小红\textquotesingle{}: 2, \textquotesingle{}小刚\textquotesingle{}: 3, \textquotesingle{}小丽\textquotesingle{}: 3, \textquotesingle{}小华\textquotesingle{}: 3, \textquotesingle{}小强\textquotesingle{}: 3, \textquotesingle{}小芳\textquotesingle{}: 2\}}
+\NormalTok{介数中心性: \{\textquotesingle{}小明\textquotesingle{}: 0.0, \textquotesingle{}小红\textquotesingle{}: 0.0, \textquotesingle{}小刚\textquotesingle{}: 0.5333, \textquotesingle{}小丽\textquotesingle{}: 0.6, \textquotesingle{}小华\textquotesingle{}: 0.1333, \textquotesingle{}小强\textquotesingle{}: 0.1333, \textquotesingle{}小芳\textquotesingle{}: 0.0\}}
+\NormalTok{接近中心性: \{\textquotesingle{}小明\textquotesingle{}: 0.4286, \textquotesingle{}小红\textquotesingle{}: 0.4286, \textquotesingle{}小刚\textquotesingle{}: 0.6, \textquotesingle{}小丽\textquotesingle{}: 0.6667, \textquotesingle{}小华\textquotesingle{}: 0.5455, \textquotesingle{}小强\textquotesingle{}: 0.5455, \textquotesingle{}小芳\textquotesingle{}: 0.4\}}
+\NormalTok{按度最高的3人: [(\textquotesingle{}小丽\textquotesingle{}, 3), (\textquotesingle{}小刚\textquotesingle{}, 3), (\textquotesingle{}小华\textquotesingle{}, 3)]}
+\NormalTok{按介数最高的3人: [(\textquotesingle{}小丽\textquotesingle{}, 0.6), (\textquotesingle{}小刚\textquotesingle{}, 0.5333), (\textquotesingle{}小华\textquotesingle{}, 0.1333)]}
+\NormalTok{按接近最高的3人: [(\textquotesingle{}小丽\textquotesingle{}, 0.6667), (\textquotesingle{}小刚\textquotesingle{}, 0.6), (\textquotesingle{}小华\textquotesingle{}, 0.5455)]}
+\NormalTok{已保存 figures/06{-}networkx/case2\_centrality.png}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-24}
+
+\textbf{一句话人话}：度问``你认识几个人''；介数问``别人找你帮忙传话的次数多不多''；接近问``你要想联系到所有人，平均要走几步''。
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \texttt{C.add\_edges\_from({[}...{]})} 一次加 9 条边；节点 7
+  人。小丽是``桥梁''（同时连左圈的小刚和右圈的小华/小强），小刚也是半座桥。
+\item
+  \texttt{nx.degree()} 只数\textbf{直接边}：小丽/小刚/小华/小强都是
+  3，即直接认识 3 人；但它看不出``桥''的价值------小芳只认识小华、小强。
+\item
+  \texttt{nx.betweenness\_centrality(C)}
+  计算``经过该节点的最短路径占比''：小丽 0.6 最高、小刚 0.5333
+  次之，因为左圈到右圈几乎都要经过他俩；而小明/小红/小芳在各自圈子的``边缘''，介数为
+  0。
+\item
+  \texttt{nx.closeness\_centrality(C)}
+  是``到其他所有节点平均距离的倒数''：小丽 0.6667
+  最高，说明它到谁都不太远；小芳 0.4 最低，因为它离左圈最远。
+\item
+  三种中心性的排序不完全一样：度并列最多（4 人都是
+  3），但介数/接近都指向小丽。这就说明\textbf{只看``朋友数''会漏掉关键桥梁}。
+\item
+  绘图用 \texttt{sorted(C.nodes())}
+  固定柱子顺序，\texttt{round(...,\ 4)}
+  让输出跨机器稳定；\texttt{savefig} 前先
+  \texttt{os.makedirs(\textquotesingle{}images\textquotesingle{},\ exist\_ok=True)}。
+\end{enumerate}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={三种中心性对比}]{figures/06-networkx/case2_centrality.png}}
+\caption{三种中心性对比}
+\end{figure}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-25}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+需求
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+写法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+说明
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+度中心性 & \texttt{nx.degree(G)} / \texttt{G.degree(node)} &
+直接邻居数 \\
+介数中心性 & \texttt{nx.betweenness\_centrality(G)} &
+经过该点的最短路占比 \\
+接近中心性 & \texttt{nx.closeness\_centrality(G)} &
+平均距离越短越接近 \\
+选最高 & \texttt{max(d,\ key=d.get)} 或
+\texttt{sorted(d.items(),\ key=lambda\ x:\ (-x{[}1{]},\ x{[}0{]}))} &
+找``最重要''节点 \\
+批量画柱状图 & \texttt{plt.subplots(1,\ 3)} +
+\texttt{ax.bar(names,\ vals)} & 三指标并排 \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-25}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  以为``度最高=最重要''：本例度并列的有 4
+  人，但真正扛起沟通的是介数最高的小丽。
+\item
+  直接 \texttt{print(nx.betweenness\_centrality(G))} 输出很多小数 →
+  建议先 \texttt{round(v,\ 4)} 再打印。
+\item
+  用 \texttt{max(bc,\ key=bc.get)}
+  只拿到``最高人''，但并列时只返回第一个；想要前三名要用
+  \texttt{sorted(...){[}:3{]}}。
+\item
+  画条形图时不用 \texttt{sorted(C.nodes())} 固定顺序：如果直接用
+  \texttt{C.nodes()} 的迭代顺序，不同环境可能顺序不同。
+\end{enumerate}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-13}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  把小明和小芳直接连起来，观察小丽/小刚的介数如何下降。
+\item
+  在 \texttt{nx.karate\_club\_graph()} 上分别算三种中心性的前三名，比较
+  0 号与 33 号谁更像``中心''。
+\item
+  用 \texttt{nx.betweenness\_centrality(G,\ k=20)} 在大图上做近似（k
+  个随机源），并与精确值比较。
+\item
+  结合 \texttt{nx.community.greedy\_modularity\_communities}
+  划分社区，再看``跨社区的桥节点''是不是就是介数最高的人。
+\end{enumerate}
+
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsection{常见误区}\label{ux5e38ux89c1ux8befux533a-18}
@@ -1223,6 +1625,197 @@ floyd\_warshall\_numpy & O(V\^{}3) \\
 \end{longtable}
 }
 
+\subsection{案例卡
+3：加权最短路径------地铁换乘总时间最少路线}\label{ux6848ux4f8bux5361-3ux52a0ux6743ux6700ux77edux8defux5f84ux5730ux94c1ux6362ux4e58ux603bux65f6ux95f4ux6700ux5c11ux8defux7ebf}
+
+\subsubsection{目标}\label{ux76eeux6807-26}
+
+把地铁站当节点、站间行驶时间(分钟)当\textbf{边权}，用
+\texttt{nx.dijkstra\_path}
+求``从中央公园到科技园''总时间最少的换乘路线，并打印从起点到所有站的最少时间。这是``带权图上找最短路''的典型应用。
+
+\subsubsection{代码}\label{ux4ee3ux7801-27}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ networkx }\ImportTok{as}\NormalTok{ nx}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ os}
+
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\CommentTok{\#\# 1) 地铁网：节点=车站，边的 weight=行驶分钟(双向)}
+\NormalTok{M }\OperatorTok{=}\NormalTok{ nx.Graph()}
+\NormalTok{M.add\_weighted\_edges\_from([}
+\NormalTok{    (}\StringTok{\textquotesingle{}中央公园\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}城东\textquotesingle{}}\NormalTok{, }\DecValTok{3}\NormalTok{), (}\StringTok{\textquotesingle{}中央公园\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}大学城\textquotesingle{}}\NormalTok{, }\DecValTok{2}\NormalTok{),}
+\NormalTok{    (}\StringTok{\textquotesingle{}城东\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}大学城\textquotesingle{}}\NormalTok{, }\DecValTok{1}\NormalTok{), (}\StringTok{\textquotesingle{}城东\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}火车站\textquotesingle{}}\NormalTok{, }\DecValTok{4}\NormalTok{), (}\StringTok{\textquotesingle{}大学城\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}火车站\textquotesingle{}}\NormalTok{, }\DecValTok{2}\NormalTok{),}
+\NormalTok{    (}\StringTok{\textquotesingle{}大学城\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}机场\textquotesingle{}}\NormalTok{, }\DecValTok{1}\NormalTok{), (}\StringTok{\textquotesingle{}火车站\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}机场\textquotesingle{}}\NormalTok{, }\DecValTok{3}\NormalTok{), (}\StringTok{\textquotesingle{}火车站\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}科技园\textquotesingle{}}\NormalTok{, }\DecValTok{2}\NormalTok{), (}\StringTok{\textquotesingle{}机场\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}科技园\textquotesingle{}}\NormalTok{, }\DecValTok{4}\NormalTok{),}
+\NormalTok{])}
+
+\CommentTok{\#\# 2) Dijkstra：单源最短路径/长度(默认按边权)}
+\NormalTok{path }\OperatorTok{=}\NormalTok{ nx.dijkstra\_path(M, }\StringTok{\textquotesingle{}中央公园\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}科技园\textquotesingle{}}\NormalTok{, weight}\OperatorTok{=}\StringTok{\textquotesingle{}weight\textquotesingle{}}\NormalTok{)}
+\NormalTok{length }\OperatorTok{=}\NormalTok{ nx.dijkstra\_path\_length(M, }\StringTok{\textquotesingle{}中央公园\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}科技园\textquotesingle{}}\NormalTok{, weight}\OperatorTok{=}\StringTok{\textquotesingle{}weight\textquotesingle{}}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}最短路径:\textquotesingle{}}\NormalTok{, path)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}最短时间(分钟):\textquotesingle{}}\NormalTok{, length)}
+
+\CommentTok{\#\# 3) 从起点到所有站的最少时间(按站名排序保证顺序稳定)}
+\NormalTok{sdd }\OperatorTok{=}\NormalTok{ nx.single\_source\_dijkstra\_path\_length(M, }\StringTok{\textquotesingle{}中央公园\textquotesingle{}}\NormalTok{, weight}\OperatorTok{=}\StringTok{\textquotesingle{}weight\textquotesingle{}}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}单源最短时间(按站名排序):\textquotesingle{}}\NormalTok{, \{k: }\BuiltInTok{round}\NormalTok{(v, }\DecValTok{4}\NormalTok{) }\ControlFlowTok{for}\NormalTok{ k, v }\KeywordTok{in} \BuiltInTok{sorted}\NormalTok{(sdd.items())\})}
+
+\CommentTok{\#\# 4) 把最短路线画出来}
+\NormalTok{path\_edges }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(}\BuiltInTok{zip}\NormalTok{(path[:}\OperatorTok{{-}}\DecValTok{1}\NormalTok{], path[}\DecValTok{1}\NormalTok{:]))}
+\NormalTok{pos }\OperatorTok{=}\NormalTok{ nx.spring\_layout(M, seed}\OperatorTok{=}\DecValTok{42}\NormalTok{, k}\OperatorTok{=}\FloatTok{0.9}\NormalTok{)}
+\NormalTok{os.makedirs(}\StringTok{\textquotesingle{}images\textquotesingle{}}\NormalTok{, exist\_ok}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{plt.figure(figsize}\OperatorTok{=}\NormalTok{(}\FloatTok{7.0}\NormalTok{, }\FloatTok{5.0}\NormalTok{))}
+\NormalTok{nx.draw\_networkx\_nodes(M, pos, node\_size}\OperatorTok{=}\DecValTok{650}\NormalTok{, node\_color}\OperatorTok{=}\StringTok{\textquotesingle{}\#dff3e0\textquotesingle{}}\NormalTok{, edgecolors}\OperatorTok{=}\StringTok{\textquotesingle{}\#3a8f4f\textquotesingle{}}\NormalTok{)}
+\NormalTok{nx.draw\_networkx\_edges(M, pos, alpha}\OperatorTok{=}\FloatTok{0.35}\NormalTok{, edge\_color}\OperatorTok{=}\StringTok{\textquotesingle{}\#999999\textquotesingle{}}\NormalTok{, width}\OperatorTok{=}\FloatTok{1.2}\NormalTok{)}
+\NormalTok{nx.draw\_networkx\_edges(M, pos, edgelist}\OperatorTok{=}\NormalTok{path\_edges, edge\_color}\OperatorTok{=}\StringTok{\textquotesingle{}\#c0392b\textquotesingle{}}\NormalTok{, width}\OperatorTok{=}\FloatTok{3.0}\NormalTok{)}
+\NormalTok{nx.draw\_networkx\_labels(M, pos, font\_size}\OperatorTok{=}\DecValTok{11}\NormalTok{, font\_family}\OperatorTok{=}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.title(}\StringTok{\textquotesingle{}地铁网：中央公园 {-}\textgreater{} 科技园 最少时间路线\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.axis(}\StringTok{\textquotesingle{}off\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.tight\_layout()}
+\NormalTok{plt.savefig(}\StringTok{\textquotesingle{}figures/06{-}networkx/case3\_metro.png\textquotesingle{}}\NormalTok{, dpi}\OperatorTok{=}\DecValTok{150}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}已保存 figures/06{-}networkx/case3\_metro.png\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.close()}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果(已运行核验)}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-25}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{最短路径: [\textquotesingle{}中央公园\textquotesingle{}, \textquotesingle{}大学城\textquotesingle{}, \textquotesingle{}火车站\textquotesingle{}, \textquotesingle{}科技园\textquotesingle{}]}
+\NormalTok{最短时间(分钟): 6}
+\NormalTok{单源最短时间(按站名排序): \{\textquotesingle{}中央公园\textquotesingle{}: 0, \textquotesingle{}城东\textquotesingle{}: 3, \textquotesingle{}大学城\textquotesingle{}: 2, \textquotesingle{}机场\textquotesingle{}: 3, \textquotesingle{}火车站\textquotesingle{}: 4, \textquotesingle{}科技园\textquotesingle{}: 6\}}
+\NormalTok{已保存 figures/06{-}networkx/case3\_metro.png}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-25}
+
+\textbf{一句话人话}：每条地铁线都标上``坐多久''，Dijkstra
+就会像贪心一样从起点出发，每次先挑``目前累计时间最少''的站往前扩，最后得到总时间最少的换乘方案。
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \texttt{M.add\_weighted\_edges\_from(...)} 每条边的 \texttt{weight}
+  就是行驶分钟；地铁双向能坐，所以用无向 \texttt{nx.Graph} 即可。
+\item
+  \texttt{nx.dijkstra\_path(M,\ \textquotesingle{}中央公园\textquotesingle{},\ \textquotesingle{}科技园\textquotesingle{},\ weight=\textquotesingle{}weight\textquotesingle{})}
+  返回\textbf{一条}路径
+  \texttt{{[}\textquotesingle{}中央公园\textquotesingle{},\textquotesingle{}大学城\textquotesingle{},\textquotesingle{}火车站\textquotesingle{},\textquotesingle{}科技园\textquotesingle{}{]}}，时间是
+  2+2+2=6 分钟。
+\item
+  \texttt{nx.dijkstra\_path\_length(...)} 只返回总时间
+  6；\texttt{nx.single\_source\_dijkstra\_path\_length(...)}
+  返回从起点到\textbf{每个站}的最少时间，例如到机场 3 分钟（经大学城
+  2+1），到火车站 4 分钟（经大学城 2+2）。
+\item
+  注意 \texttt{weight=\textquotesingle{}weight\textquotesingle{}}
+  不能漏：如果不传，NetworkX 默认把所有边权当成
+  1，那就变成``换乘站数最少''，结果会不一样。
+\item
+  为什么走``中央公园→大学城→火车站→科技园''而不是``机场→科技园''那条？因为机场-科技园要
+  4 分钟，而大学城-机场只要 1+3=4 分钟，两者到科技园都 4
+  分钟；但走大学城-火车站-科技园是 2+2=4 分钟，所以整体最短是 6 分钟。
+\item
+  绘图用 \texttt{spring\_layout(...,\ seed=42)}
+  固定布局，红色高亮最短路径；\texttt{os.makedirs(\textquotesingle{}images\textquotesingle{},\ exist\_ok=True)}
+  保证目录存在。
+\end{enumerate}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={地铁最少时间路线}]{figures/06-networkx/case3_metro.png}}
+\caption{地铁最少时间路线}
+\end{figure}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-26}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+需求
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+写法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+说明
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+加带权边 & \texttt{add\_weighted\_edges\_from({[}(u,\ v,\ w){]})} &
+属性名 \texttt{weight} \\
+单源最短路 &
+\texttt{nx.dijkstra\_path(G,\ s,\ t,\ weight=\textquotesingle{}weight\textquotesingle{})}
+& 返回一条路径 \\
+最短距离 &
+\texttt{nx.dijkstra\_path\_length(G,\ s,\ t,\ weight=\textquotesingle{}weight\textquotesingle{})}
+& 返回总权重 \\
+到所有点距离 &
+\texttt{nx.single\_source\_dijkstra\_path\_length(G,\ s,\ weight=\textquotesingle{}weight\textquotesingle{})}
+& 返回 dict \\
+全源距离矩阵 &
+\texttt{nx.floyd\_warshall\_numpy(G,\ weight=\textquotesingle{}weight\textquotesingle{})}
+& 任意两点距离 \\
+有负权边 &
+\texttt{nx.bellman\_ford\_path(G,\ s,\ t,\ weight=\textquotesingle{}weight\textquotesingle{})}
+& 改用 Bellman-Ford \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-26}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  忘了
+  \texttt{weight=\textquotesingle{}weight\textquotesingle{}}：带权图会被当成无权图，结果变成``换乘/站数最少''而不是``时间最少''。
+\item
+  在含负权边的图上用 Dijkstra：Dijkstra
+  假设非负权；有负权（无负环）时应改用 \texttt{bellman\_ford\_path} 或
+  \texttt{floyd\_warshall}。
+\item
+  \texttt{single\_source\_dijkstra\_path\_length} 返回的 dict 顺序不确定
+  → 打印前用 \texttt{sorted(d.items())} 固定。
+\item
+  以为``总时间最少''等价于``经过站最少''：本例最短时间路线是 4 站 3
+  段；但若把机场-科技园改成 1 分钟，最短时间路线就变成经机场的 3
+  段，与少换乘目标不同。
+\end{enumerate}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-14}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  新增一条``机场-城东''直达线(2
+  分钟)，重新计算最短路与最短时间，看是否变短。
+\item
+  用
+  \texttt{nx.shortest\_path(M,\ \textquotesingle{}中央公园\textquotesingle{},\ \textquotesingle{}科技园\textquotesingle{})}(不带
+  weight)对比``站数最少''与``时间最少''两条路线。
+\item
+  把权重视为``票价''，用 \texttt{nx.bellman\_ford\_path}
+  重算（本例无负权，结果应一致）。
+\item
+  用
+  \texttt{nx.floyd\_warshall\_numpy(M,\ weight=\textquotesingle{}weight\textquotesingle{})}
+  输出 6x6 距离矩阵，并验证对角元为 0。
+\end{enumerate}
+
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsection{常见误区}\label{ux5e38ux89c1ux8befux533a-19}
@@ -1297,7 +1890,8 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-13}
 \begin{quote}
 本章新增综合案例，把 01--03 的知识串起来：\textbf{创建图 + 分析指标 +
 社区检测 + 最短路径 + 可视化}。 所有代码均在 NetworkX 3.x 下运行；配图由
-build/make\_chap6\_figures.py 生成。
+build/make\_chap6\_figures.py 生成。 本页即本章综合案例卡（案例卡
+4）：把 01--03 的知识串起来。
 \end{quote}
 
 \subsection{背景}\label{ux80ccux666f-5}
@@ -1491,6 +2085,79 @@ Q≈0.41 表示网络存在较明显的社区结构；社区大小
 \pandocbounded{\includegraphics[keepaspectratio,alt={空手道俱乐部 社区划分与最短路径}]{figures/06-networkx/network_case_communities.png}}
 \caption{空手道俱乐部 社区划分与最短路径}
 \end{figure}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-27}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+需求
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+写法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+说明
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+载入经典网络 & \texttt{nx.karate\_club\_graph()} & 34 节点 78 边 \\
+度分布 &
+\texttt{sorted({[}d\ for\ \_,\ d\ in\ K.degree(){]},\ reverse=True)} &
+长尾/无标度特征 \\
+全局指标 & \texttt{nx.average\_clustering} / \texttt{nx.transitivity} /
+\texttt{nx.average\_shortest\_path\_length} & 小世界效应 \\
+社区划分 & \texttt{nxcom.greedy\_modularity\_communities(K)} &
+返回社区集合 \\
+模块度 & \texttt{modularity(K,\ comms)} & 划分质量 Q \\
+最短路径 & \texttt{nx.shortest\_path(K,\ 0,\ 33)} & 无权最短路 \\
+可视化 & \texttt{nx.draw\_networkx\_*} +
+\texttt{spring\_layout(K,\ seed=42)} & 固定布局便于复现 \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-27}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  忘记导入社区子模块：社区函数在 \texttt{networkx.algorithms.community}
+  下，需要
+  \texttt{from\ networkx.algorithms\ import\ community\ as\ nxcom}。
+\item
+  把模块度 Q 当成``越大越绝对正确''：Q 是相对指标，0.41 对 34
+  节点网络已算不错，但不同算法或 seed 可能得到不同社区数。
+\item
+  \texttt{spring\_layout} 不传
+  \texttt{seed}：每次布局不同，截图/复现对不上。
+\item
+  把``度分布降序图''误当成直方图：这里 x
+  轴是``按度排序的节点编号''，并不是度数分箱。
+\end{enumerate}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-15}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  分别计算 0 号与 33
+  号的度、介数中心性、接近中心性，比较两者谁更像``中心''。
+\item
+  用 \texttt{nx.community.louvain\_communities(K,\ seed=42)}
+  划分，比较社区个数与 Q 值。
+\item
+  把``0→33
+  最短路径''推广成``所有点对平均最短路径''，并解释``六度分隔''。
+\item
+  用 \texttt{nx.to\_numpy\_array(K)} 得到 34x34
+  邻接矩阵，验证对称；再交给 SciPy 做特征值（可选）。
+\end{enumerate}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
