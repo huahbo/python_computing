@@ -23,7 +23,7 @@
 | Hands-On ML 3rd（Aurélien Géron） | [链接](https://github.com/ageron/handson-ml3) | 第 2 章起系统讲 sklearn，示例丰富 | ★推荐 |
 | Python Data Science Handbook（Jake VanderPlas） | [链接](https://github.com/jakevdp/PythonDataScienceHandbook) | 第 5 章“Machine Learning”可整章对照 | ★推荐 |
 | scikit-learn 官方示例库 | [链接](https://scikit-learn.org/stable/auto_examples/index.html) | 大量可运行示例，按算法/任务索引 | ★推荐 |
-| 李宏毅机器学习（开源社区整理） | [链接](https://github.com/huahbo/python_computing) | 中文讲义，串起 ML 与 DL 的“为什么” | 选读 |
+| 课程仓库参考（原：李宏毅机器学习（开源社区整理）） | [链接](https://github.com/huahbo/python_computing) | 中文讲义，串起 ML 与 DL 的“为什么” | 选读 |
 
 ## 三、习题与实战（课堂/作业/上机素材）
 
@@ -41,10 +41,10 @@
 | 资料 | 链接 | 说明 | 优先级 |
 | ---- | ---- | ---- | ---- |
 | sklearn 中文文档（社区译本） | [链接](https://github.com/casperdoudou/sklearn-doc-zh) | 中文版用户指南/API 参考，适合初读 | ★推荐 |
-| 南瓜书（《机器学习》公式推导） | [链接](https://github.com/huahbo/python_computing) | 与周志华《机器学习》配套的公式推导详解 | ★推荐 |
-| 李宏毅机器学习（开源社区） | [链接](https://github.com/huahbo/python_computing) | 中文讲义，机器学习到深度学习衔接 | ★推荐 |
-| 开源社区 聪明办法学 Python v2 | [链接](https://github.com/huahbo/python_computing) | 前置 Python 复习 | 选读 |
-| 本项目（《Python 科学计算》） | [链接](https://github.com/huahbo/python_computing) | 本书开源仓库 | 选读 |
+| 课程仓库参考（原：南瓜书（《机器学习》公式推导）） | [链接](https://github.com/huahbo/python_computing) | 与周志华《机器学习》配套的公式推导详解 | ★推荐 |
+| 课程仓库参考（原：李宏毅机器学习（开源社区）） | [链接](https://github.com/huahbo/python_computing) | 中文讲义，机器学习到深度学习衔接 | ★推荐 |
+| 课程仓库参考（原：开源社区 聪明办法学 Python v2） | [链接](https://github.com/huahbo/python_computing) | 前置 Python 复习 | 选读 |
+| 课程仓库参考（本课程主仓库） | [链接](https://github.com/huahbo/python_computing) | 本书开源仓库 | 选读 |
 
 ## 五、资源使用建议
 

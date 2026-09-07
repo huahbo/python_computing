@@ -45,9 +45,9 @@
 | SciPy 中文文档镜像 | [链接](https://docs.scipy.org.cn/doc/scipy/) | 中文版参考（版本可能较旧） | 中文补充 |
 | 猫头虎 SciPy 入门教程 | [链接](https://cloud.tencent.cn/developer/article/2449258) | 安装/模块/用例中文入门 | 中文补充 |
 | 知乎/CSDN“SciPy 教程”精选 | 搜索“SciPy 数值积分 优化 入门” | 按需筛选，注意核对版本 | 中文补充 |
-| 聪明办法学 Python（前置） | [链接](https://github.com/huahbo/python_computing) | 前置课程 | 中文补充 |
-| 数学建模导论（后续） | [链接](https://github.com/huahbo/python_computing) | 大量 SciPy 建模案例 | 中文补充 |
-| 本项目（科学计算） | [链接](https://github.com/huahbo/python_computing) | 本书开源仓库 | 中文补充 |
+| 课程仓库参考（原：聪明办法学 Python（前置）） | [链接](https://github.com/huahbo/python_computing) | 前置课程 | 中文补充 |
+| 课程仓库参考（数学建模导论） | [链接](https://github.com/huahbo/python_computing) | 大量 SciPy 建模案例 | 中文补充 |
+| 课程仓库参考（本课程主仓库） | [链接](https://github.com/huahbo/python_computing) | 本书开源仓库 | 中文补充 |
 
 ## 五、资源使用建议
 

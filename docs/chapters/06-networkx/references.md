@@ -36,7 +36,7 @@
 | 本章上机（本仓库 lab/） | [./lab/README.md](./lab/README.md) | 逐点演练 + 综合任务 | ★必做 |
 | 官方示例：空手道俱乐部 | [链接](https://networkx.org/documentation/stable/auto_examples/graph/plot_karate_club.html) | 经典社区网络可视化 | ★推荐 |
 | NetworkX 社区（Discussions/Stack Overflow） | [链接](https://networkx.org/documentation/stable/faq.html) | 常见问题与讨论入口 | 选读 |
-| Grape-book（图深度学习） | [链接](https://github.com/huahbo/python_computing) | 图神经网络进阶（延伸） | 选读 |
+| 课程仓库参考（原：Grape-book（图深度学习）） | [链接](https://github.com/huahbo/python_computing) | 图神经网络进阶（延伸） | 选读 |
 
 ## 四、中文补充
 
@@ -45,7 +45,7 @@
 | NetworkX 中文文档镜像 | [链接](https://networkx.cn/documentation/stable/) | 中文版官方文档（有翻译） | ★推荐 |
 | 华为云/CSDN NetworkX 教程 | [链接](https://blog.csdn.net/Rocky006/article/details/148866312) | 中文使用详解，含代码 | 选读 |
 | 知乎：复杂网络建模（Python+NetworkX） | [链接](https://zhuanlan.zhihu.com/p/591617257) | 复杂网络建模课程代码（中文） | 选读 |
-| 开源社区 图深度学习（葡萄书） | [链接](https://github.com/huahbo/python_computing) | 中文开源书，进阶图神经网络 | 选读 |
+| 课程仓库参考（原：开源社区 图深度学习（葡萄书）） | [链接](https://github.com/huahbo/python_computing) | 中文开源书，进阶图神经网络 | 选读 |
 
 ## 五、资源使用建议
 

@@ -42,9 +42,9 @@
 | ---- | ---- | ---- |
 | Pandas 中文入门（pandas.pydata.org 官方中文翻译入口） | [链接](https://pandas.pydata.org/docs/) | 官方文档，含中文化镜像 |
 | numpy.net.cn（中文学习站） | [链接](https://numpy.net.cn/) | 中文科学计算入门（含 Pandas 相关） |
-| 开源社区 聪明办法学 Python v2 | [链接](https://github.com/huahbo/python_computing) | 前置 Python 课程 |
-| 开源社区 数学建模导论 | [链接](https://github.com/huahbo/python_computing) | 后续课程（Pandas 实战） |
-| 本项目（科学计算） | [链接](https://github.com/huahbo/python_computing) | 本书开源仓库 |
+| 课程仓库参考（原：开源社区 聪明办法学 Python v2） | [链接](https://github.com/huahbo/python_computing) | 前置 Python 课程 |
+| 课程仓库参考（数学建模导论） | [链接](https://github.com/huahbo/python_computing) | 后续课程（Pandas 实战） |
+| 课程仓库参考（本课程主仓库） | [链接](https://github.com/huahbo/python_computing) | 本书开源仓库 |
 
 ## 五、资源使用建议
 

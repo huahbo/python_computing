@@ -20,7 +20,7 @@
 
 | 资料 | 链接 | 说明 | 优先级 |
 | ---- | ---- | ---- | ---- |
-| 聪明办法学 Python v2（开源社区） | [链接](https://github.com/huahbo/python_computing) | 前置课程：Chap0 安装、Chap1 启航、Chap2-6 基础语法 | ★推荐 |
+| 课程仓库参考（原：聪明办法学 Python v2（开源社区）） | [链接](https://github.com/huahbo/python_computing) | 前置课程：Chap0 安装、Chap1 启航、Chap2-6 基础语法 | ★推荐 |
 | Python Cheat Sheet | [链接](https://www.pythoncheatsheet.org/) | 速查表 | 推荐 |
 | Python 教程 · 廖雪峰（中文） | [链接](https://liaoxuefeng.com/books/python/introduction/) | 中文查漏 | 选读 |
 | Learn X in Y minutes: Python | [链接](https://learnxinyminutes.com/docs/zh-cn/python3-cn/) | 半小时过一遍语法 | 选读 |

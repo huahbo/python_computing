@@ -40,9 +40,9 @@
 
 | 资料 | 链接 | 说明 |
 | ---- | ---- | ---- |
-| 聪明办法学 Python v2 | [链接](https://github.com/huahbo/python_computing) | 前置课程 |
-| 数学建模导论 | [链接](https://github.com/huahbo/python_computing) | 后续课程 |
-| 本项目（科学计算） | [链接](https://github.com/huahbo/python_computing) | 本书开源仓库 |
+| 课程仓库参考（原：聪明办法学 Python v2） | [链接](https://github.com/huahbo/python_computing) | 前置课程 |
+| 课程仓库参考（数学建模导论） | [链接](https://github.com/huahbo/python_computing) | 后续课程 |
+| 课程仓库参考（本课程主仓库） | [链接](https://github.com/huahbo/python_computing) | 本书开源仓库 |
 
 ## 五、资源使用建议
 

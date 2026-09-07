@@ -28,7 +28,7 @@ Pandas 是 Python 数据分析的事实标准：它以 `Series`（一维带标�
 
 ## 先修要求与运行环境
 
-- 熟悉 Python 基础语法与 NumPy（第 1 章）；建议先学 [聪明办法学 Python](https://github.com/huahbo/python_computing) 与第 1 章 numpy。
+- 熟悉 Python 基础语法与 NumPy（第 1 章）；建议先学 [课程仓库参考（原：聪明办法学 Python）](https://github.com/huahbo/python_computing) 与第 1 章 numpy。
 - 安装 Python 3.10+ 与 Pandas：
 
 ```bash

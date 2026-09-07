@@ -34,7 +34,7 @@ SymPy 是 Python 的**符号计算（symbolic computation）**核心库：它不
 
 ## 先修要求与运行环境
 
-- 熟悉 Python 基础语法（变量、函数、循环；可先学 [聪明办法学 Python](https://github.com/huahbo/python_computing)）。
+- 熟悉 Python 基础语法（变量、函数、循环；可先学 [课程仓库参考（原：聪明办法学 Python）](https://github.com/huahbo/python_computing)）。
 - 了解基本的微积分与线性代数概念（极限、导数、积分、矩阵、特征值）。
 - 安装 Python 3.10+ 与 SymPy（同时建议安装 NumPy 与 Matplotlib，便于数值验证与画图）：
 

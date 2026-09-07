@@ -3,7 +3,7 @@
 > 本页由 `build/gen_references.py` **自动生成**，勿手改。单一事实源 = 各章 `references.md` + 附录 `references.md`；新增/删除引用后重新运行生成即可。
 > 速查方式：按类别浏览；每行“用于”列标注了哪些章节使用该资料，点章节链接可回正文。
 
-共汇总 **199 条**（来自 9 个章节 + 附录）。
+共汇总 **195 条**（来自 9 个章节 + 附录）。
 
 ## 一、官方文档与工具链
 
@@ -139,19 +139,17 @@
 | [Python Data Science Handbook (Jake VanderPlas)](https://github.com/jakevdp/PythonDataScienceHandbook) | 第 2 章 NumPy，可整章对照 | 第1章 NumPy、第3章 SciPy、第4章 Pandas |
 | [Python Data Science Handbook（Jake VanderPlas）](https://github.com/jakevdp/PythonDataScienceHandbook) | 第 4 章 Matplotlib、第 5 章 Seaborn，Notebook 形式 | 第5章 Matplotlib、第8章 scikit-learn |
 | [Python Data Science Handbook（符号计算附录）](https://github.com/jakevdp/PythonDataScienceHandbook) | 第 5 章 SymPy 简介，适合数据方向学生 | 第2章 SymPy |
-| [intro-mathmodel 第 1 章 Numpy 与线性代数](https://github.com/huahbo/python_computing) | 下游对齐 | 附录 |
 | [mml-book Chapter 2/3/4](https://mml-book.github.io/) | 线性代数/解析几何/矩阵分解 | 附录 |
 | [thinkstats2](https://github.com/AllenDowney/ThinkStats2) | 用 Python 讲统计 | 附录 |
-| [上游开源教材（科学计算）](https://github.com/huahbo/python_computing) | 本书开源仓库，含本章代码 | 第7章 Statsmodels |
-| [南瓜书（《机器学习》公式推导）](https://github.com/huahbo/python_computing) | 与周志华《机器学习》配套的公式推导详解 | 第8章 scikit-learn |
-| [开源社区 图深度学习（葡萄书）](https://github.com/huahbo/python_computing) | 中文开源书，进阶图神经网络 | 第6章 NetworkX |
-| [开源社区 数学建模导论](https://github.com/huahbo/python_computing) | 后续课程（Pandas 实战） | 第4章 Pandas |
-| [数学建模导论](https://github.com/huahbo/python_computing) | 后续课程 | 第1章 NumPy |
-| [数学建模导论（后续）](https://github.com/huahbo/python_computing) | 大量 SciPy 建模案例 | 第3章 SciPy |
-| [本项目（《Python 科学计算》）](https://github.com/huahbo/python_computing) | 本书开源仓库 | 第8章 scikit-learn |
-| [本项目（科学计算）](https://github.com/huahbo/python_computing) | 本书开源仓库 | 第1章 NumPy、第2章 SymPy、第3章 SciPy、第4章 Pandas、第5章 Matplotlib |
-| [李宏毅机器学习（开源社区整理）](https://github.com/huahbo/python_computing) | 中文讲义，串起 ML 与 DL 的“为什么” | 第8章 scikit-learn |
-| [李宏毅机器学习（开源社区）](https://github.com/huahbo/python_computing) | 中文讲义，机器学习到深度学习衔接 | 第8章 scikit-learn |
+| [课程仓库参考（原：南瓜书（《机器学习》公式推导））](https://github.com/huahbo/python_computing) | 与周志华《机器学习》配套的公式推导详解 | 第8章 scikit-learn |
+| [课程仓库参考（原：开源社区 图深度学习（葡萄书））](https://github.com/huahbo/python_computing) | 中文开源书，进阶图神经网络 | 第6章 NetworkX |
+| [课程仓库参考（原：李宏毅机器学习（开源社区整理））](https://github.com/huahbo/python_computing) | 中文讲义，串起 ML 与 DL 的“为什么” | 第8章 scikit-learn |
+| [课程仓库参考（原：李宏毅机器学习（开源社区））](https://github.com/huahbo/python_computing) | 中文讲义，机器学习到深度学习衔接 | 第8章 scikit-learn |
+| [课程仓库参考（数学建模导论）](https://github.com/huahbo/python_computing) | 后续课程 | 第1章 NumPy、第3章 SciPy、第4章 Pandas |
+| [课程仓库参考（数学建模导论：第 1 章 Numpy 与线性代数）](https://github.com/huahbo/python_computing) | 下游对齐 | 附录 |
+| [课程仓库参考（数学建模导论：第 4 章复杂网络与图论模型）](https://github.com/huahbo/python_computing) | 下游对齐 | 附录 |
+| [课程仓库参考（数学建模导论：第 7 章权重/评价、第 9 章统计模型）](https://github.com/huahbo/python_computing) | 下游对齐 | 附录 |
+| [课程仓库参考（本课程主仓库）](https://github.com/huahbo/python_computing) | 本书开源仓库 | 第1章 NumPy、第2章 SymPy、第3章 SciPy、第4章 Pandas、第5章 Matplotlib、第7章 Statsmodels、第8章 scikit-learn |
 
 ## 三、精品教程与课程
 
@@ -184,16 +182,17 @@
 | [华为云/CSDN NetworkX 教程](https://blog.csdn.net/Rocky006/article/details/148866312) | 中文使用详解，含代码 | 第6章 NetworkX |
 | [可汗学院（中文）](https://zh.khanacademy.org/) | 微积分/统计基础 | 附录 |
 | [廖雪峰 Git 教程（中文）](https://liaoxuefeng.com/books/git/introduction/) | 中文入门 | 第0章 前置基础 |
-| [开源社区 fantastic-matplotlib](https://github.com/huahbo/python_computing) | 中文、渐进式 Matplotlib 教程 | 第5章 Matplotlib |
-| [开源社区 wow-plotly](https://github.com/huahbo/python_computing) | Plotly 交互式教程（对比阅读） | 第5章 Matplotlib |
-| [开源社区 聪明办法学 Python v2](https://github.com/huahbo/python_computing) | 前置 Python 课程 | 第4章 Pandas、第8章 scikit-learn |
 | [猫头虎 SciPy 入门教程](https://cloud.tencent.cn/developer/article/2449258) | 安装/模块/用例中文入门 | 第3章 SciPy |
 | [知乎专栏：SymPy 入门与实战](https://zhuanlan.zhihu.com/p/111573239) | 中文文章，带代码与截图 | 第2章 SymPy |
 | [知乎：复杂网络建模（Python+NetworkX）](https://zhuanlan.zhihu.com/p/591617257) | 复杂网络建模课程代码（中文） | 第6章 NetworkX |
-| [社区时间序列相关笔记](https://github.com/huahbo/python_computing) | 时间序列特征与规则入门 | 第7章 Statsmodels |
-| [聪明办法学 Python v2](https://github.com/huahbo/python_computing) | 前置课程 | 第1章 NumPy、第2章 SymPy、第7章 Statsmodels |
-| [聪明办法学 Python v2（开源社区）](https://github.com/huahbo/python_computing) | 前置课程：Chap0 安装、Chap1 启航、Chap2-6 基础语法 | 第0章 前置基础 |
-| [聪明办法学 Python（前置）](https://github.com/huahbo/python_computing) | 前置课程 | 第3章 SciPy、第5章 Matplotlib |
+| [课程仓库参考（原：Grape-book（图深度学习））](https://github.com/huahbo/python_computing) | 图神经网络进阶（延伸） | 第6章 NetworkX |
+| [课程仓库参考（原：开源社区 fantastic-matplotlib）](https://github.com/huahbo/python_computing) | 中文、渐进式 Matplotlib 教程 | 第5章 Matplotlib |
+| [课程仓库参考（原：开源社区 wow-plotly）](https://github.com/huahbo/python_computing) | Plotly 交互式教程（对比阅读） | 第5章 Matplotlib |
+| [课程仓库参考（原：开源社区 聪明办法学 Python v2）](https://github.com/huahbo/python_computing) | 前置 Python 课程 | 第4章 Pandas、第8章 scikit-learn |
+| [课程仓库参考（原：社区时间序列相关笔记）](https://github.com/huahbo/python_computing) | 时间序列特征与规则入门 | 第7章 Statsmodels |
+| [课程仓库参考（原：聪明办法学 Python v2（开源社区））](https://github.com/huahbo/python_computing) | 前置课程：Chap0 安装、Chap1 启航、Chap2-6 基础语法 | 第0章 前置基础 |
+| [课程仓库参考（原：聪明办法学 Python v2）](https://github.com/huahbo/python_computing) | 前置课程 | 第1章 NumPy、第2章 SymPy、第7章 Statsmodels |
+| [课程仓库参考（原：聪明办法学 Python（前置））](https://github.com/huahbo/python_computing) | 前置课程 | 第3章 SciPy、第5章 Matplotlib |
 
 ## 四、习题与实战
 
@@ -211,12 +210,9 @@
 
 | 资料 | 说明 | 用于 |
 | ---- | ---- | ---- |
-| [Grape-book（图深度学习）](https://github.com/huahbo/python_computing) | 图神经网络进阶（延伸） | 第6章 NetworkX |
 | [Python for Data Analysis 3rd (Wes McKinney)](https://github.com/wesm/pydata-book) | Pandas 作者亲著，第三版配套代码 | 第4章 Pandas |
 | [Python for Data Analysis（Wes McKinney）](https://github.com/wesm/pydata-book) | 14 章包含 statsmodels 回归示例 | 第7章 Statsmodels |
 | [dair-ai/Mathematics-for-ML](https://github.com/dair-ai/Mathematics-for-ML) | 按主题收集资源的清单 | 附录 |
-| [intro-mathmodel 第 4 章 复杂网络与图论模型](https://github.com/huahbo/python_computing) | 下游对齐 | 附录 |
-| [intro-mathmodel 第 7 章（权重/评价）、第 9 章（统计模型）](https://github.com/huahbo/python_computing) | 下游对齐 | 附录 |
 | [matplotlib-cn（中文文档）](https://github.com/tomdonald/matplotlib-cn) | Matplotlib 中文文档镜像 | 第5章 Matplotlib |
 | [mint-lab/prog_meets_math](https://github.com/mint-lab/prog_meets_math) | "Python Meets Math"：Calculus / Linear Algebra / Optimization / Probability + 代码 | 附录 |
 
