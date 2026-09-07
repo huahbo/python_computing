@@ -252,6 +252,156 @@ print("已保存 lab_case_report.png")
 plt.show()
 """)
 
+md("""## Part 5 案例卡跟练与变形（新增）
+
+为 01/02/03 新增的三个案例卡补上跟练 / 变形 / 综合任务。每个案例 3 个 cell，共 9 个。""")
+
+md("""### 案例 1（01 基本绘图）用 subplots 画成绩四连图""")
+
+code("""# 跟练 5.1 改成 1x4 横排
+import numpy as np
+import matplotlib.pyplot as plt
+plt.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei", "DejaVu Sans"]
+plt.rcParams["axes.unicode_minus"] = False
+np.set_printoptions(precision=4, suppress=True)
+subjects = ["语文", "数学", "英语"]
+scores = np.array([[88, 92, 79], [67, 73, 60], [95, 88, 90], [72, 80, 83]])
+fig, axes = plt.subplots(1, 4, figsize=(15, 3))
+axes[0].plot(subjects, scores[0], marker="o"); axes[0].set_title("1名学生")
+axes[1].bar(subjects, scores.mean(axis=0)); axes[1].set_title("各科平均")
+axes[2].hist(scores.ravel(), bins=6); axes[2].set_title("全体成绩")
+axes[3].boxplot([scores[:, j] for j in range(3)]); axes[3].set_title("各科箱线")
+plt.close(fig)
+print("axs shape:", axes.shape)
+""")
+
+code("""# 变形 5.2 按总分排名并给柱状图加标签
+import numpy as np
+import matplotlib.pyplot as plt
+plt.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei", "DejaVu Sans"]
+plt.rcParams["axes.unicode_minus"] = False
+scores = np.array([[88, 92, 79], [67, 73, 60], [95, 88, 90], [72, 80, 83]])
+totals = scores.sum(axis=1)
+order = np.argsort(totals)[::-1]
+print("rank top index:", int(order[0]))
+fig, axes = plt.subplots(1, 2, figsize=(10, 3))
+axes[0].bar(["A", "B", "C", "D"], totals)
+for i, v in enumerate(totals):
+    axes[0].text(i, v + 3, str(int(v)), ha="center", fontsize=8)
+axes[1].plot(totals, marker="o")
+plt.close(fig)
+print("done")
+""")
+
+code("""# 综合 5.3 2x2 四连图并保存 lab_case1.png
+import numpy as np
+import matplotlib.pyplot as plt
+plt.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei", "DejaVu Sans"]
+plt.rcParams["axes.unicode_minus"] = False
+subjects = ["语文", "数学", "英语"]
+scores = np.array([[88, 92, 79], [67, 73, 60], [95, 88, 90], [72, 80, 83]])
+fig, axes = plt.subplots(2, 2, figsize=(10, 7))
+for i in range(4):
+    axes[i // 2, i % 2].plot(subjects, scores[i], marker="o")
+axes[0, 0].set_title("成绩折线"); axes[1, 0].bar(subjects, scores.mean(axis=0))
+axes[0, 1].hist(scores.ravel(), bins=8); axes[1, 1].boxplot([scores[:, j] for j in range(3)])
+fig.tight_layout()
+fig.savefig("lab_case1.png", dpi=150)
+plt.close(fig)
+print("saved lab_case1.png")
+""")
+
+md("""### 案例 2（03 Seaborn 美化）箱线图+提琴图比较班级成绩""")
+
+code("""# 跟练 5.4 三个班密度曲线叠加
+import numpy as np, pandas as pd, seaborn as sns, matplotlib.pyplot as plt
+plt.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei", "DejaVu Sans"]
+plt.rcParams["axes.unicode_minus"] = False
+rng = np.random.default_rng(7); n = 60
+df = pd.DataFrame({"班级": np.repeat(["1班", "2班", "3班"], n),
+                   "成绩": np.concatenate([rng.normal(72, 8, n), rng.normal(80, 9, n), rng.normal(88, 7, n)])})
+sns.kdeplot(data=df, x="成绩", hue="班级", fill=True)
+plt.close()
+print("rows:", len(df))
+""")
+
+code("""# 变形 5.5 加“性别”列做副分组箱线图
+import numpy as np, pandas as pd, seaborn as sns, matplotlib.pyplot as plt
+plt.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei", "DejaVu Sans"]
+plt.rcParams["axes.unicode_minus"] = False
+rng = np.random.default_rng(3); n = 60
+df = pd.DataFrame({"班级": np.repeat(["1班", "2班", "3班"], n),
+                   "性别": np.tile(np.repeat(["男", "女"], n // 2), 3),
+                   "成绩": np.concatenate([rng.normal(72, 8, n), rng.normal(80, 9, n), rng.normal(88, 7, n)])})
+df["成绩"] += np.where(df["性别"] == "男", 1.5, -1.5)
+sns.boxplot(data=df, x="班级", y="成绩", hue="性别")
+plt.close()
+print("group counts:", df.groupby("性别").size().tolist())
+""")
+
+code("""# 综合 5.6 FacetGrid 分面并保存 lab_case2.png
+import numpy as np, pandas as pd, seaborn as sns
+plt.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei", "DejaVu Sans"]
+plt.rcParams["axes.unicode_minus"] = False
+rng = np.random.default_rng(7); n = 60
+df = pd.DataFrame({"班级": np.repeat(["1班", "2班", "3班"], n),
+                   "成绩": np.concatenate([rng.normal(72, 8, n), rng.normal(80, 9, n), rng.normal(88, 7, n)])})
+g = sns.FacetGrid(df, col="班级", col_wrap=3, height=2.5, aspect=1.2)
+g.map(sns.histplot, "成绩", bins=12)
+g.savefig("lab_case2.png", dpi=150)
+print("facet axes:", len(g.axes.flat))
+""")
+
+md("""### 案例 3（02 图窗布局与排版）中文字体与保存""")
+
+code("""# 跟练 5.7 设置全局字体后画 2x2 报告图
+import numpy as np, matplotlib.pyplot as plt
+plt.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei", "DejaVu Sans"]
+plt.rcParams["axes.unicode_minus"] = False
+fig, axes = plt.subplots(2, 2, figsize=(9, 6))
+months = ["1月", "2月", "3月", "4月", "5月", "6月"]
+sales = np.array([120, 95, 150, 170, 140, 210])
+axes[0, 0].bar(months, sales); axes[0, 0].set_title("柱状")
+axes[0, 1].plot(months, sales, marker="o"); axes[0, 1].set_title("折线")
+axes[1, 0].hist(sales, bins=6); axes[1, 0].set_title("直方")
+axes[1, 1].boxplot(sales); axes[1, 1].set_title("箱线")
+fig.tight_layout()
+plt.close(fig)
+print("suptitle ok")
+""")
+
+code("""# 变形 5.8 对比三种 dpi 保存
+import numpy as np, matplotlib.pyplot as plt, os
+plt.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei", "DejaVu Sans"]
+plt.rcParams["axes.unicode_minus"] = False
+x = np.linspace(0, 2 * np.pi, 100)
+fig, axes = plt.subplots(1, 2, figsize=(9, 3))
+axes[0].plot(x, np.sin(x)); axes[1].plot(x, np.cos(x), ls="--")
+out = []
+for dpi in [100, 150, 300]:
+    name = f"lab_dpi_{dpi}.png"
+    fig.savefig(name, dpi=dpi)
+    out.append(os.path.exists(name))
+plt.close(fig)
+print("files exist:", out)
+""")
+
+code("""# 综合 5.9 保存 PNG+PDF 并检查 tight_layout
+import numpy as np, matplotlib.pyplot as plt, os
+plt.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei", "DejaVu Sans"]
+plt.rcParams["axes.unicode_minus"] = False
+fig, axes = plt.subplots(2, 2, figsize=(9, 6))
+for ax in axes.flat:
+    ax.plot([1, 2, 3], [2, 1, 3])
+fig.suptitle("综合：中文字体与保存", fontsize=14)
+fig.tight_layout(rect=[0, 0, 1, 0.95])
+fig.savefig("lab_case3.png", dpi=150)
+fig.savefig("lab_case3.pdf")
+plt.close(fig)
+print("png exists:", os.path.exists("lab_case3.png"))
+print("pdf exists:", os.path.exists("lab_case3.pdf"))
+""")
+
 md("""## 提交清单
 
 - [ ] 所有 TODO 均已填写并运行；

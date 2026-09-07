@@ -60,7 +60,12 @@ Axes）。本教材优先介绍函数式，第 2 节再切换到面向对象。
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
 \ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 
 \NormalTok{x }\OperatorTok{=}\NormalTok{ [}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{]}
 \NormalTok{y }\OperatorTok{=}\NormalTok{ [}\DecValTok{1}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{16}\NormalTok{, }\DecValTok{25}\NormalTok{]}
@@ -315,21 +320,23 @@ Axes）。本教材优先介绍函数式，第 2 节再切换到面向对象。
 \NormalTok{plt.polar(theta, r)}
 \NormalTok{plt.title(}\StringTok{\textquotesingle{}Polar Chart\textquotesingle{}}\NormalTok{)}
 \BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}polar points:\textquotesingle{}}\NormalTok{, r.size)}
+\NormalTok{plt.close()   }\CommentTok{\# 关闭极坐标图，避免与下面的 3D/等高线共用 Figure}
 
 \CommentTok{\#\# 3D 曲面}
 \NormalTok{x }\OperatorTok{=}\NormalTok{ np.linspace(}\OperatorTok{{-}}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{100}\NormalTok{)}\OperatorTok{;}\NormalTok{ y }\OperatorTok{=}\NormalTok{ np.linspace(}\OperatorTok{{-}}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{100}\NormalTok{)}
 \NormalTok{X, Y }\OperatorTok{=}\NormalTok{ np.meshgrid(x, y)}
 \NormalTok{Z }\OperatorTok{=}\NormalTok{ np.sin(np.sqrt(X}\OperatorTok{**}\DecValTok{2} \OperatorTok{+}\NormalTok{ Y}\OperatorTok{**}\DecValTok{2}\NormalTok{))}
-\NormalTok{fig }\OperatorTok{=}\NormalTok{ plt.figure()}
-\NormalTok{ax }\OperatorTok{=}\NormalTok{ fig.add\_subplot(}\DecValTok{111}\NormalTok{, projection}\OperatorTok{=}\StringTok{\textquotesingle{}3d\textquotesingle{}}\NormalTok{)}
+\NormalTok{fig3d }\OperatorTok{=}\NormalTok{ plt.figure()}
+\NormalTok{ax }\OperatorTok{=}\NormalTok{ fig3d.add\_subplot(}\DecValTok{111}\NormalTok{, projection}\OperatorTok{=}\StringTok{\textquotesingle{}3d\textquotesingle{}}\NormalTok{)}
 \NormalTok{ax.plot\_surface(X, Y, Z, cmap}\OperatorTok{=}\StringTok{\textquotesingle{}viridis\textquotesingle{}}\NormalTok{)}
 \BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}surface shape:\textquotesingle{}}\NormalTok{, Z.shape)}
-\NormalTok{plt.close(fig)     }\CommentTok{\# 关闭 3D 图，避免与下面的等高线共用 Figure}
+\NormalTok{plt.close(fig3d)     }\CommentTok{\# 关闭 3D 图，避免与下面的等高线共用 Figure}
 
-\CommentTok{\#\# 等高线}
-\NormalTok{plt.contour(X, Y, Z, colors}\OperatorTok{=}\StringTok{\textquotesingle{}k\textquotesingle{}}\NormalTok{)}
-\NormalTok{plt.contourf(X, Y, Z, cmap}\OperatorTok{=}\StringTok{\textquotesingle{}viridis\textquotesingle{}}\NormalTok{)}
-\NormalTok{plt.colorbar()}
+\CommentTok{\#\# 等高线（显式用二维 Axes，避免落在 3D 坐标轴上报错）}
+\NormalTok{fig2, ax2 }\OperatorTok{=}\NormalTok{ plt.subplots()}
+\NormalTok{cs }\OperatorTok{=}\NormalTok{ ax2.contourf(X, Y, Z, cmap}\OperatorTok{=}\StringTok{\textquotesingle{}viridis\textquotesingle{}}\NormalTok{)}
+\NormalTok{ax2.contour(X, Y, Z, colors}\OperatorTok{=}\StringTok{\textquotesingle{}k\textquotesingle{}}\NormalTok{)}
+\NormalTok{fig2.colorbar(cs)}
 \BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}X,Y,Z shapes:\textquotesingle{}}\NormalTok{, X.shape, Y.shape, Z.shape)}
 \end{Highlighting}
 \end{Shaded}
@@ -352,6 +359,172 @@ Axes）。本教材优先介绍函数式，第 2 节再切换到面向对象。
 \centering
 \pandocbounded{\includegraphics[keepaspectratio,alt={基础图表一览}]{figures/05-matplotlib/basic_plots.png}}
 \caption{基础图表一览}
+\end{figure}
+
+\subsection{案例卡 1：用 subplots
+画``成绩四连图''------折线/柱状/直方/箱线}\label{ux6848ux4f8bux5361-1ux7528-subplots-ux753bux6210ux7ee9ux56dbux8fdeux56feux6298ux7ebfux67f1ux72b6ux76f4ux65b9ux7bb1ux7ebf}
+
+\subsubsection{目标}\label{ux76eeux6807-21}
+
+把一张 4 名学生 × 3 门课的成绩表，用一张 2×2 的 \texttt{subplots}
+同时画出四种基础图：折线图、柱状图、直方图、箱线图。学会``先想清楚每格放什么，再往对应的
+\texttt{ax} 上画''。
+
+\subsubsection{代码}\label{ux4ee3ux7801-22}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+\ImportTok{import}\NormalTok{ os}
+
+\NormalTok{os.makedirs(}\StringTok{\textquotesingle{}images\textquotesingle{}}\NormalTok{, exist\_ok}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\NormalTok{students }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}小明\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}小红\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}小刚\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}小丽\textquotesingle{}}\NormalTok{]}
+\NormalTok{subjects }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}语文\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}数学\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}英语\textquotesingle{}}\NormalTok{]}
+\NormalTok{scores }\OperatorTok{=}\NormalTok{ np.array([}
+\NormalTok{    [}\DecValTok{88}\NormalTok{, }\DecValTok{92}\NormalTok{, }\DecValTok{79}\NormalTok{],}
+\NormalTok{    [}\DecValTok{67}\NormalTok{, }\DecValTok{73}\NormalTok{, }\DecValTok{60}\NormalTok{],}
+\NormalTok{    [}\DecValTok{95}\NormalTok{, }\DecValTok{88}\NormalTok{, }\DecValTok{90}\NormalTok{],}
+\NormalTok{    [}\DecValTok{72}\NormalTok{, }\DecValTok{80}\NormalTok{, }\DecValTok{83}\NormalTok{],}
+\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}shape:\textquotesingle{}}\NormalTok{, scores.shape)}
+
+\NormalTok{fig, axes }\OperatorTok{=}\NormalTok{ plt.subplots(}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, figsize}\OperatorTok{=}\NormalTok{(}\DecValTok{10}\NormalTok{, }\DecValTok{7}\NormalTok{))}
+\ControlFlowTok{for}\NormalTok{ i, name }\KeywordTok{in} \BuiltInTok{enumerate}\NormalTok{(students):}
+\NormalTok{    axes[}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{].plot(subjects, scores[i], marker}\OperatorTok{=}\StringTok{\textquotesingle{}o\textquotesingle{}}\NormalTok{, label}\OperatorTok{=}\NormalTok{name)}
+\NormalTok{axes[}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{].set\_title(}\StringTok{\textquotesingle{}每位学生三科成绩折线\textquotesingle{}}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{].legend(fontsize}\OperatorTok{=}\DecValTok{8}\NormalTok{)}\OperatorTok{;}\NormalTok{ axes[}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{].grid(alpha}\OperatorTok{=}\FloatTok{0.3}\NormalTok{)}
+
+\NormalTok{means }\OperatorTok{=}\NormalTok{ scores.mean(axis}\OperatorTok{=}\DecValTok{0}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{].bar(subjects, means, color}\OperatorTok{=}\NormalTok{[}\StringTok{\textquotesingle{}\#4C9F70\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}\#2F6FB3\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}\#C0392B\textquotesingle{}}\NormalTok{])}
+\NormalTok{axes[}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{].set\_title(}\StringTok{\textquotesingle{}各科平均分\textquotesingle{}}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ j, m }\KeywordTok{in} \BuiltInTok{enumerate}\NormalTok{(means):}
+\NormalTok{    axes[}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{].text(j, m }\OperatorTok{+} \DecValTok{1}\NormalTok{, }\SpecialStringTok{f\textquotesingle{}}\SpecialCharTok{\{}\NormalTok{m}\SpecialCharTok{:.1f\}}\SpecialStringTok{\textquotesingle{}}\NormalTok{, ha}\OperatorTok{=}\StringTok{\textquotesingle{}center\textquotesingle{}}\NormalTok{, fontsize}\OperatorTok{=}\DecValTok{9}\NormalTok{)}
+
+\NormalTok{axes[}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{].hist(scores.ravel(), bins}\OperatorTok{=}\DecValTok{8}\NormalTok{, alpha}\OperatorTok{=}\FloatTok{0.7}\NormalTok{, color}\OperatorTok{=}\StringTok{\textquotesingle{}\#7fc59f\textquotesingle{}}\NormalTok{, edgecolor}\OperatorTok{=}\StringTok{\textquotesingle{}white\textquotesingle{}}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{].set\_title(}\StringTok{\textquotesingle{}全班成绩直方图\textquotesingle{}}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{].set\_xlabel(}\StringTok{\textquotesingle{}分数\textquotesingle{}}\NormalTok{)}\OperatorTok{;}\NormalTok{ axes[}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{].set\_ylabel(}\StringTok{\textquotesingle{}人数\textquotesingle{}}\NormalTok{)}
+
+\NormalTok{axes[}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{].boxplot([scores[:, j] }\ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{3}\NormalTok{)], tick\_labels}\OperatorTok{=}\NormalTok{subjects)}
+\NormalTok{axes[}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{].set\_title(}\StringTok{\textquotesingle{}各科成绩箱线图\textquotesingle{}}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{].set\_ylabel(}\StringTok{\textquotesingle{}分数\textquotesingle{}}\NormalTok{)}
+
+\NormalTok{fig.suptitle(}\StringTok{\textquotesingle{}成绩四连图：折线/柱状/直方/箱线\textquotesingle{}}\NormalTok{, fontsize}\OperatorTok{=}\DecValTok{14}\NormalTok{)}
+\NormalTok{fig.tight\_layout(rect}\OperatorTok{=}\NormalTok{[}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\FloatTok{0.95}\NormalTok{])}
+\NormalTok{fig.savefig(}\StringTok{\textquotesingle{}figures/05{-}matplotlib/case1\_scores\_subplots.png\textquotesingle{}}\NormalTok{, dpi}\OperatorTok{=}\DecValTok{150}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}mean by subject:\textquotesingle{}}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(means, }\DecValTok{2}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}max total index:\textquotesingle{}}\NormalTok{, }\BuiltInTok{int}\NormalTok{(np.argmax(scores.}\BuiltInTok{sum}\NormalTok{(axis}\OperatorTok{=}\DecValTok{1}\NormalTok{))))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}done\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-20}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{shape: (4, 3)}
+\NormalTok{mean by subject: [80.5  83.25 78.  ]}
+\NormalTok{max total index: 2}
+\NormalTok{done}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-20}
+
+\textbf{一句话人话}：\texttt{fig,\ axes\ =\ plt.subplots(2,\ 2)}
+相当于买了一张 2×2 的``画板''并把它分成 4 个小画板，用
+\texttt{axes{[}0,0{]}}、\texttt{axes{[}1,1{]}} 等分别往里面画，最后
+\texttt{savefig} 一次性保存。
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{scores} 是 \texttt{(4,\ 3)} 的矩阵：4 行 = 4 名学生，3 列 =
+  语文/数学/英语。
+\item
+  \texttt{axes{[}0,\ 0{]}.plot(subjects,\ scores{[}i{]},\ ...)} 中
+  \texttt{scores{[}i{]}} 是第 i
+  个学生的三门成绩，所以水平方向是科目、垂直方向是分数。
+\item
+  \texttt{scores.mean(axis=0)}
+  沿``学生''这一维折叠，得到三门课各自平均分；\texttt{axis=0}
+  口诀：消除第 0 维，保留第 1 维。
+\item
+  \texttt{scores.ravel()} 把 \texttt{(4,\ 3)} 展平成 12
+  个分数，\texttt{hist} 画出这 12 个数的分布。
+\item
+  \texttt{boxplot({[}scores{[}:,\ 0{]},\ scores{[}:,\ 1{]},\ scores{[}:,\ 2{]}{]})}
+  把三门课各看成一串数据，画出三个``箱子''，一眼看出哪门课最稳、哪门课波动大。
+\item
+  每个子图都有自己的
+  \texttt{set\_title/set\_xlabel/set\_ylabel}；全部画完后
+  \texttt{fig.tight\_layout()}
+  让子图不挤在一起，\texttt{fig.savefig(...)} 输出到
+  \texttt{figures/05-matplotlib/}。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-21}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+需求 & 写法 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+创建 2×2 子图 & \texttt{fig,\ axes\ =\ plt.subplots(2,\ 2)} \\
+访问子图 & \texttt{axes{[}0,\ 0{]}} / \texttt{axes{[}1,\ 1{]}} \\
+折线图 &
+\texttt{axes{[}i,\ j{]}.plot(x,\ y,\ marker=\textquotesingle{}o\textquotesingle{})} \\
+柱状图 & \texttt{axes{[}i,\ j{]}.bar(x,\ y)} \\
+直方图 & \texttt{axes{[}i,\ j{]}.hist(data,\ bins=n)} \\
+箱线图 & \texttt{axes{[}i,\ j{]}.boxplot({[}col1,\ col2,\ ...{]})} \\
+保存 &
+\texttt{fig.savefig(\textquotesingle{}figures/05-matplotlib/x.png\textquotesingle{},\ dpi=150)} \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-21}
+
+\begin{itemize}
+\tightlist
+\item
+  忘记 \texttt{axes} 是 2×2 的 ndarray，直接 \texttt{axes.plot(...)}
+  会报 \texttt{AttributeError}；
+\item
+  把不同图都画到同一个 \texttt{axes}（比如一直用
+  \texttt{axes{[}0,\ 0{]}}），导致四个格子只有一个有内容；
+\item
+  不调用 \texttt{fig.tight\_layout()}，子图标题/标签互相重叠；
+\item
+  用 \texttt{plt.savefig(...)} 但没先创建``当前图''；这里建议始终用
+  \texttt{fig.savefig(...)}。
+\end{itemize}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-9}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  把子图改为 1×4 或 2×2 之后调换顺序，观察排版差异；
+\item
+  给柱状图每根柱子加上数值标签（参考 \texttt{text} 用法）；
+\item
+  把箱线图改成``每个学生''而不是``每门课''；
+\item
+  把这张图保存为 300 DPI 的 PNG，并比较文件大小。
+\end{enumerate}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={成绩四连图}]{figures/05-matplotlib/case1_scores_subplots.png}}
+\caption{成绩四连图}
 \end{figure}
 
 \subsection{常见误区}\label{ux5e38ux89c1ux8befux533a-14}
@@ -490,7 +663,12 @@ Matplotlib 的核心对象是 \textbf{Figure}（整张图）与
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
 \ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 
 \NormalTok{fig }\OperatorTok{=}\NormalTok{ plt.figure(figsize}\OperatorTok{=}\NormalTok{(}\DecValTok{10}\NormalTok{, }\DecValTok{4}\NormalTok{), dpi}\OperatorTok{=}\DecValTok{100}\NormalTok{)}
 \NormalTok{ax }\OperatorTok{=}\NormalTok{ fig.add\_subplot(}\DecValTok{111}\NormalTok{)          }\CommentTok{\# 111 表示 1×1 网格中的第 1 个}
@@ -700,6 +878,173 @@ DPI；格式由扩展名决定（\texttt{png} / \texttt{jpg} / \texttt{pdf} /
 \texttt{svg} 等）。
 \end{quote}
 
+\subsection{案例卡
+3：中文字体与保存------做一张可以交作业的报告图}\label{ux6848ux4f8bux5361-3ux4e2dux6587ux5b57ux4f53ux4e0eux4fddux5b58ux505aux4e00ux5f20ux53efux4ee5ux4ea4ux4f5cux4e1aux7684ux62a5ux544aux56fe}
+
+\subsubsection{目标}\label{ux76eeux6807-22}
+
+配置中文字体与负号显示，做一张包含``柱状图 +
+折线图''的报告图，并同时保存为高分辨率 PNG 与
+PDF。学会``交作业前最后两步：\texttt{tight\_layout()} +
+\texttt{savefig}''。
+
+\subsubsection{代码}\label{ux4ee3ux7801-23}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+\ImportTok{import}\NormalTok{ os}
+
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{os.makedirs(}\StringTok{\textquotesingle{}images\textquotesingle{}}\NormalTok{, exist\_ok}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\NormalTok{months }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}1月\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}2月\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}3月\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}4月\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}5月\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}6月\textquotesingle{}}\NormalTok{]}
+\NormalTok{sales }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{120}\NormalTok{, }\DecValTok{95}\NormalTok{, }\DecValTok{150}\NormalTok{, }\DecValTok{170}\NormalTok{, }\DecValTok{140}\NormalTok{, }\DecValTok{210}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}months:\textquotesingle{}}\NormalTok{, }\BuiltInTok{len}\NormalTok{(months), }\StringTok{\textquotesingle{} max index:\textquotesingle{}}\NormalTok{, }\BuiltInTok{int}\NormalTok{(np.argmax(sales)))}
+
+\NormalTok{fig, axes }\OperatorTok{=}\NormalTok{ plt.subplots(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, figsize}\OperatorTok{=}\NormalTok{(}\DecValTok{11}\NormalTok{, }\DecValTok{4}\NormalTok{))}
+\NormalTok{axes[}\DecValTok{0}\NormalTok{].bar(months, sales, color}\OperatorTok{=}\StringTok{\textquotesingle{}\#2f6fb3\textquotesingle{}}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{0}\NormalTok{].set\_title(}\StringTok{\textquotesingle{}月度销量柱状图\textquotesingle{}}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{0}\NormalTok{].set\_xlabel(}\StringTok{\textquotesingle{}月份\textquotesingle{}}\NormalTok{)}\OperatorTok{;}\NormalTok{ axes[}\DecValTok{0}\NormalTok{].set\_ylabel(}\StringTok{\textquotesingle{}销量\textquotesingle{}}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ i, v }\KeywordTok{in} \BuiltInTok{enumerate}\NormalTok{(sales):}
+\NormalTok{    axes[}\DecValTok{0}\NormalTok{].text(i, v }\OperatorTok{+} \DecValTok{4}\NormalTok{, }\SpecialStringTok{f\textquotesingle{}}\SpecialCharTok{\{}\NormalTok{v}\SpecialCharTok{\}}\SpecialStringTok{\textquotesingle{}}\NormalTok{, ha}\OperatorTok{=}\StringTok{\textquotesingle{}center\textquotesingle{}}\NormalTok{, fontsize}\OperatorTok{=}\DecValTok{9}\NormalTok{)}
+
+\NormalTok{axes[}\DecValTok{1}\NormalTok{].plot(months, sales, marker}\OperatorTok{=}\StringTok{\textquotesingle{}o\textquotesingle{}}\NormalTok{, color}\OperatorTok{=}\StringTok{\textquotesingle{}\#e07b39\textquotesingle{}}\NormalTok{, lw}\OperatorTok{=}\DecValTok{2}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{1}\NormalTok{].set\_title(}\StringTok{\textquotesingle{}月度销量趋势\textquotesingle{}}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{1}\NormalTok{].set\_xlabel(}\StringTok{\textquotesingle{}月份\textquotesingle{}}\NormalTok{)}\OperatorTok{;}\NormalTok{ axes[}\DecValTok{1}\NormalTok{].set\_ylabel(}\StringTok{\textquotesingle{}销量\textquotesingle{}}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{1}\NormalTok{].grid(alpha}\OperatorTok{=}\FloatTok{0.3}\NormalTok{)}
+
+\NormalTok{fig.suptitle(}\StringTok{\textquotesingle{}中文字体与保存：作业报告图\textquotesingle{}}\NormalTok{, fontsize}\OperatorTok{=}\DecValTok{15}\NormalTok{)}
+\NormalTok{fig.tight\_layout(rect}\OperatorTok{=}\NormalTok{[}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\FloatTok{0.94}\NormalTok{])}
+\NormalTok{fig.savefig(}\StringTok{\textquotesingle{}figures/05{-}matplotlib/case3\_report.png\textquotesingle{}}\NormalTok{, dpi}\OperatorTok{=}\DecValTok{150}\NormalTok{)}
+\NormalTok{fig.savefig(}\StringTok{\textquotesingle{}figures/05{-}matplotlib/case3\_report.pdf\textquotesingle{}}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}savefig dpi:\textquotesingle{}}\NormalTok{, }\DecValTok{150}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}done\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-21}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{months: 6  max index: 5}
+\NormalTok{savefig dpi: 150}
+\NormalTok{done}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-21}
+
+\textbf{一句话人话}：先告诉
+Matplotlib``用哪套中文字体、负号怎么显示''，再画图，最后
+\texttt{tight\_layout} 整理排版、\texttt{savefig}
+存成文件------这就是``可以交作业''的报告图。
+
+\begin{itemize}
+\tightlist
+\item
+  前两行
+  \texttt{plt.rcParams{[}\textquotesingle{}font.sans-serif\textquotesingle{}{]}\ =\ {[}...{]}}
+  让中文标题、坐标轴标签不再显示成方块；\texttt{axes.unicode\_minus\ =\ False}
+  避免负号变成``横杠''。
+\item
+  \texttt{sales} 是 6 个月的销量；\texttt{np.argmax(sales)}
+  返回最大值的下标（从 0 数），这里 \texttt{210} 在下标 5。
+\item
+  \texttt{axes{[}0{]}.bar(...)}
+  画柱状图；\texttt{axes{[}0{]}.text(i,\ v\ +\ 4,\ f\textquotesingle{}\{v\}\textquotesingle{},\ ...)}
+  在每个柱子顶上标数字，\texttt{v\ +\ 4}
+  是为了把文字稍微抬高、不与柱子重叠。
+\item
+  \texttt{axes{[}1{]}.plot(...)} 画折线图，用
+  \texttt{marker=\textquotesingle{}o\textquotesingle{}} 标出每个数据点。
+\item
+  \texttt{fig.tight\_layout(rect={[}0,\ 0,\ 1,\ 0.94{]})}
+  让子图和总标题不重叠；\texttt{rect} 给最上方的 \texttt{suptitle}
+  留出空间。
+\item
+  \texttt{fig.savefig(\textquotesingle{}figures/05-matplotlib/case3\_report.png\textquotesingle{},\ dpi=150)}
+  输出 PNG；再次
+  \texttt{savefig(\textquotesingle{}figures/05-matplotlib/case3\_report.pdf\textquotesingle{})}
+  另存一份 PDF，方便打印或插入报告。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-22}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+需求
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+写法
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+设中文字体 &
+\texttt{plt.rcParams{[}\textquotesingle{}font.sans-serif\textquotesingle{}{]}\ =\ {[}\textquotesingle{}Microsoft\ YaHei\textquotesingle{},\ ...{]}} \\
+修复负号 &
+\texttt{plt.rcParams{[}\textquotesingle{}axes.unicode\_minus\textquotesingle{}{]}\ =\ False} \\
+创建子图 &
+\texttt{fig,\ axes\ =\ plt.subplots(1,\ 2,\ figsize=(11,\ 4))} \\
+子图标题 &
+\texttt{axes{[}i{]}.set\_title(\textquotesingle{}...\textquotesingle{})} \\
+整理排版 & \texttt{fig.tight\_layout(rect={[}0,\ 0,\ 1,\ 0.94{]})} \\
+保存 PNG/PDF &
+\texttt{fig.savefig(\textquotesingle{}figures/05-matplotlib/x.png\textquotesingle{},\ dpi=150)}
+/
+\texttt{fig.savefig(\textquotesingle{}figures/05-matplotlib/x.pdf\textquotesingle{})} \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-22}
+
+\begin{itemize}
+\tightlist
+\item
+  只在 \texttt{set\_theme} 之前设置字体，之后被 seaborn 重置（见 03
+  节）；
+\item
+  用 \texttt{plt.savefig(...)} 而不是
+  \texttt{fig.savefig(...)}，多子图时可能存错``当前图''；
+\item
+  不调用 \texttt{tight\_layout}，保存出来后标题被裁剪；
+\item
+  忘记
+  \texttt{os.makedirs(\textquotesingle{}images\textquotesingle{},\ exist\_ok=True)}，直接
+  \texttt{savefig(\textquotesingle{}figures/05-matplotlib/...\textquotesingle{})}
+  会因目录不存在而报错。
+\end{itemize}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-10}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  把主题换成
+  \texttt{plt.style.use(\textquotesingle{}seaborn-v0\_8-whitegrid\textquotesingle{})}，再比较字体是否被覆盖；
+\item
+  给折线加上数值标注与数据点 \texttt{annotate}；
+\item
+  分别用 100 / 150 / 300 DPI 保存三张 PNG，比较清晰度与文件大小；
+\item
+  把这张图改成 2×2 报告图（增加直方图与箱线图）。
+\end{enumerate}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={作业报告图示例}]{figures/05-matplotlib/case3_report.png}}
+\caption{作业报告图示例}
+\end{figure}
+
 \subsection{常见误区}\label{ux5e38ux89c1ux8befux533a-15}
 
 \begin{enumerate}
@@ -834,10 +1179,12 @@ Matplotlib 的
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
 \ImportTok{import}\NormalTok{ seaborn }\ImportTok{as}\NormalTok{ sns}
 \ImportTok{import}\NormalTok{ matplotlib }\ImportTok{as}\NormalTok{ mpl}
 \ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
 
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 \NormalTok{sns.set\_theme(style}\OperatorTok{=}\StringTok{"darkgrid"}\NormalTok{)}
 \NormalTok{mpl.rcParams[}\StringTok{"font.sans{-}serif"}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{"Microsoft YaHei"}\NormalTok{, }\StringTok{"SimHei"}\NormalTok{, }\StringTok{"DejaVu Sans"}\NormalTok{]}
 \NormalTok{mpl.rcParams[}\StringTok{"axes.unicode\_minus"}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
@@ -940,7 +1287,7 @@ Seaborn}\label{ux5728ux5b50ux56feux4e2dux4f7fux7528-seaborn}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{boxes: 1  violins: 4}
+\NormalTok{boxes: 1 violins: 4}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1013,6 +1360,187 @@ Seaborn}\label{ux5728ux5b50ux56feux4e2dux4f7fux7528-seaborn}
 \centering
 \pandocbounded{\includegraphics[keepaspectratio,alt={Seaborn 统计图与美化}]{figures/05-matplotlib/seaborn_style.png}}
 \caption{Seaborn 统计图与美化}
+\end{figure}
+
+\subsection{案例卡 2：Seaborn
+统计图与分面------用箱线图+提琴图比较班级成绩}\label{ux6848ux4f8bux5361-2seaborn-ux7edfux8ba1ux56feux4e0eux5206ux9762ux7528ux7bb1ux7ebfux56feux63d0ux7434ux56feux6bd4ux8f83ux73edux7ea7ux6210ux7ee9}
+
+\subsubsection{目标}\label{ux76eeux6807-23}
+
+用一份离线可复现的``班级成绩''DataFrame，画箱线图与提琴图对比三个班的成绩分布，再用
+\texttt{FacetGrid} 按班级分面画直方图。学会``先构造数据，再用 seaborn
+一句画出统计图，最后分面对比''。
+
+\subsubsection{代码}\label{ux4ee3ux7801-24}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+\ImportTok{import}\NormalTok{ seaborn }\ImportTok{as}\NormalTok{ sns}
+\ImportTok{import}\NormalTok{ os}
+\ImportTok{from}\NormalTok{ matplotlib }\ImportTok{import}\NormalTok{ rcParams}
+
+\NormalTok{os.makedirs(}\StringTok{\textquotesingle{}images\textquotesingle{}}\NormalTok{, exist\_ok}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{sns.set\_theme(style}\OperatorTok{=}\StringTok{\textquotesingle{}darkgrid\textquotesingle{}}\NormalTok{)}
+\NormalTok{rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\NormalTok{rng }\OperatorTok{=}\NormalTok{ np.random.default\_rng(}\DecValTok{7}\NormalTok{)}
+\NormalTok{n }\OperatorTok{=} \DecValTok{60}
+\NormalTok{df }\OperatorTok{=}\NormalTok{ pd.DataFrame(\{}
+    \StringTok{\textquotesingle{}班级\textquotesingle{}}\NormalTok{: np.repeat([}\StringTok{\textquotesingle{}1班\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}2班\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}3班\textquotesingle{}}\NormalTok{], n),}
+    \StringTok{\textquotesingle{}成绩\textquotesingle{}}\NormalTok{: np.concatenate([}
+\NormalTok{        rng.normal(}\DecValTok{72}\NormalTok{, }\DecValTok{8}\NormalTok{, n),}
+\NormalTok{        rng.normal(}\DecValTok{80}\NormalTok{, }\DecValTok{9}\NormalTok{, n),}
+\NormalTok{        rng.normal(}\DecValTok{88}\NormalTok{, }\DecValTok{7}\NormalTok{, n),}
+\NormalTok{    ]),}
+\NormalTok{\})}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}shape:\textquotesingle{}}\NormalTok{, df.shape)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}means:\textquotesingle{}}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(df.groupby(}\StringTok{\textquotesingle{}班级\textquotesingle{}}\NormalTok{)[}\StringTok{\textquotesingle{}成绩\textquotesingle{}}\NormalTok{].mean().to\_numpy(), }\DecValTok{2}\NormalTok{))}
+
+\NormalTok{fig, axes }\OperatorTok{=}\NormalTok{ plt.subplots(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, figsize}\OperatorTok{=}\NormalTok{(}\DecValTok{11}\NormalTok{, }\DecValTok{4}\NormalTok{))}
+\NormalTok{sns.boxplot(x}\OperatorTok{=}\StringTok{\textquotesingle{}班级\textquotesingle{}}\NormalTok{, y}\OperatorTok{=}\StringTok{\textquotesingle{}成绩\textquotesingle{}}\NormalTok{, data}\OperatorTok{=}\NormalTok{df, ax}\OperatorTok{=}\NormalTok{axes[}\DecValTok{0}\NormalTok{])}
+\NormalTok{sns.violinplot(x}\OperatorTok{=}\StringTok{\textquotesingle{}班级\textquotesingle{}}\NormalTok{, y}\OperatorTok{=}\StringTok{\textquotesingle{}成绩\textquotesingle{}}\NormalTok{, data}\OperatorTok{=}\NormalTok{df, ax}\OperatorTok{=}\NormalTok{axes[}\DecValTok{1}\NormalTok{])}
+\NormalTok{axes[}\DecValTok{0}\NormalTok{].set\_title(}\StringTok{\textquotesingle{}班级成绩箱线图\textquotesingle{}}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{1}\NormalTok{].set\_title(}\StringTok{\textquotesingle{}班级成绩提琴图\textquotesingle{}}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ ax }\KeywordTok{in}\NormalTok{ axes:}
+\NormalTok{    ax.set\_xlabel(}\StringTok{\textquotesingle{}班级\textquotesingle{}}\NormalTok{)}\OperatorTok{;}\NormalTok{ ax.set\_ylabel(}\StringTok{\textquotesingle{}成绩\textquotesingle{}}\NormalTok{)}
+\NormalTok{fig.tight\_layout()}
+\NormalTok{fig.savefig(}\StringTok{\textquotesingle{}figures/05{-}matplotlib/case2\_class\_box\_violin.png\textquotesingle{}}\NormalTok{, dpi}\OperatorTok{=}\DecValTok{150}\NormalTok{)}
+
+\NormalTok{g }\OperatorTok{=}\NormalTok{ sns.FacetGrid(df, col}\OperatorTok{=}\StringTok{\textquotesingle{}班级\textquotesingle{}}\NormalTok{, col\_wrap}\OperatorTok{=}\DecValTok{3}\NormalTok{, height}\OperatorTok{=}\FloatTok{2.5}\NormalTok{, aspect}\OperatorTok{=}\FloatTok{1.2}\NormalTok{)}
+\NormalTok{g.}\BuiltInTok{map}\NormalTok{(sns.histplot, }\StringTok{\textquotesingle{}成绩\textquotesingle{}}\NormalTok{, bins}\OperatorTok{=}\DecValTok{12}\NormalTok{)}
+\NormalTok{g.set\_titles(}\StringTok{\textquotesingle{}}\SpecialCharTok{\{col\_name\}}\StringTok{\textquotesingle{}}\NormalTok{)}
+\NormalTok{g.savefig(}\StringTok{\textquotesingle{}figures/05{-}matplotlib/case2\_class\_facet.png\textquotesingle{}}\NormalTok{, dpi}\OperatorTok{=}\DecValTok{150}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}facet axes:\textquotesingle{}}\NormalTok{, }\BuiltInTok{len}\NormalTok{(g.axes.flat))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}done\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-22}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{shape: (180, 2)}
+\NormalTok{means: [70.33 79.25 86.33]}
+\NormalTok{facet axes: 3}
+\NormalTok{done}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-22}
+
+\textbf{一句话人话}：\texttt{boxplot} 和 \texttt{violinplot}
+都是``把一组数画成一个形状''来比大小，前者用箱子+须看中位数和异常，后者用``胖瘦''看密度；\texttt{FacetGrid}
+则是``按班级切开，横着排三个小图''。
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{np.repeat({[}\textquotesingle{}1班\textquotesingle{},\textquotesingle{}2班\textquotesingle{},\textquotesingle{}3班\textquotesingle{}{]},\ n)}
+  生成 3 个班、每班 \texttt{n=60} 条的``班级''列；三个
+  \texttt{rng.normal(...)}
+  分别制造不同均值的成绩列，所以三个班天然可分。
+\item
+  \texttt{df.shape} 是 \texttt{(180,\ 2)}：180 行 = 60×3，2 列 =
+  班级、成绩。
+\item
+  \texttt{df.groupby(\textquotesingle{}班级\textquotesingle{}){[}\textquotesingle{}成绩\textquotesingle{}{]}.mean()}
+  按班求平均，\texttt{to\_numpy()} 取成数组后 \texttt{np.round(...,\ 2)}
+  保证输出两位小数稳定。
+\item
+  \texttt{sns.boxplot(x=\textquotesingle{}班级\textquotesingle{},\ y=\textquotesingle{}成绩\textquotesingle{},\ data=df,\ ax=axes{[}0{]})}：把
+  \texttt{data} 交给 seaborn，它自己按 \texttt{x} 分组，画出 3 个箱子。
+\item
+  \texttt{sns.violinplot(...)}
+  画提琴图，轮廓越宽表示该分数段的人数越多，能看出``哪个班更集中''。
+\item
+  \texttt{g\ =\ sns.FacetGrid(df,\ col=\textquotesingle{}班级\textquotesingle{},\ col\_wrap=3)}
+  按``班级''分成 3
+  个子图；\texttt{g.map(sns.histplot,\ \textquotesingle{}成绩\textquotesingle{},\ bins=12)}
+  往每个子图画成绩直方图。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-23}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+需求
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+写法
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+分组箱线图 &
+\texttt{sns.boxplot(x=\textquotesingle{}班级\textquotesingle{},\ y=\textquotesingle{}成绩\textquotesingle{},\ data=df,\ ax=axes{[}0{]})} \\
+分组提琴图 &
+\texttt{sns.violinplot(x=\textquotesingle{}班级\textquotesingle{},\ y=\textquotesingle{}成绩\textquotesingle{},\ data=df,\ ax=axes{[}1{]})} \\
+分面直方图 &
+\texttt{g\ =\ sns.FacetGrid(df,\ col=\textquotesingle{}班级\textquotesingle{},\ col\_wrap=3);\ g.map(sns.histplot,\ \textquotesingle{}成绩\textquotesingle{},\ bins=12)} \\
+设置分面标题 &
+\texttt{g.set\_titles(\textquotesingle{}\{col\_name\}\textquotesingle{})} \\
+保存分面图 &
+\texttt{g.savefig(\textquotesingle{}figures/05-matplotlib/x.png\textquotesingle{},\ dpi=150)} \\
+主题 &
+\texttt{sns.set\_theme(style=\textquotesingle{}darkgrid\textquotesingle{})}（之后重设字体） \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-23}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{set\_theme} 之后不重设中文字体，中文标题变方块；
+\item
+  把 \texttt{data=} 的 DataFrame 与 \texttt{x/y} 列名写错，或忘了
+  \texttt{data=} 导致按数组而非按列分组；
+\item
+  用旧版 \texttt{shade=True}，新版应写 \texttt{fill=True}；
+\item
+  \texttt{FacetGrid} 用 \texttt{col=} 而不是 \texttt{hue=}
+  时，想加的图例可能不出现，需调用 \texttt{g.add\_legend()}（本例用
+  \texttt{set\_titles}）。
+\end{itemize}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-11}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  把 \texttt{boxplot} 换成
+  \texttt{sns.boxplot(...,\ hue=\textquotesingle{}...\textquotesingle{})}，再加一个``性别''列观察副分组；
+\item
+  用
+  \texttt{sns.kdeplot(data=df,\ x=\textquotesingle{}成绩\textquotesingle{},\ hue=\textquotesingle{}班级\textquotesingle{})}
+  画三条密度曲线叠加；
+\item
+  给分面图加 \texttt{g.savefig(...)} 并调整 \texttt{height/aspect}；
+\item
+  把数据换成真实 \texttt{tips} 数据集，比较 \texttt{day}
+  分组的箱线/提琴图。
+\end{enumerate}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={箱线图与提琴图}]{figures/05-matplotlib/case2_class_box_violin.png}}
+\caption{箱线图与提琴图}
+\end{figure}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={班级成绩分面图}]{figures/05-matplotlib/case2_class_facet.png}}
+\caption{班级成绩分面图}
 \end{figure}
 
 \subsection{常见误区}\label{ux5e38ux89c1ux8befux533a-16}
@@ -1122,6 +1650,10 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-10}
 \ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
 \ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
 \ImportTok{import}\NormalTok{ seaborn }\ImportTok{as}\NormalTok{ sns}
+
+\NormalTok{plt.rcParams[}\StringTok{"font.sans{-}serif"}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{"Microsoft YaHei"}\NormalTok{, }\StringTok{"SimHei"}\NormalTok{, }\StringTok{"DejaVu Sans"}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{"axes.unicode\_minus"}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 
 \NormalTok{rng }\OperatorTok{=}\NormalTok{ np.random.default\_rng(}\DecValTok{2025}\NormalTok{)   }\CommentTok{\# 固定种子，保证可复现}
 \NormalTok{n }\OperatorTok{=} \DecValTok{400}
@@ -1251,6 +1783,35 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-10}
 \caption{综合案例报告图}
 \end{figure}
 
+\subsection{步骤 4：再存一份高分辨率
+PDF}\label{ux6b65ux9aa4-4ux518dux5b58ux4e00ux4efdux9ad8ux5206ux8fa8ux7387-pdf}
+
+\begin{quote}
+本步依赖步骤 3 定义的 \texttt{fig}，可在画出报告图后直接另存一份 300 DPI
+的 PDF，便于打印或插入文档。
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ os}
+\NormalTok{os.makedirs(}\StringTok{\textquotesingle{}images\textquotesingle{}}\NormalTok{, exist\_ok}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{fig.savefig(}\StringTok{\textquotesingle{}figures/05{-}matplotlib/case\_study\_report.pdf\textquotesingle{}}\NormalTok{, dpi}\OperatorTok{=}\DecValTok{300}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}pdf saved, dpi 300\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pdf saved, dpi 300}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+小提示：\texttt{savefig} 的 \texttt{dpi} 只影响输出文件的分辨率，不改变
+\texttt{fig} 本身的 \texttt{dpi}；想要画布本身更精细，可在
+\texttt{plt.subplots(figsize=...,\ dpi=...)} 里设置。
+\end{quote}
+
 \subsection{分析与延伸}\label{ux5206ux6790ux4e0eux5ef6ux4f38}
 
 \begin{itemize}
@@ -1364,7 +1925,13 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-10}
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\#\# 函数式：简单，但一张图只有一个“当前轴”}
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
 \ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
 \NormalTok{plt.plot([}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{], [}\DecValTok{1}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{9}\NormalTok{])}
 \NormalTok{plt.title(}\StringTok{"one"}\NormalTok{)}
 

@@ -17,6 +17,16 @@ Matplotlib 是 Python 科学计算中最常用的可视化库：它把“数据�
 5. 使用 Seaborn 的内置主题、`histplot`、`boxplot`、`violinplot`、`heatmap`、`FacetGrid` 与 `pairplot` 快速做统计可视化；
 6. 完成一个“绘图最佳实践”综合案例，把多子图、样式、平滑与分组分析、相关矩阵热力图串起来。
 
+
+## 案例索引
+
+| 案例卡 | 所在节 | 技术点 | 难度 |
+| ---- | ---- | ---- | ---- |
+| 1. 用 subplots 画“成绩四连图”——折线/柱状/直方/箱线 | [01 基本绘图](./01-基本绘图.md) | subplots、四种基础图 | ★★☆ |
+| 2. Seaborn 统计图与分面——用箱线图+提琴图比较班级成绩 | [03 Seaborn 美化](./03-Seaborn美化.md) | boxplot / violinplot / FacetGrid | ★★☆ |
+| 3. 中文字体与保存——做一张可以交作业的报告图 | [02 图窗布局与排版](./02-图窗布局与排版.md) | 中文字体、tight_layout、savefig | ★★☆ |
+| 4. 传感器信号分析与分组报告图（综合案例） | [04 综合案例](./04-综合案例.md) | 多子图 + Seaborn + 滑动平均 | ★★★ |
+
 ## 先修要求与运行环境
 
 - 熟悉 Python 基础语法；熟悉 NumPy 数组；了解 Pandas 的 DataFrame 会更轻松（第 4 章内容）。
