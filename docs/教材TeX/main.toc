@@ -825,247 +825,273 @@
 \contentsline {subsubsection}{1.1 概念}{276}{subsubsection*.826}%
 \contentsline {subsubsection}{1.2 单因素方差分析示例}{276}{subsubsection*.827}%
 \contentsline {subsubsection}{1.3 解读}{277}{subsubsection*.828}%
-\contentsline {subsection}{2 线性回归（OLS）}{278}{subsection*.829}%
-\contentsline {subsubsection}{2.1 数组接口：sm.OLS}{278}{subsubsection*.830}%
-\contentsline {subsubsection}{2.2 公式接口：ols}{279}{subsubsection*.831}%
-\contentsline {subsubsection}{2.3 多元回归}{280}{subsubsection*.832}%
-\contentsline {subsubsection}{2.4 公式写法小结}{280}{subsubsection*.833}%
-\contentsline {subsection}{3 回归诊断：残差 QQ 图与 JB 统计量}{281}{subsection*.834}%
-\contentsline {subsubsection}{3.1 为什么诊断}{281}{subsubsection*.835}%
-\contentsline {subsection}{4 广义线性模型（GLM）}{281}{subsection*.836}%
-\contentsline {subsubsection}{4.1 概念}{281}{subsubsection*.837}%
-\contentsline {subsubsection}{4.2 二分类 Logit 示例}{283}{subsubsection*.838}%
-\contentsline {subsection}{5 加权最小二乘（WLS）处理异方差}{283}{subsection*.839}%
-\contentsline {subsection}{6 方差分析与回归的统一框架}{284}{subsection*.840}%
-\contentsline {subsection}{常见误区}{284}{subsection*.841}%
-\contentsline {subsection}{思考题}{285}{subsection*.842}%
-\contentsline {subsection}{动手练习（详见 lab）}{285}{subsection*.843}%
-\contentsline {subsection}{延伸阅读}{285}{subsection*.844}%
-\contentsline {section}{02 时间序列预测}{285}{section*.845}%
-\contentsline {subsection}{本节目标}{285}{subsection*.846}%
-\contentsline {subsection}{先修}{285}{subsection*.847}%
-\contentsline {subsection}{官方文档/参考入口}{286}{subsection*.848}%
-\contentsline {subsection}{1 时间序列分解（seasonal\_decompose）}{286}{subsection*.849}%
-\contentsline {subsubsection}{1.1 概念}{286}{subsubsection*.850}%
-\contentsline {subsubsection}{1.2 日数据（周期=7 天）}{286}{subsubsection*.851}%
-\contentsline {subsubsection}{1.3 月度数据（周期=12 个月）}{287}{subsubsection*.852}%
-\contentsline {subsection}{2 平稳性检验（ADF 单位根检验）}{288}{subsection*.853}%
-\contentsline {subsubsection}{2.1 概念}{288}{subsubsection*.854}%
-\contentsline {subsubsection}{2.2 AR(1) 与随机游走对比}{288}{subsubsection*.855}%
-\contentsline {subsection}{3 ARIMA 模型}{289}{subsection*.856}%
-\contentsline {subsubsection}{3.1 概念}{289}{subsubsection*.857}%
-\contentsline {subsubsection}{3.2 拟合与预测}{289}{subsubsection*.858}%
-\contentsline {subsubsection}{3.3 如何选择 (p, d, q)}{290}{subsubsection*.859}%
-\contentsline {subsection}{常见误区}{291}{subsection*.860}%
-\contentsline {subsection}{思考题}{291}{subsection*.861}%
-\contentsline {subsection}{动手练习（详见 lab）}{292}{subsection*.862}%
-\contentsline {subsection}{延伸阅读}{292}{subsection*.863}%
-\contentsline {section}{03 综合案例：城市日负荷的统计建模与预测}{292}{section*.864}%
-\contentsline {subsection}{背景}{292}{subsection*.865}%
-\contentsline {subsection}{数据构造}{292}{subsection*.866}%
-\contentsline {subsection}{第 1 步：工作日 vs 周末 单因素方差分析}{293}{subsection*.867}%
-\contentsline {subsection}{第 2 步：负荷对温度的多元回归}{293}{subsection*.868}%
-\contentsline {subsection}{第 3 步：时间序列分解 + ARIMA 预测}{294}{subsection*.869}%
-\contentsline {subsection}{本章小结}{295}{subsection*.870}%
-\contentsline {section}{04 常见误区与技巧}{296}{section*.871}%
-\contentsline {subsection}{1. 高频误区速查表}{296}{subsection*.872}%
-\contentsline {subsection}{2. 原理级难点}{296}{subsection*.873}%
-\contentsline {subsubsection}{2.1 为什么必须加常数列}{296}{subsubsection*.874}%
-\contentsline {subsubsection}{2.2 C()、I()、* 的区别}{297}{subsubsection*.875}%
-\contentsline {subsubsection}{2.3 predict 返回什么}{297}{subsubsection*.876}%
-\contentsline {subsubsection}{2.4 summary() 里关键字段}{297}{subsubsection*.877}%
-\contentsline {subsection}{3. 性能技巧}{297}{subsection*.878}%
-\contentsline {subsection}{4. 调试建议}{297}{subsection*.879}%
-\contentsline {subsection}{5. 本章自测清单}{298}{subsection*.880}%
-\contentsline {subsection}{6. 延伸阅读}{298}{subsection*.881}%
-\contentsline {chapter}{第 8 章 · Sklearn及其基本使用}{301}{chapter*.882}%
-\contentsline {section}{01 数据集的预处理}{301}{section*.883}%
-\contentsline {subsection}{本节目标}{301}{subsection*.884}%
-\contentsline {subsection}{先修}{301}{subsection*.885}%
-\contentsline {subsection}{官方文档 / 参考入口}{301}{subsection*.886}%
-\contentsline {subsection}{正文}{301}{subsection*.887}%
-\contentsline {subsubsection}{1. 特征编码：把``文字''变成``数字''}{301}{subsubsection*.888}%
-\contentsline {paragraph}{1.1 独热编码（OneHotEncoder）}{302}{paragraph*.889}%
-\contentsline {paragraph}{1.2 标签编码（LabelEncoder）}{302}{paragraph*.890}%
-\contentsline {subsubsection}{2. 特征缩放：把量纲拉平}{302}{subsubsection*.891}%
-\contentsline {paragraph}{2.1 标准化（StandardScaler）}{303}{paragraph*.892}%
-\contentsline {paragraph}{2.2 归一化（MinMaxScaler）}{303}{paragraph*.893}%
-\contentsline {subsubsection}{3. 数据集切分与交叉验证}{303}{subsubsection*.894}%
-\contentsline {paragraph}{3.1 train\_test\_split}{304}{paragraph*.895}%
-\contentsline {paragraph}{3.2 K 折交叉验证（cross\_val\_score）}{304}{paragraph*.896}%
-\contentsline {paragraph}{3.3 留一交叉验证（LeaveOneOut）}{304}{paragraph*.897}%
-\contentsline {subsubsection}{4. 特征选择：保留更少的列}{304}{subsubsection*.898}%
-\contentsline {paragraph}{4.1 过滤法：VarianceThreshold（方差阈值）}{305}{paragraph*.899}%
-\contentsline {paragraph}{4.2 过滤法：SelectKBest + 互信息}{305}{paragraph*.900}%
-\contentsline {paragraph}{4.3 包装法：RFE（递归特征消除）}{305}{paragraph*.901}%
-\contentsline {paragraph}{4.4 嵌入法：Lasso / SelectFromModel}{306}{paragraph*.902}%
-\contentsline {subsubsection}{5. 特征降维一览}{306}{subsubsection*.903}%
-\contentsline {subsection}{常见误区}{306}{subsection*.904}%
-\contentsline {subsection}{思考题}{307}{subsection*.905}%
-\contentsline {subsection}{动手练习}{307}{subsection*.906}%
-\contentsline {subsection}{延伸阅读}{307}{subsection*.907}%
-\contentsline {section}{02 有监督学习的案例}{307}{section*.908}%
-\contentsline {subsection}{本节目标}{307}{subsection*.909}%
-\contentsline {subsection}{先修}{307}{subsection*.910}%
-\contentsline {subsection}{官方文档 / 参考入口}{308}{subsection*.911}%
-\contentsline {subsection}{正文}{308}{subsection*.912}%
-\contentsline {subsubsection}{1. 分类：Iris 鸢尾花}{308}{subsubsection*.913}%
-\contentsline {paragraph}{1.1 加载数据并切分}{308}{paragraph*.914}%
-\contentsline {paragraph}{1.2 训练多个分类器并比较}{310}{paragraph*.915}%
-\contentsline {paragraph}{1.3 混淆矩阵与分类报告}{310}{paragraph*.916}%
-\contentsline {paragraph}{1.4 决策树可视化}{311}{figure.0.41}%
-\contentsline {subsubsection}{2. 二分类与 ROC-AUC：乳腺癌}{311}{subsubsection*.918}%
-\contentsline {subsubsection}{3. 回归：Diabetes 糖尿病}{313}{subsubsection*.919}%
-\contentsline {subsection}{常见误区}{313}{subsection*.920}%
-\contentsline {subsection}{思考题}{314}{subsection*.921}%
-\contentsline {subsection}{动手练习}{314}{subsection*.922}%
-\contentsline {subsection}{延伸阅读}{314}{subsection*.923}%
-\contentsline {section}{03 无监督学习的案例}{314}{section*.924}%
-\contentsline {subsection}{本节目标}{314}{subsection*.925}%
-\contentsline {subsection}{先修}{314}{subsection*.926}%
-\contentsline {subsection}{官方文档 / 参考入口}{315}{subsection*.927}%
-\contentsline {subsection}{正文}{315}{subsection*.928}%
-\contentsline {subsubsection}{1. 聚类：KMeans}{315}{subsubsection*.929}%
-\contentsline {subsubsection}{2. 聚类：DBSCAN}{315}{subsubsection*.930}%
-\contentsline {subsubsection}{3. 降维：PCA（无监督）}{316}{subsubsection*.931}%
-\contentsline {subsubsection}{4. 降维：LDA（有监督）}{317}{subsubsection*.932}%
-\contentsline {subsection}{常见误区}{317}{subsection*.933}%
-\contentsline {subsection}{思考题}{317}{subsection*.934}%
-\contentsline {subsection}{动手练习}{317}{subsection*.935}%
-\contentsline {subsection}{延伸阅读}{318}{subsection*.936}%
-\contentsline {section}{04 综合案例：Wine 数据端到端（预处理 → 分类 → 聚类 → 降维）}{318}{section*.937}%
-\contentsline {subsection}{案例背景}{318}{subsection*.938}%
-\contentsline {subsection}{第 1 步：加载数据并观察}{318}{subsection*.939}%
-\contentsline {subsection}{第 2 步：缩放 + 分类（用 Pipeline 防泄漏）}{318}{subsection*.940}%
-\contentsline {subsection}{第 3 步：特征重要性（RandomForest）}{319}{subsection*.941}%
-\contentsline {subsection}{第 4 步：无监督聚类（KMeans）}{321}{subsection*.942}%
-\contentsline {subsection}{第 5 步：PCA 降维并可视化}{321}{subsection*.943}%
-\contentsline {subsection}{本章综合练习（上机任务）}{322}{subsection*.944}%
-\contentsline {subsection}{延伸阅读}{322}{subsection*.945}%
-\contentsline {section}{05 常见误区与技巧}{322}{section*.946}%
-\contentsline {subsection}{1. 高频误区速查表}{323}{subsection*.947}%
-\contentsline {subsection}{2. 性能技巧}{323}{subsection*.948}%
-\contentsline {subsection}{3. 调试建议}{324}{subsection*.949}%
-\contentsline {subsection}{4. 本章小结（自测）}{324}{subsection*.950}%
-\contentsline {subsection}{延伸阅读}{324}{subsection*.951}%
-\contentsline {chapter}{线性代数与矩阵}{325}{appendix*.952}%
-\contentsline {section}{A.1 直觉故事：矩阵到底在干什么}{325}{section*.953}%
-\contentsline {section}{A.2 关键概念讲解：把名词翻译成人话}{326}{section*.954}%
-\contentsline {subsection}{A.2.1 转置、内积与范数}{326}{subsection*.955}%
-\contentsline {subsection}{A.2.2 逆、行列式与秩：能否把变换''倒回去''}{326}{subsection*.956}%
-\contentsline {subsection}{A.2.3 特征值与特征向量：变换的''不动轴''}{326}{subsection*.957}%
-\contentsline {subsection}{A.2.4 条件数：解有多''敏感''}{326}{subsection*.958}%
-\contentsline {section}{A.3 深入：分解与算法（重点、难点）}{327}{section*.959}%
-\contentsline {subsection}{A.3.1 解方程组：高斯消元与 LU}{327}{subsection*.960}%
-\contentsline {subsection}{A.3.2 特征值分解：对称矩阵为什么''好''}{327}{subsection*.961}%
-\contentsline {subsection}{A.3.3 SVD：最重要的一段（本科必会）}{327}{subsection*.962}%
-\contentsline {subsection}{A.3.4 最小二乘与正则化}{328}{subsection*.963}%
-\contentsline {subsection}{A.3.5 数值稳定性：本科最易踩的坑}{328}{subsection*.964}%
-\contentsline {section}{A.4 动手例题（选做：手算 + 验证）}{328}{section*.965}%
-\contentsline {section}{A.5 Python 对应（速查）}{329}{section*.966}%
-\contentsline {section}{A.6 常见误区}{329}{section*.967}%
-\contentsline {section}{A.7 使用章节（双向）}{330}{section*.968}%
-\contentsline {section}{A.10 常见考题与自查（考前 10 分钟）}{330}{section*.969}%
-\contentsline {section}{A.9 综合案例：SVD 图像压缩（串联全附录）}{330}{section*.970}%
-\contentsline {section}{A.8 例题集（深入练习）}{331}{section*.971}%
-\contentsline {chapter}{微积分与数值方法}{333}{appendix*.972}%
-\contentsline {section}{B.1 直觉故事：从''瞬时速度''说起}{333}{section*.973}%
-\contentsline {section}{B.2 关键概念（带手算小例子）}{333}{section*.974}%
-\contentsline {subsection}{B.2.1 导数、偏导与梯度}{333}{subsection*.975}%
-\contentsline {subsection}{B.2.2 积分与基本定理}{334}{subsection*.976}%
-\contentsline {subsection}{B.2.3 为什么还要''数值''（难点）}{334}{subsection*.977}%
-\contentsline {section}{B.3 深入：数值方法（重点、难点）}{334}{section*.978}%
-\contentsline {subsection}{B.3.1 优化：找''最低点''}{334}{subsection*.979}%
-\contentsline {subsection}{B.3.2 插值 vs 拟合（本科高频考点）}{335}{subsection*.980}%
-\contentsline {subsection}{B.3.3 傅里叶变换（FFT）}{335}{subsection*.981}%
-\contentsline {subsection}{B.3.4 常微分方程（ODE）}{335}{subsection*.982}%
-\contentsline {subsection}{B.3.5 怎么选数值方法（决策表）}{335}{subsection*.983}%
-\contentsline {section}{B.4 动手例题（选做）}{336}{section*.984}%
-\contentsline {section}{B.5 Python 对应（速查）}{336}{section*.985}%
-\contentsline {section}{B.6 常见误区}{337}{section*.986}%
-\contentsline {section}{B.7 使用章节（双向）}{337}{section*.987}%
-\contentsline {section}{B.10 常见考题与自查（考前 10 分钟）}{337}{section*.988}%
-\contentsline {section}{B.9 综合案例：拟合 + 积分（做一道完整数值题）}{338}{section*.989}%
-\contentsline {section}{B.8 例题集（深入练习）}{338}{section*.990}%
-\contentsline {chapter}{概率统计基础}{339}{appendix*.991}%
-\contentsline {section}{C.1 直觉故事：为什么不能只看平均分}{339}{section*.992}%
-\contentsline {section}{C.2 随机变量与分布（讲解）}{339}{section*.993}%
-\contentsline {subsection}{C.2.1 期望与方差}{339}{subsection*.994}%
-\contentsline {subsection}{C.2.2 常用分布}{339}{subsection*.995}%
-\contentsline {subsection}{C.2.3 中心极限定理（必须理解）}{340}{subsection*.996}%
-\contentsline {subsection}{C.2.4 协方差与相关}{340}{subsection*.997}%
-\contentsline {section}{C.3 统计推断（重点、难点）}{340}{section*.998}%
-\contentsline {subsection}{C.3.1 置信区间：从''估计值''到''可靠性''}{340}{subsection*.999}%
-\contentsline {subsection}{C.3.2 假设检验：p 值到底在说什么}{341}{subsection*.1000}%
-\contentsline {subsection}{C.3.3 检验实操清单}{341}{subsection*.1001}%
-\contentsline {section}{C.4 回归与方差分析（建模视角）}{341}{section*.1002}%
-\contentsline {subsection}{C.4.1 线性回归 = 换视角的最小二乘}{341}{subsection*.1003}%
-\contentsline {subsection}{C.4.2 怎么评价}{341}{subsection*.1004}%
-\contentsline {subsection}{C.4.3 ANOVA：多组到底有没有差异}{342}{subsection*.1005}%
-\contentsline {section}{C.5 时间序列：和''普通回归''有什么不同（重点）}{342}{section*.1006}%
-\contentsline {section}{C.6 动手例题（选做）}{342}{section*.1007}%
-\contentsline {section}{C.7 Python 对应（速查）}{343}{section*.1008}%
-\contentsline {section}{C.8 常见误区}{343}{section*.1009}%
-\contentsline {section}{C.9 使用章节（双向）}{344}{section*.1010}%
-\contentsline {section}{C.12 常见考题与自查（考前 10 分钟）}{344}{section*.1011}%
-\contentsline {section}{C.11 综合案例：一份''完整统计报告''的骨架}{344}{section*.1012}%
-\contentsline {section}{C.10 例题集（深入练习）}{345}{section*.1013}%
-\contentsline {chapter}{图论与网络}{347}{appendix*.1014}%
-\contentsline {section}{D.1 直觉故事：朋友圈里的''谁最重要''}{347}{section*.1015}%
-\contentsline {section}{D.2 图的基本表示（讲解 + 手算）}{347}{section*.1016}%
-\contentsline {subsection}{D.2.1 怎么把图''喂给电脑''}{347}{subsection*.1017}%
-\contentsline {subsection}{D.2.2 基本量：度、连通、树}{348}{subsection*.1018}%
-\contentsline {subsection}{D.2.3 加权与有向}{348}{subsection*.1019}%
-\contentsline {section}{D.3 经典算法：思路与手算}{348}{section*.1020}%
-\contentsline {subsection}{D.3.1 遍历：BFS 与 DFS}{348}{subsection*.1021}%
-\contentsline {subsection}{D.3.2 最短路径}{348}{subsection*.1022}%
-\contentsline {subsection}{D.3.3 最小生成树（MST）}{349}{subsection*.1023}%
-\contentsline {subsection}{D.3.4 中心性与社区}{349}{subsection*.1024}%
-\contentsline {section}{D.4 动手例题（选做）}{349}{section*.1025}%
-\contentsline {section}{D.5 Python 对应（速查）}{350}{section*.1026}%
-\contentsline {section}{D.6 常见误区}{350}{section*.1027}%
-\contentsline {section}{D.7 使用章节（双向）}{350}{section*.1028}%
-\contentsline {section}{D.10 常见考题与自查（考前 10 分钟）}{351}{section*.1029}%
-\contentsline {section}{D.9 综合案例：给一个小网络做''体检''}{351}{section*.1030}%
-\contentsline {section}{D.8 例题集（深入练习）}{352}{section*.1031}%
-\contentsline {chapter}{机器学习基础}{353}{appendix*.1032}%
-\contentsline {section}{E.1 直觉故事：为什么模型会''学偏''}{353}{section*.1033}%
-\contentsline {section}{E.2 学习范式与损失函数（讲解）}{353}{section*.1034}%
-\contentsline {subsection}{E.2.1 三大任务}{353}{subsection*.1035}%
-\contentsline {subsection}{E.2.2 损失函数：怎么算''错得有多离谱''}{354}{subsection*.1036}%
-\contentsline {subsection}{E.2.3 优化：把损失调小}{354}{subsection*.1037}%
-\contentsline {section}{E.3 评估与过拟合（重点、难点）}{354}{section*.1038}%
-\contentsline {subsection}{E.3.1 训练/验证/测试}{354}{subsection*.1039}%
-\contentsline {subsection}{E.3.2 偏差-方差分解（必考理解）}{354}{subsection*.1040}%
-\contentsline {subsection}{E.3.3 指标怎么选}{354}{subsection*.1041}%
-\contentsline {section}{E.4 常用模型直觉（讲解 + 速查）}{355}{section*.1042}%
-\contentsline {section}{E.5 动手例题（选做）}{355}{section*.1043}%
-\contentsline {section}{E.6 Python 对应（scikit-learn 标准流程，速查）}{356}{section*.1044}%
-\contentsline {section}{E.7 常见误区}{357}{section*.1045}%
-\contentsline {section}{E.8 使用章节（双向）}{357}{section*.1046}%
-\contentsline {section}{E.11 常见考题与自查（考前 10 分钟）}{357}{section*.1047}%
-\contentsline {section}{E.10 综合案例：一次完整的建模流程（期末大作业可直接套）}{358}{section*.1048}%
-\contentsline {section}{E.9 例题集（深入练习）}{358}{section*.1049}%
-\contentsline {chapter}{通用数学与算法速查}{361}{appendix*.1050}%
-\contentsline {section}{F.1 常用记号与希腊字母（速查）}{361}{section*.1051}%
-\contentsline {section}{F.2 常用公式卡（速查）}{361}{section*.1052}%
-\contentsline {subsection}{微积分}{361}{subsection*.1053}%
-\contentsline {subsection}{线性代数}{362}{subsection*.1054}%
-\contentsline {subsection}{概率统计}{362}{subsection*.1055}%
-\contentsline {subsection}{机器学习}{362}{subsection*.1056}%
-\contentsline {section}{F.3 复杂度与常用算法量级（速查）}{362}{section*.1057}%
-\contentsline {section}{F.4 数值稳定性（科学计算必修，讲解）}{362}{section*.1058}%
-\contentsline {section}{F.5 关键词索引（速查）}{363}{section*.1059}%
-\contentsline {section}{F.6 使用章节（双向）}{363}{section*.1060}%
-\contentsline {section}{F.7 术语英中对照（速查）}{364}{section*.1061}%
-\contentsline {section}{F.9 考前 10 分钟清单（全附录）}{364}{section*.1062}%
-\contentsline {section}{F.8 数值小技巧（速查）}{364}{section*.1063}%
-\contentsline {chapter}{全书总参考文献（附录 G）}{367}{appendix*.1064}%
-\contentsline {section}{一、官方文档与工具链}{367}{section*.1065}%
-\contentsline {section}{二、教材与书籍}{370}{section*.1066}%
-\contentsline {section}{三、精品教程与课程}{370}{section*.1067}%
-\contentsline {section}{四、习题与实战}{371}{section*.1068}%
-\contentsline {section}{五、开源项目与配套仓库}{372}{section*.1069}%
-\contentsline {section}{六、中文资料与镜像}{372}{section*.1070}%
-\contentsline {section}{七、其他}{372}{section*.1071}%
-\contentsline {section}{按章节快速查找}{373}{section*.1072}%
+\contentsline {subsection}{案例卡 1：单因素方差分析------三种肥料对产量差异是否显著}{278}{subsection*.829}%
+\contentsline {subsubsection}{目标}{278}{subsubsection*.830}%
+\contentsline {subsubsection}{代码}{278}{subsubsection*.831}%
+\contentsline {subsubsection}{运行结果（已运行核验）}{279}{subsubsection*.832}%
+\contentsline {subsubsection}{讲解}{279}{subsubsection*.833}%
+\contentsline {subsubsection}{主要用法 / API}{281}{subsubsection*.834}%
+\contentsline {subsubsection}{常见错误}{281}{subsubsection*.835}%
+\contentsline {subsubsection}{拓展 / 跟练}{281}{subsubsection*.836}%
+\contentsline {subsection}{2 线性回归（OLS）}{281}{subsection*.837}%
+\contentsline {subsubsection}{2.1 数组接口：sm.OLS}{281}{subsubsection*.838}%
+\contentsline {subsubsection}{2.2 公式接口：ols}{284}{subsubsection*.839}%
+\contentsline {subsubsection}{2.3 多元回归}{284}{subsubsection*.840}%
+\contentsline {subsubsection}{2.4 公式写法小结}{285}{subsubsection*.841}%
+\contentsline {subsection}{案例卡 2：OLS 多元回归------用公式接口解读系数与 p 值}{285}{subsection*.842}%
+\contentsline {subsubsection}{目标}{285}{subsubsection*.843}%
+\contentsline {subsubsection}{代码}{285}{subsubsection*.844}%
+\contentsline {subsubsection}{运行结果（已运行核验）}{286}{subsubsection*.845}%
+\contentsline {subsubsection}{讲解}{287}{subsubsection*.846}%
+\contentsline {subsubsection}{主要用法 / API}{287}{subsubsection*.847}%
+\contentsline {subsubsection}{常见错误}{288}{subsubsection*.848}%
+\contentsline {subsubsection}{拓展 / 跟练}{288}{subsubsection*.849}%
+\contentsline {subsection}{3 回归诊断：残差 QQ 图与 JB 统计量}{288}{subsection*.850}%
+\contentsline {subsubsection}{3.1 为什么诊断}{288}{subsubsection*.851}%
+\contentsline {subsection}{4 广义线性模型（GLM）}{290}{subsection*.852}%
+\contentsline {subsubsection}{4.1 概念}{290}{subsubsection*.853}%
+\contentsline {subsubsection}{4.2 二分类 Logit 示例}{290}{subsubsection*.854}%
+\contentsline {subsection}{5 加权最小二乘（WLS）处理异方差}{290}{subsection*.855}%
+\contentsline {subsection}{6 方差分析与回归的统一框架}{291}{subsection*.856}%
+\contentsline {subsection}{常见误区}{291}{subsection*.857}%
+\contentsline {subsection}{思考题}{292}{subsection*.858}%
+\contentsline {subsection}{动手练习（详见 lab）}{292}{subsection*.859}%
+\contentsline {subsection}{延伸阅读}{292}{subsection*.860}%
+\contentsline {section}{02 时间序列预测}{292}{section*.861}%
+\contentsline {subsection}{本节目标}{292}{subsection*.862}%
+\contentsline {subsection}{先修}{293}{subsection*.863}%
+\contentsline {subsection}{官方文档/参考入口}{293}{subsection*.864}%
+\contentsline {subsection}{1 时间序列分解（seasonal\_decompose）}{293}{subsection*.865}%
+\contentsline {subsubsection}{1.1 概念}{293}{subsubsection*.866}%
+\contentsline {subsubsection}{1.2 日数据（周期=7 天）}{293}{subsubsection*.867}%
+\contentsline {subsubsection}{1.3 月度数据（周期=12 个月）}{295}{subsubsection*.868}%
+\contentsline {subsection}{2 平稳性检验（ADF 单位根检验）}{295}{subsection*.869}%
+\contentsline {subsubsection}{2.1 概念}{295}{subsubsection*.870}%
+\contentsline {subsubsection}{2.2 AR(1) 与随机游走对比}{295}{subsubsection*.871}%
+\contentsline {subsection}{3 ARIMA 模型}{296}{subsection*.872}%
+\contentsline {subsubsection}{3.1 概念}{296}{subsubsection*.873}%
+\contentsline {subsubsection}{3.2 拟合与预测}{296}{subsubsection*.874}%
+\contentsline {subsubsection}{3.3 如何选择 (p, d, q)}{298}{subsubsection*.875}%
+\contentsline {subsection}{案例卡 3：ARIMA 时间序列------用 ADF 检验与残差诊断选 p,d,q}{299}{subsection*.876}%
+\contentsline {subsubsection}{目标}{299}{subsubsection*.877}%
+\contentsline {subsubsection}{代码}{299}{subsubsection*.878}%
+\contentsline {subsubsection}{运行结果（已运行核验）}{300}{subsubsection*.879}%
+\contentsline {subsubsection}{讲解}{301}{subsubsection*.880}%
+\contentsline {subsubsection}{主要用法 / API}{301}{subsubsection*.881}%
+\contentsline {subsubsection}{常见错误}{302}{subsubsection*.882}%
+\contentsline {subsubsection}{拓展 / 跟练}{302}{subsubsection*.883}%
+\contentsline {subsection}{常见误区}{303}{subsection*.884}%
+\contentsline {subsection}{思考题}{303}{subsection*.885}%
+\contentsline {subsection}{动手练习（详见 lab）}{303}{subsection*.886}%
+\contentsline {subsection}{延伸阅读}{303}{subsection*.887}%
+\contentsline {section}{03 综合案例：城市日负荷的统计建模与预测}{303}{section*.888}%
+\contentsline {subsection}{背景}{303}{subsection*.889}%
+\contentsline {subsection}{数据构造}{304}{subsection*.890}%
+\contentsline {subsection}{第 1 步：工作日 vs 周末 单因素方差分析}{304}{subsection*.891}%
+\contentsline {subsection}{第 2 步：负荷对温度的多元回归}{305}{subsection*.892}%
+\contentsline {subsection}{第 3 步：时间序列分解 + ARIMA 预测}{305}{subsection*.893}%
+\contentsline {subsection}{增强：时间序列诊断与预测误差对比}{306}{subsection*.894}%
+\contentsline {subsubsection}{运行结果（已运行核验）}{308}{subsubsection*.895}%
+\contentsline {subsection}{本章小结}{309}{subsection*.896}%
+\contentsline {section}{04 常见误区与技巧}{309}{section*.897}%
+\contentsline {subsection}{1. 高频误区速查表}{309}{subsection*.898}%
+\contentsline {subsection}{2. 原理级难点}{310}{subsection*.899}%
+\contentsline {subsubsection}{2.1 为什么必须加常数列}{310}{subsubsection*.900}%
+\contentsline {subsubsection}{2.2 C()、I()、* 的区别}{310}{subsubsection*.901}%
+\contentsline {subsubsection}{2.3 predict 返回什么}{310}{subsubsection*.902}%
+\contentsline {subsubsection}{2.4 summary() 里关键字段}{310}{subsubsection*.903}%
+\contentsline {subsection}{3. 性能技巧}{310}{subsection*.904}%
+\contentsline {subsection}{4. 调试建议}{311}{subsection*.905}%
+\contentsline {subsection}{5. 本章自测清单}{311}{subsection*.906}%
+\contentsline {subsection}{6. 延伸阅读}{311}{subsection*.907}%
+\contentsline {chapter}{第 8 章 · Sklearn及其基本使用}{313}{chapter*.908}%
+\contentsline {section}{01 数据集的预处理}{313}{section*.909}%
+\contentsline {subsection}{本节目标}{313}{subsection*.910}%
+\contentsline {subsection}{先修}{313}{subsection*.911}%
+\contentsline {subsection}{官方文档 / 参考入口}{313}{subsection*.912}%
+\contentsline {subsection}{正文}{313}{subsection*.913}%
+\contentsline {subsubsection}{1. 特征编码：把``文字''变成``数字''}{313}{subsubsection*.914}%
+\contentsline {paragraph}{1.1 独热编码（OneHotEncoder）}{314}{paragraph*.915}%
+\contentsline {paragraph}{1.2 标签编码（LabelEncoder）}{314}{paragraph*.916}%
+\contentsline {subsubsection}{2. 特征缩放：把量纲拉平}{314}{subsubsection*.917}%
+\contentsline {paragraph}{2.1 标准化（StandardScaler）}{315}{paragraph*.918}%
+\contentsline {paragraph}{2.2 归一化（MinMaxScaler）}{315}{paragraph*.919}%
+\contentsline {subsubsection}{3. 数据集切分与交叉验证}{315}{subsubsection*.920}%
+\contentsline {paragraph}{3.1 train\_test\_split}{316}{paragraph*.921}%
+\contentsline {paragraph}{3.2 K 折交叉验证（cross\_val\_score）}{316}{paragraph*.922}%
+\contentsline {paragraph}{3.3 留一交叉验证（LeaveOneOut）}{316}{paragraph*.923}%
+\contentsline {subsubsection}{4. 特征选择：保留更少的列}{316}{subsubsection*.924}%
+\contentsline {paragraph}{4.1 过滤法：VarianceThreshold（方差阈值）}{317}{paragraph*.925}%
+\contentsline {paragraph}{4.2 过滤法：SelectKBest + 互信息}{317}{paragraph*.926}%
+\contentsline {paragraph}{4.3 包装法：RFE（递归特征消除）}{317}{paragraph*.927}%
+\contentsline {paragraph}{4.4 嵌入法：Lasso / SelectFromModel}{318}{paragraph*.928}%
+\contentsline {subsubsection}{5. 特征降维一览}{318}{subsubsection*.929}%
+\contentsline {subsection}{常见误区}{318}{subsection*.930}%
+\contentsline {subsection}{思考题}{319}{subsection*.931}%
+\contentsline {subsection}{动手练习}{319}{subsection*.932}%
+\contentsline {subsection}{延伸阅读}{319}{subsection*.933}%
+\contentsline {section}{02 有监督学习的案例}{319}{section*.934}%
+\contentsline {subsection}{本节目标}{319}{subsection*.935}%
+\contentsline {subsection}{先修}{319}{subsection*.936}%
+\contentsline {subsection}{官方文档 / 参考入口}{320}{subsection*.937}%
+\contentsline {subsection}{正文}{320}{subsection*.938}%
+\contentsline {subsubsection}{1. 分类：Iris 鸢尾花}{320}{subsubsection*.939}%
+\contentsline {paragraph}{1.1 加载数据并切分}{320}{paragraph*.940}%
+\contentsline {paragraph}{1.2 训练多个分类器并比较}{322}{paragraph*.941}%
+\contentsline {paragraph}{1.3 混淆矩阵与分类报告}{322}{paragraph*.942}%
+\contentsline {paragraph}{1.4 决策树可视化}{323}{figure.0.44}%
+\contentsline {subsubsection}{2. 二分类与 ROC-AUC：乳腺癌}{323}{subsubsection*.944}%
+\contentsline {subsubsection}{3. 回归：Diabetes 糖尿病}{325}{subsubsection*.945}%
+\contentsline {subsection}{常见误区}{325}{subsection*.946}%
+\contentsline {subsection}{思考题}{326}{subsection*.947}%
+\contentsline {subsection}{动手练习}{326}{subsection*.948}%
+\contentsline {subsection}{延伸阅读}{326}{subsection*.949}%
+\contentsline {section}{03 无监督学习的案例}{326}{section*.950}%
+\contentsline {subsection}{本节目标}{326}{subsection*.951}%
+\contentsline {subsection}{先修}{326}{subsection*.952}%
+\contentsline {subsection}{官方文档 / 参考入口}{327}{subsection*.953}%
+\contentsline {subsection}{正文}{327}{subsection*.954}%
+\contentsline {subsubsection}{1. 聚类：KMeans}{327}{subsubsection*.955}%
+\contentsline {subsubsection}{2. 聚类：DBSCAN}{327}{subsubsection*.956}%
+\contentsline {subsubsection}{3. 降维：PCA（无监督）}{328}{subsubsection*.957}%
+\contentsline {subsubsection}{4. 降维：LDA（有监督）}{329}{subsubsection*.958}%
+\contentsline {subsection}{常见误区}{329}{subsection*.959}%
+\contentsline {subsection}{思考题}{329}{subsection*.960}%
+\contentsline {subsection}{动手练习}{329}{subsection*.961}%
+\contentsline {subsection}{延伸阅读}{330}{subsection*.962}%
+\contentsline {section}{04 综合案例：Wine 数据端到端（预处理 → 分类 → 聚类 → 降维）}{330}{section*.963}%
+\contentsline {subsection}{案例背景}{330}{subsection*.964}%
+\contentsline {subsection}{第 1 步：加载数据并观察}{330}{subsection*.965}%
+\contentsline {subsection}{第 2 步：缩放 + 分类（用 Pipeline 防泄漏）}{330}{subsection*.966}%
+\contentsline {subsection}{第 3 步：特征重要性（RandomForest）}{331}{subsection*.967}%
+\contentsline {subsection}{第 4 步：无监督聚类（KMeans）}{333}{subsection*.968}%
+\contentsline {subsection}{第 5 步：PCA 降维并可视化}{333}{subsection*.969}%
+\contentsline {subsection}{本章综合练习（上机任务）}{334}{subsection*.970}%
+\contentsline {subsection}{延伸阅读}{334}{subsection*.971}%
+\contentsline {section}{05 常见误区与技巧}{334}{section*.972}%
+\contentsline {subsection}{1. 高频误区速查表}{335}{subsection*.973}%
+\contentsline {subsection}{2. 性能技巧}{335}{subsection*.974}%
+\contentsline {subsection}{3. 调试建议}{336}{subsection*.975}%
+\contentsline {subsection}{4. 本章小结（自测）}{336}{subsection*.976}%
+\contentsline {subsection}{延伸阅读}{336}{subsection*.977}%
+\contentsline {chapter}{线性代数与矩阵}{337}{appendix*.978}%
+\contentsline {section}{A.1 直觉故事：矩阵到底在干什么}{337}{section*.979}%
+\contentsline {section}{A.2 关键概念讲解：把名词翻译成人话}{338}{section*.980}%
+\contentsline {subsection}{A.2.1 转置、内积与范数}{338}{subsection*.981}%
+\contentsline {subsection}{A.2.2 逆、行列式与秩：能否把变换''倒回去''}{338}{subsection*.982}%
+\contentsline {subsection}{A.2.3 特征值与特征向量：变换的''不动轴''}{338}{subsection*.983}%
+\contentsline {subsection}{A.2.4 条件数：解有多''敏感''}{338}{subsection*.984}%
+\contentsline {section}{A.3 深入：分解与算法（重点、难点）}{339}{section*.985}%
+\contentsline {subsection}{A.3.1 解方程组：高斯消元与 LU}{339}{subsection*.986}%
+\contentsline {subsection}{A.3.2 特征值分解：对称矩阵为什么''好''}{339}{subsection*.987}%
+\contentsline {subsection}{A.3.3 SVD：最重要的一段（本科必会）}{339}{subsection*.988}%
+\contentsline {subsection}{A.3.4 最小二乘与正则化}{340}{subsection*.989}%
+\contentsline {subsection}{A.3.5 数值稳定性：本科最易踩的坑}{340}{subsection*.990}%
+\contentsline {section}{A.4 动手例题（选做：手算 + 验证）}{340}{section*.991}%
+\contentsline {section}{A.5 Python 对应（速查）}{341}{section*.992}%
+\contentsline {section}{A.6 常见误区}{341}{section*.993}%
+\contentsline {section}{A.7 使用章节（双向）}{342}{section*.994}%
+\contentsline {section}{A.10 常见考题与自查（考前 10 分钟）}{342}{section*.995}%
+\contentsline {section}{A.9 综合案例：SVD 图像压缩（串联全附录）}{342}{section*.996}%
+\contentsline {section}{A.8 例题集（深入练习）}{343}{section*.997}%
+\contentsline {chapter}{微积分与数值方法}{345}{appendix*.998}%
+\contentsline {section}{B.1 直觉故事：从''瞬时速度''说起}{345}{section*.999}%
+\contentsline {section}{B.2 关键概念（带手算小例子）}{345}{section*.1000}%
+\contentsline {subsection}{B.2.1 导数、偏导与梯度}{345}{subsection*.1001}%
+\contentsline {subsection}{B.2.2 积分与基本定理}{346}{subsection*.1002}%
+\contentsline {subsection}{B.2.3 为什么还要''数值''（难点）}{346}{subsection*.1003}%
+\contentsline {section}{B.3 深入：数值方法（重点、难点）}{346}{section*.1004}%
+\contentsline {subsection}{B.3.1 优化：找''最低点''}{346}{subsection*.1005}%
+\contentsline {subsection}{B.3.2 插值 vs 拟合（本科高频考点）}{347}{subsection*.1006}%
+\contentsline {subsection}{B.3.3 傅里叶变换（FFT）}{347}{subsection*.1007}%
+\contentsline {subsection}{B.3.4 常微分方程（ODE）}{347}{subsection*.1008}%
+\contentsline {subsection}{B.3.5 怎么选数值方法（决策表）}{347}{subsection*.1009}%
+\contentsline {section}{B.4 动手例题（选做）}{348}{section*.1010}%
+\contentsline {section}{B.5 Python 对应（速查）}{348}{section*.1011}%
+\contentsline {section}{B.6 常见误区}{349}{section*.1012}%
+\contentsline {section}{B.7 使用章节（双向）}{349}{section*.1013}%
+\contentsline {section}{B.10 常见考题与自查（考前 10 分钟）}{349}{section*.1014}%
+\contentsline {section}{B.9 综合案例：拟合 + 积分（做一道完整数值题）}{350}{section*.1015}%
+\contentsline {section}{B.8 例题集（深入练习）}{350}{section*.1016}%
+\contentsline {chapter}{概率统计基础}{351}{appendix*.1017}%
+\contentsline {section}{C.1 直觉故事：为什么不能只看平均分}{351}{section*.1018}%
+\contentsline {section}{C.2 随机变量与分布（讲解）}{351}{section*.1019}%
+\contentsline {subsection}{C.2.1 期望与方差}{351}{subsection*.1020}%
+\contentsline {subsection}{C.2.2 常用分布}{351}{subsection*.1021}%
+\contentsline {subsection}{C.2.3 中心极限定理（必须理解）}{352}{subsection*.1022}%
+\contentsline {subsection}{C.2.4 协方差与相关}{352}{subsection*.1023}%
+\contentsline {section}{C.3 统计推断（重点、难点）}{352}{section*.1024}%
+\contentsline {subsection}{C.3.1 置信区间：从''估计值''到''可靠性''}{352}{subsection*.1025}%
+\contentsline {subsection}{C.3.2 假设检验：p 值到底在说什么}{353}{subsection*.1026}%
+\contentsline {subsection}{C.3.3 检验实操清单}{353}{subsection*.1027}%
+\contentsline {section}{C.4 回归与方差分析（建模视角）}{353}{section*.1028}%
+\contentsline {subsection}{C.4.1 线性回归 = 换视角的最小二乘}{353}{subsection*.1029}%
+\contentsline {subsection}{C.4.2 怎么评价}{353}{subsection*.1030}%
+\contentsline {subsection}{C.4.3 ANOVA：多组到底有没有差异}{354}{subsection*.1031}%
+\contentsline {section}{C.5 时间序列：和''普通回归''有什么不同（重点）}{354}{section*.1032}%
+\contentsline {section}{C.6 动手例题（选做）}{354}{section*.1033}%
+\contentsline {section}{C.7 Python 对应（速查）}{355}{section*.1034}%
+\contentsline {section}{C.8 常见误区}{355}{section*.1035}%
+\contentsline {section}{C.9 使用章节（双向）}{356}{section*.1036}%
+\contentsline {section}{C.12 常见考题与自查（考前 10 分钟）}{356}{section*.1037}%
+\contentsline {section}{C.11 综合案例：一份''完整统计报告''的骨架}{356}{section*.1038}%
+\contentsline {section}{C.10 例题集（深入练习）}{357}{section*.1039}%
+\contentsline {chapter}{图论与网络}{359}{appendix*.1040}%
+\contentsline {section}{D.1 直觉故事：朋友圈里的''谁最重要''}{359}{section*.1041}%
+\contentsline {section}{D.2 图的基本表示（讲解 + 手算）}{359}{section*.1042}%
+\contentsline {subsection}{D.2.1 怎么把图''喂给电脑''}{359}{subsection*.1043}%
+\contentsline {subsection}{D.2.2 基本量：度、连通、树}{360}{subsection*.1044}%
+\contentsline {subsection}{D.2.3 加权与有向}{360}{subsection*.1045}%
+\contentsline {section}{D.3 经典算法：思路与手算}{360}{section*.1046}%
+\contentsline {subsection}{D.3.1 遍历：BFS 与 DFS}{360}{subsection*.1047}%
+\contentsline {subsection}{D.3.2 最短路径}{360}{subsection*.1048}%
+\contentsline {subsection}{D.3.3 最小生成树（MST）}{361}{subsection*.1049}%
+\contentsline {subsection}{D.3.4 中心性与社区}{361}{subsection*.1050}%
+\contentsline {section}{D.4 动手例题（选做）}{361}{section*.1051}%
+\contentsline {section}{D.5 Python 对应（速查）}{362}{section*.1052}%
+\contentsline {section}{D.6 常见误区}{362}{section*.1053}%
+\contentsline {section}{D.7 使用章节（双向）}{362}{section*.1054}%
+\contentsline {section}{D.10 常见考题与自查（考前 10 分钟）}{363}{section*.1055}%
+\contentsline {section}{D.9 综合案例：给一个小网络做''体检''}{363}{section*.1056}%
+\contentsline {section}{D.8 例题集（深入练习）}{364}{section*.1057}%
+\contentsline {chapter}{机器学习基础}{365}{appendix*.1058}%
+\contentsline {section}{E.1 直觉故事：为什么模型会''学偏''}{365}{section*.1059}%
+\contentsline {section}{E.2 学习范式与损失函数（讲解）}{365}{section*.1060}%
+\contentsline {subsection}{E.2.1 三大任务}{365}{subsection*.1061}%
+\contentsline {subsection}{E.2.2 损失函数：怎么算''错得有多离谱''}{366}{subsection*.1062}%
+\contentsline {subsection}{E.2.3 优化：把损失调小}{366}{subsection*.1063}%
+\contentsline {section}{E.3 评估与过拟合（重点、难点）}{366}{section*.1064}%
+\contentsline {subsection}{E.3.1 训练/验证/测试}{366}{subsection*.1065}%
+\contentsline {subsection}{E.3.2 偏差-方差分解（必考理解）}{366}{subsection*.1066}%
+\contentsline {subsection}{E.3.3 指标怎么选}{366}{subsection*.1067}%
+\contentsline {section}{E.4 常用模型直觉（讲解 + 速查）}{367}{section*.1068}%
+\contentsline {section}{E.5 动手例题（选做）}{367}{section*.1069}%
+\contentsline {section}{E.6 Python 对应（scikit-learn 标准流程，速查）}{368}{section*.1070}%
+\contentsline {section}{E.7 常见误区}{369}{section*.1071}%
+\contentsline {section}{E.8 使用章节（双向）}{369}{section*.1072}%
+\contentsline {section}{E.11 常见考题与自查（考前 10 分钟）}{369}{section*.1073}%
+\contentsline {section}{E.10 综合案例：一次完整的建模流程（期末大作业可直接套）}{370}{section*.1074}%
+\contentsline {section}{E.9 例题集（深入练习）}{370}{section*.1075}%
+\contentsline {chapter}{通用数学与算法速查}{373}{appendix*.1076}%
+\contentsline {section}{F.1 常用记号与希腊字母（速查）}{373}{section*.1077}%
+\contentsline {section}{F.2 常用公式卡（速查）}{373}{section*.1078}%
+\contentsline {subsection}{微积分}{373}{subsection*.1079}%
+\contentsline {subsection}{线性代数}{374}{subsection*.1080}%
+\contentsline {subsection}{概率统计}{374}{subsection*.1081}%
+\contentsline {subsection}{机器学习}{374}{subsection*.1082}%
+\contentsline {section}{F.3 复杂度与常用算法量级（速查）}{374}{section*.1083}%
+\contentsline {section}{F.4 数值稳定性（科学计算必修，讲解）}{374}{section*.1084}%
+\contentsline {section}{F.5 关键词索引（速查）}{375}{section*.1085}%
+\contentsline {section}{F.6 使用章节（双向）}{375}{section*.1086}%
+\contentsline {section}{F.7 术语英中对照（速查）}{376}{section*.1087}%
+\contentsline {section}{F.9 考前 10 分钟清单（全附录）}{376}{section*.1088}%
+\contentsline {section}{F.8 数值小技巧（速查）}{376}{section*.1089}%
+\contentsline {chapter}{全书总参考文献（附录 G）}{379}{appendix*.1090}%
+\contentsline {section}{一、官方文档与工具链}{379}{section*.1091}%
+\contentsline {section}{二、教材与书籍}{382}{section*.1092}%
+\contentsline {section}{三、精品教程与课程}{382}{section*.1093}%
+\contentsline {section}{四、习题与实战}{383}{section*.1094}%
+\contentsline {section}{五、开源项目与配套仓库}{384}{section*.1095}%
+\contentsline {section}{六、中文资料与镜像}{384}{section*.1096}%
+\contentsline {section}{七、其他}{384}{section*.1097}%
+\contentsline {section}{按章节快速查找}{385}{section*.1098}%

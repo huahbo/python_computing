@@ -43,6 +43,61 @@ print(anova_res)
 # TODO: 读出 F 与 P 值，判断三组均值是否显著不同（P<0.05）
 """)
 
+code("""# 跟练 1: 增加第 4 组，并用 Tukey 做两两比较
+import numpy as np, pandas as pd
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+from statsmodels.stats.multicomp import pairwise_tukeyhsd
+rng = np.random.default_rng(7)
+n = 15
+g = {'A': rng.normal(50,6,n), 'B': rng.normal(55,6,n),
+     'C': rng.normal(60,6,n), 'D': rng.normal(65,6,n)}
+df4 = pd.DataFrame({'fertilizer': np.repeat(list(g.keys()), n),
+                    'out': np.concatenate(list(g.values()))})
+m4 = ols('out ~ C(fertilizer)', data=df4).fit()
+a4 = sm.stats.anova_lm(m4, typ=1)
+print('4组 F = %.3f  P = %.3g' % (a4['F'].iloc[0], a4['PR(>F)'].iloc[0]))
+print('各组均值:', df4.groupby('fertilizer')['out'].mean().round(2).to_dict())
+pt = pairwise_tukeyhsd(endog=df4['out'], groups=df4['fertilizer'], alpha=0.05)
+print(pt.summary())
+# TODO: 哪两组差异显著？D 组与 A 组相差多少？
+""")
+
+code("""# 变形 1: 用 scipy 的 f_oneway 交叉验证 ANOVA 结果
+import numpy as np
+from scipy import stats
+rng = np.random.default_rng(42)
+n = 15
+a = rng.normal(50,6,n); b = rng.normal(55,6,n); c = rng.normal(60,6,n)
+F, p = stats.f_oneway(a, b, c)
+print('scipy f_oneway: F = %.3f  P = %.3g' % (F, p))
+print('与 ols + anova_lm 的结果应一致（约 F=18.455, P=1.77e-06）')
+# TODO: 为什么二者一致？二者各自返回什么？
+""")
+
+code("""# 综合任务 1: 不等样本量的三组方差分析 + 箱线图
+import numpy as np, pandas as pd, matplotlib.pyplot as plt, os
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+rng = np.random.default_rng(9)
+sizes = {'A':20, 'B':15, 'C':10}
+dfu = pd.DataFrame({'fertilizer': np.repeat(list(sizes), list(sizes.values())),
+                    'out': np.r_[rng.normal(50,6,sizes['A']),
+                                 rng.normal(55,6,sizes['B']),
+                                 rng.normal(60,6,sizes['C'])]})
+mu = ols('out ~ C(fertilizer)', data=dfu).fit()
+au = sm.stats.anova_lm(mu, typ=1)
+print('不等样本 F = %.3f  P = %.3g' % (au['F'].iloc[0], au['PR(>F)'].iloc[0]))
+fig, ax = plt.subplots(figsize=(5.2,3.6))
+ax.boxplot([dfu.loc[dfu['fertilizer']==gg, 'out'].values for gg in sizes],
+           tick_labels=list(sizes))
+ax.set_title('不等样本量单因素方差分析')
+ax.set_xlabel('fertilizer'); ax.set_ylabel('out')
+fig.tight_layout(); fig.savefig('lab_case1_box.png', dpi=150); plt.close()
+print('saved lab_case1_box.png')
+# TODO: 样本量不等时，方差分析还适用吗？如何解读 F 值？
+""")
+
 md("""## Part 2 一元线性回归（statsmodels.api.OLS）
 
 用数组接口做最小二乘回归：记得 <code>add_constant</code> 加截距。""")
@@ -79,6 +134,61 @@ print(mul.params)
 print(mul.pvalues)
 print("R² =", round(mul.rsquared, 4))
 # TODO: 判断 x1、x2 是否显著（P<0.05）
+""")
+
+code("""# 跟练 2: 加入交互项 area:age，比较 R2 与 AIC
+import numpy as np, pandas as pd
+from statsmodels.formula.api import ols
+rng = np.random.default_rng(3)
+n = 40
+area = rng.uniform(30,120,n); age = rng.uniform(0,30,n)
+price = 50 + 3.0*area - 1.5*age + rng.normal(0,8,n)
+d2 = pd.DataFrame({'area':area,'age':age,'price':price})
+m1 = ols('price ~ area + age', data=d2).fit()
+m2 = ols('price ~ area + age + area:age', data=d2).fit()
+print('model1 R2=%.4f AIC=%.2f' % (m1.rsquared, m1.aic))
+print('model2 R2=%.4f AIC=%.2f' % (m2.rsquared, m2.aic))
+print('interaction p = %.3g' % m2.pvalues['area:age'])
+# TODO: 交互项显著吗？AIC 是变小还是变大？说明什么？
+""")
+
+code("""# 变形 2: 用数组接口 sm.OLS 重跑，核对系数一致
+import numpy as np, pandas as pd, statsmodels.api as sm
+from statsmodels.formula.api import ols
+rng = np.random.default_rng(3)
+n = 40
+area = rng.uniform(30,120,n); age = rng.uniform(0,30,n)
+price = 50 + 3.0*area - 1.5*age + rng.normal(0,8,n)
+X = sm.add_constant(np.column_stack([area, age]))
+arr = sm.OLS(price, X).fit()
+print('array params:', arr.params.round(4))
+d2 = pd.DataFrame({'area':area,'age':age,'price':price})
+fm = ols('price ~ area + age', data=d2).fit()
+print('formula params:', fm.params.round(4))
+print('一致?', np.allclose(arr.params, fm.params, atol=1e-8))
+# TODO: 为什么数组接口要手动 add_constant？公式接口如何加截距？
+""")
+
+code("""# 综合任务 2: 三变量回归 + 标准化系数比较
+import numpy as np, pandas as pd
+from statsmodels.formula.api import ols
+rng = np.random.default_rng(12)
+n = 60
+area = rng.uniform(30,120,n); age = rng.uniform(0,30,n); rooms = rng.integers(1,6,n)
+price = 40 + 2.5*area - 1.2*age + 4*rooms + rng.normal(0,6,n)
+d3 = pd.DataFrame({'area':area,'age':age,'rooms':rooms,'price':price})
+m3 = ols('price ~ area + age + rooms', data=d3).fit()
+print('coef:')
+print(m3.params.round(4))
+print('pvalues:')
+for k in m3.params.index:
+    print('  %s  p=%.2e' % (k, m3.pvalues[k]))
+zs = d3[['area','age','rooms','price']].apply(lambda s: (s-s.mean())/s.std())
+ms = ols('price ~ area + age + rooms', data=zs).fit()
+print('standardized coef:')
+print(ms.params.round(4))
+print('R2 =', round(m3.rsquared,4))
+# TODO: 标准化后哪个变量影响最大？为什么面积和房间数的相对大小会变？
 """)
 
 md("""## Part 4 广义线性模型（GLM / 二分类 Logit）""")
@@ -176,6 +286,88 @@ plt.legend(); plt.savefig("arima_lab.png"); plt.show()
 # TODO: 给出未来 5 天预测值，并判断模型参数是否显著
 """)
 
+code("""# 跟练 3: 对随机游走做 ADF，并比较差分前后
+import numpy as np, pandas as pd
+from statsmodels.tsa.stattools import adfuller
+rng = np.random.default_rng(5)
+n = 200
+rw = np.cumsum(rng.normal(0,1,n))
+s = pd.Series(rw)
+a0 = adfuller(s)
+print('raw  ADF=%.3f p=%.3g' % (a0[0], a0[1]))
+d = s.diff().dropna()
+a1 = adfuller(d)
+print('diff ADF=%.3f p=%.3g' % (a1[0], a1[1]))
+# TODO: 为什么随机游走差分后 p 值明显变小？
+""")
+
+code("""# 变形 3: 用 AIC 对 (p,q) 网格搜索选阶
+import numpy as np, pandas as pd, warnings
+warnings.filterwarnings('ignore')
+from statsmodels.tsa.arima.model import ARIMA
+rng = np.random.default_rng(11); n=300
+e = rng.normal(0,1,n); x=np.zeros(n)
+for t in range(1,n):
+    x[t]=0.6*x[t-1]+e[t]+0.3*e[t-1]
+ser = pd.Series(np.cumsum(x)+100)
+best=None
+for p in range(3):
+    for q in range(3):
+        try:
+            m=ARIMA(ser, order=(p,1,q)).fit()
+            if best is None or m.aic<best[0]: best=(m.aic,p,q)
+        except Exception: pass
+print('best order (p,d,q):', best[1],1,best[2],'AIC=%.3f'%best[0])
+print('候选表:')
+for p in range(3):
+    for q in range(3):
+        try:
+            m=ARIMA(ser, order=(p,1,q)).fit()
+            print('  (%d,1,%d) AIC=%.2f'%(p,q,m.aic))
+        except Exception:
+            print('  (%d,1,%d) failed'%(p,q))
+# TODO: 哪些阶数 AIC 接近？为什么不能只看 AIC？
+""")
+
+code("""# 综合任务 3: 拟合最优模型，做残差诊断并画预测图
+import numpy as np, pandas as pd, warnings, matplotlib.pyplot as plt, os
+warnings.filterwarnings('ignore')
+from statsmodels.tsa.arima.model import ARIMA
+from statsmodels.stats.diagnostic import acorr_ljungbox
+from statsmodels.stats.stattools import jarque_bera
+rng = np.random.default_rng(11); n=300
+e = rng.normal(0,1,n); x=np.zeros(n)
+for t in range(1,n):
+    x[t]=0.6*x[t-1]+e[t]+0.3*e[t-1]
+vals = np.cumsum(x)+100
+idx = pd.date_range('2020-01-01', periods=n, freq='D')
+ser = pd.Series(vals, index=idx)
+best=None
+for p in range(3):
+    for q in range(3):
+        try:
+            m=ARIMA(ser, order=(p,1,q)).fit()
+            if best is None or m.aic<best[0]: best=(m.aic,p,q)
+        except Exception: pass
+final = ARIMA(ser, order=(best[1],1,best[2])).fit()
+resid = final.resid.iloc[10:]
+print('order (p,d,q):', best[1],1,best[2])
+print('AR:', np.round(final.arparams,4), ' MA:', np.round(final.maparams,4))
+print('Ljung-Box p = %.4f' % acorr_ljungbox(resid,lags=[10],return_df=True)['lb_pvalue'].iloc[0])
+print('Jarque-Bera p = %.4f' % jarque_bera(resid)[1])
+fc = final.forecast(5)
+print('forecast:', np.round(fc.values,3))
+plt.figure(figsize=(8,3.5))
+plt.plot(ser.index[-40:], ser.values[-40:], label='历史')
+fidx = pd.date_range(ser.index[-1]+pd.Timedelta(days=1), periods=5, freq='D')
+plt.plot(fidx, fc.values, marker='o', label='预测')
+plt.axvline(ser.index[-1], color='gray', ls=':')
+plt.legend(); plt.title('ARIMA 最优模型预测')
+plt.savefig('lab_case3_forecast.png', dpi=150); plt.close()
+print('saved lab_case3_forecast.png')
+# TODO: 根据 Ljung-Box 与 JB 判断模型是否合格
+""")
+
 md("""## Part 9 综合任务：城市日负荷分析
 
 把本章的**回归 + 方差分析 + 时间序列**串起来：对模拟的城市日负荷数据，做
@@ -225,6 +417,7 @@ md("""## 提交清单
 - [ ] Part 5 已读取 JB 与 Prob(JB)；
 - [ ] Part 7 已说明 AR(1) 与随机游走的 ADF 差异；
 - [ ] Part 9 已写出 3 句结论并生成 case_load.png；
+- [ ] 案例卡 C1/C2/C3 的“跟练、变形、综合任务”均已运行并回答 TODO；
 - [ ] 导出为 html / 保留 ipynb 提交。
 
 **延伸**：完成 exercises/ 的 10 道自测题与 <code>03-综合案例.md</code>、<code>04-常见误区与技巧.md</code>。""")

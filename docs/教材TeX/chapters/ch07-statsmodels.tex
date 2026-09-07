@@ -112,6 +112,10 @@ Statsmodels 通常先用 OLS
 \ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
 \ImportTok{import}\NormalTok{ statsmodels.api }\ImportTok{as}\NormalTok{ sm}
 \ImportTok{from}\NormalTok{ statsmodels.formula.api }\ImportTok{import}\NormalTok{ ols}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
 
 \NormalTok{rng }\OperatorTok{=}\NormalTok{ np.random.default\_rng(}\DecValTok{1}\NormalTok{)}
 \NormalTok{n }\OperatorTok{=} \DecValTok{12}
@@ -167,6 +171,194 @@ Statsmodels 通常先用 OLS
 多做几组对比时，anova\_lm 的 typ 可切换 I/II/III
 型平方和；单因素情形三者等价。
 \end{quote}
+
+\subsection{案例卡
+1：单因素方差分析------三种肥料对产量差异是否显著}\label{ux6848ux4f8bux5361-1ux5355ux56e0ux7d20ux65b9ux5deeux5206ux6790ux4e09ux79cdux80a5ux6599ux5bf9ux4ea7ux91cfux5deeux5f02ux662fux5426ux663eux8457}
+
+\subsubsection{目标}\label{ux76eeux6807-27}
+
+在田间试验里，把同一作物种在 45 块小地上，分别施 A、B、C
+三种肥料，每种肥料 15
+块地，记录每块地产量。我们要用\textbf{单因素方差分析}（One-Way
+ANOVA）回答：三种肥料的平均产量差异，究竟是\textbf{真实的处理效应}，还是\textbf{抽样噪声}造成的巧合。核心统计量是
+F 值与其 P 值。
+
+\subsubsection{代码}\label{ux4ee3ux7801-28}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\ImportTok{import}\NormalTok{ statsmodels.api }\ImportTok{as}\NormalTok{ sm}
+\ImportTok{from}\NormalTok{ statsmodels.formula.api }\ImportTok{import}\NormalTok{ ols}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+\ImportTok{import}\NormalTok{ os}
+
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.width\textquotesingle{}}\NormalTok{, }\DecValTok{100}\NormalTok{)}
+
+\NormalTok{rng }\OperatorTok{=}\NormalTok{ np.random.default\_rng(}\DecValTok{42}\NormalTok{)}
+\NormalTok{n }\OperatorTok{=} \DecValTok{15}
+\NormalTok{a }\OperatorTok{=}\NormalTok{ rng.normal(}\DecValTok{50}\NormalTok{, }\DecValTok{6}\NormalTok{, n)}
+\NormalTok{b }\OperatorTok{=}\NormalTok{ rng.normal(}\DecValTok{55}\NormalTok{, }\DecValTok{6}\NormalTok{, n)}
+\NormalTok{c }\OperatorTok{=}\NormalTok{ rng.normal(}\DecValTok{60}\NormalTok{, }\DecValTok{6}\NormalTok{, n)}
+\NormalTok{df }\OperatorTok{=}\NormalTok{ pd.DataFrame(\{}\StringTok{\textquotesingle{}fertilizer\textquotesingle{}}\NormalTok{: [}\StringTok{\textquotesingle{}A\textquotesingle{}}\NormalTok{]}\OperatorTok{*}\NormalTok{n }\OperatorTok{+}\NormalTok{ [}\StringTok{\textquotesingle{}B\textquotesingle{}}\NormalTok{]}\OperatorTok{*}\NormalTok{n }\OperatorTok{+}\NormalTok{ [}\StringTok{\textquotesingle{}C\textquotesingle{}}\NormalTok{]}\OperatorTok{*}\NormalTok{n,}
+                   \StringTok{\textquotesingle{}out\textquotesingle{}}\NormalTok{: np.r\_[a, b, c]\})}
+
+\BuiltInTok{print}\NormalTok{(df.groupby(}\StringTok{\textquotesingle{}fertilizer\textquotesingle{}}\NormalTok{)[}\StringTok{\textquotesingle{}out\textquotesingle{}}\NormalTok{].mean().}\BuiltInTok{round}\NormalTok{(}\DecValTok{2}\NormalTok{))}
+
+\NormalTok{model }\OperatorTok{=}\NormalTok{ ols(}\StringTok{\textquotesingle{}out \textasciitilde{} C(fertilizer)\textquotesingle{}}\NormalTok{, data}\OperatorTok{=}\NormalTok{df).fit()}
+\NormalTok{anova }\OperatorTok{=}\NormalTok{ sm.stats.anova\_lm(model, typ}\OperatorTok{=}\DecValTok{1}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}F = }\SpecialCharTok{\%.3f}\StringTok{\textquotesingle{}} \OperatorTok{\%}\NormalTok{ anova[}\StringTok{\textquotesingle{}F\textquotesingle{}}\NormalTok{].iloc[}\DecValTok{0}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}P = }\SpecialCharTok{\%.3g}\StringTok{\textquotesingle{}} \OperatorTok{\%}\NormalTok{ anova[}\StringTok{\textquotesingle{}PR(\textgreater{}F)\textquotesingle{}}\NormalTok{].iloc[}\DecValTok{0}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}SS\_between = }\SpecialCharTok{\%.3f}\StringTok{\textquotesingle{}} \OperatorTok{\%}\NormalTok{ anova[}\StringTok{\textquotesingle{}sum\_sq\textquotesingle{}}\NormalTok{].iloc[}\DecValTok{0}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}SS\_within = }\SpecialCharTok{\%.3f}\StringTok{\textquotesingle{}} \OperatorTok{\%}\NormalTok{ anova[}\StringTok{\textquotesingle{}sum\_sq\textquotesingle{}}\NormalTok{].iloc[}\DecValTok{1}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}df\_between =\textquotesingle{}}\NormalTok{, anova[}\StringTok{\textquotesingle{}df\textquotesingle{}}\NormalTok{].iloc[}\DecValTok{0}\NormalTok{], }\StringTok{\textquotesingle{} df\_within =\textquotesingle{}}\NormalTok{, anova[}\StringTok{\textquotesingle{}df\textquotesingle{}}\NormalTok{].iloc[}\DecValTok{1}\NormalTok{])}
+
+\NormalTok{os.makedirs(}\StringTok{\textquotesingle{}images\textquotesingle{}}\NormalTok{, exist\_ok}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{plt.figure(figsize}\OperatorTok{=}\NormalTok{(}\FloatTok{5.6}\NormalTok{, }\FloatTok{3.8}\NormalTok{))}
+\NormalTok{bp }\OperatorTok{=}\NormalTok{ plt.boxplot([a, b, c], tick\_labels}\OperatorTok{=}\NormalTok{[}\StringTok{\textquotesingle{}A\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}B\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}C\textquotesingle{}}\NormalTok{], patch\_artist}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ patch, color }\KeywordTok{in} \BuiltInTok{zip}\NormalTok{(bp[}\StringTok{\textquotesingle{}boxes\textquotesingle{}}\NormalTok{], [}\StringTok{\textquotesingle{}\#a8d5f2\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}\#f5b971\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}\#a9d9a8\textquotesingle{}}\NormalTok{]):}
+\NormalTok{    patch.set\_facecolor(color)}
+\NormalTok{plt.plot([}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{], [a.mean(), b.mean(), c.mean()], marker}\OperatorTok{=}\StringTok{\textquotesingle{}o\textquotesingle{}}\NormalTok{, color}\OperatorTok{=}\StringTok{\textquotesingle{}\#c0392b\textquotesingle{}}\NormalTok{,}
+\NormalTok{         ls}\OperatorTok{=}\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{, label}\OperatorTok{=}\StringTok{\textquotesingle{}组均值\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.legend(fontsize}\OperatorTok{=}\DecValTok{8}\NormalTok{)}
+\NormalTok{plt.grid(alpha}\OperatorTok{=}\FloatTok{0.25}\NormalTok{)}
+\NormalTok{plt.savefig(}\StringTok{\textquotesingle{}figures/07{-}statsmodels/case1\_fertilizer\_anova.png\textquotesingle{}}\NormalTok{, dpi}\OperatorTok{=}\DecValTok{150}\NormalTok{)}
+\NormalTok{plt.close()}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}saved figures/07{-}statsmodels/case1\_fertilizer\_anova.png\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-26}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fertilizer}
+\NormalTok{A    49.98}
+\NormalTok{B    55.22}
+\NormalTok{C    60.80}
+\NormalTok{Name: out, dtype: float64}
+\NormalTok{F = 18.455}
+\NormalTok{P = 1.77e{-}06}
+\NormalTok{SS\_between = 877.288}
+\NormalTok{SS\_within = 998.289}
+\NormalTok{df\_between = 2.0  df\_within = 42.0}
+\NormalTok{saved figures/07{-}statsmodels/case1\_fertilizer\_anova.png}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-26}
+
+\textbf{一句话人话}：把 45
+块地的产量按``肥料''分成三堆，先看每堆平均数，再看堆与堆之间的差距，是否大到不像是``随机抽签运气好/坏''造成的。
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \texttt{rng.normal(50,\ 6,\ n)}：生成 15 个``平均 50、标准差
+  6''的产量，模拟 A 肥；B、C 分别把均值换成 55、60。固定
+  \texttt{seed=42} 保证每次结果一致。
+\item
+  \texttt{df.groupby(\textquotesingle{}fertilizer\textquotesingle{}){[}\textquotesingle{}out\textquotesingle{}{]}.mean()}：把产量按肥料分组求平均，得到
+  A≈49.98、B≈55.22、C≈60.80，肉眼能看出递增。
+\item
+  \texttt{ols(\textquotesingle{}out\ \textasciitilde{}\ C(fertilizer)\textquotesingle{},\ data=df)}：把``肥料''当分类自变量（\texttt{C(...)}
+  自动转成哑变量），拟合线性模型；这就是 ANOVA 的回归写法。
+\item
+  \texttt{sm.stats.anova\_lm(model,\ typ=1)}：对该回归结果做方差分析，把总平方和拆成``组间''与``组内''两块，算出
+  F 与 P 值。
+\item
+  \texttt{SS\_between}（组间）≈877.29、\texttt{SS\_within}（组内）≈998.29，说明三组之间的差异占总差异的一半左右，不是噪声。
+\item
+  \texttt{F=18.455}、\texttt{P=1.77e-06\ \textless{}\ 0.05}：拒绝``三组均值相同''的原假设，即三种肥料对产量的影响\textbf{统计显著}。
+\end{enumerate}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={三种肥料的产量箱线图}]{figures/07-statsmodels/case1_fertilizer_anova.png}}
+\caption{三种肥料的产量箱线图}
+\end{figure}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-28}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+需求
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+写法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+说明
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+生成正态随机数 & \texttt{rng.normal(mean,\ std,\ n)} & 模拟每组产量 \\
+按组求均值 &
+\texttt{df.groupby(\textquotesingle{}fertilizer\textquotesingle{}){[}\textquotesingle{}out\textquotesingle{}{]}.mean()}
+& 组间比较第一步 \\
+分类变量进公式 &
+\texttt{ols(\textquotesingle{}out\ \textasciitilde{}\ C(fertilizer)\textquotesingle{},\ data=df)}
+& \texttt{C()} 把类别变哑变量 \\
+方差分析表 & \texttt{sm.stats.anova\_lm(model,\ typ=1)} & 输出
+df/平方和/F/P \\
+取 F / P 值 &
+\texttt{anova{[}\textquotesingle{}F\textquotesingle{}{]}.iloc{[}0{]}} /
+\texttt{anova{[}\textquotesingle{}PR(\textgreater{}F)\textquotesingle{}{]}.iloc{[}0{]}}
+& 用 \texttt{.iloc{[}0{]}} 避免位置弃用警告 \\
+画箱线图 & \texttt{plt.boxplot({[}a,\ b,\ c{]},\ tick\_labels=...)} &
+直观展示组分布与均值 \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-28}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  误把``组均值看起来不同''当成``显著不同''：还要看组内波动（\texttt{SS\_within}）够不够小；组内波动大时，均值差异可能不显著。
+\item
+  公式里直接写
+  \texttt{ols(\textquotesingle{}out\ \textasciitilde{}\ fertilizer\textquotesingle{},\ ...)}
+  而不加 \texttt{C()}：字符串列会被 patsy 当连续变量或报错。
+\item
+  直接用
+  \texttt{anova{[}\textquotesingle{}F\textquotesingle{}{]}{[}0{]}}
+  取第一行：新版 pandas 可能给出``按位置取数''的 FutureWarning，应改用
+  \texttt{.iloc{[}0{]}}。
+\item
+  忘记在绘图前
+  \texttt{os.makedirs(\textquotesingle{}images\textquotesingle{},\ exist\_ok=True)}：首次没有
+  \texttt{figures/07-statsmodels/} 目录时 \texttt{savefig} 会报错。
+\end{enumerate}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-16}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  把 \texttt{n} 改成 30，观察 F 与 P
+  值如何变化；把种子改成别的值，多次运行看结论是否稳定。
+\item
+  用 \texttt{scipy.stats.f\_oneway(a,\ b,\ c)} 直接计算，和
+  \texttt{anova\_lm} 的 F/P 对比是否一致。
+\item
+  给数据再加一个``对照''组（不施肥、均值 45），看 4 组 ANOVA 结论。
+\item
+  用 \texttt{statsmodels.stats.multicomp.pairwise\_tukeyhsd} 做 Tukey
+  事后两两比较，找出哪两组差异显著。
+\end{enumerate}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -338,6 +530,196 @@ y \textasciitilde{} x1 * x2 & 主效应 + 交互项 \\
 y \textasciitilde{} x1 + I(x1**2) & 添加二次项 \\
 \end{longtable}
 }
+
+\subsection{案例卡 2：OLS 多元回归------用公式接口解读系数与 p
+值}\label{ux6848ux4f8bux5361-2ols-ux591aux5143ux56deux5f52ux7528ux516cux5f0fux63a5ux53e3ux89e3ux8bfbux7cfbux6570ux4e0e-p-ux503c}
+
+\subsubsection{目标}\label{ux76eeux6807-28}
+
+造一份``房子面积（平方米）、房龄（年）→
+房价（万元）''的模拟数据，用\textbf{公式接口}
+\texttt{ols(\textquotesingle{}price\ \textasciitilde{}\ area\ +\ age\textquotesingle{},\ data=df)}
+一次估计两个自变量。我们重点关注每个系数的\textbf{大小、符号、p 值、95\%
+置信区间}，并说明``面积每大一平米、房龄每多一年，房价平均怎么变''。
+
+\subsubsection{代码}\label{ux4ee3ux7801-29}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\ImportTok{from}\NormalTok{ statsmodels.formula.api }\ImportTok{import}\NormalTok{ ols}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+\ImportTok{import}\NormalTok{ os}
+
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.width\textquotesingle{}}\NormalTok{, }\DecValTok{100}\NormalTok{)}
+
+\NormalTok{rng }\OperatorTok{=}\NormalTok{ np.random.default\_rng(}\DecValTok{3}\NormalTok{)}
+\NormalTok{n }\OperatorTok{=} \DecValTok{40}
+\NormalTok{area }\OperatorTok{=}\NormalTok{ rng.uniform(}\DecValTok{30}\NormalTok{, }\DecValTok{120}\NormalTok{, n)    }\CommentTok{\# 面积：30\textasciitilde{}120 平米}
+\NormalTok{age }\OperatorTok{=}\NormalTok{ rng.uniform(}\DecValTok{0}\NormalTok{, }\DecValTok{30}\NormalTok{, n)       }\CommentTok{\# 房龄：0\textasciitilde{}30 年}
+\NormalTok{price }\OperatorTok{=} \DecValTok{50} \OperatorTok{+} \FloatTok{3.0}\OperatorTok{*}\NormalTok{area }\OperatorTok{{-}} \FloatTok{1.5}\OperatorTok{*}\NormalTok{age }\OperatorTok{+}\NormalTok{ rng.normal(}\DecValTok{0}\NormalTok{, }\DecValTok{8}\NormalTok{, n)  }\CommentTok{\# 真实模型}
+
+\NormalTok{df }\OperatorTok{=}\NormalTok{ pd.DataFrame(\{}\StringTok{\textquotesingle{}area\textquotesingle{}}\NormalTok{: area, }\StringTok{\textquotesingle{}age\textquotesingle{}}\NormalTok{: age, }\StringTok{\textquotesingle{}price\textquotesingle{}}\NormalTok{: price\})}
+\NormalTok{model }\OperatorTok{=}\NormalTok{ ols(}\StringTok{\textquotesingle{}price \textasciitilde{} area + age\textquotesingle{}}\NormalTok{, data}\OperatorTok{=}\NormalTok{df).fit()}
+\NormalTok{ci }\OperatorTok{=}\NormalTok{ model.conf\_int()}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}coefficients:\textquotesingle{}}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ name }\KeywordTok{in}\NormalTok{ [}\StringTok{\textquotesingle{}Intercept\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}area\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}age\textquotesingle{}}\NormalTok{]:}
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{name}\SpecialCharTok{:9s\}}\SpecialStringTok{ coef=}\SpecialCharTok{\{}\NormalTok{model}\SpecialCharTok{.}\NormalTok{params[name]}\SpecialCharTok{:.4f\}}\SpecialStringTok{ p=}\SpecialCharTok{\{}\NormalTok{model}\SpecialCharTok{.}\NormalTok{pvalues[name]}\SpecialCharTok{:.2e\}}\SpecialStringTok{ CI=[}\SpecialCharTok{\{}\NormalTok{ci}\SpecialCharTok{.}\NormalTok{loc[name,}\DecValTok{0}\NormalTok{]}\SpecialCharTok{:.4f\}}\SpecialStringTok{, }\SpecialCharTok{\{}\NormalTok{ci}\SpecialCharTok{.}\NormalTok{loc[name,}\DecValTok{1}\NormalTok{]}\SpecialCharTok{:.4f\}}\SpecialStringTok{]"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}R2 =\textquotesingle{}}\NormalTok{, }\BuiltInTok{round}\NormalTok{(model.rsquared, }\DecValTok{4}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}F =\textquotesingle{}}\NormalTok{, }\BuiltInTok{round}\NormalTok{(model.fvalue, }\DecValTok{3}\NormalTok{), }\StringTok{\textquotesingle{} P(F) = }\SpecialCharTok{\%.3g}\StringTok{\textquotesingle{}} \OperatorTok{\%}\NormalTok{ model.f\_pvalue)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}AIC =\textquotesingle{}}\NormalTok{, }\BuiltInTok{round}\NormalTok{(model.aic, }\DecValTok{2}\NormalTok{))}
+
+\NormalTok{os.makedirs(}\StringTok{\textquotesingle{}images\textquotesingle{}}\NormalTok{, exist\_ok}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{fig, axes }\OperatorTok{=}\NormalTok{ plt.subplots(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, figsize}\OperatorTok{=}\NormalTok{(}\DecValTok{9}\NormalTok{, }\FloatTok{3.6}\NormalTok{))}
+\NormalTok{axes[}\DecValTok{0}\NormalTok{].scatter(model.fittedvalues, df[}\StringTok{\textquotesingle{}price\textquotesingle{}}\NormalTok{], s}\OperatorTok{=}\DecValTok{16}\NormalTok{, color}\OperatorTok{=}\StringTok{\textquotesingle{}\#2f6fb3\textquotesingle{}}\NormalTok{, alpha}\OperatorTok{=}\FloatTok{0.7}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{0}\NormalTok{].plot([df[}\StringTok{\textquotesingle{}price\textquotesingle{}}\NormalTok{].}\BuiltInTok{min}\NormalTok{(), df[}\StringTok{\textquotesingle{}price\textquotesingle{}}\NormalTok{].}\BuiltInTok{max}\NormalTok{()], [df[}\StringTok{\textquotesingle{}price\textquotesingle{}}\NormalTok{].}\BuiltInTok{min}\NormalTok{(), df[}\StringTok{\textquotesingle{}price\textquotesingle{}}\NormalTok{].}\BuiltInTok{max}\NormalTok{()], color}\OperatorTok{=}\StringTok{\textquotesingle{}\#c0392b\textquotesingle{}}\NormalTok{, lw}\OperatorTok{=}\FloatTok{1.6}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{0}\NormalTok{].set\_xlabel(}\StringTok{\textquotesingle{}拟合值\textquotesingle{}}\NormalTok{)}\OperatorTok{;}\NormalTok{ axes[}\DecValTok{0}\NormalTok{].set\_ylabel(}\StringTok{\textquotesingle{}真实值\textquotesingle{}}\NormalTok{)}\OperatorTok{;}\NormalTok{ axes[}\DecValTok{0}\NormalTok{].set\_title(}\StringTok{\textquotesingle{}拟合值 vs 真实值\textquotesingle{}}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{1}\NormalTok{].scatter(model.fittedvalues, model.resid, s}\OperatorTok{=}\DecValTok{16}\NormalTok{, color}\OperatorTok{=}\StringTok{\textquotesingle{}\#3a8f4f\textquotesingle{}}\NormalTok{, alpha}\OperatorTok{=}\FloatTok{0.7}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{1}\NormalTok{].axhline(}\DecValTok{0}\NormalTok{, color}\OperatorTok{=}\StringTok{\textquotesingle{}\#c0392b\textquotesingle{}}\NormalTok{, lw}\OperatorTok{=}\FloatTok{1.2}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{1}\NormalTok{].set\_xlabel(}\StringTok{\textquotesingle{}拟合值\textquotesingle{}}\NormalTok{)}\OperatorTok{;}\NormalTok{ axes[}\DecValTok{1}\NormalTok{].set\_ylabel(}\StringTok{\textquotesingle{}残差\textquotesingle{}}\NormalTok{)}\OperatorTok{;}\NormalTok{ axes[}\DecValTok{1}\NormalTok{].set\_title(}\StringTok{\textquotesingle{}残差 vs 拟合值\textquotesingle{}}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ ax }\KeywordTok{in}\NormalTok{ axes:}
+\NormalTok{    ax.grid(alpha}\OperatorTok{=}\FloatTok{0.25}\NormalTok{)}
+\NormalTok{fig.tight\_layout()}
+\NormalTok{fig.savefig(}\StringTok{\textquotesingle{}figures/07{-}statsmodels/case2\_ols\_multi.png\textquotesingle{}}\NormalTok{, dpi}\OperatorTok{=}\DecValTok{150}\NormalTok{)}
+\NormalTok{plt.close()}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}saved figures/07{-}statsmodels/case2\_ols\_multi.png\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-27}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{coefficients:}
+\NormalTok{Intercept coef=50.8786 p=2.16e{-}12 CI=[40.8480, 60.9092]}
+\NormalTok{area      coef=2.9799 p=1.59e{-}36 CI=[2.8662, 3.0937]}
+\NormalTok{age       coef={-}1.4557 p=8.11e{-}11 CI=[{-}1.7844, {-}1.1269]}
+\NormalTok{R2 = 0.9872}
+\NormalTok{F = 1425.282  P(F) = 9.82e{-}36}
+\NormalTok{AIC = 290.09}
+\NormalTok{saved figures/07{-}statsmodels/case2\_ols\_multi.png}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-27}
+
+\textbf{一句话人话}：房价 ≈ 一个``起步价'' + 每平米单价 × 面积 −
+每年折旧 × 房龄；\texttt{coef} 就是这些单价，\texttt{p}
+告诉你``这个单价是不是真的、会不会只是噪声''。
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \texttt{area\ =\ rng.uniform(30,\ 120,\ n)}：生成 40
+  套房子的面积；\texttt{age} 类似。\texttt{price} 用真实系数
+  \texttt{(50,\ 3,\ -1.5)}
+  再加噪声构造，这样我们能``对着答案''检验模型。
+\item
+  \texttt{ols(\textquotesingle{}price\ \textasciitilde{}\ area\ +\ age\textquotesingle{},\ data=df)}：公式接口自动加截距（\texttt{Intercept}），并同时放进
+  \texttt{area} 与 \texttt{age} 两个自变量。
+\item
+  \texttt{model.params}：截距 ≈50.88（接近真实 50），\texttt{area}
+  ≈2.98（接近真实 3），\texttt{age} ≈−1.46（接近真实
+  −1.5）。系数就是``在控制另一个变量后，该变量每改变 1
+  单位，因变量的平均变化''。
+\item
+  \texttt{model.pvalues}：三个 p 值都远小于
+  0.05，说明截距、面积、房龄都\textbf{统计显著}；房龄系数为负也符合直觉（房子越旧越便宜）。
+\item
+  \texttt{model.conf\_int()}：给出 95\% 置信区间。\texttt{area} 的区间
+  \texttt{{[}2.87,\ 3.09{]}} 不包含
+  0，说明面积效应显著为正；\texttt{age} 区间
+  \texttt{{[}-1.78,\ -1.13{]}} 不包含 0，说明房龄效应显著为负。
+\item
+  \texttt{R2=0.9872}：面积+房龄解释了约 98.7\% 的房价变动；\texttt{F} 与
+  \texttt{p(F)} 说明模型整体显著。\texttt{AIC} 可用于与其它模型比较。
+\end{enumerate}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={拟合值 vs 真实值 与 残差图}]{figures/07-statsmodels/case2_ols_multi.png}}
+\caption{拟合值 vs 真实值 与 残差图}
+\end{figure}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-29}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+需求
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+写法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+说明
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+多元回归 &
+\texttt{ols(\textquotesingle{}price\ \textasciitilde{}\ area\ +\ age\textquotesingle{},\ data=df)}
+& 公式接口，自动加截距 \\
+系数 & \texttt{model.params} & 每个变量的边际效应 \\
+p 值 & \texttt{model.pvalues} & \textless0.05 视为显著 \\
+置信区间 & \texttt{model.conf\_int()} & 95\% CI，不含 0 一般显著 \\
+拟合优度 & \texttt{model.rsquared} / \texttt{model.rsquared\_adj} &
+解释比例 / 调整后 \\
+整体显著性 & \texttt{model.fvalue} / \texttt{model.f\_pvalue} &
+所有系数联合是否为 0 \\
+信息准则 & \texttt{model.aic} & 越小越好，用于模型选择 \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-29}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  只打印 \texttt{model.summary()}
+  而不使用关键字段：跨版本摘要边缘（空格、分隔线、\texttt{+/-}
+  号）不稳定，教学时建议用
+  \texttt{params}/\texttt{pvalues}/\texttt{conf\_int} 打印固定字段。
+\item
+  忘记 \texttt{add\_constant}
+  但用了数组接口：公式接口自动加截距，数组接口却要手动加。
+\item
+  把 \texttt{p=0.0} 直接打印当``无意义''：应使用 \texttt{\%.2e} 或
+  \texttt{\%.3g} 科学计数法，避免显示成 0。
+\item
+  用 \texttt{round(model.pvalues,\ 4)} 输出时 p 值太小被四舍五入成
+  0.0000，看不出数量级。
+\end{enumerate}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-17}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  在公式里加交互项
+  \texttt{ols(\textquotesingle{}price\ \textasciitilde{}\ area\ +\ age\ +\ area:age\textquotesingle{},\ data=df)}，看交互项是否显著。
+\item
+  把 \texttt{age} 换成``新房/二手''分类变量
+  \texttt{C(new\_house)}，对比系数含义变化。
+\item
+  用数组接口
+  \texttt{sm.OLS(df{[}\textquotesingle{}price\textquotesingle{}{]},\ sm.add\_constant(df{[}{[}\textquotesingle{}area\textquotesingle{},\textquotesingle{}age\textquotesingle{}{]}{]}))}
+  重跑，确认系数一致。
+\item
+  计算各自变量的标准化系数（\texttt{z-score}
+  后回归），比较``谁的影响更大''。
+\end{enumerate}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -692,8 +1074,12 @@ y_t = T_t \times S_t \times R_t \quad(\text{乘法模型})
 \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
 \ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\ImportTok{import}\NormalTok{ statsmodels.api }\ImportTok{as}\NormalTok{ sm}
 \ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
 \ImportTok{from}\NormalTok{ statsmodels.tsa.seasonal }\ImportTok{import}\NormalTok{ seasonal\_decompose}
+
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
 
 \NormalTok{rng }\OperatorTok{=}\NormalTok{ np.random.default\_rng(}\DecValTok{0}\NormalTok{)}
 \NormalTok{idx }\OperatorTok{=}\NormalTok{ pd.date\_range(}\StringTok{\textquotesingle{}2022{-}01{-}01\textquotesingle{}}\NormalTok{, periods}\OperatorTok{=}\DecValTok{180}\NormalTok{, freq}\OperatorTok{=}\StringTok{\textquotesingle{}D\textquotesingle{}}\NormalTok{)}
@@ -967,6 +1353,239 @@ Non-invertible starting MA parameters'' 之类的提示，属正常，statsmodel
 会改用零值作为初始参数。
 \end{quote}
 
+\subsection{案例卡 3：ARIMA 时间序列------用 ADF 检验与残差诊断选
+p,d,q}\label{ux6848ux4f8bux5361-3arima-ux65f6ux95f4ux5e8fux5217ux7528-adf-ux68c0ux9a8cux4e0eux6b8bux5deeux8bcaux65adux9009-pdq}
+
+\subsubsection{目标}\label{ux76eeux6807-29}
+
+模拟一个``先平稳、再被累加''的 ARIMA(1,1,1)
+序列，完整走一遍选阶流程：先用 \textbf{ADF} 定差分阶数
+\texttt{d}，再看差分序列的 \textbf{ACF/PACF} 与网格搜索（AIC）定
+\texttt{p}、\texttt{q}，最后用 \textbf{Ljung-Box} 与
+\textbf{Jarque-Bera} 检查残差是否``洗干净''成白噪声，并给出未来 5
+步预测。
+
+\subsubsection{代码}\label{ux4ee3ux7801-30}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\ImportTok{import}\NormalTok{ warnings}
+\NormalTok{warnings.filterwarnings(}\StringTok{\textquotesingle{}ignore\textquotesingle{}}\NormalTok{)}
+\ImportTok{from}\NormalTok{ statsmodels.tsa.stattools }\ImportTok{import}\NormalTok{ adfuller, acf, pacf}
+\ImportTok{from}\NormalTok{ statsmodels.tsa.arima.model }\ImportTok{import}\NormalTok{ ARIMA}
+\ImportTok{from}\NormalTok{ statsmodels.stats.diagnostic }\ImportTok{import}\NormalTok{ acorr\_ljungbox}
+\ImportTok{from}\NormalTok{ statsmodels.stats.stattools }\ImportTok{import}\NormalTok{ jarque\_bera}
+\ImportTok{from}\NormalTok{ statsmodels.graphics.tsaplots }\ImportTok{import}\NormalTok{ plot\_acf}
+\ImportTok{from}\NormalTok{ itertools }\ImportTok{import}\NormalTok{ product}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+\ImportTok{import}\NormalTok{ os}
+
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.width\textquotesingle{}}\NormalTok{, }\DecValTok{100}\NormalTok{)}
+
+\NormalTok{rng }\OperatorTok{=}\NormalTok{ np.random.default\_rng(}\DecValTok{11}\NormalTok{)}
+\NormalTok{n }\OperatorTok{=} \DecValTok{300}
+\NormalTok{e }\OperatorTok{=}\NormalTok{ rng.normal(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, n)}
+\NormalTok{x }\OperatorTok{=}\NormalTok{ np.zeros(n)}
+\ControlFlowTok{for}\NormalTok{ t }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{1}\NormalTok{, n):}
+\NormalTok{    x[t] }\OperatorTok{=} \FloatTok{0.6}\OperatorTok{*}\NormalTok{x[t}\OperatorTok{{-}}\DecValTok{1}\NormalTok{] }\OperatorTok{+}\NormalTok{ e[t] }\OperatorTok{+} \FloatTok{0.3}\OperatorTok{*}\NormalTok{e[t}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]      }\CommentTok{\# 平稳的 ARMA(1,1)}
+\NormalTok{vals }\OperatorTok{=}\NormalTok{ np.cumsum(x) }\OperatorTok{+} \DecValTok{100}                      \CommentTok{\# 累加 =\textgreater{} ARIMA(1,1,1)}
+\NormalTok{idx }\OperatorTok{=}\NormalTok{ pd.date\_range(}\StringTok{\textquotesingle{}2020{-}01{-}01\textquotesingle{}}\NormalTok{, periods}\OperatorTok{=}\NormalTok{n, freq}\OperatorTok{=}\StringTok{\textquotesingle{}D\textquotesingle{}}\NormalTok{)}
+\NormalTok{ser }\OperatorTok{=}\NormalTok{ pd.Series(vals, index}\OperatorTok{=}\NormalTok{idx)}
+
+\NormalTok{adf0 }\OperatorTok{=}\NormalTok{ adfuller(ser)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}adfuller raw: ADF=}\SpecialCharTok{\%.3f}\StringTok{ p=}\SpecialCharTok{\%.3g}\StringTok{\textquotesingle{}} \OperatorTok{\%}\NormalTok{ (adf0[}\DecValTok{0}\NormalTok{], adf0[}\DecValTok{1}\NormalTok{]))}
+\NormalTok{d1 }\OperatorTok{=}\NormalTok{ ser.diff().dropna()}
+\NormalTok{adf1 }\OperatorTok{=}\NormalTok{ adfuller(d1)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}adfuller diff: ADF=}\SpecialCharTok{\%.3f}\StringTok{ p=}\SpecialCharTok{\%.3g}\StringTok{\textquotesingle{}} \OperatorTok{\%}\NormalTok{ (adf1[}\DecValTok{0}\NormalTok{], adf1[}\DecValTok{1}\NormalTok{]))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}ACF(diff) lag1{-}4:\textquotesingle{}}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(acf(d1, nlags}\OperatorTok{=}\DecValTok{4}\NormalTok{)[}\DecValTok{1}\NormalTok{:], }\DecValTok{3}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}PACF(diff) lag1{-}4:\textquotesingle{}}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(pacf(d1, nlags}\OperatorTok{=}\DecValTok{4}\NormalTok{)[}\DecValTok{1}\NormalTok{:], }\DecValTok{3}\NormalTok{))}
+
+\NormalTok{best }\OperatorTok{=} \VariableTok{None}
+\ControlFlowTok{for}\NormalTok{ p }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{3}\NormalTok{):}
+    \ControlFlowTok{for}\NormalTok{ q }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{3}\NormalTok{):}
+        \ControlFlowTok{try}\NormalTok{:}
+\NormalTok{            mod }\OperatorTok{=}\NormalTok{ ARIMA(ser, order}\OperatorTok{=}\NormalTok{(p, }\DecValTok{1}\NormalTok{, q)).fit()}
+\NormalTok{            aic }\OperatorTok{=}\NormalTok{ mod.aic}
+            \ControlFlowTok{if}\NormalTok{ best }\KeywordTok{is} \VariableTok{None} \KeywordTok{or}\NormalTok{ aic }\OperatorTok{\textless{}}\NormalTok{ best[}\DecValTok{0}\NormalTok{]:}
+\NormalTok{                best }\OperatorTok{=}\NormalTok{ (aic, p, q)}
+        \ControlFlowTok{except} \PreprocessorTok{Exception}\NormalTok{:}
+            \ControlFlowTok{pass}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}best AIC order (p,d,q):\textquotesingle{}}\NormalTok{, best[}\DecValTok{1}\NormalTok{], }\DecValTok{1}\NormalTok{, best[}\DecValTok{2}\NormalTok{], }\StringTok{\textquotesingle{} AIC=}\SpecialCharTok{\%.3f}\StringTok{\textquotesingle{}} \OperatorTok{\%}\NormalTok{ best[}\DecValTok{0}\NormalTok{])}
+
+\NormalTok{final }\OperatorTok{=}\NormalTok{ ARIMA(ser, order}\OperatorTok{=}\NormalTok{(best[}\DecValTok{1}\NormalTok{], }\DecValTok{1}\NormalTok{, best[}\DecValTok{2}\NormalTok{])).fit()}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}AR params:\textquotesingle{}}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(final.arparams, }\DecValTok{4}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}MA params:\textquotesingle{}}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(final.maparams, }\DecValTok{4}\NormalTok{))}
+\NormalTok{resid }\OperatorTok{=}\NormalTok{ final.resid.iloc[}\DecValTok{10}\NormalTok{:]}
+\NormalTok{lb }\OperatorTok{=}\NormalTok{ acorr\_ljungbox(resid, lags}\OperatorTok{=}\NormalTok{[}\DecValTok{10}\NormalTok{], return\_df}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{jb }\OperatorTok{=}\NormalTok{ jarque\_bera(resid)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}Ljung{-}Box Q pvalue = }\SpecialCharTok{\%.4f}\StringTok{\textquotesingle{}} \OperatorTok{\%}\NormalTok{ lb[}\StringTok{\textquotesingle{}lb\_pvalue\textquotesingle{}}\NormalTok{].iloc[}\DecValTok{0}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}Jarque{-}Bera pvalue = }\SpecialCharTok{\%.4f}\StringTok{\textquotesingle{}} \OperatorTok{\%}\NormalTok{ jb[}\DecValTok{1}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}forecast 5:\textquotesingle{}}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(final.forecast(}\DecValTok{5}\NormalTok{).values, }\DecValTok{3}\NormalTok{))}
+
+\NormalTok{os.makedirs(}\StringTok{\textquotesingle{}images\textquotesingle{}}\NormalTok{, exist\_ok}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{fig, axes }\OperatorTok{=}\NormalTok{ plt.subplots(}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, figsize}\OperatorTok{=}\NormalTok{(}\FloatTok{9.5}\NormalTok{, }\FloatTok{5.6}\NormalTok{))}
+\NormalTok{axes[}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{].plot(ser.index, ser.values, lw}\OperatorTok{=}\FloatTok{1.1}\NormalTok{, color}\OperatorTok{=}\StringTok{\textquotesingle{}\#2f6fb3\textquotesingle{}}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{].set\_title(}\StringTok{\textquotesingle{}原始序列（非平稳）\textquotesingle{}}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{].plot(d1.index, d1.values, lw}\OperatorTok{=}\FloatTok{1.1}\NormalTok{, color}\OperatorTok{=}\StringTok{\textquotesingle{}\#3a8f4f\textquotesingle{}}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{].set\_title(}\StringTok{\textquotesingle{}一阶差分\textquotesingle{}}\NormalTok{)}
+\NormalTok{plot\_acf(d1, ax}\OperatorTok{=}\NormalTok{axes[}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{], lags}\OperatorTok{=}\DecValTok{15}\NormalTok{, title}\OperatorTok{=}\StringTok{\textquotesingle{}差分 ACF\textquotesingle{}}\NormalTok{)}
+\NormalTok{plot\_acf(resid, ax}\OperatorTok{=}\NormalTok{axes[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{], lags}\OperatorTok{=}\DecValTok{15}\NormalTok{, title}\OperatorTok{=}\StringTok{\textquotesingle{}残差 ACF\textquotesingle{}}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ ax }\KeywordTok{in}\NormalTok{ axes.ravel():}
+\NormalTok{    ax.grid(alpha}\OperatorTok{=}\FloatTok{0.2}\NormalTok{)}
+\NormalTok{fig.tight\_layout()}
+\NormalTok{fig.savefig(}\StringTok{\textquotesingle{}figures/07{-}statsmodels/case3\_arima\_diag.png\textquotesingle{}}\NormalTok{, dpi}\OperatorTok{=}\DecValTok{150}\NormalTok{)}
+\NormalTok{plt.close()}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}saved figures/07{-}statsmodels/case3\_arima\_diag.png\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-28}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{adfuller raw: ADF={-}2.239 p=0.192}
+\NormalTok{adfuller diff: ADF={-}6.094 p=1.02e{-}07}
+\NormalTok{ACF(diff) lag1{-}4: [0.738 0.457 0.311 0.202]}
+\NormalTok{PACF(diff) lag1{-}4: [ 0.741 {-}0.196  0.119 {-}0.071]}
+\NormalTok{best AIC order (p,d,q): 1 1 1  AIC=802.817}
+\NormalTok{AR params: [0.5958]}
+\NormalTok{MA params: [0.3302]}
+\NormalTok{Ljung{-}Box Q pvalue = 0.2587}
+\NormalTok{Jarque{-}Bera pvalue = 0.4776}
+\NormalTok{forecast 5: [122.494 121.879 121.512 121.294 121.164]}
+\NormalTok{saved figures/07{-}statsmodels/case3\_arima\_diag.png}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-28}
+
+\textbf{一句话人话}：先问``序列稳不稳''（ADF），不稳就先差分（\texttt{d}=1）；再用``多少阶自相关/移动平均''（ACF/PACF
++ AIC）挑
+\texttt{p}、\texttt{q}；最后看残差是不是``没剩什么信息''（Ljung-Box /
+JB）来确认模型合格。
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \texttt{x{[}t{]}=0.6*x{[}t-1{]}+e{[}t{]}+0.3*e{[}t-1{]}}
+  造一个\textbf{平稳} ARMA(1,1)；再 \texttt{np.cumsum(x)} 累加得到
+  \texttt{ARIMA(1,1,1)} 序列（差分后就是原来的
+  ARMA）。这样做能让我们``知道答案''，方便验证流程。
+\item
+  \texttt{adfuller(ser)}：原始序列
+  \texttt{p=0.192\ \textgreater{}\ 0.05}，不能拒绝单位根，说明\textbf{非平稳}
+  → 决定 \texttt{d=1}。
+\item
+  \texttt{ser.diff().dropna()}：一阶差分后再做
+  ADF，\texttt{p=1.02e-07\ \textless{}\ 0.05}，差分序列\textbf{平稳}。
+\item
+  ACF/PACF 只是``参考图''：差分序列 ACF 在 lag1 就衰减到 0.74，PACF 也是
+  lag1 最大，说明滞后阶数不需要太大。
+\item
+  网格搜索（\texttt{itertools.product}）在
+  \texttt{p,q\ in\ \{0,1,2\}}、固定 \texttt{d=1} 下比较 AIC，选出
+  \texttt{(1,1,1)}（AIC=802.817），与真实阶数一致。
+\item
+  结果解读：\texttt{AR(1)=0.596}、\texttt{MA(1)=0.330} 都接近生成时的
+  0.6 与 0.3；\texttt{Ljung-Box\ p=0.259}、\texttt{Jarque-Bera\ p=0.478}
+  都大于 0.05，说明残差\textbf{近似白噪声}，模型合格。
+\item
+  \texttt{forecast(5)} 给出未来 5 天（约 122.5 →
+  121.2）的预测；画图里``残差
+  ACF''几乎都在置信带内，也支持``残差已洗净''。
+\end{enumerate}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={ARIMA 选阶与残差诊断图}]{figures/07-statsmodels/case3_arima_diag.png}}
+\caption{ARIMA 选阶与残差诊断图}
+\end{figure}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-30}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+需求
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+写法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+说明
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+平稳性检验 & \texttt{adfuller(ser)} & 返回 (ADF, p, \ldots) \\
+差分 & \texttt{ser.diff().dropna()} & \texttt{diff()} 后首元素为 NaN \\
+ACF/PACF & \texttt{acf(d1,\ nlags=4)} / \texttt{pacf(...)} & 判断 p/q
+参考 \\
+网格选阶 & \texttt{itertools.product(range(3),\ range(3))} + AIC &
+在候选 (p,q) 中找 AIC 最小 \\
+拟合 ARIMA & \texttt{ARIMA(ser,\ order=(p,d,q)).fit()} &
+返回模型（含预测） \\
+残差自相关 & \texttt{acorr\_ljungbox(resid,\ lags={[}10{]})} &
+p\textgreater0.05 视为白噪声 \\
+残差正态性 & \texttt{jarque\_bera(resid)} & p\textgreater0.05
+可接受正态 \\
+预测 & \texttt{model.forecast(steps=5)} & 返回未来值 \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-30}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  拿到序列就拟合 ARIMA，不做
+  ADF：非平稳序列容易``伪回归''，应先检验、必要时差分。
+\item
+  \texttt{diff()} 后忘记 \texttt{dropna()}：首元素为
+  NaN，\texttt{adfuller} 或 \texttt{acf} 会报错。
+\item
+  直接用 \texttt{final.resid} 做诊断：模型首期残差可能因初始化偏大，建议
+  \texttt{resid.iloc{[}10:{]}} 跳过 burn-in 再检验。
+\item
+  只看 \texttt{summary()} 的 AIC/BIC 而不做残差诊断：AIC
+  低不代表残差是白噪声，仍需 Ljung-Box 与 JB。
+\item
+  网格搜索时把所有阶数都 \texttt{fit()}，可能触发``Non-stationary
+  starting\ldots''等提示；用
+  \texttt{warnings.filterwarnings(\textquotesingle{}ignore\textquotesingle{})}
+  只影响显示，不影响结果。
+\end{enumerate}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-18}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  把生成模型改成 \texttt{ARIMA(2,1,1)}（在 \texttt{x{[}t{]}} 里加
+  \texttt{x{[}t-2{]}} 项），看网格搜索是否选回 \texttt{(2,1,1)}。
+\item
+  把 \texttt{lags} 换成 \texttt{{[}5,\ 20{]}}，分别看 Ljung-Box p
+  值，理解滞后阶数的影响。
+\item
+  用 \texttt{statsmodels.tsa.statespace.SARIMAX} 加入季节项
+  \texttt{(1,1,1)(1,1,1,7)}，比较与普通 ARIMA 的 AIC。
+\item
+  把数据切为训练/测试（前 240 / 后 60），用 RMSE 比较
+  \texttt{ARIMA(1,1,1)}、\texttt{ARIMA(2,1,1)} 与 \texttt{ARIMA(0,1,0)}
+  谁的预测误差最小。
+\end{enumerate}
+
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsection{常见误区}\label{ux5e38ux89c1ux8befux533a-21}
@@ -1080,6 +1699,10 @@ build/make\_chap7\_figures.py 生成）。
 \ImportTok{from}\NormalTok{ statsmodels.formula.api }\ImportTok{import}\NormalTok{ ols}
 \ImportTok{from}\NormalTok{ statsmodels.tsa.seasonal }\ImportTok{import}\NormalTok{ seasonal\_decompose}
 \ImportTok{from}\NormalTok{ statsmodels.tsa.arima.model }\ImportTok{import}\NormalTok{ ARIMA}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
 
 \NormalTok{rng }\OperatorTok{=}\NormalTok{ np.random.default\_rng(}\DecValTok{7}\NormalTok{)}
 \NormalTok{m }\OperatorTok{=} \DecValTok{140}
@@ -1227,6 +1850,84 @@ build/make\_chap7\_figures.py 生成）。
 \item
   结合第 2
   步：若未来一周气温升高，可直接用回归式估算负荷增量，作为短期调度参考。
+\end{itemize}
+
+\subsection{增强：时间序列诊断与预测误差对比}\label{ux589eux5f3aux65f6ux95f4ux5e8fux5217ux8bcaux65adux4e0eux9884ux6d4bux8befux5deeux5bf9ux6bd4}
+
+综合案例不只是``把三个方法跑一遍''，还应该\textbf{检验模型是否值得信任}。下面补两件事：①
+对日负荷做 ADF 平稳性检验（定 \texttt{d} 的依据）；② 把前 120
+天当训练、后 20 天当测试，分别用 ARIMA
+与``温度+周末''回归做预测，用测试集 RMSE 比较谁更准。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\ImportTok{import}\NormalTok{ statsmodels.api }\ImportTok{as}\NormalTok{ sm}
+\ImportTok{from}\NormalTok{ statsmodels.tsa.stattools }\ImportTok{import}\NormalTok{ adfuller}
+\ImportTok{from}\NormalTok{ statsmodels.tsa.arima.model }\ImportTok{import}\NormalTok{ ARIMA}
+
+\NormalTok{rng }\OperatorTok{=}\NormalTok{ np.random.default\_rng(}\DecValTok{7}\NormalTok{)}
+\NormalTok{m }\OperatorTok{=} \DecValTok{140}
+\NormalTok{date }\OperatorTok{=}\NormalTok{ pd.date\_range(}\StringTok{\textquotesingle{}2023{-}01{-}01\textquotesingle{}}\NormalTok{, periods}\OperatorTok{=}\NormalTok{m, freq}\OperatorTok{=}\StringTok{\textquotesingle{}D\textquotesingle{}}\NormalTok{)}
+\NormalTok{trendc }\OperatorTok{=}\NormalTok{ np.linspace(}\DecValTok{0}\NormalTok{, }\DecValTok{15}\NormalTok{, m)}
+\NormalTok{seasonc }\OperatorTok{=} \DecValTok{5}\OperatorTok{*}\NormalTok{np.sin(}\DecValTok{2}\OperatorTok{*}\NormalTok{np.pi}\OperatorTok{*}\NormalTok{np.arange(m)}\OperatorTok{/}\DecValTok{7}\NormalTok{) }\OperatorTok{+} \DecValTok{2}\OperatorTok{*}\NormalTok{np.cos(}\DecValTok{2}\OperatorTok{*}\NormalTok{np.pi}\OperatorTok{*}\NormalTok{np.arange(m)}\OperatorTok{/}\DecValTok{7}\NormalTok{)}
+\NormalTok{noisec }\OperatorTok{=}\NormalTok{ rng.normal(}\DecValTok{0}\NormalTok{, }\DecValTok{3}\NormalTok{, m)}
+\NormalTok{weekend }\OperatorTok{=}\NormalTok{ (date.dayofweek }\OperatorTok{\textgreater{}=} \DecValTok{5}\NormalTok{).astype(}\BuiltInTok{int}\NormalTok{)}
+\NormalTok{temp }\OperatorTok{=} \DecValTok{25} \OperatorTok{+} \DecValTok{6}\OperatorTok{*}\NormalTok{np.sin(}\DecValTok{2}\OperatorTok{*}\NormalTok{np.pi}\OperatorTok{*}\NormalTok{np.arange(m)}\OperatorTok{/}\DecValTok{7}\NormalTok{) }\OperatorTok{+}\NormalTok{ rng.normal(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\NormalTok{, m)}
+\NormalTok{load }\OperatorTok{=} \DecValTok{300} \OperatorTok{+} \DecValTok{4}\OperatorTok{*}\NormalTok{temp }\OperatorTok{+} \DecValTok{20}\OperatorTok{*}\NormalTok{weekend }\OperatorTok{+}\NormalTok{ trendc }\OperatorTok{+}\NormalTok{ seasonc }\OperatorTok{+}\NormalTok{ noisec}
+\NormalTok{dfc }\OperatorTok{=}\NormalTok{ pd.DataFrame(\{}\StringTok{\textquotesingle{}date\textquotesingle{}}\NormalTok{: date, }\StringTok{\textquotesingle{}load\textquotesingle{}}\NormalTok{: load, }\StringTok{\textquotesingle{}weekend\textquotesingle{}}\NormalTok{: weekend, }\StringTok{\textquotesingle{}temp\textquotesingle{}}\NormalTok{: temp\})}
+\NormalTok{load\_s }\OperatorTok{=}\NormalTok{ pd.Series(dfc[}\StringTok{\textquotesingle{}load\textquotesingle{}}\NormalTok{].values, index}\OperatorTok{=}\NormalTok{date)}
+
+\NormalTok{adf\_p }\OperatorTok{=}\NormalTok{ adfuller(load\_s)[}\DecValTok{1}\NormalTok{]}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}load ADF p = }\SpecialCharTok{\%.3g}\StringTok{\textquotesingle{}} \OperatorTok{\%}\NormalTok{ adf\_p)}
+
+\NormalTok{tr }\OperatorTok{=}\NormalTok{ load\_s.iloc[:}\DecValTok{120}\NormalTok{]}
+\NormalTok{te }\OperatorTok{=}\NormalTok{ load\_s.iloc[}\DecValTok{120}\NormalTok{:]}
+\NormalTok{mtr }\OperatorTok{=}\NormalTok{ ARIMA(tr, order}\OperatorTok{=}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{)).fit()}
+\NormalTok{fc }\OperatorTok{=}\NormalTok{ mtr.forecast(steps}\OperatorTok{=}\BuiltInTok{len}\NormalTok{(te))}
+\NormalTok{rmse\_arima }\OperatorTok{=} \BuiltInTok{float}\NormalTok{(np.sqrt(np.mean((te.values }\OperatorTok{{-}}\NormalTok{ fc.values)}\OperatorTok{**}\DecValTok{2}\NormalTok{)))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}ARIMA(1,1,1) test RMSE = }\SpecialCharTok{\%.3f}\StringTok{\textquotesingle{}} \OperatorTok{\%}\NormalTok{ rmse\_arima)}
+
+\NormalTok{x\_tr }\OperatorTok{=}\NormalTok{ dfc[[}\StringTok{\textquotesingle{}temp\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}weekend\textquotesingle{}}\NormalTok{]].iloc[:}\DecValTok{120}\NormalTok{]}
+\NormalTok{y\_tr }\OperatorTok{=}\NormalTok{ dfc[}\StringTok{\textquotesingle{}load\textquotesingle{}}\NormalTok{].iloc[:}\DecValTok{120}\NormalTok{]}
+\NormalTok{x\_te }\OperatorTok{=}\NormalTok{ dfc[[}\StringTok{\textquotesingle{}temp\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}weekend\textquotesingle{}}\NormalTok{]].iloc[}\DecValTok{120}\NormalTok{:]}
+\NormalTok{y\_te }\OperatorTok{=}\NormalTok{ dfc[}\StringTok{\textquotesingle{}load\textquotesingle{}}\NormalTok{].iloc[}\DecValTok{120}\NormalTok{:]}
+\NormalTok{mreg }\OperatorTok{=}\NormalTok{ sm.OLS(y\_tr, sm.add\_constant(x\_tr)).fit()}
+\NormalTok{pred\_reg }\OperatorTok{=}\NormalTok{ mreg.predict(sm.add\_constant(x\_te))}
+\NormalTok{rmse\_reg }\OperatorTok{=} \BuiltInTok{float}\NormalTok{(np.sqrt(np.mean((y\_te.values }\OperatorTok{{-}}\NormalTok{ pred\_reg.values)}\OperatorTok{**}\DecValTok{2}\NormalTok{)))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}OLS(temp,weekend) test RMSE = }\SpecialCharTok{\%.3f}\StringTok{\textquotesingle{}} \OperatorTok{\%}\NormalTok{ rmse\_reg)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-29}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{load ADF p = 0.774}
+\NormalTok{ARIMA(1,1,1) test RMSE = 29.412}
+\NormalTok{OLS(temp,weekend) test RMSE = 7.808}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{解读}：
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{load\ ADF\ p\ =\ 0.774\ \textgreater{}\ 0.05}：日负荷序列非平稳，所以第
+  3 步用 \texttt{ARIMA(...,d=1)} 是合理的；若想用 \texttt{SARIMAX}
+  含外生温度，也应先差分。
+\item
+  测试集 RMSE 上，\texttt{OLS(temp,\ weekend)} 为
+  \textbf{7.81}，明显优于 \texttt{ARIMA(1,1,1)} 的
+  \textbf{29.41}：因为负荷主要受温度与周末影响，回归能``用上外生变量''，而纯
+  ARIMA 只能靠历史轨迹外推。
+\item
+  这不代表 ARIMA
+  没用：若没有温度等外生变量，或只关心短期的纯时间形态，ARIMA
+  是更好的基线；更复杂的 \texttt{SARIMAX}（把 \texttt{temp}
+  当外生变量）通常能进一步压小 RMSE。
 \end{itemize}
 
 \subsection{本章小结}\label{ux672cux7ae0ux5c0fux7ed3}

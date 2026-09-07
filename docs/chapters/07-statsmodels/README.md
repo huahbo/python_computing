@@ -26,6 +26,15 @@ Statsmodels 是 Python 中一个面向**统计建模与计量经济学**的库�
 5. 用 <code>seasonal_decompose</code> 分解时间序列为趋势、季节、残差；用 <code>adfuller</code> 判断平稳性。
 6. 用 <code>ARIMA</code> 拟合并预测未来值，能读懂 <code>SARIMAX Results</code> 摘要。
 
+## 案例索引
+
+| 案例卡 | 所在节 | 技术点 | 难度 |
+| ---- | ---- | ---- | ---- |
+| 1. 单因素方差分析——三种肥料对产量差异是否显著 | [01 方差分析与回归](./01-方差分析与回归.md) | `C()`、`anova_lm`、F/P 值 | ★★☆ |
+| 2. OLS 多元回归——用公式接口解读系数与 p 值 | [01 方差分析与回归](./01-方差分析与回归.md) | `ols` 公式、`pvalues`、`conf_int` | ★★☆ |
+| 3. ARIMA 时间序列——用 ADF 检验与残差诊断选 p,d,q | [02 时间序列预测](./02-时间序列预测.md) | `adfuller`、ACF/PACF、AIC、残差诊断 | ★★★ |
+| 综合案例：城市日负荷的统计建模与预测 | [03 综合案例](./03-综合案例.md) | ANOVA + OLS + 分解/ARIMA + RMSE 对比 | ★★★ |
+
 ## 先修要求与运行环境
 
 - 熟悉 Python 基础语法、NumPy 数组与 Pandas DataFrame（前几章内容）。
@@ -51,8 +60,8 @@ pip install matplotlib scipy
 
 | 小节 | 文件 | 内容 |
 | ---- | ---- | ---- |
-| 01 方差分析与回归 | [01-方差分析与回归.md](./01-方差分析与回归.md) | OLS 回归、公式 API、anova_lm、GLM、诊断、WLS |
-| 02 时间序列预测 | [02-时间序列预测.md](./02-时间序列预测.md) | seasonal_decompose、ADF、ARIMA |
+| 01 方差分析与回归 | [01-方差分析与回归.md](./01-方差分析与回归.md) | OLS 回归、公式 API、anova_lm、GLM、诊断、WLS；案例卡 1/2 |
+| 02 时间序列预测 | [02-时间序列预测.md](./02-时间序列预测.md) | seasonal_decompose、ADF、ARIMA；案例卡 3 |
 | 03 综合案例 | [03-综合案例.md](./03-综合案例.md) | 城市日负荷：方差分析 + 回归 + 时间序列预测 |
 | 04 常见误区与技巧 | [04-常见误区与技巧.md](./04-常见误区与技巧.md) | 易错点表格、性能/调试/自测清单 |
 
@@ -68,7 +77,7 @@ pip install matplotlib scipy
 ## 练习与上机入口
 
 - [本章练习（exercises/）](./exercises/README.md)：10 道自测题、作业、参考答案。
-- [本章上机（lab/）](./lab/README.md)：10 个代码单元、4 个大 Part，含综合任务。
+- [本章上机（lab/）](./lab/README.md)：19 个代码单元、4 个大 Part，含案例卡跟练/变形/综合任务与综合任务。
 - [本章参考与延伸阅读（references.md）](./references.md)：官方文档、精品教程、习题集、中文资料。
 - [教学说明（teaching.md）](./teaching.md)：课时安排、重点难点、考核建议（教师用）。
 
