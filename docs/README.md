@@ -42,4 +42,4 @@ pip install numpy pandas scipy sympy matplotlib seaborn networkx statsmodels sci
 
 ## 版权
 
-本作品采用 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) 许可。原始项目：[datawhalechina/scientific-computing](https://github.com/datawhalechina/scientific-computing)。
+本作品采用 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) 许可。本课程仓库：[huahbo/python_computing](https://github.com/huahbo/python_computing)。

@@ -46,9 +46,9 @@
 | 资料 | 链接 | 说明 | 优先级 |
 | ---- | ---- | ---- | ---- |
 | Statsmodels 中文文档（ApacheCN 翻译） | [链接](https://github.com/ljtlrh/statsmodels_doc_zh) | 官方文档的中文翻译 | ★推荐 |
-| 上游开源教材（科学计算） | [链接](https://github.com/datawhalechina/scientific-computing) | 本书开源仓库，含本章代码 | ★推荐 |
-| 社区时间序列相关笔记 | [链接](https://blog.csdn.net/weixin_45306755/article/details/108122794) | 时间序列特征与规则入门 | 选读 |
-| 聪明办法学 Python v2 | [链接](https://github.com/datawhalechina/learn-python-the-smart-way-v2) | 前置 Python 课程（第 0 章先修） | 选读 |
+| 上游开源教材（科学计算） | [链接](https://github.com/huahbo/python_computing) | 本书开源仓库，含本章代码 | ★推荐 |
+| 社区时间序列相关笔记 | [链接](https://github.com/huahbo/python_computing) | 时间序列特征与规则入门 | 选读 |
+| 聪明办法学 Python v2 | [链接](https://github.com/huahbo/python_computing) | 前置 Python 课程（第 0 章先修） | 选读 |
 
 ## 五、资源使用建议
 

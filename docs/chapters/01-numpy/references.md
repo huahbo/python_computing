@@ -40,9 +40,9 @@
 
 | 资料 | 链接 | 说明 |
 | ---- | ---- | ---- |
-| 聪明办法学 Python v2 | [链接](https://github.com/datawhalechina/learn-python-the-smart-way-v2) | 前置课程 |
-| 数学建模导论 | [链接](https://github.com/datawhalechina/intro-mathmodel) | 后续课程 |
-| 本项目（科学计算） | [链接](https://github.com/datawhalechina/scientific-computing) | 本书开源仓库 |
+| 聪明办法学 Python v2 | [链接](https://github.com/huahbo/python_computing) | 前置课程 |
+| 数学建模导论 | [链接](https://github.com/huahbo/python_computing) | 后续课程 |
+| 本项目（科学计算） | [链接](https://github.com/huahbo/python_computing) | 本书开源仓库 |
 
 ## 五、资源使用建议
 

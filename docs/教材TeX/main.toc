@@ -1117,9 +1117,9 @@
 \contentsline {chapter}{全书总参考文献（附录 G）}{389}{appendix*.1118}%
 \contentsline {section}{一、官方文档与工具链}{389}{section*.1119}%
 \contentsline {section}{二、教材与书籍}{392}{section*.1120}%
-\contentsline {section}{三、精品教程与课程}{392}{section*.1121}%
-\contentsline {section}{四、习题与实战}{393}{section*.1122}%
+\contentsline {section}{三、精品教程与课程}{393}{section*.1121}%
+\contentsline {section}{四、习题与实战}{394}{section*.1122}%
 \contentsline {section}{五、开源项目与配套仓库}{394}{section*.1123}%
-\contentsline {section}{六、中文资料与镜像}{394}{section*.1124}%
-\contentsline {section}{七、其他}{394}{section*.1125}%
+\contentsline {section}{六、中文资料与镜像}{395}{section*.1124}%
+\contentsline {section}{七、其他}{395}{section*.1125}%
 \contentsline {section}{按章节快速查找}{395}{section*.1126}%

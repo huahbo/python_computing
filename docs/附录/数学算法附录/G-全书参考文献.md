@@ -3,7 +3,7 @@
 > 本页由 `build/gen_references.py` **自动生成**，勿手改。单一事实源 = 各章 `references.md` + 附录 `references.md`；新增/删除引用后重新运行生成即可。
 > 速查方式：按类别浏览；每行“用于”列标注了哪些章节使用该资料，点章节链接可回正文。
 
-共汇总 **163 条**（来自 9 个章节 + 附录）。
+共汇总 **199 条**（来自 9 个章节 + 附录）。
 
 ## 一、官方文档与工具链
 
@@ -12,7 +12,7 @@
 | [API Reference](https://www.statsmodels.org/stable/api.html) | 全部函数索引 | 第7章 Statsmodels |
 | [ARIMA](https://www.statsmodels.org/stable/generated/statsmodels.tsa.arima.model.ARIMA.html) | ARIMA/SARIMAX 模型 | 第7章 Statsmodels |
 | [Anaconda vs Miniconda](https://www.anaconda.com/docs/getting-started/concepts/anaconda-or-miniconda) | 选型说明（课程推荐 Miniconda） | 第0章 前置基础 |
-| [Broadcasting 官方说明](https://numpy.org/doc/stable/user/basics.broadcasting.html) | 广播规则权威定义 | 第1章 NumPy、附录 |
+| [Broadcasting 官方说明](https://numpy.org/doc/stable/user/basics.broadcasting.html) | 广播规则权威定义 | 第1章 NumPy |
 | [Complex Network Analysis in Python（官方示例）](https://networkx.org/documentation/stable/auto_examples/index.html) | 官方示例集，覆盖绘图/社区/路径 | 第6章 NetworkX |
 | [Examples 总目录](https://www.statsmodels.org/stable/examples/index.html) | 官方示例（含回归与时间序列） | 第7章 Statsmodels |
 | [Formula API](https://www.statsmodels.org/stable/formula.html) | <code>ols('y ~ x', data=...)</code> 语法 | 第7章 Statsmodels |
@@ -23,16 +23,19 @@
 | [Learn LaTeX 中文站](https://www.learnlatex.org/zh-hans/) | 免费结构化课程：结构/公式/表格/插图 | 第0章 前置基础 |
 | [LoongTeX（龙文）](https://www.loongtex.com/) | 国产在线编译（备选，中文友好） | 第0章 前置基础 |
 | [Matplotlib Cheatsheets](https://matplotlib.org/stable/cheatsheets/index.html) | 速查表（含多子图排版） | 第5章 Matplotlib |
+| [Matplotlib Gallery 官方示例](https://matplotlib.org/stable/gallery/index.html) | 每个图型含完整可运行源码 | 第5章 Matplotlib |
 | [Matplotlib 图型画廊](https://matplotlib.org/stable/gallery/index.html) | 各类图型官方示例 | 第5章 Matplotlib |
 | [Matplotlib 快速开始](https://matplotlib.org/stable/tutorials/introductory/quick_start.html) | 官方绝对入门，覆盖 Plot/Axes/Figure | 第5章 Matplotlib |
 | [Matplotlib 文本/字体](https://matplotlib.org/stable/users/explain/text/text_props.html) | 字体、字号、数学公式 | 第5章 Matplotlib |
 | [Matplotlib: Anatomy of a Figure](https://matplotlib.org/stable/tutorials/intermediate/tight_layout_guide.html) | 子图排版与 tight_layout 细节 | 第5章 Matplotlib |
 | [NetworkX 3.x 迁移/新特性](https://networkx.org/documentation/stable/release/release_3.3.html) | 版本更新说明 | 第6章 NetworkX |
-| [NetworkX Tutorial（官方教程）](https://networkx.org/documentation/stable/tutorial.html) | 从零创建图、访问节点边、常用操作 | 第6章 NetworkX、附录 |
+| [NetworkX Tutorial（官方教程）](https://networkx.org/documentation/stable/tutorial.html) | 从零创建图、访问节点边、常用操作 | 第6章 NetworkX |
 | [NetworkX 中文文档镜像](https://networkx.cn/documentation/stable/) | 中文版官方文档（有翻译） | 第6章 NetworkX |
+| [NetworkX 官方教程](https://networkx.org/documentation/stable/tutorial.html) | API 与算法 | 附录 |
 | [NetworkX 社区（Discussions/Stack Overflow）](https://networkx.org/documentation/stable/faq.html) | 常见问题与讨论入口 | 第6章 NetworkX |
 | [NumPy Quickstart](https://numpy.org/doc/stable/user/quickstart.html) | 快速上手教程 | 第1章 NumPy |
 | [NumPy for MATLAB users](https://numpy.org/doc/stable/user/numpy-for-matlab-users.html) | 给 MATLAB 背景学生迁移 | 第1章 NumPy |
+| [NumPy 性能（broadcasting 等）](https://numpy.org/doc/stable/user/basics.broadcasting.html) | 向量化与性能 | 附录 |
 | [NumPy：Absolute Beginner](https://numpy.org/doc/stable/user/absolute_beginners.html) | 官方“绝对入门”，覆盖创建/索引/广播 | 第1章 NumPy |
 | [OLS](https://www.statsmodels.org/stable/generated/statsmodels.regression.linear_model.OLS.html) | 最小二乘回归 | 第7章 Statsmodels |
 | [Overleaf](https://www.overleaf.com/) | 在线编译（备选） | 第0章 前置基础 |
@@ -47,12 +50,15 @@
 | [Regressions](https://www.statsmodels.org/stable/regression.html) | 线性回归/GLS/WLS 总览 | 第7章 Statsmodels |
 | [SciPy 中文文档镜像](https://docs.scipy.org.cn/doc/scipy/) | 中文版参考（版本可能较旧） | 第3章 SciPy |
 | [SciPy 主页](https://scipy.org/) | 库介绍、版本、安装 | 第3章 SciPy |
-| [SciPy 参考手册（全模块）](https://docs.scipy.org/doc/scipy/reference/) | 按模块查函数签名与示例 | 第3章 SciPy、附录 |
+| [SciPy 参考手册（全模块）](https://docs.scipy.org/doc/scipy/reference/) | 按模块查函数签名与示例 | 第3章 SciPy |
 | [SciPy 官方教程（tutorial 目录）](https://docs.scipy.org/doc/scipy/tutorial/) | 官方讲解积分/FFT/插值 | 第3章 SciPy |
+| [SciPy 官方示例库](https://docs.scipy.org/doc/scipy/reference/) | 函数页内附示例 | 第3章 SciPy |
 | [SciPy 版本发布说明](https://docs.scipy.org/doc/scipy/release.html) | 查看函数改名/废弃 | 第3章 SciPy |
 | [Seaborn 官方教程](https://seaborn.pydata.org/tutorial.html) | 分布/箱线/热力图/分面教程 | 第5章 Matplotlib |
+| [Statsmodels in Python (教育向)](https://www.statsmodels.org/stable/user-guide.html) | 官方逐步教学 | 第7章 Statsmodels |
 | [Statsmodels 中文文档（ApacheCN 翻译）](https://github.com/ljtlrh/statsmodels_doc_zh) | 官方文档的中文翻译 | 第7章 Statsmodels |
-| [Statsmodels 主页](https://www.statsmodels.org/stable/index.html) | 库简介与总入口 | 第7章 Statsmodels、附录 |
+| [Statsmodels 主页](https://www.statsmodels.org/stable/index.html) | 库简介与总入口 | 第7章 Statsmodels |
+| [Statsmodels 官方示例 Notebooks](https://www.statsmodels.org/stable/examples/index.html) | 直接可跑的 notebook，含回归/诊断/时间序列 | 第7章 Statsmodels |
 | [Statsmodels 官方示例（回归）](https://www.statsmodels.org/stable/examples/index.html#regression) | 一整套可运行回归案例 | 第7章 Statsmodels |
 | [Statsmodels 官方示例（时间序列）](https://www.statsmodels.org/stable/examples/index.html#time-series) | 分解、ARIMA/SARIMA 案例 | 第7章 Statsmodels |
 | [SymPy Calculus（求导/积分/极限）](https://docs.sympy.org/latest/tutorials/intro-tutorial/calculus.html) | 极限、diff、integrate 的权威说明 | 第2章 SymPy |
@@ -75,29 +81,33 @@
 | [anova_lm](https://www.statsmodels.org/stable/generated/statsmodels.stats.anova.anova_lm.html) | 方差分析 | 第7章 Statsmodels |
 | [ctex 宏包文档](https://ctan.org/pkg/ctex) | 中文排版权威 | 第0章 前置基础 |
 | [ndarray 基础](https://numpy.org/doc/stable/user/basics.html) | 形状、索引、切片、视图/拷贝 | 第1章 NumPy |
-| [numpy.linalg 参考](https://numpy.org/doc/stable/reference/routines.linalg.html) | 线性代数全部函数 | 第1章 NumPy、附录 |
+| [numpy.linalg 参考](https://numpy.org/doc/stable/reference/routines.linalg.html) | 线性代数全部函数 | 第1章 NumPy |
+| [numpy.linalg 官方参考](https://numpy.org/doc/stable/reference/routines.linalg.html) | 函数速查 | 附录 |
 | [numpy.polynomial 参考](https://numpy.org/doc/stable/reference/routines.polynomials.html) | 多项式接口 | 第1章 NumPy |
 | [pandas.DataFrame 参考](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html) | DataFrame 全部方法 | 第4章 Pandas |
 | [pandas.Series 参考](https://pandas.pydata.org/docs/reference/api/pandas.Series.html) | Series 全部方法 | 第4章 Pandas |
 | [pivot_table 参考](https://pandas.pydata.org/docs/reference/api/pandas.pivot_table.html) | 透视表 | 第4章 Pandas |
 | [scikit-learn API 速查](https://scikit-learn.org/stable/modules/classes.html) | 全部类/函数索引 | 第8章 scikit-learn |
 | [scikit-learn MOOC（INRIA）](https://inria.github.io/scikit-learn-mooc/) | 官方协作的免费课程，带习题与 Notebook | 第8章 scikit-learn |
+| [scikit-learn User Guide](https://scikit-learn.org/stable/user_guide.html) | 官方模型/评估 | 附录 |
 | [scikit-learn 交叉验证](https://scikit-learn.org/stable/modules/cross_validation.html) | train/test、交叉验证、调参 | 第8章 scikit-learn |
 | [scikit-learn 入门教程](https://scikit-learn.org/stable/tutorial/index.html) | 官方快速上手，含“选择正确评估器”参考 | 第8章 scikit-learn |
 | [scikit-learn 官方主页 / 稳定版文档](https://scikit-learn.org/stable/) | 权威 API 与用户指南入口，建议作为查错第一站 | 第8章 scikit-learn |
 | [scikit-learn 官方示例库](https://scikit-learn.org/stable/auto_examples/index.html) | 大量可运行示例，按算法/任务索引 | 第8章 scikit-learn |
 | [scikit-learn 模型评估](https://scikit-learn.org/stable/modules/model_evaluation.html) | 分类/回归/聚类指标 | 第8章 scikit-learn |
 | [scikit-learn 特征选择](https://scikit-learn.org/stable/modules/feature_selection.html) | 过滤/包装/嵌入三类方法 | 第8章 scikit-learn |
-| [scikit-learn 用户指南](https://scikit-learn.org/stable/user_guide.html) | 按主题讲解预处理、监督、无监督、模型选择 | 第8章 scikit-learn、附录 |
+| [scikit-learn 用户指南](https://scikit-learn.org/stable/user_guide.html) | 按主题讲解预处理、监督、无监督、模型选择 | 第8章 scikit-learn |
 | [scikit-learn 预处理](https://scikit-learn.org/stable/modules/preprocessing.html) | 编码、缩放、缺失值处理 | 第8章 scikit-learn |
 | [scipy.fft 傅里叶变换](https://docs.scipy.org/doc/scipy/reference/fft.html) | `fft`/`rfft`/`fftfreq` | 第3章 SciPy |
 | [scipy.integrate 积分与 ODE](https://docs.scipy.org/doc/scipy/reference/integrate.html) | `quad`/`odeint`/`solve_ivp`/`solve_bvp` | 第3章 SciPy |
 | [scipy.interpolate 插值](https://docs.scipy.org/doc/scipy/reference/interpolate.html) | 一维/多维/散点插值 | 第3章 SciPy |
+| [scipy.optimize / scipy.integrate 官方文档](https://docs.scipy.org/doc/scipy/reference/) | 函数 API | 附录 |
 | [scipy.optimize 优化](https://docs.scipy.org/doc/scipy/reference/optimize.html) | 求根/极值/规划/拟合 | 第3章 SciPy |
 | [scipy.signal 信号处理](https://docs.scipy.org/doc/scipy/reference/signal.html) | 滤波器设计、卷积 | 第3章 SciPy |
 | [scipy.stats 统计](https://docs.scipy.org/doc/scipy/reference/stats.html) | 检验/分布/描述统计 | 第3章 SciPy |
 | [seasonal_decompose](https://www.statsmodels.org/stable/generated/statsmodels.tsa.seasonal.seasonal_decompose.html) | 时间序列分解 | 第7章 Statsmodels |
 | [statsmodels 官方](https://www.statsmodels.org/stable/) | 方差分析事后比较/回归 | 第3章 SciPy |
+| [statsmodels 官方文档](https://www.statsmodels.org/stable/index.html) | 回归/ANOVA/时序 | 附录 |
 | [中心性算法](https://networkx.org/documentation/stable/reference/algorithms/centrality.html) | 介数/接近/度中心性 | 第6章 NetworkX |
 | [分组（groupby）](https://pandas.pydata.org/docs/user_guide/groupby.html) | 分组聚合/变换/过滤 | 第4章 Pandas |
 | [图与 NumPy/SciPy 互转](https://networkx.org/documentation/stable/reference/convert.html) | to_numpy_array / to_scipy_sparse_array | 第6章 NetworkX |
@@ -124,14 +134,24 @@
 | ---- | ---- | ---- |
 | [3Blue1Brown 线性代数的本质（中文字幕）](https://space.bilibili.com/88461692/) | 可视化直觉 | 附录 |
 | [Mathematics for Machine Learning](https://mml-book.github.io/) | Part I 数学基础（线性代数/微积分）+ Part II 机器学习，主题式 | 附录 |
+| [Python Data Science Handbook](https://github.com/jakevdp/PythonDataScienceHandbook) | 数据科学视角，可作延伸 | 第6章 NetworkX |
 | [Python Data Science Handbook](https://jakevdp.github.io/PythonDataScienceHandbook/) | Jake VanderPlas 的《线性回归》一章对比 sklearn/statsmodels | 第7章 Statsmodels |
-| [Python Data Science Handbook (Jake VanderPlas)](https://github.com/jakevdp/PythonDataScienceHandbook) | 第 2 章 NumPy，可整章对照 | 第1章 NumPy、第2章 SymPy、第3章 SciPy、第4章 Pandas、第5章 Matplotlib、第6章 NetworkX、第8章 scikit-learn |
+| [Python Data Science Handbook (Jake VanderPlas)](https://github.com/jakevdp/PythonDataScienceHandbook) | 第 2 章 NumPy，可整章对照 | 第1章 NumPy、第3章 SciPy、第4章 Pandas |
+| [Python Data Science Handbook（Jake VanderPlas）](https://github.com/jakevdp/PythonDataScienceHandbook) | 第 4 章 Matplotlib、第 5 章 Seaborn，Notebook 形式 | 第5章 Matplotlib、第8章 scikit-learn |
+| [Python Data Science Handbook（符号计算附录）](https://github.com/jakevdp/PythonDataScienceHandbook) | 第 5 章 SymPy 简介，适合数据方向学生 | 第2章 SymPy |
+| [intro-mathmodel 第 1 章 Numpy 与线性代数](https://github.com/huahbo/python_computing) | 下游对齐 | 附录 |
+| [mml-book Chapter 2/3/4](https://mml-book.github.io/) | 线性代数/解析几何/矩阵分解 | 附录 |
 | [thinkstats2](https://github.com/AllenDowney/ThinkStats2) | 用 Python 讲统计 | 附录 |
-| [南瓜书（《机器学习》公式推导）](https://github.com/datawhalechina/pumpkin-book) | 与周志华《机器学习》配套的公式推导详解 | 第8章 scikit-learn |
-| [开源社区 图深度学习（葡萄书）](https://github.com/datawhalechina/grape-book) | 中文开源书，进阶图神经网络 | 第6章 NetworkX |
-| [数学建模导论](https://github.com/datawhalechina/intro-mathmodel) | 后续课程 | 第1章 NumPy、第3章 SciPy、第4章 Pandas、附录 |
-| [本项目（科学计算）](https://github.com/datawhalechina/scientific-computing) | 本书开源仓库 | 第1章 NumPy、第2章 SymPy、第3章 SciPy、第4章 Pandas、第5章 Matplotlib、第7章 Statsmodels、第8章 scikit-learn |
-| [李宏毅机器学习（开源社区整理）](https://github.com/datawhalechina/leedl-tutorial) | 中文讲义，串起 ML 与 DL 的“为什么” | 第8章 scikit-learn |
+| [上游开源教材（科学计算）](https://github.com/huahbo/python_computing) | 本书开源仓库，含本章代码 | 第7章 Statsmodels |
+| [南瓜书（《机器学习》公式推导）](https://github.com/huahbo/python_computing) | 与周志华《机器学习》配套的公式推导详解 | 第8章 scikit-learn |
+| [开源社区 图深度学习（葡萄书）](https://github.com/huahbo/python_computing) | 中文开源书，进阶图神经网络 | 第6章 NetworkX |
+| [开源社区 数学建模导论](https://github.com/huahbo/python_computing) | 后续课程（Pandas 实战） | 第4章 Pandas |
+| [数学建模导论](https://github.com/huahbo/python_computing) | 后续课程 | 第1章 NumPy |
+| [数学建模导论（后续）](https://github.com/huahbo/python_computing) | 大量 SciPy 建模案例 | 第3章 SciPy |
+| [本项目（《Python 科学计算》）](https://github.com/huahbo/python_computing) | 本书开源仓库 | 第8章 scikit-learn |
+| [本项目（科学计算）](https://github.com/huahbo/python_computing) | 本书开源仓库 | 第1章 NumPy、第2章 SymPy、第3章 SciPy、第4章 Pandas、第5章 Matplotlib |
+| [李宏毅机器学习（开源社区整理）](https://github.com/huahbo/python_computing) | 中文讲义，串起 ML 与 DL 的“为什么” | 第8章 scikit-learn |
+| [李宏毅机器学习（开源社区）](https://github.com/huahbo/python_computing) | 中文讲义，机器学习到深度学习衔接 | 第8章 scikit-learn |
 
 ## 三、精品教程与课程
 
@@ -141,34 +161,46 @@
 | [Hands-On ML 3rd（Aurélien Géron）](https://github.com/ageron/handson-ml3) | 第 2 章起系统讲 sklearn，示例丰富 | 第8章 scikit-learn |
 | [Kaggle Intro to ML](https://www.kaggle.com/learn/intro-to-machine-learning) | 用真实数据练决策树/随机森林/交叉验证 | 第8章 scikit-learn |
 | [Learn X in Y minutes: Python](https://learnxinyminutes.com/docs/zh-cn/python3-cn/) | 半小时过一遍语法 | 第0章 前置基础 |
-| [Lectures on Scientific Computing (Robert Johansson)](https://github.com/jrjohansson/scientific-python-lectures) | Lecture-2-Numpy.ipynb，Notebook 形式 | 第1章 NumPy、第2章 SymPy、第3章 SciPy、第4章 Pandas、第6章 NetworkX、第7章 Statsmodels |
+| [Lectures on Scientific Computing](https://github.com/jrjohansson/scientific-python-lectures) | Lecture 4 讲 statsmodels 回归 | 第7章 Statsmodels |
+| [Lectures on Scientific Computing (Robert Johansson)](https://github.com/jrjohansson/scientific-python-lectures) | Lecture-2-Numpy.ipynb，Notebook 形式 | 第1章 NumPy、第2章 SymPy、第4章 Pandas、第6章 NetworkX |
 | [MIT OCW 数值计算（2.086）](https://ocw.mit.edu/courses/2-086-numerical-computation-for-mechanical-engineers-spring-2013/) | 数值方法讲义 | 附录 |
 | [NumPy 中文学习站](https://numpy.net.cn/learn/) | 中文入门与文档镜像 | 第1章 NumPy |
 | [Python 教程 · 廖雪峰（中文）](https://liaoxuefeng.com/books/python/introduction/) | 中文查漏 | 第0章 前置基础 |
 | [Python数据可视化（知乎/博客）](https://www.zhihu.com/question/582168949) | 中文快速入门与经验 | 第5章 Matplotlib |
-| [SciPy Lecture Notes](https://scipy-lectures.org/) | 系统、带图，含 SciPy 章节 | 第3章 SciPy、第4章 Pandas、第6章 NetworkX、附录 |
+| [SciPy Lecture Notes](https://scipy-lectures.org/) | 系统、带图，含 SciPy 章节 | 第3章 SciPy |
 | [SciPy Lecture Notes](https://scipy-lectures.org/packages/10_advanced_2d_plotting.html) | Matplotlib 进阶绘图讲义 | 第5章 Matplotlib |
 | [SciPy Lecture Notes – NumPy](https://scipy-lectures.org/intro/numpy/index.html) | 系统、带图，覆盖数组/广播/运算 | 第1章 NumPy |
+| [SciPy Lecture Notes（Pandas 章节）](https://scipy-lectures.org/) | 偏科学计算，含数据整理 | 第4章 Pandas |
+| [SciPy Lecture Notes（网络章节）](https://scipy-lectures.org/) | 科学计算整体，含图与网络 | 第6章 NetworkX |
+| [SciPy Lectures – Numpy / Linear algebra](https://scipy-lectures.org/) | 数值实现视角 | 附录 |
+| [SciPy Lectures – Optimization / Integration](https://scipy-lectures.org/) | 优化/积分/ODE 实用教程 | 附录 |
 | [SciPy Lectures – SymPy](https://scipy-lectures.org/packages/sympy.html) | 系统、带例子，覆盖符号计算核心 | 第2章 SymPy |
+| [SciPy-lectures 练习](https://scipy-lectures.org/) | 每节配练习 | 第3章 SciPy |
+| [Scientific Python Lectures (GitHub)](https://github.com/jrjohansson/scientific-python-lectures) | Lecture-3-Scipy.ipynb，Notebook 形式 | 第3章 SciPy |
 | [ZetCode 中文教程：SymPy](https://zetcode.cn/python/sympy/) | 中文入门，含符号运算示例 | 第2章 SymPy |
 | [numpy.net.cn（中文学习站）](https://numpy.net.cn/) | 中文科学计算入门（含 Pandas 相关） | 第4章 Pandas |
+| [scikit-learn MOOC 习题](https://inria.github.io/scikit-learn-mooc/) | 在线交互 Quiz + Notebook | 第8章 scikit-learn |
 | [sklearn 中文文档（社区译本）](https://github.com/casperdoudou/sklearn-doc-zh) | 中文版用户指南/API 参考，适合初读 | 第8章 scikit-learn |
 | [华为云/CSDN NetworkX 教程](https://blog.csdn.net/Rocky006/article/details/148866312) | 中文使用详解，含代码 | 第6章 NetworkX |
 | [可汗学院（中文）](https://zh.khanacademy.org/) | 微积分/统计基础 | 附录 |
 | [廖雪峰 Git 教程（中文）](https://liaoxuefeng.com/books/git/introduction/) | 中文入门 | 第0章 前置基础 |
-| [开源社区 fantastic-matplotlib](https://github.com/datawhalechina/fantastic-matplotlib) | 中文、渐进式 Matplotlib 教程 | 第5章 Matplotlib |
-| [开源社区 wow-plotly](https://github.com/datawhalechina/wow-plotly) | Plotly 交互式教程（对比阅读） | 第5章 Matplotlib |
+| [开源社区 fantastic-matplotlib](https://github.com/huahbo/python_computing) | 中文、渐进式 Matplotlib 教程 | 第5章 Matplotlib |
+| [开源社区 wow-plotly](https://github.com/huahbo/python_computing) | Plotly 交互式教程（对比阅读） | 第5章 Matplotlib |
+| [开源社区 聪明办法学 Python v2](https://github.com/huahbo/python_computing) | 前置 Python 课程 | 第4章 Pandas、第8章 scikit-learn |
 | [猫头虎 SciPy 入门教程](https://cloud.tencent.cn/developer/article/2449258) | 安装/模块/用例中文入门 | 第3章 SciPy |
 | [知乎专栏：SymPy 入门与实战](https://zhuanlan.zhihu.com/p/111573239) | 中文文章，带代码与截图 | 第2章 SymPy |
 | [知乎：复杂网络建模（Python+NetworkX）](https://zhuanlan.zhihu.com/p/591617257) | 复杂网络建模课程代码（中文） | 第6章 NetworkX |
-| [社区时间序列相关笔记](https://blog.csdn.net/weixin_45306755/article/details/108122794) | 时间序列特征与规则入门 | 第7章 Statsmodels |
-| [聪明办法学 Python v2（开源社区）](https://github.com/datawhalechina/learn-python-the-smart-way-v2) | 前置课程：Chap0 安装、Chap1 启航、Chap2-6 基础语法 | 第0章 前置基础、第1章 NumPy、第2章 SymPy、第3章 SciPy、第4章 Pandas、第5章 Matplotlib、第7章 Statsmodels、第8章 scikit-learn |
+| [社区时间序列相关笔记](https://github.com/huahbo/python_computing) | 时间序列特征与规则入门 | 第7章 Statsmodels |
+| [聪明办法学 Python v2](https://github.com/huahbo/python_computing) | 前置课程 | 第1章 NumPy、第2章 SymPy、第7章 Statsmodels |
+| [聪明办法学 Python v2（开源社区）](https://github.com/huahbo/python_computing) | 前置课程：Chap0 安装、Chap1 启航、Chap2-6 基础语法 | 第0章 前置基础 |
+| [聪明办法学 Python（前置）](https://github.com/huahbo/python_computing) | 前置课程 | 第3章 SciPy、第5章 Matplotlib |
 
 ## 四、习题与实战
 
 | 资料 | 说明 | 用于 |
 | ---- | ---- | ---- |
 | [100 Pandas Puzzles](https://github.com/ajcr/100-pandas-puzzles) | 100 道 Pandas 小题带答案 | 第4章 Pandas |
+| [Hands-On ML 练习](https://github.com/ageron/handson-ml3) | 每章自带练习（含答案） | 第8章 scikit-learn |
 | [NTNU：Exercises and solutions in symbolic mathematics (SymPy)](https://www.ntnu.no/wiki/spaces/imtsoftware/pages/148770976/Exercises+and+solutions+symbolic+mathematics+in+Python) | 含 SymPy 符号计算练习题与答案 | 第2章 SymPy |
 | [NumPy 习题（中文版，Data-Science-Notes）](https://github.com/fengdu78/Data-Science-Notes) | 含 numpy-100 中文整理 | 第1章 NumPy |
 | [Pandas Exercises (guipsamora)](https://github.com/guipsamora/pandas_exercises) | 分主题练习（清洗/分组/时间序列） | 第4章 Pandas |
@@ -179,8 +211,12 @@
 
 | 资料 | 说明 | 用于 |
 | ---- | ---- | ---- |
-| [Python for Data Analysis 3rd (Wes McKinney)](https://github.com/wesm/pydata-book) | Pandas 作者亲著，第三版配套代码 | 第4章 Pandas、第7章 Statsmodels |
+| [Grape-book（图深度学习）](https://github.com/huahbo/python_computing) | 图神经网络进阶（延伸） | 第6章 NetworkX |
+| [Python for Data Analysis 3rd (Wes McKinney)](https://github.com/wesm/pydata-book) | Pandas 作者亲著，第三版配套代码 | 第4章 Pandas |
+| [Python for Data Analysis（Wes McKinney）](https://github.com/wesm/pydata-book) | 14 章包含 statsmodels 回归示例 | 第7章 Statsmodels |
 | [dair-ai/Mathematics-for-ML](https://github.com/dair-ai/Mathematics-for-ML) | 按主题收集资源的清单 | 附录 |
+| [intro-mathmodel 第 4 章 复杂网络与图论模型](https://github.com/huahbo/python_computing) | 下游对齐 | 附录 |
+| [intro-mathmodel 第 7 章（权重/评价）、第 9 章（统计模型）](https://github.com/huahbo/python_computing) | 下游对齐 | 附录 |
 | [matplotlib-cn（中文文档）](https://github.com/tomdonald/matplotlib-cn) | Matplotlib 中文文档镜像 | 第5章 Matplotlib |
 | [mint-lab/prog_meets_math](https://github.com/mint-lab/prog_meets_math) | "Python Meets Math"：Calculus / Linear Algebra / Optimization / Probability + 代码 | 附录 |
 
@@ -188,7 +224,6 @@
 
 | 资料 | 说明 | 用于 |
 | ---- | ---- | ---- |
-| [Grape-book（图深度学习）](https://datawhalechina.github.io/grape-book) | 图神经网络进阶（延伸） | 第6章 NetworkX |
 | [清华 Anaconda/PyPI 镜像](https://mirrors.tuna.tsinghua.edu.cn/) | conda/pip 都从这里加速 | 第0章 前置基础 |
 | [清华 Miniconda 镜像](https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/) | 国内下载加速 | 第0章 前置基础 |
 | [腾讯云开发者社区：Python 科学计算之 SymPy](https://cloud.tencent.cn/developer/article/2510103) | 中文案例集合 | 第2章 SymPy |
@@ -202,6 +237,7 @@
 | [Python Cheat Sheet](https://www.pythoncheatsheet.org/) | 速查表 | 第0章 前置基础 |
 | [Seaborn API](https://seaborn.pydata.org/api.html) | 函数索引 | 第5章 Matplotlib |
 | [Seaborn 示例](https://seaborn.pydata.org/examples/index.html) | 多分组/分面/热力图示例 | 第5章 Matplotlib |
+| [mml-book Part II](https://mml-book.github.io/) | 回归/分类/概率视角 | 附录 |
 
 ---
 

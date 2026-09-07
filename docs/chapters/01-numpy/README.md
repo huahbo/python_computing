@@ -38,7 +38,7 @@ NumPy 是 Python 科学计算的地基：它用高效的 `ndarray`（N 维数组
 
 ## 先修要求与运行环境
 
-- 熟悉 Python 基础语法（变量、列表、函数、循环；可先学 [聪明办法学 Python](https://github.com/datawhalechina/learn-python-the-smart-way-v2)）。
+- 熟悉 Python 基础语法（变量、列表、函数、循环；可先学 [聪明办法学 Python](https://github.com/huahbo/python_computing)）。
 - 安装 Python 3.10+ 与 NumPy：
 
 ```bash

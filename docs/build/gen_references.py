@@ -93,7 +93,8 @@ def main():
         refs = os.path.join(cdir, "references.md")
         label = CHAPTER_LABEL.get(ch, ch)
         for r in parse_table(refs):
-            key = r["url"].rstrip("/")
+            # 去重键：标题+URL（URL 统一为本课程仓库后，不同资料也要保留）
+            key = r["title"].strip() + "|" + r["url"].rstrip("/")
             if key not in entries:
                 r["srcs"] = [label]
                 entries[key] = r
@@ -101,7 +102,7 @@ def main():
                 if label not in entries[key]["srcs"]:
                     entries[key]["srcs"].append(label)
     for r in parse_table(os.path.join(APP_DIR, "references.md")):
-        key = r["url"].rstrip("/")
+        key = r["title"].strip() + "|" + r["url"].rstrip("/")
         if key not in entries:
             r["srcs"] = ["附录"]
             entries[key] = r

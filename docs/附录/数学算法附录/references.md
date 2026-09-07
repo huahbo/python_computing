@@ -20,7 +20,7 @@
 | SciPy Lectures – Numpy / Linear algebra | https://scipy-lectures.org/ | 数值实现视角 |
 | numpy.linalg 官方参考 | https://numpy.org/doc/stable/reference/routines.linalg.html | 函数速查 |
 | 《线性代数》（同济版等） | 本校教材 | 证明与习题 |
-| intro-mathmodel 第 1 章 Numpy 与线性代数 | https://github.com/datawhalechina/intro-mathmodel | 下游对齐 |
+| intro-mathmodel 第 1 章 Numpy 与线性代数 | https://github.com/huahbo/python_computing | 下游对齐 |
 
 ## 三、微积分与数值方法（附录 B）
 
@@ -38,7 +38,7 @@
 | statsmodels 官方文档 | https://www.statsmodels.org/stable/index.html | 回归/ANOVA/时序 |
 | thinkstats2 | https://github.com/AllenDowney/ThinkStats2 | 用 Python 讲统计 |
 | 《概率论与数理统计》（浙江大学版等） | 本校教材 | 分布/推断证明 |
-| intro-mathmodel 第 7 章（权重/评价）、第 9 章（统计模型） | https://github.com/datawhalechina/intro-mathmodel | 下游对齐 |
+| intro-mathmodel 第 7 章（权重/评价）、第 9 章（统计模型） | https://github.com/huahbo/python_computing | 下游对齐 |
 
 ## 五、图论与网络（附录 D）
 
@@ -46,7 +46,7 @@
 | ---- | ---- | ---- |
 | NetworkX 官方教程 | https://networkx.org/documentation/stable/tutorial.html | API 与算法 |
 | 《图论》（Bondy & Murty 或中文教材） | 本校教材 | 定理证明 |
-| intro-mathmodel 第 4 章 复杂网络与图论模型 | https://github.com/datawhalechina/intro-mathmodel | 下游对齐 |
+| intro-mathmodel 第 4 章 复杂网络与图论模型 | https://github.com/huahbo/python_computing | 下游对齐 |
 
 ## 六、机器学习基础（附录 E）
 

@@ -39,8 +39,8 @@
 | ZetCode 中文教程：SymPy | [链接](https://zetcode.cn/python/sympy/) | 中文入门，含符号运算示例 |
 | 知乎专栏：SymPy 入门与实战 | [链接](https://zhuanlan.zhihu.com/p/111573239) | 中文文章，带代码与截图 |
 | 腾讯云开发者社区：Python 科学计算之 SymPy | [链接](https://cloud.tencent.cn/developer/article/2510103) | 中文案例集合 |
-| 聪明办法学 Python v2 | [链接](https://github.com/datawhalechina/learn-python-the-smart-way-v2) | 前置 Python 课程 |
-| 本项目（科学计算） | [链接](https://github.com/datawhalechina/scientific-computing) | 本书开源仓库 |
+| 聪明办法学 Python v2 | [链接](https://github.com/huahbo/python_computing) | 前置 Python 课程 |
+| 本项目（科学计算） | [链接](https://github.com/huahbo/python_computing) | 本书开源仓库 |
 
 ## 五、资源使用建议
 
