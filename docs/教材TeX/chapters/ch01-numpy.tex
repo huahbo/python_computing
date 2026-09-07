@@ -1780,10 +1780,10 @@ QR 在最小二乘、特征值算法稳定实现中广泛使用。
 \NormalTok{X }\OperatorTok{=}\NormalTok{ np.column\_stack([np.ones(height.size), height])}
 \NormalTok{coef, res, rank\_, sv }\OperatorTok{=}\NormalTok{ np.linalg.lstsq(X, weight, rcond}\OperatorTok{=}\VariableTok{None}\NormalTok{)}
 
-\BuiltInTok{print}\NormalTok{(}\StringTok{"coef (截距, 斜率):"}\NormalTok{, coef)}
-\BuiltInTok{print}\NormalTok{(}\StringTok{"残差平方和:"}\NormalTok{, res[}\DecValTok{0}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"coef (截距, 斜率):"}\NormalTok{, }\SpecialStringTok{f"}\SpecialCharTok{\{}\NormalTok{coef[}\DecValTok{0}\NormalTok{]}\SpecialCharTok{:.4f\}}\SpecialStringTok{, }\SpecialCharTok{\{}\NormalTok{coef[}\DecValTok{1}\NormalTok{]}\SpecialCharTok{:.4f\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"残差平方和:"}\NormalTok{, }\SpecialStringTok{f"}\SpecialCharTok{\{}\BuiltInTok{float}\NormalTok{(res[}\DecValTok{0}\NormalTok{])}\SpecialCharTok{:.4f\}}\SpecialStringTok{"}\NormalTok{)}
 \BuiltInTok{print}\NormalTok{(}\StringTok{"rank:"}\NormalTok{, rank\_)}
-\BuiltInTok{print}\NormalTok{(}\StringTok{"来自 np.polyfit 的对照:"}\NormalTok{, np.polyfit(height, weight, }\DecValTok{1}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"来自 np.polyfit 的对照:"}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(np.polyfit(height, weight, }\DecValTok{1}\NormalTok{), }\DecValTok{4}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1791,8 +1791,8 @@ QR 在最小二乘、特征值算法稳定实现中广泛使用。
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{coef (截距, 斜率): [{-}60.2551   0.7371]}
-\NormalTok{残差平方和: 92.68917264143425}
+\NormalTok{coef (截距, 斜率): {-}60.2551, 0.7371}
+\NormalTok{残差平方和: 92.6892}
 \NormalTok{rank: 2}
 \NormalTok{来自 np.polyfit 的对照: [  0.7371 {-}60.2551]}
 \end{Highlighting}
