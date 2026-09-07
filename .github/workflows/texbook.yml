@@ -6,6 +6,7 @@ on:
       - 'docs/chapters/**'
       - 'docs/build/**'
       - 'docs/教材PDF/README.md'
+      - '.github/workflows/texbook.yml'
   workflow_dispatch:
 
 jobs:
