@@ -422,6 +422,160 @@ SymPy 没有单独的``重积分''函数，通过嵌套 \texttt{integrate}
 \end{Highlighting}
 \end{Shaded}
 
+\subsection{案例卡 1：符号与数值的区别------为什么 x 不是
+1.0}\label{ux6848ux4f8bux5361-1ux7b26ux53f7ux4e0eux6570ux503cux7684ux533aux522bux4e3aux4ec0ux4e48-x-ux4e0dux662f-1.0}
+
+\subsubsection{目标}\label{ux76eeux6807-11}
+
+用 SymPy 创建符号 \(x\) 之后，\(x\)
+是一个\textbf{符号对象}，不是具体的数字。这个案例让你亲眼看到：打印
+\(x+1\) 得到的是表达式 \texttt{x\ +\ 1}，而不是某个数值；只有用
+\texttt{subs} 代入具体数字、再用 \texttt{evalf}/\texttt{N}
+数值化，才会得到普通浮点数。理解了这一点，你以后才不会把 SymPy
+当成``升级版计算器''误用。
+
+\subsubsection{代码}\label{ux4ee3ux7801-11}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ sympy }\ImportTok{as}\NormalTok{ sp}
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\NormalTok{x }\OperatorTok{=}\NormalTok{ sp.Symbol(}\StringTok{\textquotesingle{}x\textquotesingle{}}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}type(x) =\textquotesingle{}}\NormalTok{, }\BuiltInTok{type}\NormalTok{(x).}\VariableTok{\_\_name\_\_}\NormalTok{)          }\CommentTok{\# Symbol}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}x + 1 =\textquotesingle{}}\NormalTok{, x }\OperatorTok{+} \DecValTok{1}\NormalTok{)                       }\CommentTok{\# 仍是表达式}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}x * 2 =\textquotesingle{}}\NormalTok{, x }\OperatorTok{*} \DecValTok{2}\NormalTok{)                       }\CommentTok{\# 2*x}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}x == 1.0:\textquotesingle{}}\NormalTok{, x }\OperatorTok{==} \FloatTok{1.0}\NormalTok{)                  }\CommentTok{\# 符号不等于数字}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}x + 1 == 2:\textquotesingle{}}\NormalTok{, x }\OperatorTok{+} \DecValTok{1} \OperatorTok{==} \DecValTok{2}\NormalTok{)              }\CommentTok{\# 结构不同}
+
+\CommentTok{\#\# 代入具体值：subs 返回“新的表达式”，不会改动 x}
+\NormalTok{v }\OperatorTok{=}\NormalTok{ (x}\OperatorTok{**}\DecValTok{2} \OperatorTok{+} \DecValTok{2}\OperatorTok{*}\NormalTok{x }\OperatorTok{+} \DecValTok{1}\NormalTok{).subs(x, }\DecValTok{3}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}subs x=3 后:\textquotesingle{}}\NormalTok{, v, }\StringTok{\textquotesingle{} type:\textquotesingle{}}\NormalTok{, }\BuiltInTok{type}\NormalTok{(v).}\VariableTok{\_\_name\_\_}\NormalTok{)   }\CommentTok{\# 16 Integer}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}evalf:\textquotesingle{}}\NormalTok{, sp.N(v))                       }\CommentTok{\# 16.0000000000000}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}float:\textquotesingle{}}\NormalTok{, }\BuiltInTok{float}\NormalTok{(sp.N(v)))                }\CommentTok{\# 16.0}
+
+\CommentTok{\#\# 符号 pi 与浮点 pi 的区别}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}sp.pi =\textquotesingle{}}\NormalTok{, sp.pi)                       }\CommentTok{\# pi}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}float(sp.pi) =\textquotesingle{}}\NormalTok{, }\BuiltInTok{float}\NormalTok{(sp.pi))         }\CommentTok{\# 3.141592653589793}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}sp.sin(sp.pi/2) =\textquotesingle{}}\NormalTok{, sp.sin(sp.pi}\OperatorTok{/}\DecValTok{2}\NormalTok{))   }\CommentTok{\# 精确的 1}
+\ImportTok{import}\NormalTok{ math}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}math.sin(math.pi/2) =\textquotesingle{}}\NormalTok{, math.sin(math.pi}\OperatorTok{/}\DecValTok{2}\NormalTok{))  }\CommentTok{\# 浮点近似 1.0}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-11}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{type(x) = Symbol}
+\NormalTok{x + 1 = x + 1}
+\NormalTok{x * 2 = 2*x}
+\NormalTok{x == 1.0: False}
+\NormalTok{x + 1 == 2: False}
+\NormalTok{subs x=3 后: 16  type: Integer}
+\NormalTok{evalf: 16.0000000000000}
+\NormalTok{float: 16.0}
+\NormalTok{sp.pi = pi}
+\NormalTok{float(sp.pi) = 3.141592653589793}
+\NormalTok{sp.sin(sp.pi/2) = 1}
+\NormalTok{math.sin(math.pi/2) = 1.0}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-11}
+
+\textbf{一句话人话}：SymPy 里的 \(x\) 是一张``写有 x
+的纸条''，你可以对它做代数运算，但要得到数字，必须把具体的数写上去（\texttt{subs}）再``读出数值''（\texttt{evalf}）。
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{sp.Symbol(\textquotesingle{}x\textquotesingle{})}
+  创建符号。\texttt{type(x).\_\_name\_\_} 打印
+  \texttt{Symbol}，说明它是一个符号对象，不是 \texttt{float} 或
+  \texttt{int}。
+\item
+  \texttt{x\ +\ 1}、\texttt{x\ *\ 2} 结果分别是
+  \texttt{x\ +\ 1}、\texttt{2*x} ------ SymPy 把 \texttt{+}、\texttt{*}
+  当成\textbf{表达式构造}，而不是浮点加法。所以不会算出 2.0、3.0
+  之类的数字。
+\item
+  \texttt{x\ ==\ 1.0} 为 \texttt{False}：\texttt{==}
+  比较的是``是不是同一个结构/对象''，而符号 \(x\) 与数字 1.0
+  结构不同。要判断``符号表达式是否数学等价''，用
+  \texttt{simplify(a\ -\ b)\ ==\ 0} 或 \texttt{a.equals(b)}（见 04
+  小节）。
+\item
+  \texttt{(x**2\ +\ 2*x\ +\ 1).subs(x,\ 3)} 把 \(x\) 换成 3，SymPy
+  先算出\textbf{精确整数} \texttt{16}（类型
+  \texttt{Integer}）。\texttt{sp.N(v)} 把它数值化成
+  \texttt{16.0000000000000}，\texttt{float(sp.N(v))} 得到 Python 的浮点
+  \texttt{16.0}。
+\item
+  \texttt{sp.pi} 是符号 \(\pi\)；\texttt{sp.sin(sp.pi/2)} 精确返回
+  \texttt{1}。\texttt{math.sin(math.pi/2)} 是``先用浮点近似 \(\pi\)
+  再取正弦''，得到
+  \texttt{1.0}（浮点），两者在不要求精确时看起来一样，但在符号推导里
+  \texttt{sp.pi} 更``干净''。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-11}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+需求 & 写法 & 返回 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+创建单个符号 & \texttt{sp.Symbol(\textquotesingle{}x\textquotesingle{})}
+& \texttt{Symbol} \\
+创建多个符号 &
+\texttt{sp.symbols(\textquotesingle{}x\ y\textquotesingle{})} & 元组 \\
+替换变量 & \texttt{expr.subs(x,\ 3)} & 新的表达式 \\
+符号表达式数值化 & \texttt{sp.N(expr)} / \texttt{expr.evalf()} & 浮点 \\
+转成 Python 浮点 & \texttt{float(sp.N(expr))} & \texttt{float} \\
+符号常量 & \texttt{sp.pi} 、\texttt{sp.oo} & 符号 \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-11}
+
+\begin{itemize}
+\tightlist
+\item
+  把 \texttt{x\ +\ 1}
+  当成``一个会自动算数值的表达式''，其实它是符号对象；
+\item
+  用 \texttt{==} 比较 \(x+1\) 与 \(x+1\) 之外的等价形式（如
+  \texttt{sin(x)**2+cos(x)**2} 与 1），得到 \texttt{False}；
+\item
+  想得到数值却忘了 \texttt{subs} 或 \texttt{evalf}，直接打印表达式；
+\item
+  用 \texttt{math.pi} 参与符号运算导致浮点污染。
+\end{itemize}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  试着 \texttt{sp.simplify(x\ +\ 1\ -\ 1)}，看结果是什么？为什么？
+\item
+  给
+  \texttt{x\ =\ sp.Symbol(\textquotesingle{}x\textquotesingle{},\ positive=True)}
+  后，\texttt{sp.sqrt(x**2)} 与不设假设时有什么不同？
+\item
+  用 \texttt{sp.Rational(1,\ 3)} 和 \texttt{1/3} 分别做
+  \texttt{sp.N}，观察精度差异。
+\item
+  用 \texttt{sp.pi} 与 \texttt{math.pi} 各自计算
+  \(\sin(\pi)\)，比较是否都是 0。
+\end{enumerate}
+
 \subsection{常见误区}\label{ux5e38ux89c1ux8befux533a-5}
 
 \begin{enumerate}
@@ -565,6 +719,7 @@ lab）}\label{ux52a8ux624bux7ec3ux4e60ux8be6ux89c1-lab-4}
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ sympy }\ImportTok{as}\NormalTok{ sp}
 \NormalTok{x }\OperatorTok{=}\NormalTok{ sp.symbols(}\StringTok{\textquotesingle{}x\textquotesingle{}}\NormalTok{)}
 \NormalTok{equation }\OperatorTok{=}\NormalTok{ sp.Eq(x}\OperatorTok{**}\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{)}
 \BuiltInTok{print}\NormalTok{(sp.solveset(equation, x))}
@@ -726,20 +881,178 @@ domain \\
 \begin{Highlighting}[]
 \NormalTok{x, y }\OperatorTok{=}\NormalTok{ sp.symbols(}\StringTok{\textquotesingle{}x y\textquotesingle{}}\NormalTok{)}
 \NormalTok{eqs }\OperatorTok{=}\NormalTok{ [x}\OperatorTok{**}\DecValTok{2} \OperatorTok{+}\NormalTok{ y}\OperatorTok{**}\DecValTok{2} \OperatorTok{{-}} \DecValTok{2}\NormalTok{, x}\OperatorTok{**}\DecValTok{3} \OperatorTok{+}\NormalTok{ y}\OperatorTok{**}\DecValTok{3}\NormalTok{]}
-\BuiltInTok{print}\NormalTok{(sp.nonlinsolve(eqs, (x, y)))}
+\NormalTok{sols }\OperatorTok{=}\NormalTok{ sp.nonlinsolve(eqs, (x, y))}
+\NormalTok{real }\OperatorTok{=} \BuiltInTok{sorted}\NormalTok{([s }\ControlFlowTok{for}\NormalTok{ s }\KeywordTok{in}\NormalTok{ sols }\ControlFlowTok{if}\NormalTok{ sp.im(s[}\DecValTok{0}\NormalTok{]) }\OperatorTok{==} \DecValTok{0} \KeywordTok{and}\NormalTok{ sp.im(s[}\DecValTok{1}\NormalTok{]) }\OperatorTok{==} \DecValTok{0}\NormalTok{], key}\OperatorTok{=}\BuiltInTok{str}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}实数解:\textquotesingle{}}\NormalTok{, real)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}解集个数:\textquotesingle{}}\NormalTok{, }\BuiltInTok{len}\NormalTok{(sols))}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{\{({-}1, 1), (1, {-}1), (({-}1 {-} sqrt(3)*I)*sqrt(1 {-} sqrt(3)*I)/2, {-}sqrt(1 {-} sqrt(3)*I)), ((1 {-} sqrt(3)*I)*sqrt(1 + sqrt(3)*I)/2, sqrt(1 {-} sqrt(3)*I)), ...\}}
+\NormalTok{实数解: [({-}1, 1), (1, {-}1)]}
+\NormalTok{解集个数: 6}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{quote}
-该结果包含两个实数解 \((-1,1)\)、\((1,-1)\)
-和若干复数解。实际题目若只关心实数解，可在此基础上筛选。
+\texttt{nonlinsolve} 原样返回 6 个解（2 个实数、4 个复数）；上面用
+\texttt{im(s{[}0{]})==0\ and\ im(s{[}1{]})==0}
+过滤出两个实数解。实际题目若只关心实数解，可照此筛选。
 \end{quote}
+
+\subsection{案例卡 2：用 solve/solveset
+解方程并判断根的类型}\label{ux6848ux4f8bux5361-2ux7528-solvesolveset-ux89e3ux65b9ux7a0bux5e76ux5224ux65adux6839ux7684ux7c7bux578b}
+
+\subsubsection{目标}\label{ux76eeux6807-12}
+
+同一个方程，\texttt{solve} 与 \texttt{solveset}
+会返回不同形式；而且在实数域或无解/重根/复数根情况下，结果差异很大。这个案例让你学会：先选对求解函数，再根据
+\texttt{domain}
+判断根是实数还是复数、是单根还是重根、是有理根还是无理根。
+
+\subsubsection{代码}\label{ux4ee3ux7801-12}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ sympy }\ImportTok{as}\NormalTok{ sp}
+
+\NormalTok{x }\OperatorTok{=}\NormalTok{ sp.symbols(}\StringTok{\textquotesingle{}x\textquotesingle{}}\NormalTok{, real}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\CommentTok{\#\# 一元二次方程 x\^{}2 {-} 5x + 6 = 0}
+\NormalTok{eq }\OperatorTok{=}\NormalTok{ sp.Eq(x}\OperatorTok{**}\DecValTok{2} \OperatorTok{{-}} \DecValTok{5}\OperatorTok{*}\NormalTok{x }\OperatorTok{+} \DecValTok{6}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}solve    :\textquotesingle{}}\NormalTok{, sp.solve(eq, x))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}solveset :\textquotesingle{}}\NormalTok{, sp.solveset(eq, x))}
+
+\CommentTok{\#\# 重根 (x{-}2)\^{}2 = 0}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}solve 重根    :\textquotesingle{}}\NormalTok{, sp.solve((x }\OperatorTok{{-}} \DecValTok{2}\NormalTok{)}\OperatorTok{**}\DecValTok{2}\NormalTok{, x))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}solveset 重根 :\textquotesingle{}}\NormalTok{, sp.solveset((x }\OperatorTok{{-}} \DecValTok{2}\NormalTok{)}\OperatorTok{**}\DecValTok{2}\NormalTok{, x))}
+
+\CommentTok{\#\# 实数域与复数域}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}x\^{}2+1 Reals   :\textquotesingle{}}\NormalTok{, sp.solveset(x}\OperatorTok{**}\DecValTok{2} \OperatorTok{+} \DecValTok{1}\NormalTok{, x, domain}\OperatorTok{=}\NormalTok{sp.S.Reals))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}x\^{}2+1 Complex :\textquotesingle{}}\NormalTok{, sp.solveset(x}\OperatorTok{**}\DecValTok{2} \OperatorTok{+} \DecValTok{1}\NormalTok{, x, domain}\OperatorTok{=}\NormalTok{sp.S.Complexes))}
+
+\CommentTok{\#\# 判断根的类型}
+\NormalTok{r1 }\OperatorTok{=}\NormalTok{ sp.Rational(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{)}
+\NormalTok{r2 }\OperatorTok{=}\NormalTok{ sp.sqrt(}\DecValTok{2}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}有理根 r1 =\textquotesingle{}}\NormalTok{, r1, }\StringTok{\textquotesingle{} 无理根 r2 =\textquotesingle{}}\NormalTok{, r2)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}r1.is\_rational =\textquotesingle{}}\NormalTok{, r1.is\_rational, }\StringTok{\textquotesingle{}  r2.is\_rational =\textquotesingle{}}\NormalTok{, r2.is\_rational)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-12}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{solve    : [2, 3]}
+\NormalTok{solveset : \{2, 3\}}
+\NormalTok{solve 重根    : [2]}
+\NormalTok{solveset 重根 : \{2\}}
+\NormalTok{x\^{}2+1 Reals   : EmptySet}
+\NormalTok{x\^{}2+1 Complex : \{{-}I, I\}}
+\NormalTok{有理根 r1 = 1/2  无理根 r2 = sqrt(2)}
+\NormalTok{r1.is\_rational = True   r2.is\_rational = False}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-12}
+
+\textbf{一句话人话}：\texttt{solve}
+爱把结果塞进一个列表里，\texttt{solveset}
+更喜欢用集合表示，并且能告诉你``这个根只在复数里出现''这类信息------所以做题目时要看清你要的是``一个解''还是``所有解''，以及``是不是实数解''。
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{sp.Eq(x**2\ -\ 5*x\ +\ 6,\ 0)}
+  明确写出``左边等于右边''。\texttt{solve} 返回列表
+  \texttt{{[}2,\ 3{]}}，\texttt{solveset} 返回集合
+  \texttt{\{2,\ 3\}}。两者数值一样，但形式不同：列表适合按顺序取，集合自动去重且数学上更严谨。
+\item
+  对重根 \texttt{(x-2)**2}，\texttt{solve} 返回
+  \texttt{{[}2{]}}，\texttt{solveset} 也返回
+  \texttt{\{2\}}。这两个函数都不会把``重数''写出来；若需要计算重根次数，要看
+  \texttt{roots} 或 \texttt{Poly} 的
+  \texttt{multiplicity}（本节先知道``有重根''即可）。
+\item
+  \texttt{x\^{}2+1=0} 在\textbf{实数域} \texttt{sp.S.Reals}
+  上没有解，所以 \texttt{solveset} 返回
+  \texttt{EmptySet}；换成\textbf{复数域} \texttt{sp.S.Complexes} 就得到
+  \texttt{\{-I,\ I\}}。这正是 \texttt{solveset} 的 \texttt{domain}
+  参数的价值：帮你把``题目要求实数解''限定清楚。
+\item
+  \texttt{sp.Rational(1,\ 2)} 是精确的有理数 \texttt{1/2}，其
+  \texttt{.is\_rational} 为 \texttt{True}；\texttt{sp.sqrt(2)}
+  是无理根，\texttt{.is\_rational} 为 \texttt{False}。用这些
+  \texttt{.is\_xxx} 属性可以程序化地判断根的类型。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-12}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+需求
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+写法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+返回
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+解一元方程（列表形式） & \texttt{sp.solve(eq,\ x)} &
+\texttt{{[}...{]}} \\
+解一元方程（集合形式） & \texttt{sp.solveset(eq,\ x)} &
+\texttt{FiniteSet} / \texttt{EmptySet} \\
+限定实数域 & \texttt{sp.solveset(f,\ x,\ domain=sp.S.Reals)} & 集合 \\
+限定复数域 & \texttt{sp.solveset(f,\ x,\ domain=sp.S.Complexes)} &
+集合 \\
+判断是否为有理数 & \texttt{root.is\_rational} & \texttt{True} /
+\texttt{False} \\
+精确分数 & \texttt{sp.Rational(1,\ 2)} & \texttt{Rational} \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-12}
+
+\begin{itemize}
+\tightlist
+\item
+  以为 \texttt{solve} 与 \texttt{solveset}
+  永远等价：重根、无解、复数域场景下返回形式不同；
+\item
+  求实数根却忘了 \texttt{domain=sp.S.Reals}，结果里混入
+  \(I\)（虚数单位）；
+\item
+  用 \texttt{==} 判断``某个数是不是解''：应先 \texttt{eq.subs(x,\ r)} 再
+  \texttt{sp.simplify(result)\ ==\ 0}；
+\item
+  把 \texttt{sp.solve(f,\ x)} 中 \texttt{f} 直接写成 \texttt{f\ =\ 0}
+  的字符串（如
+  \texttt{\textquotesingle{}x**2-4\textquotesingle{}}），那是字符串不是表达式。
+\end{itemize}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-1}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  解 \(x^3-6x^2+11x-6=0\)，分别用 \texttt{solve} 与 \texttt{solveset}
+  比较；
+\item
+  用 \texttt{sp.solveset(x**2\ +\ 1,\ x,\ domain=sp.S.Reals)}
+  看空集，再解释为什么；
+\item
+  用 \texttt{root.is\_integer} / \texttt{root.is\_real} 判断
+  \(\sqrt{4}\) 是否整数（提示：先化简）。
+\end{enumerate}
 
 \subsection{\texorpdfstring{2.2 用 Symbolic \texttt{Matrix}
 做矩阵运算}{2.2 用 Symbolic Matrix 做矩阵运算}}\label{ux7528-symbolic-matrix-ux505aux77e9ux9635ux8fd0ux7b97}
@@ -858,6 +1171,137 @@ domain \\
 \textbf{注意}：\texttt{lambdify} 生成的是数值函数，返回的是 NumPy
 数组或标量；\texttt{f(1)} 返回 4（不是原文档里误写的 3）。
 \end{quote}
+
+\subsection{案例卡 3：lambdify
+把公式变成可计算函数}\label{ux6848ux4f8bux5361-3lambdify-ux628aux516cux5f0fux53d8ux6210ux53efux8ba1ux7b97ux51fdux6570}
+
+\subsubsection{目标}\label{ux76eeux6807-13}
+
+SymPy
+给出的是一张``公式纸条''，不能直接对数组做高效计算。\texttt{lambdify}
+就是那座桥：把符号表达式\textbf{编译}成一个真正能接收数字/NumPy 数组的
+Python 函数，从而把``符号推导''和``数值计算/画图''无缝接起来。
+
+\subsubsection{代码}\label{ux4ee3ux7801-13}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ sympy }\ImportTok{as}\NormalTok{ sp}
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\NormalTok{x, y }\OperatorTok{=}\NormalTok{ sp.symbols(}\StringTok{\textquotesingle{}x y\textquotesingle{}}\NormalTok{)}
+\NormalTok{f }\OperatorTok{=}\NormalTok{ x}\OperatorTok{**}\DecValTok{2} \OperatorTok{+} \DecValTok{2}\OperatorTok{*}\NormalTok{x}\OperatorTok{*}\NormalTok{y }\OperatorTok{+}\NormalTok{ y}\OperatorTok{**}\DecValTok{2}          \CommentTok{\# 符号公式：(x+y)\^{}2}
+\NormalTok{f\_num }\OperatorTok{=}\NormalTok{ sp.lambdify((x, y), f, }\StringTok{\textquotesingle{}numpy\textquotesingle{}}\NormalTok{)}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}lambdify(x,y) 类型:\textquotesingle{}}\NormalTok{, }\BuiltInTok{type}\NormalTok{(f\_num).}\VariableTok{\_\_name\_\_}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}f\_num(1, 2) =\textquotesingle{}}\NormalTok{, f\_num(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{))       }\CommentTok{\# (1+2)\^{}2 = 9}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}f\_num(3, 4) =\textquotesingle{}}\NormalTok{, f\_num(}\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{))       }\CommentTok{\# (3+4)\^{}2 = 49}
+
+\CommentTok{\#\# 一次性算一堆点（向量化）：这就是"符号 {-}\textgreater{} 数值"的价值}
+\NormalTok{a }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{])}
+\NormalTok{b }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{6}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}向量化 f\_num(a, b) =\textquotesingle{}}\NormalTok{, f\_num(a, b))   }\CommentTok{\# [25 49 81]}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}用 subs 逐个验证  =\textquotesingle{}}\NormalTok{, [f.subs(\{x: i, y: j\}) }\ControlFlowTok{for}\NormalTok{ i, j }\KeywordTok{in} \BuiltInTok{zip}\NormalTok{(a, b)])}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-13}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lambdify(x,y) 类型: function}
+\NormalTok{f\_num(1, 2) = 9}
+\NormalTok{f\_num(3, 4) = 49}
+\NormalTok{向量化 f\_num(a, b) = [25 49 81]}
+\NormalTok{用 subs 逐个验证  = [25, 49, 81]}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-13}
+
+\textbf{一句话人话}：\texttt{lambdify} 把``带 x、y
+的公式''变成一个``填数字就出结果''的普通函数，而且它能一口气处理整个
+NumPy 数组，不用你写 for 循环。
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{sp.lambdify((x,\ y),\ f,\ \textquotesingle{}numpy\textquotesingle{})}
+  第一个参数是符号（单个符号或符号元组），第二个是表达式，第三个
+  \texttt{\textquotesingle{}numpy\textquotesingle{}}
+  告诉它``生成的函数要能处理 NumPy 数组''。
+\item
+  \texttt{f\_num(1,\ 2)} 返回 9：因为 \(f=(x+y)^2\)，代入 \((1,2)\) 得
+  \(3^2=9\)。\texttt{f\_num(3,\ 4)} 同理得到 49。
+\item
+  \texttt{f\_num(a,\ b)} 中 \texttt{a}、\texttt{b} 是长度 3 的 NumPy
+  数组，\texttt{lambdify} 生成的是\textbf{向量化}函数，一次算出
+  \texttt{{[}25,\ 49,\ 81{]}}。这是它比``循环里逐点 \texttt{subs} /
+  \texttt{evalf}''快很多的原因。
+\item
+  最后用 \texttt{subs} 逐个代入验证：\texttt{{[}25,\ 49,\ 81{]}}，与
+  \texttt{lambdify} 结果一致，说明二者数学上等价。注意 \texttt{subs}
+  返回的是符号/整数对象，\texttt{lambdify} 返回的是普通数值/NumPy 数组。
+\end{itemize}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-13}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+需求 & 写法 & 返回 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+一元符号表达式转数值函数 &
+\texttt{sp.lambdify(x,\ expr,\ \textquotesingle{}numpy\textquotesingle{})}
+& 函数 \\
+多元表达式 &
+\texttt{sp.lambdify((x,\ y),\ expr,\ \textquotesingle{}numpy\textquotesingle{})}
+& 函数 \\
+函数传入标量 & \texttt{f\_num(2)} & 数值 \\
+函数传入数组 & \texttt{f\_num(arr)} & NumPy 数组 \\
+不指定模块 & \texttt{sp.lambdify(x,\ expr)} & 只支持普通 Python
+标量/列表 \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-13}
+
+\begin{itemize}
+\tightlist
+\item
+  对 \texttt{lambdify} 生成的结果再次 \texttt{diff} /
+  \texttt{subs}：它已经是数值函数，不是符号表达式；
+\item
+  没传 \texttt{\textquotesingle{}numpy\textquotesingle{}}，导致传入
+  NumPy 数组时报错或返回列表而非数组；
+\item
+  把 \texttt{sp.symbols(\textquotesingle{}x\ y\textquotesingle{})}
+  返回的元组直接当成单符号传给 \texttt{lambdify}；
+\item
+  忘记先导入
+  \texttt{numpy}（\texttt{lambdify(...,\ \textquotesingle{}numpy\textquotesingle{})}
+  运行时会用到）。
+\end{itemize}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-2}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  把 \(f(x)=\sin(x)/x\) 用 \texttt{lambdify} 转成函数，计算
+  \texttt{np.linspace(0.01,\ 10,\ 5)} 处的值；
+\item
+  用 \texttt{lambdify} 把 02 节解出的根/多项式转成数值函数，再用
+  \texttt{np.roots} 验证；
+\item
+  对比循环 \texttt{subs} 与 \texttt{lambdify} 在 10000 个点上的耗时（用
+  \texttt{time}）。
+\end{enumerate}
 
 \subsection{\texorpdfstring{2.4 用 \texttt{dsolve}
 解常微分方程}{2.4 用 dsolve 解常微分方程}}\label{ux7528-dsolve-ux89e3ux5e38ux5faeux5206ux65b9ux7a0b}
@@ -1069,7 +1513,7 @@ lamdify + matplotlib 可视化}。 所有代码在 SymPy 1.13.1、NumPy
 可\textbf{精确}求得
 \(\int_0^1 x^2 dx=\frac{1}{3}\)，再用数值（\texttt{N}/\texttt{evalf}）验证，并画出图形。
 
-\subsubsection{代码}\label{ux4ee3ux7801-11}
+\subsubsection{代码}\label{ux4ee3ux7801-14}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1099,11 +1543,14 @@ lamdify + matplotlib 可视化}。 所有代码在 SymPy 1.13.1、NumPy
 \NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
 \NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
 
+\ImportTok{import}\NormalTok{ os}
+\NormalTok{os.makedirs(}\StringTok{\textquotesingle{}images\textquotesingle{}}\NormalTok{, exist\_ok}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
 \NormalTok{xs }\OperatorTok{=}\NormalTok{ np.linspace(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{300}\NormalTok{)}
 \NormalTok{ys }\OperatorTok{=}\NormalTok{ xs}\OperatorTok{**}\DecValTok{2}
 \NormalTok{plt.figure(figsize}\OperatorTok{=}\NormalTok{(}\FloatTok{5.4}\NormalTok{, }\FloatTok{4.0}\NormalTok{))}
-\NormalTok{plt.fill\_between(xs, ys, color}\OperatorTok{=}\StringTok{\textquotesingle{}\#9ec7e8\textquotesingle{}}\NormalTok{, alpha}\OperatorTok{=}\FloatTok{0.55}\NormalTok{, label}\OperatorTok{=}\SpecialStringTok{f\textquotesingle{}S = ∫x²dx = }\SpecialCharTok{\{}\BuiltInTok{float}\NormalTok{(area)}\SpecialCharTok{:.4f\}}\SpecialStringTok{\textquotesingle{}}\NormalTok{)}
-\NormalTok{plt.plot(xs, ys, color}\OperatorTok{=}\StringTok{\textquotesingle{}\#2f6fb3\textquotesingle{}}\NormalTok{, lw}\OperatorTok{=}\FloatTok{2.4}\NormalTok{, label}\OperatorTok{=}\StringTok{\textquotesingle{}y = x²\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.fill\_between(xs, ys, color}\OperatorTok{=}\StringTok{\textquotesingle{}\#9ec7e8\textquotesingle{}}\NormalTok{, alpha}\OperatorTok{=}\FloatTok{0.55}\NormalTok{, label}\OperatorTok{=}\SpecialStringTok{f\textquotesingle{}S = int x\^{}2 dx = }\SpecialCharTok{\{}\BuiltInTok{float}\NormalTok{(area)}\SpecialCharTok{:.4f\}}\SpecialStringTok{\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.plot(xs, ys, color}\OperatorTok{=}\StringTok{\textquotesingle{}\#2f6fb3\textquotesingle{}}\NormalTok{, lw}\OperatorTok{=}\FloatTok{2.4}\NormalTok{, label}\OperatorTok{=}\StringTok{\textquotesingle{}y = x\^{}2\textquotesingle{}}\NormalTok{)}
 \NormalTok{plt.xlabel(}\StringTok{\textquotesingle{}x\textquotesingle{}}\NormalTok{)}\OperatorTok{;}\NormalTok{ plt.ylabel(}\StringTok{\textquotesingle{}y\textquotesingle{}}\NormalTok{)}
 \NormalTok{plt.title(}\StringTok{\textquotesingle{}符号积分求面积并用数值验证\textquotesingle{}}\NormalTok{, fontsize}\OperatorTok{=}\DecValTok{11}\NormalTok{)}
 \NormalTok{plt.legend()}\OperatorTok{;}\NormalTok{ plt.grid(alpha}\OperatorTok{=}\FloatTok{0.25}\NormalTok{)}
@@ -1158,7 +1605,7 @@ lamdify + matplotlib 可视化}。 所有代码在 SymPy 1.13.1、NumPy
 \(\cos x\)，再求斜率 \(\cos(1)\)，最后用 \texttt{lambdify}
 画图，并与数值差商验证。
 
-\subsubsection{代码}\label{ux4ee3ux7801-12}
+\subsubsection{代码}\label{ux4ee3ux7801-15}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1179,7 +1626,7 @@ lamdify + matplotlib 可视化}。 所有代码在 SymPy 1.13.1、NumPy
 \CommentTok{\#\# 数值差商验证导数}
 \NormalTok{h }\OperatorTok{=} \FloatTok{1e{-}6}
 \NormalTok{numeric\_deriv }\OperatorTok{=}\NormalTok{ (sp.sin(a }\OperatorTok{+}\NormalTok{ h) }\OperatorTok{{-}}\NormalTok{ sp.sin(a }\OperatorTok{{-}}\NormalTok{ h)) }\OperatorTok{/}\NormalTok{ (}\DecValTok{2}\OperatorTok{*}\NormalTok{h)}
-\BuiltInTok{print}\NormalTok{(}\BuiltInTok{float}\NormalTok{(sp.N(numeric\_deriv)))}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\SpecialCharTok{\{}\BuiltInTok{float}\NormalTok{(sp.N(numeric\_deriv))}\SpecialCharTok{:.12f\}}\SpecialStringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1188,7 +1635,7 @@ lamdify + matplotlib 可视化}。 所有代码在 SymPy 1.13.1、NumPy
 \NormalTok{cos(x)}
 \NormalTok{0.540302305868140}
 \NormalTok{(x {-} 1)*cos(1) + sin(1)}
-\NormalTok{0.540302305840346}
+\NormalTok{0.540302305840}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1200,6 +1647,9 @@ lamdify + matplotlib 可视化}。 所有代码在 SymPy 1.13.1、NumPy
 
 \NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
 \NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+
+\ImportTok{import}\NormalTok{ os}
+\NormalTok{os.makedirs(}\StringTok{\textquotesingle{}images\textquotesingle{}}\NormalTok{, exist\_ok}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 
 \KeywordTok{def}\NormalTok{ tangent\_num(v):}
     \ControlFlowTok{return} \BuiltInTok{float}\NormalTok{(sp.N(tangent.subs(x, v)))}
@@ -1377,7 +1827,7 @@ lamdify + matplotlib 可视化}。 所有代码在 SymPy 1.13.1、NumPy
 \bottomrule\noalign{}
 \endlastfoot
 1 & \texttt{pi\ =\ 3.14159} 然后参与符号运算 & 用 \texttt{sp.pi}（符号
-π） & 浮点近似破坏精确性 \\
+\(\pi\)） & 浮点近似破坏精确性 \\
 2 & \texttt{x\ +\ y\ ==\ y\ +\ x} 判断表达式相等 &
 \texttt{sp.simplify((x+y)\ -\ (y+x))\ ==\ 0} 或
 \texttt{(x+y).equals(y+x)} & \texttt{==} 比较的是结构不是数学等价 \\
@@ -1517,7 +1967,7 @@ lamdify + matplotlib 可视化}。 所有代码在 SymPy 1.13.1、NumPy
 \item[$\square$]
   能说明 \texttt{symbols} 与 \texttt{Symbol} 的区别；
 \item[$\square$]
-  能区分符号 π 与 \texttt{math.pi}；
+  能区分符号 \(\pi\) 与 \texttt{math.pi}；
 \item[$\square$]
   能正确判断两个符号表达式是否数学等价；
 \item[$\square$]

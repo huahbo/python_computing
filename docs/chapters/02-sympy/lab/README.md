@@ -6,7 +6,7 @@
 
 | 文件 | 说明 |
 | ---- | ---- |
-| `lab.ipynb` | 上机实验 notebook（含 Part 1–7，TODO 与检查项） |
+| `lab.ipynb` | 上机实验 notebook（含 Part 1–8，TODO 与检查项） |
 
 ## 如何开始
 
@@ -27,11 +27,12 @@
 | 5 | 符号矩阵与 lambdify | 15 min |
 | 6 | 微分方程 dsolve | 15 min |
 | 7 | 综合任务（符号面积 + 切线图） | 20 min |
+| 8 | 案例卡跟练（3 案例 x 跟练/变形/综合） | 15 min |
 
 ## 教师说明
 
 - 可作为一次 2–3 学时的上机课；
-- 检查重点：Part 4 的 solve/solveset 差异、Part 5 的 lambdify 用法、Part 7 的图形与结论；
+- 检查重点：Part 4 的 solve/solveset 差异、Part 5 的 lambdify 用法、Part 7 的图形与结论、Part 8 的 9 个跟练 cell；
 - 可要求学生把每个 Part 的输出截图附在报告里。
 
 ## 配套

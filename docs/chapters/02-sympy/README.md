@@ -21,6 +21,17 @@ SymPy 是 Python 的**符号计算（symbolic computation）**核心库：它不
 7. 用 `dsolve` 求解一阶/二阶常微分方程及初值问题，并画出解的曲线。
 8. 完成一个综合小案例（如符号求面积 + 可视化、符号导数 + 切线图），体会“精确推导 + 数值验证 + 可视化”的完整流程。
 
+## 案例索引
+
+| 案例卡 | 所在节 | 技术点 | 难度 |
+| ---- | ---- | ---- | ---- |
+| 1. 符号与数值的区别——为什么 x 不是 1.0 | [01 符号对象与基本运算](./01-符号对象与基本运算.md) | Symbol、subs、evalf、符号 vs 数值 | ★☆☆ |
+| 2. 用 solve/solveset 解方程并判断根的类型 | [02 利用 SymPy 求解问题](./02-利用SymPy求解问题.md) | Eq、solve、solveset、domain、根类型 | ★★☆ |
+| 3. lambdify 把公式变成可计算函数 | [02 利用 SymPy 求解问题](./02-利用SymPy求解问题.md) | lambdify、numpy、向量化 | ★★☆ |
+| 4. 符号积分求面积并数值验证 | [03 综合案例](./03-综合案例.md) | 符号积分、N、matplotlib | ★★☆ |
+| 5. 符号导数→切线方程→数值验证 | [03 综合案例](./03-综合案例.md) | diff、subs、lambdify、差商 | ★★☆ |
+| 6. 解方程并把根画在数轴上 | [03 综合案例](./03-综合案例.md) | solve、根可视化 | ★★☆ |
+
 ## 先修要求与运行环境
 
 - 熟悉 Python 基础语法（变量、函数、循环；可先学 [聪明办法学 Python](https://github.com/datawhalechina/learn-python-the-smart-way-v2)）。
@@ -39,8 +50,8 @@ pip install numpy matplotlib scipy pandas
 
 | 小节 | 文件 | 内容 |
 | ---- | ---- | ---- |
-| 01 符号对象与基本运算 | [01-符号对象与基本运算.md](./01-符号对象与基本运算.md) | 符号创建、假设、算术、函数、极限、导数、积分、化简与替换 |
-| 02 利用 SymPy 求解问题 | [02-利用SymPy求解问题.md](./02-利用SymPy求解问题.md) | Eq、solve/solveset/linsolve/nonlinsolve、符号矩阵、lambdify、dsolve |
+| 01 符号对象与基本运算 | [01-符号对象与基本运算.md](./01-符号对象与基本运算.md) | 符号创建、假设、算术、函数、极限、导数、积分、化简与替换、1 个精讲案例卡 |
+| 02 利用 SymPy 求解问题 | [02-利用SymPy求解问题.md](./02-利用SymPy求解问题.md) | Eq、solve/solveset/linsolve/nonlinsolve、符号矩阵、lambdify、dsolve、2 个精讲案例卡 |
 | 03 综合案例 | [03-综合案例.md](./03-综合案例.md) | 符号求面积 + 可视化、符号导数 + 切线图、根的可视化（图文案例） |
 | 04 常见误区与技巧 | [04-常见误区与技巧.md](./04-常见误区与技巧.md) | 易错点清单、性能技巧、调试建议 |
 

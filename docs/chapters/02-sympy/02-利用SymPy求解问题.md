@@ -29,6 +29,7 @@
 ### 2.1.1 用 `Eq` 表示等式
 
 ```python
+import sympy as sp
 x = sp.symbols('x')
 equation = sp.Eq(x**2, 4)
 print(sp.solveset(equation, x))
@@ -139,14 +140,97 @@ print(sp.linsolve((A, b), (x, y, z)))
 ```python
 x, y = sp.symbols('x y')
 eqs = [x**2 + y**2 - 2, x**3 + y**3]
-print(sp.nonlinsolve(eqs, (x, y)))
+sols = sp.nonlinsolve(eqs, (x, y))
+real = sorted([s for s in sols if sp.im(s[0]) == 0 and sp.im(s[1]) == 0], key=str)
+print('实数解:', real)
+print('解集个数:', len(sols))
 ```
 
 ```text
-{(-1, 1), (1, -1), ((-1 - sqrt(3)*I)*sqrt(1 - sqrt(3)*I)/2, -sqrt(1 - sqrt(3)*I)), ((1 - sqrt(3)*I)*sqrt(1 + sqrt(3)*I)/2, sqrt(1 - sqrt(3)*I)), ...}
+实数解: [(-1, 1), (1, -1)]
+解集个数: 6
 ```
 
-> 该结果包含两个实数解 $(-1,1)$、$(1,-1)$ 和若干复数解。实际题目若只关心实数解，可在此基础上筛选。
+> `nonlinsolve` 原样返回 6 个解（2 个实数、4 个复数）；上面用 `im(s[0])==0 and im(s[1])==0` 过滤出两个实数解。实际题目若只关心实数解，可照此筛选。
+
+## 案例卡 2：用 solve/solveset 解方程并判断根的类型
+
+### 目标
+
+同一个方程，`solve` 与 `solveset` 会返回不同形式；而且在实数域或无解/重根/复数根情况下，结果差异很大。这个案例让你学会：先选对求解函数，再根据 `domain` 判断根是实数还是复数、是单根还是重根、是有理根还是无理根。
+
+### 代码
+
+```python
+import sympy as sp
+
+x = sp.symbols('x', real=True)
+
+# 一元二次方程 x^2 - 5x + 6 = 0
+eq = sp.Eq(x**2 - 5*x + 6, 0)
+print('solve    :', sp.solve(eq, x))
+print('solveset :', sp.solveset(eq, x))
+
+# 重根 (x-2)^2 = 0
+print('solve 重根    :', sp.solve((x - 2)**2, x))
+print('solveset 重根 :', sp.solveset((x - 2)**2, x))
+
+# 实数域与复数域
+print('x^2+1 Reals   :', sp.solveset(x**2 + 1, x, domain=sp.S.Reals))
+print('x^2+1 Complex :', sp.solveset(x**2 + 1, x, domain=sp.S.Complexes))
+
+# 判断根的类型
+r1 = sp.Rational(1, 2)
+r2 = sp.sqrt(2)
+print('有理根 r1 =', r1, ' 无理根 r2 =', r2)
+print('r1.is_rational =', r1.is_rational, '  r2.is_rational =', r2.is_rational)
+```
+
+### 运行结果（已运行核验）
+
+```text
+solve    : [2, 3]
+solveset : {2, 3}
+solve 重根    : [2]
+solveset 重根 : {2}
+x^2+1 Reals   : EmptySet
+x^2+1 Complex : {-I, I}
+有理根 r1 = 1/2  无理根 r2 = sqrt(2)
+r1.is_rational = True   r2.is_rational = False
+```
+
+### 讲解
+
+**一句话人话**：`solve` 爱把结果塞进一个列表里，`solveset` 更喜欢用集合表示，并且能告诉你“这个根只在复数里出现”这类信息——所以做题目时要看清你要的是“一个解”还是“所有解”，以及“是不是实数解”。
+
+- `sp.Eq(x**2 - 5*x + 6, 0)` 明确写出“左边等于右边”。`solve` 返回列表 `[2, 3]`，`solveset` 返回集合 `{2, 3}`。两者数值一样，但形式不同：列表适合按顺序取，集合自动去重且数学上更严谨。
+- 对重根 `(x-2)**2`，`solve` 返回 `[2]`，`solveset` 也返回 `{2}`。这两个函数都不会把“重数”写出来；若需要计算重根次数，要看 `roots` 或 `Poly` 的 `multiplicity`（本节先知道“有重根”即可）。
+- `x^2+1=0` 在**实数域** `sp.S.Reals` 上没有解，所以 `solveset` 返回 `EmptySet`；换成**复数域** `sp.S.Complexes` 就得到 `{-I, I}`。这正是 `solveset` 的 `domain` 参数的价值：帮你把“题目要求实数解”限定清楚。
+- `sp.Rational(1, 2)` 是精确的有理数 `1/2`，其 `.is_rational` 为 `True`；`sp.sqrt(2)` 是无理根，`.is_rational` 为 `False`。用这些 `.is_xxx` 属性可以程序化地判断根的类型。
+
+### 主要用法 / API
+
+| 需求 | 写法 | 返回 |
+| ---- | ---- | ---- |
+| 解一元方程（列表形式） | `sp.solve(eq, x)` | `[...]` |
+| 解一元方程（集合形式） | `sp.solveset(eq, x)` | `FiniteSet` / `EmptySet` |
+| 限定实数域 | `sp.solveset(f, x, domain=sp.S.Reals)` | 集合 |
+| 限定复数域 | `sp.solveset(f, x, domain=sp.S.Complexes)` | 集合 |
+| 判断是否为有理数 | `root.is_rational` | `True` / `False` |
+| 精确分数 | `sp.Rational(1, 2)` | `Rational` |
+
+### 常见错误
+
+- 以为 `solve` 与 `solveset` 永远等价：重根、无解、复数域场景下返回形式不同；
+- 求实数根却忘了 `domain=sp.S.Reals`，结果里混入 $I$（虚数单位）；
+- 用 `==` 判断“某个数是不是解”：应先 `eq.subs(x, r)` 再 `sp.simplify(result) == 0`；
+- 把 `sp.solve(f, x)` 中 `f` 直接写成 `f = 0` 的字符串（如 `'x**2-4'`），那是字符串不是表达式。
+
+### 拓展 / 跟练
+
+1. 解 $x^3-6x^2+11x-6=0$，分别用 `solve` 与 `solveset` 比较；
+2. 用 `sp.solveset(x**2 + 1, x, domain=sp.S.Reals)` 看空集，再解释为什么；
+3. 用 `root.is_integer` / `root.is_real` 判断 $\sqrt{4}$ 是否整数（提示：先化简）。
 
 ## 2.2 用 Symbolic `Matrix` 做矩阵运算
 
@@ -238,6 +322,76 @@ print(f(np.array([0, np.pi/2, np.pi])))
 ```
 
 > **注意**：`lambdify` 生成的是数值函数，返回的是 NumPy 数组或标量；`f(1)` 返回 4（不是原文档里误写的 3）。
+
+## 案例卡 3：lambdify 把公式变成可计算函数
+
+### 目标
+
+SymPy 给出的是一张“公式纸条”，不能直接对数组做高效计算。`lambdify` 就是那座桥：把符号表达式**编译**成一个真正能接收数字/NumPy 数组的 Python 函数，从而把“符号推导”和“数值计算/画图”无缝接起来。
+
+### 代码
+
+```python
+import sympy as sp
+import numpy as np
+np.set_printoptions(precision=4, suppress=True)
+
+x, y = sp.symbols('x y')
+f = x**2 + 2*x*y + y**2          # 符号公式：(x+y)^2
+f_num = sp.lambdify((x, y), f, 'numpy')
+
+print('lambdify(x,y) 类型:', type(f_num).__name__)
+print('f_num(1, 2) =', f_num(1, 2))       # (1+2)^2 = 9
+print('f_num(3, 4) =', f_num(3, 4))       # (3+4)^2 = 49
+
+# 一次性算一堆点（向量化）：这就是"符号 -> 数值"的价值
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+print('向量化 f_num(a, b) =', f_num(a, b))   # [25 49 81]
+print('用 subs 逐个验证  =', [f.subs({x: i, y: j}) for i, j in zip(a, b)])
+```
+
+### 运行结果（已运行核验）
+
+```text
+lambdify(x,y) 类型: function
+f_num(1, 2) = 9
+f_num(3, 4) = 49
+向量化 f_num(a, b) = [25 49 81]
+用 subs 逐个验证  = [25, 49, 81]
+```
+
+### 讲解
+
+**一句话人话**：`lambdify` 把“带 x、y 的公式”变成一个“填数字就出结果”的普通函数，而且它能一口气处理整个 NumPy 数组，不用你写 for 循环。
+
+- `sp.lambdify((x, y), f, 'numpy')` 第一个参数是符号（单个符号或符号元组），第二个是表达式，第三个 `'numpy'` 告诉它“生成的函数要能处理 NumPy 数组”。
+- `f_num(1, 2)` 返回 9：因为 $f=(x+y)^2$，代入 $(1,2)$ 得 $3^2=9$。`f_num(3, 4)` 同理得到 49。
+- `f_num(a, b)` 中 `a`、`b` 是长度 3 的 NumPy 数组，`lambdify` 生成的是**向量化**函数，一次算出 `[25, 49, 81]`。这是它比“循环里逐点 `subs` / `evalf`”快很多的原因。
+- 最后用 `subs` 逐个代入验证：`[25, 49, 81]`，与 `lambdify` 结果一致，说明二者数学上等价。注意 `subs` 返回的是符号/整数对象，`lambdify` 返回的是普通数值/NumPy 数组。
+
+### 主要用法 / API
+
+| 需求 | 写法 | 返回 |
+| ---- | ---- | ---- |
+| 一元符号表达式转数值函数 | `sp.lambdify(x, expr, 'numpy')` | 函数 |
+| 多元表达式 | `sp.lambdify((x, y), expr, 'numpy')` | 函数 |
+| 函数传入标量 | `f_num(2)` | 数值 |
+| 函数传入数组 | `f_num(arr)` | NumPy 数组 |
+| 不指定模块 | `sp.lambdify(x, expr)` | 只支持普通 Python 标量/列表 |
+
+### 常见错误
+
+- 对 `lambdify` 生成的结果再次 `diff` / `subs`：它已经是数值函数，不是符号表达式；
+- 没传 `'numpy'`，导致传入 NumPy 数组时报错或返回列表而非数组；
+- 把 `sp.symbols('x y')` 返回的元组直接当成单符号传给 `lambdify`；
+- 忘记先导入 `numpy`（`lambdify(..., 'numpy')` 运行时会用到）。
+
+### 拓展 / 跟练
+
+1. 把 $f(x)=\sin(x)/x$ 用 `lambdify` 转成函数，计算 `np.linspace(0.01, 10, 5)` 处的值；
+2. 用 `lambdify` 把 02 节解出的根/多项式转成数值函数，再用 `np.roots` 验证；
+3. 对比循环 `subs` 与 `lambdify` 在 10000 个点上的耗时（用 `time`）。
 
 ## 2.4 用 `dsolve` 解常微分方程
 

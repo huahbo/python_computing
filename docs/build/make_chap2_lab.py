@@ -175,6 +175,92 @@ code("# TODO 7.2 符号导数 + 切线图",
    "plt.savefig('sympy_tangent_lab.png', bbox_inches='tight')",
    "print('已保存 sympy_tangent_lab.png')")
 
+md("## Part 8 案例卡跟练（新增）",
+   "",
+   "复现 01/02 三个精讲案例卡：每个案例含“跟练 cell”（复现+改参数）、“变形 cell”（换数据/场景）、“综合任务 cell”（串 2 个技术点）。",
+   "")
+
+code("# 案例 1 跟练：复现“符号与数值”并改参数",
+     "import sympy as sp",
+     "x = sp.Symbol('x')",
+     "expr = x**2 + 2*x + 1",
+     "print('expr =', expr)",
+     "v = expr.subs(x, 5)",
+     "print('subs x=5:', v, ' type:', type(v).__name__)",
+     "print('N =', sp.N(v))")
+
+code("# 案例 1 变形：换成成本模型（单价*数量 + 固定成本）",
+     "import sympy as sp",
+     "x = sp.Symbol('x')",
+     "cost = 3*x + 10",
+     "print('成本公式:', cost)",
+     "print('做 20 件成本:', cost.subs(x, 20))",
+     "print('每件 7 元时:', cost.subs(x, 7))")
+
+code("# 案例 1 综合：符号求解 -> 数值核验（串案例1符号/数值 + 案例2求解）",
+     "import sympy as sp",
+     "x = sp.Symbol('x')",
+     "roots = sp.solveset(x**2 - 5*x + 6, x)",
+     "print('solveset:', roots)",
+     "for r in [2, 3]:",
+     "    val = (x**2 - 5*x + 6).subs(x, r)",
+     "    print('代入', r, ':', val)")
+
+code("# 案例 2 跟练：复现 solve/solveset 并判断根类型（换方程）",
+     "import sympy as sp",
+     "x = sp.symbols('x')",
+     "eq = sp.Eq(x**2 - 3*x + 2, 0)",
+     "print('solve:', sp.solve(eq, x))",
+     "print('solveset:', sp.solveset(eq, x))",
+     "print('solveset(Complexes):', sp.solveset(x**2 + 1, x, domain=sp.S.Complexes))")
+
+code("# 案例 2 变形：求落地时刻 h(t) = -5t^2 + 20t = 0",
+     "import sympy as sp",
+     "t = sp.symbols('t')",
+     "h = -5*t**2 + 20*t",
+     "roots = sp.solve(sp.Eq(h, 0), t)",
+     "print('落地时刻:', roots)",
+     "print('实数根类型:', [r.is_real for r in roots])")
+
+code("# 案例 2 综合：用 solve 求根，再用 lambdify 数值验证（串案例2+案例3）",
+     "import sympy as sp",
+     "import numpy as np",
+     "x = sp.symbols('x')",
+     "p = x**2 - 4*x + 3",
+     "roots = sp.solve(p, x)",
+     "pf = sp.lambdify(x, p, 'numpy')",
+     "print('根:', roots)",
+     "print('f(root) =', [float(pf(r)) for r in roots])")
+
+code("# 案例 3 跟练：复现 lambdify，换成 f = x^3 - 2x",
+     "import sympy as sp",
+     "import numpy as np",
+     "x = sp.symbols('x')",
+     "f = x**3 - 2*x",
+     "fn = sp.lambdify(x, f, 'numpy')",
+     "arr = np.array([0, 1, 2, 3])",
+     "print('fn(arr) =', fn(arr))")
+
+code("# 案例 3 变形：二元函数 x*y + sin(x) 的向量化计算",
+     "import sympy as sp",
+     "import numpy as np",
+     "x, y = sp.symbols('x y')",
+     "f = x*y + sp.sin(x)",
+     "fn = sp.lambdify((x, y), f, 'numpy')",
+     "X = np.array([0, 1, 2])",
+     "Y = np.array([1, 2, 3])",
+     "print('fn(X, Y) =', fn(X, Y))")
+
+code("# 案例 3 综合：符号积分 -> lambdify -> 数值点计算（串案例1+案例3）",
+     "import sympy as sp",
+     "import numpy as np",
+     "x = sp.symbols('x')",
+     "F = sp.integrate(sp.sin(x), x)",
+     "print('F =', F)",
+     "fn = sp.lambdify(x, F, 'numpy')",
+     "xs = np.linspace(0, np.pi, 5)",
+     "print('F(xs) =', fn(xs))")
+
 md("## 提交清单",
    "",
    "- [ ] 所有 TODO 均已填写并运行；",
