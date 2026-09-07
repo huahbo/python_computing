@@ -1,7 +1,7 @@
 # 全书 LaTeX 构建配置（build/texbook.py 读取）
 title: Python 科学计算（新版教程）
 subtitle: 从 NumPy 到 scikit-learn 的完整实践教程
-author: Datawhale · 若冰（马世拓）
+author: 自用教材
 date: 2026
 # 章节顺序：目录名对应 docs/chapters/<dir>；标题与文件清单复用该章 pdf_manifest.txt
 chapters:

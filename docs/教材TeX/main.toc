@@ -1004,7 +1004,7 @@
 \contentsline {subsection}{延伸阅读}{345}{subsection*.1005}%
 \contentsline {chapter}{线性代数与矩阵}{347}{appendix*.1006}%
 \contentsline {section}{A.1 直觉故事：矩阵到底在干什么}{347}{section*.1007}%
-\contentsline {section}{A.2 关键概念讲解：把名词翻译成人话}{348}{section*.1008}%
+\contentsline {section}{A.2 关键概念讲解：把名词翻译成通俗解释}{348}{section*.1008}%
 \contentsline {subsection}{A.2.1 转置、内积与范数}{348}{subsection*.1009}%
 \contentsline {subsection}{A.2.2 逆、行列式与秩：能否把变换''倒回去''}{348}{subsection*.1010}%
 \contentsline {subsection}{A.2.3 特征值与特征向量：变换的''不动轴''}{348}{subsection*.1011}%
