@@ -20,7 +20,7 @@ jobs:
           sudo apt-get install -y pandoc texlive-xetex texlive-lang-chinese texlive-latex-extra latexmk fonts-noto-cjk
 
       - name: Install Python deps
-        run: pip install pypdf pyyaml
+        run: pip install pypdf pyyaml numpy matplotlib
 
       # 代码自动验证：NumPy 章严格要求（输出必须与正文一致），其余章先报警告
       - name: Validate NumPy code blocks
