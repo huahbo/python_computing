@@ -22,8 +22,8 @@
 | Python Data Science Handbook（Jake VanderPlas） | [链接](https://github.com/jakevdp/PythonDataScienceHandbook) | 第 4 章 Matplotlib、第 5 章 Seaborn，Notebook 形式 | ★推荐 |
 | SciPy Lecture Notes | [链接](https://scipy-lectures.org/packages/10_advanced_2d_plotting.html) | Matplotlib 进阶绘图讲义 | ★推荐 |
 | Matplotlib: Anatomy of a Figure | [链接](https://matplotlib.org/stable/tutorials/intermediate/tight_layout_guide.html) | 子图排版与 tight_layout 细节 | ★推荐 |
-| Datawhale fantastic-matplotlib | [链接](https://github.com/datawhalechina/fantastic-matplotlib) | 中文、渐进式 Matplotlib 教程 | 中文补充 |
-| Datawhale wow-plotly | [链接](https://github.com/datawhalechina/wow-plotly) | Plotly 交互式教程（对比阅读） | 选读 |
+| 开源社区 fantastic-matplotlib | [链接](https://github.com/datawhalechina/fantastic-matplotlib) | 中文、渐进式 Matplotlib 教程 | 中文补充 |
+| 开源社区 wow-plotly | [链接](https://github.com/datawhalechina/wow-plotly) | Plotly 交互式教程（对比阅读） | 选读 |
 
 ## 三、习题与实战（课堂/作业/上机素材）
 
@@ -40,7 +40,7 @@
 | 资料 | 链接 | 说明 |
 | ---- | ---- | ---- |
 | matplotlib-cn（中文文档） | [链接](https://github.com/tomdonald/matplotlib-cn) | Matplotlib 中文文档镜像 |
-| Datawhale fantastic-matplotlib | [链接](https://github.com/datawhalechina/fantastic-matplotlib) | 中文精品教程，适合入门 |
+| 开源社区 fantastic-matplotlib | [链接](https://github.com/datawhalechina/fantastic-matplotlib) | 中文精品教程，适合入门 |
 | 聪明办法学 Python（前置） | [链接](https://github.com/datawhalechina/learn-python-the-smart-way-v2) | 前置 Python 课程 |
 | 本项目（科学计算） | [链接](https://github.com/datawhalechina/scientific-computing) | 本书开源仓库 |
 

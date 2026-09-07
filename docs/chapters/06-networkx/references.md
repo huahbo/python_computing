@@ -45,7 +45,7 @@
 | NetworkX 中文文档镜像 | [链接](https://networkx.cn/documentation/stable/) | 中文版官方文档（有翻译） | ★推荐 |
 | 华为云/CSDN NetworkX 教程 | [链接](https://blog.csdn.net/Rocky006/article/details/148866312) | 中文使用详解，含代码 | 选读 |
 | 知乎：复杂网络建模（Python+NetworkX） | [链接](https://zhuanlan.zhihu.com/p/591617257) | 复杂网络建模课程代码（中文） | 选读 |
-| Datawhale 图深度学习（葡萄书） | [链接](https://github.com/datawhalechina/grape-book) | 中文开源书，进阶图神经网络 | 选读 |
+| 开源社区 图深度学习（葡萄书） | [链接](https://github.com/datawhalechina/grape-book) | 中文开源书，进阶图神经网络 | 选读 |
 
 ## 五、资源使用建议
 

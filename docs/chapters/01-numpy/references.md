@@ -36,7 +36,7 @@
 | 本章作业（本仓库 exercises/） | [./exercises/README.md](./exercises/README.md) | 20 题 + quiz 自动评分 | ★必做 |
 | 本章上机（本仓库 lab/） | [./lab/README.md](./lab/README.md) | 逐点演练 + 综合任务 | ★必做 |
 
-## 四、Datawhale 上下游
+## 四、开源社区课程与项目
 
 | 资料 | 链接 | 说明 |
 | ---- | ---- | ---- |

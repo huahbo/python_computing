@@ -123,24 +123,21 @@
 | 资料 | 说明 | 用于 |
 | ---- | ---- | ---- |
 | [3Blue1Brown 线性代数的本质（中文字幕）](https://space.bilibili.com/88461692/) | 可视化直觉 | 附录 |
-| [Datawhale 图深度学习（葡萄书）](https://github.com/datawhalechina/grape-book) | 中文开源书，进阶图神经网络 | 第6章 NetworkX |
 | [Mathematics for Machine Learning](https://mml-book.github.io/) | Part I 数学基础（线性代数/微积分）+ Part II 机器学习，主题式 | 附录 |
 | [Python Data Science Handbook](https://jakevdp.github.io/PythonDataScienceHandbook/) | Jake VanderPlas 的《线性回归》一章对比 sklearn/statsmodels | 第7章 Statsmodels |
 | [Python Data Science Handbook (Jake VanderPlas)](https://github.com/jakevdp/PythonDataScienceHandbook) | 第 2 章 NumPy，可整章对照 | 第1章 NumPy、第2章 SymPy、第3章 SciPy、第4章 Pandas、第5章 Matplotlib、第6章 NetworkX、第8章 scikit-learn |
 | [thinkstats2](https://github.com/AllenDowney/ThinkStats2) | 用 Python 讲统计 | 附录 |
 | [南瓜书（《机器学习》公式推导）](https://github.com/datawhalechina/pumpkin-book) | 与周志华《机器学习》配套的公式推导详解 | 第8章 scikit-learn |
+| [开源社区 图深度学习（葡萄书）](https://github.com/datawhalechina/grape-book) | 中文开源书，进阶图神经网络 | 第6章 NetworkX |
 | [数学建模导论](https://github.com/datawhalechina/intro-mathmodel) | 后续课程 | 第1章 NumPy、第3章 SciPy、第4章 Pandas、附录 |
 | [本项目（科学计算）](https://github.com/datawhalechina/scientific-computing) | 本书开源仓库 | 第1章 NumPy、第2章 SymPy、第3章 SciPy、第4章 Pandas、第5章 Matplotlib、第7章 Statsmodels、第8章 scikit-learn |
-| [李宏毅机器学习（Datawhale 整理）](https://github.com/datawhalechina/leedl-tutorial) | 中文讲义，串起 ML 与 DL 的“为什么” | 第8章 scikit-learn |
+| [李宏毅机器学习（开源社区整理）](https://github.com/datawhalechina/leedl-tutorial) | 中文讲义，串起 ML 与 DL 的“为什么” | 第8章 scikit-learn |
 
 ## 三、精品教程与课程
 
 | 资料 | 说明 | 用于 |
 | ---- | ---- | ---- |
 | [100 NumPy Exercises（rougier）](https://github.com/rougier/numpy-100) | 100 题带解答，适合课后 | 第1章 NumPy |
-| [Datawhale fantastic-matplotlib](https://github.com/datawhalechina/fantastic-matplotlib) | 中文、渐进式 Matplotlib 教程 | 第5章 Matplotlib |
-| [Datawhale wow-plotly](https://github.com/datawhalechina/wow-plotly) | Plotly 交互式教程（对比阅读） | 第5章 Matplotlib |
-| [Datawhale 时间序列相关笔记](https://blog.csdn.net/weixin_45306755/article/details/108122794) | 时间序列特征与规则入门 | 第7章 Statsmodels |
 | [Hands-On ML 3rd（Aurélien Géron）](https://github.com/ageron/handson-ml3) | 第 2 章起系统讲 sklearn，示例丰富 | 第8章 scikit-learn |
 | [Kaggle Intro to ML](https://www.kaggle.com/learn/intro-to-machine-learning) | 用真实数据练决策树/随机森林/交叉验证 | 第8章 scikit-learn |
 | [Learn X in Y minutes: Python](https://learnxinyminutes.com/docs/zh-cn/python3-cn/) | 半小时过一遍语法 | 第0章 前置基础 |
@@ -159,10 +156,13 @@
 | [华为云/CSDN NetworkX 教程](https://blog.csdn.net/Rocky006/article/details/148866312) | 中文使用详解，含代码 | 第6章 NetworkX |
 | [可汗学院（中文）](https://zh.khanacademy.org/) | 微积分/统计基础 | 附录 |
 | [廖雪峰 Git 教程（中文）](https://liaoxuefeng.com/books/git/introduction/) | 中文入门 | 第0章 前置基础 |
+| [开源社区 fantastic-matplotlib](https://github.com/datawhalechina/fantastic-matplotlib) | 中文、渐进式 Matplotlib 教程 | 第5章 Matplotlib |
+| [开源社区 wow-plotly](https://github.com/datawhalechina/wow-plotly) | Plotly 交互式教程（对比阅读） | 第5章 Matplotlib |
 | [猫头虎 SciPy 入门教程](https://cloud.tencent.cn/developer/article/2449258) | 安装/模块/用例中文入门 | 第3章 SciPy |
 | [知乎专栏：SymPy 入门与实战](https://zhuanlan.zhihu.com/p/111573239) | 中文文章，带代码与截图 | 第2章 SymPy |
 | [知乎：复杂网络建模（Python+NetworkX）](https://zhuanlan.zhihu.com/p/591617257) | 复杂网络建模课程代码（中文） | 第6章 NetworkX |
-| [聪明办法学 Python v2（Datawhale）](https://github.com/datawhalechina/learn-python-the-smart-way-v2) | 前置课程：Chap0 安装、Chap1 启航、Chap2-6 基础语法 | 第0章 前置基础、第1章 NumPy、第2章 SymPy、第3章 SciPy、第4章 Pandas、第5章 Matplotlib、第7章 Statsmodels、第8章 scikit-learn |
+| [社区时间序列相关笔记](https://blog.csdn.net/weixin_45306755/article/details/108122794) | 时间序列特征与规则入门 | 第7章 Statsmodels |
+| [聪明办法学 Python v2（开源社区）](https://github.com/datawhalechina/learn-python-the-smart-way-v2) | 前置课程：Chap0 安装、Chap1 启航、Chap2-6 基础语法 | 第0章 前置基础、第1章 NumPy、第2章 SymPy、第3章 SciPy、第4章 Pandas、第5章 Matplotlib、第7章 Statsmodels、第8章 scikit-learn |
 
 ## 四、习题与实战
 
