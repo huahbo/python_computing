@@ -70,6 +70,61 @@ print("mean:", round(scores.mean(), 4))
 """)
 
 md("""
+### 案例卡 1 跟练：特征编码与缩放
+
+针对案例卡 1 做 3 个变式：先复现编码/缩放，再改用 MinMax + ColumnTransformer，最后用 Pipeline 跑 5 折。
+""")
+
+code("""
+import numpy as np
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
+np.set_printoptions(precision=4, suppress=True)
+
+cats = np.array([['male','low'],['female','mid'],['male','high'],['female','mid']])
+enc = OneHotEncoder(sparse_output=False).fit(cats)
+print("OneHot shape:", enc.transform(cats).shape)
+
+X = np.array([[1.0, 10.0], [2.0, 20.0], [3.0, 30.0], [4.0, 40.0]])
+ss = StandardScaler().fit(X)
+print("mean:", np.round(ss.mean_, 4), "scale:", np.round(ss.scale_, 4))
+print(np.round(ss.transform(X), 4))
+""")
+
+code("""
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.compose import ColumnTransformer
+
+mm = MinMaxScaler().fit(X)
+print("MinMax range:")
+print(np.round(mm.transform(X), 4))
+
+# TODO 变形：把分类列与数值列合并，用 ColumnTransformer 一次处理
+Xall = np.column_stack([np.array(['a','b','a','c']), X.astype(object)])
+ct = ColumnTransformer([
+    ("onehot", OneHotEncoder(sparse_output=False), [0]),
+    ("scale", StandardScaler(), [1, 2]),
+])
+Xt = ct.fit_transform(Xall)
+print("ColumnTransformer shape:", Xt.shape)
+""")
+
+code("""
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.pipeline import Pipeline
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import StandardScaler
+
+iris = load_iris(); X, y = iris.data, iris.target
+Xtr, Xte, ytr, yte = train_test_split(X, y, test_size=0.3, random_state=42, stratify=y)
+pipe = Pipeline([("sc", StandardScaler()), ("knn", KNeighborsClassifier(n_neighbors=5))])
+pipe.fit(Xtr, ytr)
+print("Pipeline acc:", round(pipe.score(Xte, yte), 4))
+print("5-fold mean:", round(cross_val_score(pipe, X, y, cv=5).mean(), 4))
+""")
+
+md("""
 ## Part 2 有监督学习：分类与回归
 
 练习：在 Iris 上比较多个分类器；在 Diabetes 上做回归并比较 L1/L2 正则化。
@@ -110,6 +165,46 @@ print("Lasso nonzero coef count:", np.count_nonzero(las.coef_), "/", len(las.coe
 """)
 
 md("""
+### 案例卡 2 跟练：分类流水线（KNN + 标准化 + Pipeline）
+
+围绕案例卡 2 做 3 个变式：复现 Pipeline、比较缩放前后、用 GridSearchCV 调参。
+""")
+
+code("""
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+iris = load_iris(); X, y = iris.data, iris.target
+Xtr, Xte, ytr, yte = train_test_split(X, y, test_size=0.3, random_state=42, stratify=y)
+pipe = Pipeline([("sc", StandardScaler()), ("knn", KNeighborsClassifier(n_neighbors=5))])
+pipe.fit(Xtr, ytr)
+print("Pipeline acc:", round(accuracy_score(yte, pipe.predict(Xte)), 4))
+print("5-fold mean:", round(cross_val_score(pipe, X, y, cv=5).mean(), 4))
+""")
+
+code("""
+knn_raw = KNeighborsClassifier(n_neighbors=5).fit(Xtr, ytr)
+print("Raw KNN acc:", round(accuracy_score(yte, knn_raw.predict(Xte)), 4))
+print("Raw 5-fold mean:", round(cross_val_score(knn_raw, Xtr, ytr, cv=5).mean(), 4))
+
+# TODO 变形：把 StandardScaler 换成 MinMaxScaler，重新跑 Pipeline 的 5 折均值。
+""")
+
+code("""
+from sklearn.model_selection import GridSearchCV
+
+pipe_g = Pipeline([("sc", StandardScaler()), ("knn", KNeighborsClassifier())])
+g = GridSearchCV(pipe_g, {"knn__n_neighbors": [3, 5, 7, 9]}, cv=5)
+g.fit(Xtr, ytr)
+print("Best params:", g.best_params_)
+print("Best CV mean:", round(g.best_score_, 4))
+""")
+
+md("""
 ## Part 3 无监督学习：聚类与降维
 """)
 
@@ -141,6 +236,60 @@ print("PCA cum var:", np.round(np.cumsum(pca.explained_variance_ratio_), 4))
 lda = LDA(n_components=2)
 Xl = lda.fit_transform(X, y)
 print("LDA explained var:", np.round(lda.explained_variance_ratio_, 4))
+""")
+
+md("""
+### 案例卡 3 跟练：KMeans 肘部法则 + PCA 可视化
+
+围绕案例卡 3 做 3 个变式：画肘部、算 silhouette、保存 PCA 2D 图。
+""")
+
+code("""
+import numpy as np
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.datasets import load_wine
+
+np.set_printoptions(precision=4, suppress=True)
+wine = load_wine(); Xw, yw = wine.data, wine.target
+Xs = StandardScaler().fit_transform(Xw)
+ks = range(1, 9)
+inertias = []
+for k in ks:
+    km = KMeans(n_clusters=k, random_state=42).fit(Xs)
+    inertias.append(km.inertia_)
+print("inertia:", np.round(np.array(inertias), 2))
+""")
+
+code("""
+from sklearn.metrics import silhouette_score, adjusted_rand_score
+
+for k in [3, 4, 5]:
+    km = KMeans(n_clusters=k, random_state=42).fit(Xs)
+    print("k=%d silhouette=%.4f ARI=%.4f" % (k, silhouette_score(Xs, km.labels_), adjusted_rand_score(yw, km.labels_)))
+""")
+
+code("""
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+import os
+
+km3 = KMeans(n_clusters=3, random_state=42).fit(Xs)
+pca = PCA(n_components=2)
+Xp = pca.fit_transform(Xs)
+os.makedirs("chapters/08-sklearn/lab", exist_ok=True)
+fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+axes[0].plot(list(ks), inertias, "o-")
+axes[0].set_title("elbow: inertia vs k")
+axes[0].set_xlabel("k"); axes[0].set_ylabel("inertia")
+axes[1].scatter(Xp[:, 0], Xp[:, 1], c=km3.labels_, cmap="viridis", s=20)
+axes[1].set_title("PCA 2D by KMeans")
+for ax in axes:
+    ax.grid(alpha=0.2)
+fig.tight_layout()
+fig.savefig("chapters/08-sklearn/lab/case3_elbow_lab.png", dpi=150)
+plt.close()
+print("saved chapters/08-sklearn/lab/case3_elbow_lab.png")
 """)
 
 md("""

@@ -76,7 +76,12 @@ sklearn 1.6.1、Python 3.13 下运行验证。
 \begin{Shaded}
 \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
 \ImportTok{from}\NormalTok{ sklearn.preprocessing }\ImportTok{import}\NormalTok{ OneHotEncoder}
+
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 
 \NormalTok{data }\OperatorTok{=}\NormalTok{ np.array([[}\StringTok{\textquotesingle{}male\textquotesingle{}}\NormalTok{], [}\StringTok{\textquotesingle{}female\textquotesingle{}}\NormalTok{], [}\StringTok{\textquotesingle{}male\textquotesingle{}}\NormalTok{], [}\StringTok{\textquotesingle{}female\textquotesingle{}}\NormalTok{]])}
 \NormalTok{encoder }\OperatorTok{=}\NormalTok{ OneHotEncoder(sparse\_output}\OperatorTok{=}\VariableTok{False}\NormalTok{)}
@@ -164,10 +169,10 @@ sklearn 1.6.1、Python 3.13 下运行验证。
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{mean\_: [3. 4.] scale\_: [1.632993 1.632993]}
-\NormalTok{[[{-}1.22474487 {-}1.22474487]}
-\NormalTok{ [ 0.          0.        ]}
-\NormalTok{ [ 1.22474487  1.22474487]]}
+\NormalTok{mean\_: [3. 4.] scale\_: [1.633 1.633]}
+\NormalTok{[[{-}1.2247 {-}1.2247]}
+\NormalTok{ [ 0.      0.    ]}
+\NormalTok{ [ 1.2247  1.2247]]}
 \end{Highlighting}
 \end{Shaded}
 
@@ -319,9 +324,10 @@ sklearn 1.6.1、Python 3.13 下运行验证。
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\ImportTok{from}\NormalTok{ functools }\ImportTok{import}\NormalTok{ partial}
 \ImportTok{from}\NormalTok{ sklearn.feature\_selection }\ImportTok{import}\NormalTok{ SelectKBest, mutual\_info\_classif}
 
-\NormalTok{selb }\OperatorTok{=}\NormalTok{ SelectKBest(mutual\_info\_classif, k}\OperatorTok{=}\DecValTok{2}\NormalTok{)}
+\NormalTok{selb }\OperatorTok{=}\NormalTok{ SelectKBest(partial(mutual\_info\_classif, random\_state}\OperatorTok{=}\DecValTok{42}\NormalTok{), k}\OperatorTok{=}\DecValTok{2}\NormalTok{)}
 \NormalTok{Xb }\OperatorTok{=}\NormalTok{ selb.fit\_transform(X, y)}
 \BuiltInTok{print}\NormalTok{(}\StringTok{"选中的特征索引:"}\NormalTok{, selb.get\_support(indices}\OperatorTok{=}\VariableTok{True}\NormalTok{))}
 \BuiltInTok{print}\NormalTok{(}\StringTok{"各特征互信息:"}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(selb.scores\_, }\DecValTok{4}\NormalTok{))}
@@ -332,7 +338,7 @@ sklearn 1.6.1、Python 3.13 下运行验证。
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{选中的特征索引: [2 3]}
-\NormalTok{各特征互信息: [0.494  0.2597 0.9784 0.9804]}
+\NormalTok{各特征互信息: [0.5114 0.2994 0.9926 0.9856]}
 \NormalTok{变换后 shape: (150, 2)}
 \end{Highlighting}
 \end{Shaded}
@@ -380,7 +386,7 @@ Lasso 的 L1 正则会把不重要的系数压到 0；用 \texttt{SelectFromMode
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{Lasso 系数: [ 0.       {-}0.        0.408119  0.      ]}
+\NormalTok{Lasso 系数: [ 0.     {-}0.      0.4081  0.    ]}
 \NormalTok{非零掩码: [False False  True False]}
 \end{Highlighting}
 \end{Shaded}
@@ -420,6 +426,178 @@ Lasso 的 L1 正则会把不重要的系数压到 0；用 \texttt{SelectFromMode
   \textbf{LDA}（有监督）：融合类别信息，最大化类间/类内方差之比，示例见
   03 节。
 \end{itemize}
+
+\subsection{案例卡 1：特征编码与缩放------为什么先 fit 再
+transform}\label{ux6848ux4f8bux5361-1ux7279ux5f81ux7f16ux7801ux4e0eux7f29ux653eux4e3aux4ec0ux4e48ux5148-fit-ux518d-transform}
+
+\subsubsection{目标}\label{ux76eeux6807-30}
+
+用 \texttt{OneHotEncoder} 把无序文字类别变成 0/1 向量，用
+\texttt{StandardScaler} 把不同量纲的数值列拉平；并说清 \texttt{fit}
+学统计量、\texttt{transform} 应用统计量，以及为什么训练/测试要分开
+\texttt{fit/transform}。
+
+\subsubsection{代码}\label{ux4ee3ux7801-31}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{from}\NormalTok{ sklearn.preprocessing }\ImportTok{import}\NormalTok{ OneHotEncoder, StandardScaler}
+\ImportTok{from}\NormalTok{ sklearn.model\_selection }\ImportTok{import}\NormalTok{ train\_test\_split}
+\ImportTok{from}\NormalTok{ sklearn.datasets }\ImportTok{import}\NormalTok{ load\_iris}
+
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\CommentTok{\#\# (1) OneHotEncoder 编码无序分类特征}
+\NormalTok{cats }\OperatorTok{=}\NormalTok{ np.array([[}\StringTok{\textquotesingle{}male\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}low\textquotesingle{}}\NormalTok{],[}\StringTok{\textquotesingle{}female\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}mid\textquotesingle{}}\NormalTok{],[}\StringTok{\textquotesingle{}male\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}high\textquotesingle{}}\NormalTok{],[}\StringTok{\textquotesingle{}female\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}mid\textquotesingle{}}\NormalTok{]])}
+\NormalTok{enc }\OperatorTok{=}\NormalTok{ OneHotEncoder(sparse\_output}\OperatorTok{=}\VariableTok{False}\NormalTok{).fit(cats)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}类别组合:\textquotesingle{}}\NormalTok{, enc.categories\_)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}编码后形状:\textquotesingle{}}\NormalTok{, enc.transform(cats).shape)}
+\BuiltInTok{print}\NormalTok{(enc.transform(cats))}
+
+\CommentTok{\#\# (2) StandardScaler: fit 学统计量, transform 应用}
+\NormalTok{X }\OperatorTok{=}\NormalTok{ np.array([[}\FloatTok{1.0}\NormalTok{,}\FloatTok{10.0}\NormalTok{],[}\FloatTok{2.0}\NormalTok{,}\FloatTok{20.0}\NormalTok{],[}\FloatTok{3.0}\NormalTok{,}\FloatTok{30.0}\NormalTok{],[}\FloatTok{4.0}\NormalTok{,}\FloatTok{40.0}\NormalTok{]])}
+\NormalTok{ss }\OperatorTok{=}\NormalTok{ StandardScaler().fit(X)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}mean\_:\textquotesingle{}}\NormalTok{, ss.mean\_, }\StringTok{\textquotesingle{}scale\_:\textquotesingle{}}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(ss.scale\_, }\DecValTok{4}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}标准化结果:\textquotesingle{}}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(np.}\BuiltInTok{round}\NormalTok{(ss.transform(X), }\DecValTok{4}\NormalTok{))}
+
+\CommentTok{\#\# (3) 为什么先 fit 再 transform: 用训练集统计量处理测试集}
+\NormalTok{iris }\OperatorTok{=}\NormalTok{ load\_iris()}\OperatorTok{;}\NormalTok{ X, y }\OperatorTok{=}\NormalTok{ iris.data, iris.target}
+\NormalTok{Xtr, Xte, ytr, yte }\OperatorTok{=}\NormalTok{ train\_test\_split(X, y, test\_size}\OperatorTok{=}\FloatTok{0.3}\NormalTok{, random\_state}\OperatorTok{=}\DecValTok{42}\NormalTok{, stratify}\OperatorTok{=}\NormalTok{y)}
+\NormalTok{sc }\OperatorTok{=}\NormalTok{ StandardScaler().fit(Xtr)}
+\NormalTok{Xte\_s }\OperatorTok{=}\NormalTok{ sc.transform(Xte)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}训练集 mean\_:\textquotesingle{}}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(sc.mean\_, }\DecValTok{4}\NormalTok{))}
+
+\CommentTok{\#\# 反例: 对全量 fit\_transform(泄漏) 后, 测试集被全量统计量影响}
+\NormalTok{sc\_all }\OperatorTok{=}\NormalTok{ StandardScaler().fit(X)}
+\NormalTok{Xte\_leak }\OperatorTok{=}\NormalTok{ sc\_all.transform(Xte)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}正确做法测试集均值:\textquotesingle{}}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(Xte\_s.mean(axis}\OperatorTok{=}\DecValTok{0}\NormalTok{), }\DecValTok{4}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}泄漏做法测试集均值:\textquotesingle{}}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(Xte\_leak.mean(axis}\OperatorTok{=}\DecValTok{0}\NormalTok{), }\DecValTok{4}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-30}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{类别组合: [array([\textquotesingle{}female\textquotesingle{}, \textquotesingle{}male\textquotesingle{}], dtype=\textquotesingle{}\textless{}U6\textquotesingle{}), array([\textquotesingle{}high\textquotesingle{}, \textquotesingle{}low\textquotesingle{}, \textquotesingle{}mid\textquotesingle{}], dtype=\textquotesingle{}\textless{}U6\textquotesingle{})]}
+\NormalTok{编码后形状: (4, 5)}
+\NormalTok{[[0. 1. 0. 1. 0.]}
+\NormalTok{ [1. 0. 0. 0. 1.]}
+\NormalTok{ [0. 1. 1. 0. 0.]}
+\NormalTok{ [1. 0. 0. 0. 1.]]}
+\NormalTok{mean\_: [ 2.5 25. ] scale\_: [ 1.118  11.1803]}
+\NormalTok{标准化结果:}
+\NormalTok{[[{-}1.3416 {-}1.3416]}
+\NormalTok{ [{-}0.4472 {-}0.4472]}
+\NormalTok{ [ 0.4472  0.4472]}
+\NormalTok{ [ 1.3416  1.3416]]}
+\NormalTok{训练集 mean\_: [5.8733 3.0552 3.7848 1.2057]}
+\NormalTok{正确做法测试集均值: [{-}0.1164  0.0153 {-}0.0502 {-}0.0275]}
+\NormalTok{泄漏做法测试集均值: [{-}0.0848  0.0113 {-}0.0355 {-}0.0196]}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-29}
+
+\textbf{一句话人话}：\texttt{fit} 是``量尺寸''，\texttt{transform}
+是``按尺寸改衣服''；尺寸只能从训练集量，不能把测试集也一起量，否则就``作弊''了。
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \texttt{OneHotEncoder} 把两列文字展开成 5 列（性别 2 列 + 等级 3
+  列），每行只有 1 个位置为 1，其余为
+  0；它\textbf{不关心谁大谁小}，适合无序类别。
+\item
+  \texttt{StandardScaler().fit(X)} 只做一件事：算出每列的均值
+  \texttt{mean\_} 和标准差 \texttt{scale\_}，这里
+  \texttt{mean\_={[}2.5,\ 25.{]}}、\texttt{scale\_≈{[}1.118,\ 11.1803{]}}。
+\item
+  \texttt{ss.transform(X)} 按公式 \texttt{(x\ -\ mean)\ /\ scale}
+  逐元素变换，得到每列均值约 0、标准差约 1。
+\item
+  第 (3) 步用 Iris 演示：先在训练集上 \texttt{fit}，得到训练集均值
+  \texttt{{[}5.8733,\ 3.0552,\ 3.7848,\ 1.2057{]}}；再对测试集
+  \texttt{transform}，测试集均值不为
+  0，这是\textbf{正常}的（测试集不应使用自己的统计量）。
+\item
+  最后两行对比``泄漏做法''：如果对全量数据 \texttt{fit} 后再
+  \texttt{transform}
+  测试集，测试集均值会偏向全量统计量（\texttt{-0.0848} 与
+  \texttt{-0.1164}
+  不同）。训练/测试切分前就做缩放，等于让模型提前``见过''测试集的分布，真实评估会被高估。
+\end{enumerate}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-31}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+需求
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+写法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+说明
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+无序类别编码 & \texttt{OneHotEncoder(sparse\_output=False)} &
+输出稠密矩阵，适合打印/调试 \\
+连续特征缩放 & \texttt{StandardScaler()} 或 \texttt{MinMaxScaler()} &
+拉平量纲 \\
+学统计量 & \texttt{scaler.fit(X\_train)} & 只使用训练集 \\
+应用统计量 & \texttt{scaler.transform(X\_test)} & 用训练集统计量 \\
+一步完成 & \texttt{scaler.fit\_transform(X)} &
+只适合训练集或全量一次性转换 \\
+组合更安全 & \texttt{ColumnTransformer} + \texttt{Pipeline} &
+保证交叉验证每折都重新 fit \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-31}
+
+\begin{itemize}
+\tightlist
+\item
+  对测试集调用 \texttt{fit\_transform} → 信息泄漏；应先把 \texttt{fit}
+  用在训练集。
+\item
+  把 \texttt{LabelEncoder} 当成特征编码 → 无序类别被强加虚拟顺序。
+\item
+  传给 OneHotEncoder 用旧参数 \texttt{sparse=False} → 新版本应为
+  \texttt{sparse\_output=False}。
+\item
+  缩放后只打印变换结果、不打印
+  \texttt{mean\_}/\texttt{scale\_}，很难发现是否用错了统计量。
+\end{itemize}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-19}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  把 \texttt{StandardScaler} 换成
+  \texttt{MinMaxScaler}，比较变换后的最小/最大值。
+\item
+  用 \texttt{ColumnTransformer} 同时处理 \texttt{cats} 的分类列与
+  \texttt{X} 的数值列，打印变换后形状。
+\item
+  在 02 节用 \texttt{Pipeline} 包住``缩放 + 模型''跑 5 折，观察与手写
+  \texttt{fit/transform} 的差别。
+\item
+  给 \texttt{cats} 增加一个训练时没见过的类别 \texttt{male/unknown}，看
+  \texttt{transform} 会如何报错。
+\end{enumerate}
 
 \subsection{常见误区}\label{ux5e38ux89c1ux8befux533a-22}
 
@@ -571,8 +749,13 @@ Lasso 的 L1 正则会把不重要的系数压到 0；用 \texttt{SelectFromMode
 \begin{Shaded}
 \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
 \ImportTok{from}\NormalTok{ sklearn.datasets }\ImportTok{import}\NormalTok{ load\_iris}
 \ImportTok{from}\NormalTok{ sklearn.model\_selection }\ImportTok{import}\NormalTok{ train\_test\_split}
+
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 
 \NormalTok{iris }\OperatorTok{=}\NormalTok{ load\_iris()}
 \NormalTok{X, y }\OperatorTok{=}\NormalTok{ iris.data, iris.target}
@@ -619,10 +802,10 @@ Lasso 的 L1 正则会把不重要的系数压到 0；用 \texttt{SelectFromMode
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{KNN(k=5)              acc = 0.9778}
-\NormalTok{LogisticRegression    acc = 0.9333}
-\NormalTok{DecisionTree          acc = 0.9333}
-\NormalTok{RandomForest(100)     acc = 0.8889}
+\NormalTok{KNN(k=5)               acc = 0.9778}
+\NormalTok{LogisticRegression     acc = 0.9333}
+\NormalTok{DecisionTree           acc = 0.9333}
+\NormalTok{RandomForest(100)      acc = 0.8889}
 \end{Highlighting}
 \end{Shaded}
 
@@ -772,9 +955,9 @@ ROC-AUC：乳腺癌}\label{ux4e8cux5206ux7c7bux4e0e-roc-aucux4e73ux817aux764c}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{LinearRegression    MSE=2900.19  MAE=42.79  R2=0.4526}
-\NormalTok{Ridge(alpha=1)      MSE=3077.42  MAE=46.14  R2=0.4192}
-\NormalTok{Lasso(alpha=0.1)    MSE=2798.19  MAE=42.85  R2=0.4719}
+\NormalTok{LinearRegression     MSE=2900.19  MAE=42.79  R2=0.4526}
+\NormalTok{Ridge(alpha=1)       MSE=3077.42  MAE=46.14  R2=0.4192}
+\NormalTok{Lasso(alpha=0.1)     MSE=2798.19  MAE=42.85  R2=0.4719}
 \NormalTok{Lasso 非零系数个数: 7}
 \NormalTok{特征名: [\textquotesingle{}age\textquotesingle{}, \textquotesingle{}sex\textquotesingle{}, \textquotesingle{}bmi\textquotesingle{}, \textquotesingle{}bp\textquotesingle{}, \textquotesingle{}s1\textquotesingle{}, \textquotesingle{}s2\textquotesingle{}, \textquotesingle{}s3\textquotesingle{}, \textquotesingle{}s4\textquotesingle{}, \textquotesingle{}s5\textquotesingle{}, \textquotesingle{}s6\textquotesingle{}]}
 \end{Highlighting}
@@ -785,6 +968,169 @@ ROC-AUC：乳腺癌}\label{ux4e8cux5206ux7c7bux4e0e-roc-aucux4e73ux817aux764c}
 越好。这里 Lasso 用 L1 正则把部分系数压到 0，既得到不错 R²
 又做了特征选择。
 \end{quote}
+
+\subsection{案例卡 2：分类流水线------Iris 用 KNN+标准化+Pipeline
+防数据泄漏}\label{ux6848ux4f8bux5361-2ux5206ux7c7bux6d41ux6c34ux7ebfiris-ux7528-knnux6807ux51c6ux5316pipeline-ux9632ux6570ux636eux6cc4ux6f0f}
+
+\subsubsection{目标}\label{ux76eeux6807-31}
+
+把 \texttt{StandardScaler} 与 \texttt{KNeighborsClassifier} 串成一条
+\texttt{Pipeline}，在 Iris 上完成训练和 5
+折交叉验证；并对比``未缩放直接喂
+KNN''，体会缩放对距离类模型的影响，以及为什么 \texttt{Pipeline}
+能防止数据泄漏。
+
+\subsubsection{代码}\label{ux4ee3ux7801-32}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{from}\NormalTok{ sklearn.datasets }\ImportTok{import}\NormalTok{ load\_iris}
+\ImportTok{from}\NormalTok{ sklearn.model\_selection }\ImportTok{import}\NormalTok{ train\_test\_split, cross\_val\_score}
+\ImportTok{from}\NormalTok{ sklearn.preprocessing }\ImportTok{import}\NormalTok{ StandardScaler}
+\ImportTok{from}\NormalTok{ sklearn.pipeline }\ImportTok{import}\NormalTok{ Pipeline}
+\ImportTok{from}\NormalTok{ sklearn.neighbors }\ImportTok{import}\NormalTok{ KNeighborsClassifier}
+\ImportTok{from}\NormalTok{ sklearn.metrics }\ImportTok{import}\NormalTok{ accuracy\_score}
+
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\NormalTok{iris }\OperatorTok{=}\NormalTok{ load\_iris()}\OperatorTok{;}\NormalTok{ X, y }\OperatorTok{=}\NormalTok{ iris.data, iris.target}
+\NormalTok{Xtr, Xte, ytr, yte }\OperatorTok{=}\NormalTok{ train\_test\_split(X, y, test\_size}\OperatorTok{=}\FloatTok{0.3}\NormalTok{, random\_state}\OperatorTok{=}\DecValTok{42}\NormalTok{, stratify}\OperatorTok{=}\NormalTok{y)}
+
+\NormalTok{pipe }\OperatorTok{=}\NormalTok{ Pipeline([(}\StringTok{\textquotesingle{}sc\textquotesingle{}}\NormalTok{, StandardScaler()), (}\StringTok{\textquotesingle{}knn\textquotesingle{}}\NormalTok{, KNeighborsClassifier(n\_neighbors}\OperatorTok{=}\DecValTok{5}\NormalTok{))])}
+\NormalTok{pipe.fit(Xtr, ytr)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}Pipeline KNN acc:\textquotesingle{}}\NormalTok{, }\BuiltInTok{round}\NormalTok{(accuracy\_score(yte, pipe.predict(Xte)), }\DecValTok{4}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}5折CV:\textquotesingle{}}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(cross\_val\_score(pipe, X, y, cv}\OperatorTok{=}\DecValTok{5}\NormalTok{), }\DecValTok{4}\NormalTok{))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}5折均值:\textquotesingle{}}\NormalTok{, }\BuiltInTok{round}\NormalTok{(cross\_val\_score(pipe, X, y, cv}\OperatorTok{=}\DecValTok{5}\NormalTok{).mean(), }\DecValTok{4}\NormalTok{))}
+
+\NormalTok{knn\_raw }\OperatorTok{=}\NormalTok{ KNeighborsClassifier(n\_neighbors}\OperatorTok{=}\DecValTok{5}\NormalTok{).fit(Xtr, ytr)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}未缩放 KNN acc:\textquotesingle{}}\NormalTok{, }\BuiltInTok{round}\NormalTok{(accuracy\_score(yte, knn\_raw.predict(Xte)), }\DecValTok{4}\NormalTok{))}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}pipeline steps:\textquotesingle{}}\NormalTok{, pipe.named\_steps)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}scaler mean\_:\textquotesingle{}}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(pipe.named\_steps[}\StringTok{\textquotesingle{}sc\textquotesingle{}}\NormalTok{].mean\_, }\DecValTok{4}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-31}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Pipeline KNN acc: 0.9111}
+\NormalTok{5折CV: [0.9667 0.9667 0.9333 0.9333 1.    ]}
+\NormalTok{5折均值: 0.96}
+\NormalTok{未缩放 KNN acc: 0.9778}
+\NormalTok{pipeline steps: \{\textquotesingle{}sc\textquotesingle{}: StandardScaler(), \textquotesingle{}knn\textquotesingle{}: KNeighborsClassifier()\}}
+\NormalTok{scaler mean\_: [5.8733 3.0552 3.7848 1.2057]}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-30}
+
+\textbf{一句话人话}：\texttt{Pipeline}
+就像一条自动流水线：先把特征``缩放''，再交给 KNN
+分类；每一次交叉验证都会在训练折重新缩放，绝不偷看测试折。
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \texttt{train\_test\_split(random\_state=42,\ stratify=y)} 把 Iris
+  按类别等比例分成训练 (105) 与测试 (45)，固定随机种子保证可复现。
+\item
+  \texttt{Pipeline({[}(\textquotesingle{}sc\textquotesingle{},\ StandardScaler()),\ (\textquotesingle{}knn\textquotesingle{},\ KNeighborsClassifier(n\_neighbors=5)){]})}
+  定义两步：\texttt{sc} 缩放，\texttt{knn} 分类。调用
+  \texttt{pipe.fit(Xtr,\ ytr)} 时，先 \texttt{fit} 缩放器再 \texttt{fit}
+  KNN，一步完成。
+\item
+  \texttt{pipe.predict(Xte)}
+  会自动用训练集的均值和标准差缩放测试集，再交给 KNN
+  分类；测试集信息完全没有参与缩放统计量。
+\item
+  \texttt{cross\_val\_score(pipe,\ X,\ y,\ cv=5)}
+  每次折叠都会\textbf{重新 fit
+  整条流水线}，因此不会用整份数据算缩放器；5 折均值为
+  0.96，比单次测试集更可信。
+\item
+  最后一行 \texttt{scaler\ mean\_} 显示的是训练集均值
+  \texttt{{[}5.8733,\ 3.0552,\ 3.7848,\ 1.2057{]}}，它与 Case 1 中``只
+  fit 训练集''的结果一致，说明 \texttt{Pipeline} 没有泄漏。
+\item
+  对比``未缩放 KNN
+  acc=0.9778''：在\textbf{这次固定切分}上未缩放反而略高；但距离类模型对量纲敏感，单次
+  test 很随机，因此应看 5
+  折均值（0.96）或换多组切分，而不是凭一次结果下结论。
+\end{enumerate}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-32}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+需求
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+写法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+说明
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+拼接缩放+模型 &
+\texttt{Pipeline({[}(\textquotesingle{}sc\textquotesingle{},\ StandardScaler()),\ (\textquotesingle{}knn\textquotesingle{},\ KNeighborsClassifier()){]})}
+& \texttt{fit} 时自动先缩放再训练 \\
+交叉验证 & \texttt{cross\_val\_score(pipe,\ X,\ y,\ cv=5)} & 每折重新
+fit 整条流水线 \\
+查看每一步 & \texttt{pipe.named\_steps} & 返回名字到对象的字典 \\
+取某一步参数 &
+\texttt{pipe.named\_steps{[}\textquotesingle{}sc\textquotesingle{}{]}.mean\_}
+& 例如看缩放器统计量 \\
+预测概率 & \texttt{pipe.predict\_proba(X){[}:,\ 1{]}} &
+二分类正类概率在第二列 \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-32}
+
+\begin{itemize}
+\tightlist
+\item
+  先 \texttt{StandardScaler().fit\_transform(X)} 再切分 →
+  数据泄漏；应把缩放放进 \texttt{Pipeline} 或只对训练集 \texttt{fit}。
+\item
+  在 \texttt{cross\_val\_score} 里直接传缩放后的 \texttt{X}，而不是传
+  \texttt{Pipeline} → 等价于每折都用全量统计量。
+\item
+  认为``缩放一定提升精度''：单次 test
+  可能相反，但距离类模型通常更稳定；要用 CV 判断。
+\item
+  忘记设置 \texttt{random\_state}：KMeans/KNN
+  等虽确定，但数据切分与后续调参不设种子会无法复现。
+\end{itemize}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-20}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  把 KNN 换成
+  \texttt{SVC(kernel=\textquotesingle{}rbf\textquotesingle{})} 或
+  \texttt{LogisticRegression}，重跑 \texttt{Pipeline} 5 折，比较均值。
+\item
+  用 \texttt{GridSearchCV} 搜索
+  \texttt{knn\_\_n\_neighbors}，注意参数名前缀 \texttt{knn\_\_}。
+\item
+  把 \texttt{StandardScaler} 换成 \texttt{MinMaxScaler}，观察 5
+  折均值是否变化。
+\item
+  对测试集单独 \texttt{fit\_transform}，观察 ROC-AUC
+  或准确率是否被高估，并写下结论。
+\end{enumerate}
 
 \subsection{常见误区}\label{ux5e38ux89c1ux8befux533a-23}
 
@@ -912,9 +1258,14 @@ KMeans 把数据分成 K 个簇，使``簇内平方和''最小。它需要预先
 \begin{Shaded}
 \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
 \ImportTok{from}\NormalTok{ sklearn.cluster }\ImportTok{import}\NormalTok{ KMeans}
 \ImportTok{from}\NormalTok{ sklearn.datasets }\ImportTok{import}\NormalTok{ make\_blobs}
 \ImportTok{from}\NormalTok{ sklearn.metrics }\ImportTok{import}\NormalTok{ silhouette\_score}
+
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 
 \NormalTok{X, \_ }\OperatorTok{=}\NormalTok{ make\_blobs(n\_samples}\OperatorTok{=}\DecValTok{300}\NormalTok{, centers}\OperatorTok{=}\DecValTok{4}\NormalTok{, cluster\_std}\OperatorTok{=}\FloatTok{0.60}\NormalTok{, random\_state}\OperatorTok{=}\DecValTok{0}\NormalTok{)}
 \NormalTok{km }\OperatorTok{=}\NormalTok{ KMeans(n\_clusters}\OperatorTok{=}\DecValTok{4}\NormalTok{, random\_state}\OperatorTok{=}\DecValTok{0}\NormalTok{).fit(X)}
@@ -1042,6 +1393,177 @@ LDA
 维，但语义不同。
 \end{quote}
 
+\subsection{案例卡 3：KMeans 与 PCA------用肘部法则评估聚类数并做 2D
+可视化}\label{ux6848ux4f8bux5361-3kmeans-ux4e0e-pcaux7528ux8098ux90e8ux6cd5ux5219ux8bc4ux4f30ux805aux7c7bux6570ux5e76ux505a-2d-ux53efux89c6ux5316}
+
+\subsubsection{目标}\label{ux76eeux6807-32}
+
+在 Wine 这个 13
+维数值数据集上，先标准化，再用\textbf{肘部法则}（簇内平方和 inertia
+随聚类数 k 变化）评估该选几个簇；最后用 \textbf{PCA} 把 13 维压到 2
+维，画出 KMeans 聚类结果的 2D 可视化。
+
+\subsubsection{代码}\label{ux4ee3ux7801-33}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ os}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+\ImportTok{from}\NormalTok{ sklearn.datasets }\ImportTok{import}\NormalTok{ load\_wine}
+\ImportTok{from}\NormalTok{ sklearn.preprocessing }\ImportTok{import}\NormalTok{ StandardScaler}
+\ImportTok{from}\NormalTok{ sklearn.cluster }\ImportTok{import}\NormalTok{ KMeans}
+\ImportTok{from}\NormalTok{ sklearn.decomposition }\ImportTok{import}\NormalTok{ PCA}
+\ImportTok{from}\NormalTok{ sklearn.metrics }\ImportTok{import}\NormalTok{ silhouette\_score, adjusted\_rand\_score}
+
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\NormalTok{wine }\OperatorTok{=}\NormalTok{ load\_wine()}\OperatorTok{;}\NormalTok{ X }\OperatorTok{=}\NormalTok{ wine.data}\OperatorTok{;}\NormalTok{ y }\OperatorTok{=}\NormalTok{ wine.target}
+\NormalTok{Xs }\OperatorTok{=}\NormalTok{ StandardScaler().fit\_transform(X)}
+\NormalTok{ks }\OperatorTok{=} \BuiltInTok{range}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{9}\NormalTok{)}
+\NormalTok{inertias }\OperatorTok{=}\NormalTok{ []}
+\ControlFlowTok{for}\NormalTok{ k }\KeywordTok{in}\NormalTok{ ks:}
+\NormalTok{    km }\OperatorTok{=}\NormalTok{ KMeans(n\_clusters}\OperatorTok{=}\NormalTok{k, random\_state}\OperatorTok{=}\DecValTok{42}\NormalTok{).fit(Xs)}
+\NormalTok{    inertias.append(km.inertia\_)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}inertia:\textquotesingle{}}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(np.array(inertias), }\DecValTok{2}\NormalTok{))}
+\ControlFlowTok{for}\NormalTok{ k }\KeywordTok{in}\NormalTok{ [}\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{]:}
+\NormalTok{    km }\OperatorTok{=}\NormalTok{ KMeans(n\_clusters}\OperatorTok{=}\NormalTok{k, random\_state}\OperatorTok{=}\DecValTok{42}\NormalTok{).fit(Xs)}
+    \BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}k=}\SpecialCharTok{\%d}\StringTok{ silhouette=}\SpecialCharTok{\%.4f}\StringTok{ ARI=}\SpecialCharTok{\%.4f}\StringTok{\textquotesingle{}} \OperatorTok{\%}\NormalTok{ (k, silhouette\_score(Xs, km.labels\_), adjusted\_rand\_score(y, km.labels\_)))}
+
+\NormalTok{km3 }\OperatorTok{=}\NormalTok{ KMeans(n\_clusters}\OperatorTok{=}\DecValTok{3}\NormalTok{, random\_state}\OperatorTok{=}\DecValTok{42}\NormalTok{).fit(Xs)}
+\NormalTok{pca }\OperatorTok{=}\NormalTok{ PCA(n\_components}\OperatorTok{=}\DecValTok{2}\NormalTok{)}
+\NormalTok{Xp }\OperatorTok{=}\NormalTok{ pca.fit\_transform(Xs)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}PC1/PC2 var ratio:\textquotesingle{}}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(pca.explained\_variance\_ratio\_, }\DecValTok{4}\NormalTok{))}
+
+\NormalTok{os.makedirs(}\StringTok{\textquotesingle{}images\textquotesingle{}}\NormalTok{, exist\_ok}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{fig, axes }\OperatorTok{=}\NormalTok{ plt.subplots(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, figsize}\OperatorTok{=}\NormalTok{(}\DecValTok{10}\NormalTok{, }\DecValTok{4}\NormalTok{))}
+\NormalTok{axes[}\DecValTok{0}\NormalTok{].plot(}\BuiltInTok{list}\NormalTok{(ks), inertias, }\StringTok{\textquotesingle{}o{-}\textquotesingle{}}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{0}\NormalTok{].set\_title(}\StringTok{\textquotesingle{}肘部法则: inertia vs k\textquotesingle{}}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{0}\NormalTok{].set\_xlabel(}\StringTok{\textquotesingle{}k\textquotesingle{}}\NormalTok{)}\OperatorTok{;}\NormalTok{ axes[}\DecValTok{0}\NormalTok{].set\_ylabel(}\StringTok{\textquotesingle{}inertia\textquotesingle{}}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{1}\NormalTok{].scatter(Xp[:, }\DecValTok{0}\NormalTok{], Xp[:, }\DecValTok{1}\NormalTok{], c}\OperatorTok{=}\NormalTok{km3.labels\_, cmap}\OperatorTok{=}\StringTok{\textquotesingle{}viridis\textquotesingle{}}\NormalTok{, s}\OperatorTok{=}\DecValTok{20}\NormalTok{)}
+\NormalTok{axes[}\DecValTok{1}\NormalTok{].set\_title(}\StringTok{\textquotesingle{}PCA 2D (k=3)\textquotesingle{}}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ ax }\KeywordTok{in}\NormalTok{ axes:}
+\NormalTok{    ax.grid(alpha}\OperatorTok{=}\FloatTok{0.2}\NormalTok{)}
+\NormalTok{fig.tight\_layout()}
+\NormalTok{fig.savefig(}\StringTok{\textquotesingle{}figures/08{-}sklearn/case3\_elbow\_pca.png\textquotesingle{}}\NormalTok{, dpi}\OperatorTok{=}\DecValTok{150}\NormalTok{)}
+\NormalTok{plt.close()}
+\BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}saved figures/08{-}sklearn/case3\_elbow\_pca.png\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{运行结果（已运行核验）}\label{ux8fd0ux884cux7ed3ux679cux5df2ux8fd0ux884cux6838ux9a8c-32}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{inertia: [2314.   1661.68 1277.93 1211.75 1123.16 1079.54 1014.43  982.65]}
+\NormalTok{k=3 silhouette=0.2849 ARI=0.8975}
+\NormalTok{k=4 silhouette=0.2542 ARI=0.8172}
+\NormalTok{k=5 silhouette=0.1836 ARI=0.6264}
+\NormalTok{PC1/PC2 var ratio: [0.362  0.1921]}
+\NormalTok{saved figures/08{-}sklearn/case3\_elbow\_pca.png}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={KMeans 肘部法则与 PCA 2D 可视化}]{figures/08-sklearn/case3_elbow_pca.png}}
+\caption{KMeans 肘部法则与 PCA 2D 可视化}
+\end{figure}
+
+\subsubsection{讲解}\label{ux8bb2ux89e3-31}
+
+\textbf{一句话人话}：KMeans
+要告诉它``分成几堆''，肘部法则看``再分一堆能省多少距离''，省得开始变少时的
+k 就是不错的分堆数；PCA 则把 13 维投影到平面上，让我们能``看见''这些堆。
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \texttt{StandardScaler().fit\_transform(X)} 先对 13 个特征做
+  z-score，避免量纲大的特征（如 proline）主导聚类。
+\item
+  \texttt{KMeans(n\_clusters=k,\ random\_state=42)}
+  用固定随机种子，保证每次结果可复现；\texttt{inertia\_}
+  是簇内平方和（WCSS），k 越大通常越小。
+\item
+  肘部法则：观察 \texttt{inertia} 序列，k 从 1 到 2、2 到 3
+  下降很大（2314→1661→1278），3
+  之后下降明显变缓（1211、1123、1079\ldots），所以``肘''在 k=3 附近。
+\item
+  辅助指标：\texttt{silhouette}（越接近 1 越好）在 k=3
+  时最大（0.2849）；\texttt{ARI} 衡量与真实品种标签的一致性，k=3 时
+  ARI=0.8975，说明分成 3 簇与真实品种高度吻合。
+\item
+  \texttt{PCA(n\_components=2)} 给出前两个主成分解释方差比例
+  \texttt{{[}0.362,\ 0.1921{]}}，两者合计约 0.554，虽不足 100\%，但 2D
+  散点已能看出三团结构。
+\item
+  右图按 KMeans 的簇标签着色，三团颜色基本对应真实的三类
+  Wine；左图（肘部图）则直观显示``k=3 是下降变缓的拐点''。
+\end{enumerate}
+
+\subsubsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-33}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+需求 & 写法 & 说明 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+标准化 & \texttt{StandardScaler().fit\_transform(X)} &
+距离/聚类前常用 \\
+聚类 & \texttt{KMeans(n\_clusters=k,\ random\_state=42)} &
+需要固定随机种子 \\
+簇内平方和 & \texttt{km.inertia\_} & 画肘部曲线 \\
+轮廓系数 & \texttt{silhouette\_score(Xs,\ km.labels\_)} &
+越大越``内紧外分'' \\
+与真实标签比对 & \texttt{adjusted\_rand\_score(y,\ km.labels\_)} & 1
+为完全一致 \\
+降维到 2 维 & \texttt{PCA(n\_components=2).fit\_transform(Xs)} &
+用于可视化 \\
+\end{longtable}
+}
+
+\subsubsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-33}
+
+\begin{itemize}
+\tightlist
+\item
+  不缩放就聚类：量纲大的特征会把其他特征``压扁''，常见结果是簇形状被大数值特征主导。
+\item
+  只看 \texttt{inertia} 就选 k：\texttt{inertia\_}
+  只减不增，若没有明显``肘''，还要结合 silhouette 或业务知识。
+\item
+  用一次 KMeans 标签就下结论：KMeans
+  只是无监督分组，标签顺序与真实类别不一定对应，应结合 ARI/可视化。
+\item
+  把 \texttt{explained\_variance\_ratio\_}
+  的累计值当成``模型准确率''：它是投影保留的方差比例，不是分类/聚类精度。
+\end{itemize}
+
+\subsubsection{拓展 / 跟练}\label{ux62d3ux5c55-ux8ddfux7ec3-21}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  把 \texttt{ks} 范围改为 1\textasciitilde10，看 k 更大时 inertia
+  是否还在``加速下降''。
+\item
+  把标准化后的 Wine 改用 \texttt{DBSCAN}，比较它对 Wine 的簇数与 ARI。
+\item
+  用 \texttt{PCA} 的 \texttt{explained\_variance\_ratio\_}
+  画``累计解释方差''图，判断保留到 2 维是否够。
+\item
+  对 Iris 也做同样的肘部图 + PCA 2D 可视化，比较 Wine 与 Iris 的最佳 k
+  是否都为 3。
+\end{enumerate}
+
 \subsection{常见误区}\label{ux5e38ux89c1ux8befux533a-24}
 
 \begin{enumerate}
@@ -1111,8 +1633,10 @@ LDA
 
 \begin{quote}
 本章新增综合案例，把 01--03 的知识串成一条完整流水线：\textbf{特征缩放 →
-分类 → 特征重要性 → 聚类 → 降维 → 可视化}。所有代码在 sklearn 1.6.1
-下验证；配图由 \texttt{build/make\_chap8\_figures.py} 生成。
+分类 → 特征重要性 → 聚类 → 降维 → 可视化}。本综合案例按``案例卡
+4''组织：目标 → 步骤 → 讲解 → 主要用法 / API → 常见错误 →
+拓展练习。所有代码在 sklearn 1.6.1 下验证；配图由
+\texttt{build/make\_chap8\_figures.py} 生成。
 \end{quote}
 
 \subsection{案例背景}\label{ux6848ux4f8bux80ccux666f-3}
@@ -1121,13 +1645,35 @@ Wine（红酒）数据集有 178 个样本、13
 个数值特征（酒精、苹果酸、灰分、总酚、黄酮等），标签为 3
 个品种（\texttt{class\_0/1/2}）。这是一个``数值特征多、量纲不同、类别有结构''的典型数据，非常适合练习本章全部知识。
 
+\subsection{案例目标}\label{ux6848ux4f8bux76eeux6807}
+
+\begin{itemize}
+\tightlist
+\item
+  用 \texttt{StandardScaler} + \texttt{Pipeline} 完成``缩放 +
+  分类''，在训练/测试切分与 5 折交叉验证中都避免数据泄漏；
+\item
+  用随机森林 \texttt{feature\_importances\_} 找出区分品种的关键特征；
+\item
+  用 \texttt{KMeans} 做无监督聚类，并用 \texttt{silhouette\_score} /
+  \texttt{adjusted\_rand\_score} 评估聚类质量；
+\item
+  用 \texttt{PCA} 降到 2 维并可视化，比较``真实类别''与``KMeans
+  簇''在平面上的重合程度。
+\end{itemize}
+
 \subsection{第 1
 步：加载数据并观察}\label{ux7b2c-1-ux6b65ux52a0ux8f7dux6570ux636eux5e76ux89c2ux5bdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
 \ImportTok{from}\NormalTok{ sklearn.datasets }\ImportTok{import}\NormalTok{ load\_wine}
+
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}font.sans{-}serif\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ [}\StringTok{\textquotesingle{}Microsoft YaHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}SimHei\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}DejaVu Sans\textquotesingle{}}\NormalTok{]}
+\NormalTok{plt.rcParams[}\StringTok{\textquotesingle{}axes.unicode\_minus\textquotesingle{}}\NormalTok{] }\OperatorTok{=} \VariableTok{False}
+\NormalTok{np.set\_printoptions(precision}\OperatorTok{=}\DecValTok{4}\NormalTok{, suppress}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
 
 \NormalTok{wine }\OperatorTok{=}\NormalTok{ load\_wine()}
 \NormalTok{X, y }\OperatorTok{=}\NormalTok{ wine.data, wine.target}
@@ -1308,6 +1854,84 @@ KMeans，看能否大致还原真实品种。
 前两个主成分只保留约 55\% 方差，说明 13 维信息没有完全集中在 2
 维，但散点已能看出三团结构；KMeans 簇与真实类别在 PCA 平面上也基本重合。
 \end{quote}
+
+\subsection{案例讲解}\label{ux6848ux4f8bux8bb2ux89e3}
+
+\textbf{一句话人话}：把 13 个红酒指标当成 13
+维坐标，先缩放拉平尺度，再训练分类器、看哪些指标最重要，最后用 KMeans
+分堆并用 PCA 投到平面上一眼看清。
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  第 1 步打印 \texttt{wine.feature\_names} 与
+  \texttt{X.shape}，先``看清数据''。13
+  个特征量纲不同，所以后面必须做缩放。
+\item
+  第 2 步用 \texttt{Pipeline} 把 \texttt{StandardScaler}
+  和分类器串起来；\texttt{cross\_val\_score} 时每折都会重新 \texttt{fit}
+  缩放器，避免信息泄漏。5
+  折均值：LogisticRegression=0.9832、RandomForest=0.9778。
+\item
+  第 3 步查看
+  \texttt{feature\_importances\_}：\texttt{flavanoids}（0.1945）、\texttt{color\_intensity}（0.1730）、\texttt{alcohol}（0.1416）贡献最大，说明这几个指标最能区分品种。
+\item
+  第 4 步 KMeans 聚类
+  \texttt{ARI=0.8975}，说明无监督分组与真实品种高度一致；轮廓系数 0.2849
+  说明簇间还有一定重叠。
+\item
+  第 5 步 PCA 前两个主成分解释方差约 55\%，2D
+  平面已能看出三团；按真实标签与按 KMeans
+  簇着色基本重合，说明这个数据在低维确实可分。
+\end{enumerate}
+
+\subsection{主要用法 / API}\label{ux4e3bux8981ux7528ux6cd5-api-34}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+需求
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+写法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+说明
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+缩放 + 分类 &
+\texttt{Pipeline({[}(\textquotesingle{}sc\textquotesingle{},\ StandardScaler()),\ (\textquotesingle{}clf\textquotesingle{},\ LogisticRegression()){]})}
+& 训练/预测统一走流水线 \\
+交叉验证 & \texttt{cross\_val\_score(pipe,\ X,\ y,\ cv=5)} &
+每折重新拟合 \\
+特征重要性 & \texttt{rf.feature\_importances\_} & 越大越重要 \\
+聚类评估 & \texttt{silhouette\_score}、\texttt{adjusted\_rand\_score} &
+内紧外分 / 与真实标签一致性 \\
+降维 & \texttt{PCA(n\_components=2)} & 读
+\texttt{explained\_variance\_ratio\_} \\
+\end{longtable}
+}
+
+\subsection{常见错误}\label{ux5e38ux89c1ux9519ux8bef-34}
+
+\begin{itemize}
+\tightlist
+\item
+  在 \texttt{cross\_val\_score} 里把``缩放后的 X''传进去，而不是传
+  \texttt{Pipeline} → 数据泄漏。
+\item
+  直接用未缩放的 Wine 做 KMeans → 量纲大的特征主导，簇可能失衡。
+\item
+  把 PCA 的``累计解释方差''当成分类精度 → 它是投影保留的方差比例。
+\item
+  只凭一次 train/test 下结论：小数据要结合 5 折均值。
+\end{itemize}
 
 \subsection{本章综合练习（上机任务）}\label{ux672cux7ae0ux7efcux5408ux7ec3ux4e60ux4e0aux673aux4efbux52a1-3}
 
