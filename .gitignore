@@ -4,8 +4,8 @@ Scientific_Computin_Book.pdf
 README.pdf
 *_quiz.zip
 
-# ===== 生成物 PDF（推荐忽略：由 build/ 脚本或 CI 重新生成；如需入库请删除本行） =====
-docs/教材PDF/
+# ===== 教材 PDF（每章合订 + 全书）已入库，不再忽略 =====
+# 说明：由 build/ 脚本或 CI 重新生成，但为了离线阅读/下载已提交到本仓库
 
 # ===== LaTeX / 编译中间产物 =====
 *.aux

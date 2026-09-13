@@ -10,7 +10,7 @@
   - `docs/教学资源/`：课时表、期末大作业、LaTeX 模板等
   - `docs/教材TeX/`：**可编译 LaTeX 工程**（生成物，可编辑定制区 user_style/user_meta）
   - `docs/build/`：构建脚本、实施计划、设计文档、坑清单
-  - `docs/教材PDF/`：生成的每章/全书 PDF（**被 .gitignore 忽略**，由 CI/脚本生成）
+  - `docs/教材PDF/`：每章/全书 PDF（由脚本/CI 生成，**已入库**，可离线阅读或直接下载）
 - `.github/workflows/texbook.yml`：CI（push 后自动校验 + 生成 PDF/TeX 并上传 artifact）
 
 ## 常用命令
