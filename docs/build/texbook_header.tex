@@ -6,16 +6,33 @@
 \fancyhead[R]{\small\color{gray}\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 
-% ===== 全局排版：行距/表格/图片/断行（M10 排版精修）=====
+% ===== 全局排版：行距/表格/图片/断行 =====
 \usepackage{setspace}
 \setstretch{1.15}
 \renewcommand{\arraystretch}{1.18}
 \setlength{\tabcolsep}{4pt}
-\emergencystretch=1.5em
+\emergencystretch=3em
 \clubpenalty=4000
 \widowpenalty=4000
 \RequirePackage{graphicx}
-\setkeys{Gin}{width=\textwidth,keepaspectratio}
+
+% ===== 图片：限制高度并只在页顶/独立页排版，避免被页面下沿裁切 =====
+\usepackage{float}
+\floatplacement{figure}{tp}
+\setkeys{Gin}{width=\textwidth,height=0.70\textheight,keepaspectratio}
+\setlength{\intextsep}{10pt}
+\setlength{\textfloatsep}{12pt}
+
+% ===== 代码块：长行自动折行（长注释、长命令不再溢出到页边）=====
+\usepackage{fvextra}
+\fvset{breaklines=true,breakanywhere=true,breakindent=0pt,breaksymbolleft={},breaksymbolright={},fontsize=\small}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\},breaklines=true,breakanywhere=true,breakindent=0pt,fontsize=\small}
+
+% ===== 正文断行：长 URL 与长等宽串允许断行 =====
+\usepackage{xurl}
+\usepackage[htt]{hyphenat}
+\sloppy
+\hbadness=10000
 
 % 长表格用 \small 字体，减少列溢出
 \usepackage{longtable}
