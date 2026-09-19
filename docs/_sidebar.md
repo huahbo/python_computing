@@ -68,6 +68,7 @@
     - [01 AI 编程与 Agent 基础](./chapters/09-agent-basics/01-AI编程与Agent基础.md)
     - [02 安装与配置](./chapters/09-agent-basics/02-安装与配置.md)
     - [03 界面与斜杠命令](./chapters/09-agent-basics/03-界面与斜杠命令.md)
+    - [04 权限、安全与数据红线](./chapters/09-agent-basics/04-权限、安全与数据红线.md)
     - [参考资料](./chapters/09-agent-basics/references.md)
     - [教学说明](./chapters/09-agent-basics/teaching.md)
   - [10 Agent 工作流与验证方法](./chapters/10-agent-workflow/README.md)
