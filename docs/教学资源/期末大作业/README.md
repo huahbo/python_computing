@@ -18,6 +18,7 @@
   - `project1/`：与 Project 1 相关的脚本代码
   - `project2/`：与 Project 2 相关的脚本代码
 - `reports/`：最终报告（Markdown / PDF / PPT 等）
+- `project3_agent.md`：Project 3（Agent 辅助的端到端数据分析）题目与评分标准
 - `env/`：虚拟环境相关脚本（如创建虚拟环境的 `.bat` / `.sh` 文件）
 
 你可以将本模板复制到任意位置，然后在其基础上填充自己的代码和数据。
