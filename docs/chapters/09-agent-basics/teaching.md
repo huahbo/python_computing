@@ -31,3 +31,19 @@
 - 配图：images/（8 张概念图）；
 - 参考资料：references.md；
 - 版本盒：`docs/build/dsh_version.yaml`。
+
+## 6. 课堂演示脚本（2 学时）
+
+| 时段 | 内容 | 现场只敲这几条 |
+| ---- | ---- | ---- |
+| 0–15 min | 三代工具对比 + Agent 循环（01 节） | —— |
+| 15–45 min | 现场安装：`npx @deepseek-ai/dsh web`（用备份环境演示） | `npx @deepseek-ai/dsh web` |
+| 45–70 min | 配置模型 + 第一个任务（只读审阅仓库） | `/permission`（read-only） |
+| 70–90 min | 斜杠命令速查 + 常见坑 | `/plan`、`/compact`、`/export` |
+| 课后 | 提交环境自检输出 + 第一个任务的截图 | `node -v` / `npm -v` / `dsh --version` |
+
+## 7. 时间不够时的压缩方案
+
+- 只讲 01 节 + 02 节的路径 A（npx 免安装），桌面版与 headless 留给自学；
+- 04 节（权限与数据红线）压缩为 10 分钟三条红线提醒；
+- 斜杠命令只演示 `/plan`、`/compact`、`/export` 三条。

@@ -28,8 +28,8 @@
 
 | 资源 | 位置 | 说明 |
 | ---- | ---- | ---- |
-| 练习入口 | [exercises/README.md](./exercises/README.md) | quiz（10 题）+ assignment（12 题）+ 答案 |
-| 上机入口 | [lab/README.md](./lab/README.md) | 三段式 lab：离线自检 / 联网任务 / 综合项目 |
+| 练习入口 | [exercises/README.md](./exercises/README.md) | [quiz.ipynb](./exercises/quiz.ipynb)（10 题，含 assert 自检）+ [answers.ipynb](./exercises/answers.ipynb) + [assignment.md](./exercises/assignment.md)（12 题） |
+| 上机入口 | [lab/README.md](./lab/README.md) | 三段式 lab（[lab.ipynb](./lab/lab.ipynb)）：Part A 离线自检 / Part B 联网任务 / Part C 综合项目 |
 | 演示数据 | [lab/data/](./lab/data/) | `scores.csv`、`scores_dirty.csv`、`sensor.csv`、`scores_buggy.py` |
 | 参考产物 | [lab/sample_agent_output/](./lab/sample_agent_output/) | 真实运行产物与脱敏会话记录（断网时用） |
 | 参考资料 | [references.md](./references.md) | 案例涉及的数据与工具文档 |
