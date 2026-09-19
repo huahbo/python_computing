@@ -5,6 +5,9 @@ on:
     # 每月 1 日与 15 日 09:00（北京时间）= 01:00 UTC
     - cron: "0 1 1,15 * *"
   workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/dsh-release-watch.yml
 
 permissions:
   contents: read
@@ -37,7 +40,7 @@ jobs:
           if-no-files-found: warn
 
       - name: Open issue when a new version is found
-        if: steps.check.outcome == "failure"
+        if: steps.check.outcome == 'failure'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
