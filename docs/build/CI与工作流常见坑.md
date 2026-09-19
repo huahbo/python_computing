@@ -116,3 +116,47 @@ gh run view <run-id> --json jobs --jq ".jobs[].steps[] | {name, conclusion}"
 - **软告警**：文本超右边界 3–10pt → 多为字体差异或 CJK 标点悬挂（悬挂不计错）；>10pt 且含 ASCII 才算硬错。
 - **不要用 pandoc/xelatex 的 .log 判断**：pandoc 成功后会删除日志，"没有日志"≠"没有 overfull"。要判断就跑真实渲染（fitz 读 PDF）。
 - 修图顺序：先看 `float` 放置与图片高度上限（`\floatplacement{figure}{tp}` + `0.70\textheight`），再看代码块折行（fvextra），最后看长 URL/长等宽串（xurl + hyphenat）。
+
+## F. 本机工具链：Hindsight 记忆服务（2026-09-19）
+
+### F1. 症状与定位
+
+- 现象一：`hindsight_*` 工具全部 401 —— `Authentication failed: API key required (no apiToken is configured)`。
+  说明插件跑在默认的 **cloud** 模式但没配 token。
+- 现象二：切到本地 daemon 模式后仍起不来，`~/.hindsight/profiles/<profile>.log` 末尾：
+  `RuntimeError: Failed to start embedded PostgreSQL after 5 attempts. Last error: Error: initdb failed`。
+  **注意**：此时 LLM 通道往往是好的（日志里有 `Connection verified: deepseek/deepseek-flash`），坏的是嵌入式 PostgreSQL（pg0）在本机 initdb 失败。
+
+### F2. 本机采用的方案（Docker 自托管）
+
+```bash
+# 数据面 8888 / 控制面 9999；用 DeepSeek 做事实抽取（Key 取 ~/.dsh/.credentials.yaml 的 refs.DEEPSEEK_API_KEY）
+docker run -d --name hindsight --restart unless-stopped -p 8888:8888 -p 9999:9999 \
+  -e HINDSIGHT_API_LLM_PROVIDER=deepseek \
+  -e HINDSIGHT_API_LLM_API_KEY=$DEEPSEEK_API_KEY \
+  -e HINDSIGHT_API_LLM_MODEL=deepseek-flash \
+  ghcr.io/vectorize-io/hindsight:latest
+
+# 验证
+curl -s -o /dev/null -w "%{http_code}\n" http://127.0.0.1:8888/health   # 期望 200
+```
+
+启动器 `~/.dsh/dshweb.ps1` 在拉起 dsh web 之前导出：
+
+```powershell
+$env:HINDSIGHT_SERVER_MODE = 'self-hosted'
+$env:HINDSIGHT_API_URL = 'http://127.0.0.1:8888'
+```
+
+### F3. 排查顺序（下次直接照做）
+
+1. `curl -s http://127.0.0.1:8888/health` → 不通就先看 `docker ps --filter name=hindsight` 与 `docker logs --tail 30 hindsight`；
+2. 容器正常但工具仍 401 → 确认 dsh web 进程**重启过**（插件只在启动时读环境变量）；
+3. 想知道插件实际认为的配置 → 看 `~/.hindsight/coding-agents-logs/plugin.log`；
+4. 本地 daemon 模式的日志在 `~/.hindsight/profiles/<profile>.log`，配置在 `~/.hindsight/profiles/<profile>.env`（**含明文 Key**，别提交/截图）。
+
+### F4. 其他坑
+
+- `hindsight-embed` CLI 的输出含 ✓ 等字符，GBK 控制台直接 print 会 `UnicodeEncodeError`，脚本先 `sys.stdout.reconfigure(encoding="utf-8", errors="replace")`；
+- PowerShell `Start-Process` 在本机因 `NO_PROXY`/`no_proxy` 键冲突报 `Item has already been added`，改用 node `spawn(..., {detached:true})` 或在子进程 env 里删掉重复变量；
+- 容器务必加 `--restart unless-stopped`，否则重启后记忆服务不会自己回来。
