@@ -25,7 +25,7 @@
 
 - 先修：第 0 章（终端、Python 环境、LaTeX）与第 1 到 8 章任一（案例会复用 NumPy、Pandas、SciPy、Statsmodels、sklearn 的知识）。
 - 运行环境：
-  - Node.js ^22.19.0 或 >= 24.0.0（安装与自查见 02 节）；
+  - Node.js ^22.19.0 或 >= 24.0.0，**npm 与 npx 会随它一起装上**（Node 是什么、怎么装、怎么自查，见 02 节第 0 小节）；
   - 一个 DeepSeek 开放平台账号与 API Key（申请与付费见 02 节第 5 小节）；
   - Python 环境沿用第 0 章的 scicomp 环境（案例中的验证脚本需要 numpy / pandas / scipy / statsmodels / scikit-learn / matplotlib）。
 - 网络：安装与联网任务需要网络；**所有练习都提供离线替代路径**，断网时也能完成核心训练。

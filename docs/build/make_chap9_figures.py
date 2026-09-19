@@ -170,7 +170,7 @@ def fig_install_paths():
         box(ax, x, 33, 29, 12, cmd, LIGHT, tc=DARK, fs=8.6, bold=False, ec=color)
         last = "浏览器界面" + chr(10) + "127.0.0.1:3080" if i < 2 else "原生窗口" + chr(10) + "端口 19387"
         box(ax, x, 16, 29, 13, last, "white", tc=DARK, fs=9.5, bold=False, ec=color)
-    ax.text(50, 7, "共同前置：Node ^22.19.0 或 >= 24；先跑 node -v 自查", ha="center", va="center", fontsize=10, color="#c0392b")
+    ax.text(50, 7, "共同前置：先装 Node.js（自带 npm 与 npx），要求 ^22.19.0 或 >= 24", ha="center", va="center", fontsize=10, color="#c0392b")
     save(fig, "install_paths.png")
 
 def fig_permission_flow():
