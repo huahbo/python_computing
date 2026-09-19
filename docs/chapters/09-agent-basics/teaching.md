@@ -47,3 +47,22 @@
 - 只讲 01 节 + 02 节的路径 A（npx 免安装），桌面版与 headless 留给自学；
 - 04 节（权限与数据红线）压缩为 10 分钟三条红线提醒；
 - 斜杠命令只演示 `/plan`、`/compact`、`/export` 三条。
+
+## 9. 可选：第 4 张界面截图（会话时间线）
+
+现有 3 张界面图（首屏 / 设置→模型 / 工作区选择器）已足够支撑 03 节；若想再加一张"会话时间线"（一次真实任务里读文件→跑命令→看结果的流水），步骤：
+
+1. 用**干净的演示环境**启动（已预置 Key 与一个演示工作区，不含个人会话）：
+
+```powershell
+$env:DSH_HOME = "C:/Users/Administrator/AppData/Local/Temp/dsh-demo/home"
+cd C:/Users/Administrator/AppData/Local/Temp/dsh-demo/workspace
+dsh web --port 3099
+```
+
+2. 在输入框左侧点「选择工作区」→ 选 `dsh-demo`；
+3. 发一句只读任务（例如「读取 data/scores.csv，按行算每个学生平均分并打印」）；
+4. 截取**对话区域**（不要包含左侧会话列表），存为 `images/shot_session_timeline.png`；
+5. 重建：`python build/pdf_build.py 09-agent-basics && python build/part_pdf.py && python build/texbook.py --full`，并更新 `教材PDF/README.md` 页数。
+
+> 说明：自动化脚本能完成前 3 张（`build/capture_dsh_shots.cjs`），但"选择工作区"的下拉菜单在无头浏览器里点不中，因此第 4 张需要人工截一次。
