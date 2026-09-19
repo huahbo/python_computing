@@ -3,3 +3,4 @@ TITLE: AI Agent 编程基础
 README.md
 01-AI编程与Agent基础.md
 02-安装与配置.md
+03-界面与斜杠命令.md
