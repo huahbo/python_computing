@@ -11,7 +11,11 @@ edge by more than HARD_TOL pt while containing ASCII (i.e. a real token overflow
 CJK punctuation hanging (xeCJK 标点悬挂) is reported as [hang] info only and never fails.
 """
 import glob, os, re, sys
-import fitz
+try:
+    import fitz
+except ImportError:
+    print("check_pdf_layout: PyMuPDF (fitz) 未安装，跳过版式自检（安装：pip install pymupdf）")
+    sys.exit(0)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PDF_DIR = os.path.join(ROOT, "教材PDF")
