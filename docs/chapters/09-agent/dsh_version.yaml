@@ -1,0 +1,36 @@
+# 第 9 章版本单一事实源（build/check_dsh_release.py 读取；更新流程见 build/dsh_更新SOP.md）
+# 说明：本章所有版本、命令、界面与价格信息以本文件记录的基线为准，过期时只改这里 + 标记段落。
+
+baseline:
+  version: 0.1.5-rc.2
+  channel: latest            # npm dist-tags 中的 latest
+  released_at: 2026-09-10
+  checked_at: 2026-09-19
+  node: ^22.19.0 || >=24.0.0
+  stage: developer-preview   # 官方全部 release tag 均为 prerelease
+
+upstream:
+  npm_package: "@deepseek-ai/dsh"
+  github_repo: deepseek-ai/deepseek-harness
+  releases: https://github.com/deepseek-ai/deepseek-harness/releases
+  docs: https://deepseek-harness.github.io/deepseek-harness/
+  pricing: https://api-docs.deepseek.com/zh-cn/quick_start/pricing
+  platform: https://platform.deepseek.com/
+
+watch:
+  dist_tags: [latest, next, alpha]
+  schedule: 每月 1 日与 15 日 09:00（北京时间）
+  workflow: .github/workflows/dsh-release-watch.yml
+
+review_on_change:
+  - chapters/09-agent/02-安装与配置.md
+  - chapters/09-agent/03-Agent工作流与核心能力.md
+  - chapters/09-agent/08-常见误区与科研规范.md
+  - chapters/09-agent/images/shot_web_home.png
+  - chapters/09-agent/images/shot_settings_model.png
+  - chapters/09-agent/images/shot_permission_dialog.png
+  - chapters/09-agent/images/shot_session_timeline.png
+
+notes:
+  - 官方 release tag 全部为 prerelease，没有传统意义的稳定版；npm latest 即当前推荐安装版本。
+  - 价格、赠送与并发限制以官方定价页为准，教材中的价格表是 2026-09-18 的快照。
