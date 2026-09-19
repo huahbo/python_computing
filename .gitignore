@@ -21,6 +21,7 @@ docs/教材TeX/main.pdf
 
 # ===== 构建缓存 / 临时 =====
 docs/build/.texbook_cache.json
+docs/build/_dsh_release_report.md
 docs/build/.tex_emit_cache.json
 docs/build/_tmp_*.md
 

@@ -1,0 +1,50 @@
+name: dsh release watch
+
+on:
+  schedule:
+    # 每月 1 日与 15 日 09:00（北京时间）= 01:00 UTC
+    - cron: "0 1 1,15 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: pip install pyyaml
+
+      - name: Check upstream releases
+        id: check
+        continue-on-error: true
+        run: python docs/build/check_dsh_release.py --ci
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dsh-release-report
+          path: docs/build/_dsh_release_report.md
+          if-no-files-found: warn
+
+      - name: Open issue when a new version is found
+        if: steps.check.outcome == "failure"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TITLE="dsh 新版本待评估（自动巡检）"
+          COUNT=$(gh issue list --state open --search "dsh 新版本待评估 in:title" --json number --jq "length")
+          if [ "$COUNT" = "0" ]; then
+            gh issue create --title "$TITLE" --body-file docs/build/_dsh_release_report.md
+          else
+            echo "已有开启中的巡检 Issue（$COUNT 个），跳过创建"
+          fi
