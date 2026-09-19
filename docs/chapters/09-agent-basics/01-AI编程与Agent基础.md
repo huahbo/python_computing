@@ -250,6 +250,6 @@ by_exam = scores.mean(axis=0)
 
 ## 练习与延伸阅读
 
-- 练习：`exercises/quiz.ipynb` 第 1–4 题（概念题）；
+- 练习：第 11 章 `exercises/` 第 1–4 题（概念题）；
 - 延伸：DeepSeek Harness 官方仓库与文档（见 `references.md`）；
 - 下一节：`02-安装与配置.md`（三条安装路径 + API Key 申请与付费）。

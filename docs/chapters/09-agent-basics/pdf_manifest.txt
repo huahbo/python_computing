@@ -1,0 +1,5 @@
+# 第 9 章 PDF 合订清单（build/pdf_build.py 读取）
+TITLE: AI Agent 编程基础
+README.md
+01-AI编程与Agent基础.md
+02-安装与配置.md

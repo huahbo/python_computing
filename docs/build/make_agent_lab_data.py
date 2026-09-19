@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "chapters", "09-agent", "lab", "data")
+OUT = os.path.join(ROOT, "chapters", "11-agent-cases", "lab", "data")
 os.makedirs(OUT, exist_ok=True)
 
 NAMES = ["张三", "李四", "王五", "赵六", "钱七", "孙八", "周九", "吴十"]

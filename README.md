@@ -5,13 +5,13 @@
 ## 目录
 
 - `docs/`：课程内容（docsify 在线教程 + 构建体系）
-  - `docs/chapters/`：**新版教学内容**（每章：正文/案例/误区/练习/上机/参考/教学说明）
+  - `docs/chapters/`：**新版教学内容**，分两部分 —— 第一部分第 0–8 章（Python 科学计算）、**第二部分第 9–12 章（AI Agent 编程）**；每章含正文/案例/误区/练习/上机/参考/教学说明
   - `docs/原始资料/`：旧版原始内容归档（只读）
   - `docs/教学资源/`：课时表、期末大作业、LaTeX 模板等
   - `docs/教材TeX/`：**可编译 LaTeX 工程**（生成物，可编辑定制区 user_style/user_meta）
   - `docs/build/`：构建脚本、实施计划、设计文档、坑清单
   - `docs/教材PDF/`：每章/全书 PDF（由脚本/CI 生成，**已入库**，可离线阅读或直接下载）
-- `.github/workflows/texbook.yml`：CI（push 后自动校验 + 生成 PDF/TeX 并上传 artifact）
+- `.github/workflows/texbook.yml`：CI（push 后自动校验 + 生成每章 PDF、**部分合并 PDF**、全书 PDF 与 TeX 并上传 artifact）
 
 ## 常用命令
 

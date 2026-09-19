@@ -12,6 +12,10 @@ import os, sys, json, re, shutil, tempfile, hashlib, subprocess
 import yaml
 from pypdf import PdfReader
 import fonts
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # docs/
 CHAPTERS = os.path.join(ROOT, "chapters")
@@ -120,6 +124,16 @@ def shift_heading(text):
             line = "#" * (len(m.group(1)) + 1) + line[len(m.group(1)):]
         out.append(line)
     return "\n".join(out)
+
+
+def part_titles(cfg):
+    """Map the first chapter of each part to its title."""
+    out = {}
+    for part in cfg.get('parts') or []:
+        chs = part.get('chapters') or []
+        if chs:
+            out[chs[0]] = part.get('title', '')
+    return out
 
 
 def chapter_md(ch, cfg):
@@ -277,6 +291,7 @@ def build_book(full=False):
             cache = json.load(f)
     parts = []
     changed = []
+    ptitles = part_titles(cfg)
     for ch in chapters:
         title, files = read_manifest(ch)
         srcs = [os.path.join(CHAPTERS, ch, f) for f in files if os.path.exists(os.path.join(CHAPTERS, ch, f))]
@@ -285,6 +300,8 @@ def build_book(full=False):
             print(f"[up-to-date] {ch}")
         else:
             changed.append(ch)
+        if ch in ptitles:
+            parts.append("```{=latex}\n\\part{" + latex_escape(ptitles[ch]) + "}\n```")
         parts.append(chapter_md(ch, cfg))
         cache[ch] = h
     # 附录：appendix 后原样拼接（数学与算法补充）

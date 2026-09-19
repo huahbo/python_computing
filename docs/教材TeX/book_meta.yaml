@@ -2,4 +2,4 @@
 title: Python 科学计算（新版教程）
 author: 自用教材
 date: 2026
-chapters: 00-prep, 01-numpy, 02-sympy, 03-scipy, 04-pandas, 05-matplotlib, 06-networkx, 07-statsmodels, 08-sklearn
+chapters: 00-prep, 01-numpy, 02-sympy, 03-scipy, 04-pandas, 05-matplotlib, 06-networkx, 07-statsmodels, 08-sklearn, 09-agent-basics, 10-agent-workflow, 11-agent-cases, 12-agent-engineering

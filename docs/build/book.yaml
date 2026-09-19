@@ -14,6 +14,18 @@ chapters:
   - 06-networkx
   - 07-statsmodels
   - 08-sklearn
+  - 09-agent-basics
+  - 10-agent-workflow
+  - 11-agent-cases
+  - 12-agent-engineering
+
+# 部分划分（texbook.py 与 emit_tex.py 据此插入 LaTeX part；file 为部分合并 PDF 名）
+parts:
+  - title: 第一部分 · Python 科学计算基础
+    chapters: [00-prep, 01-numpy, 02-sympy, 03-scipy, 04-pandas, 05-matplotlib, 06-networkx, 07-statsmodels, 08-sklearn]
+  - title: 第二部分 · AI Agent 编程
+    chapters: [09-agent-basics, 10-agent-workflow, 11-agent-cases, 12-agent-engineering]
+    file: 第二部分-AI-Agent编程.pdf
 
 # 附录：数学与算法补充（目录相对 docs/；清单见该目录 pdf_manifest.txt）
 appendices:

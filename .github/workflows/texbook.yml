@@ -41,6 +41,8 @@ jobs:
             docs/教材PDF/Python科学计算_全书.pdf
             docs/教材PDF/数学与算法补充.pdf
             docs/教材PDF/0*-*.pdf
+            docs/教材PDF/1*-*.pdf
+            docs/教材PDF/第二部分*.pdf
           if-no-files-found: error
 
       - name: Upload editable TeX project

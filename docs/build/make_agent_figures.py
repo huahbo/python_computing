@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Circle
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "chapters", "09-agent", "images")
+OUT = os.path.join(ROOT, "chapters", "09-agent-basics", "images")
 os.makedirs(OUT, exist_ok=True)
 
 plt.rcParams["figure.dpi"] = 150
@@ -258,6 +258,11 @@ def main():
     fig_permission_flow()
     fig_api_key_flow()
     fig_subagent_split()
+    import shutil
+    for ch in ("10-agent-workflow", "11-agent-cases"):
+        dst = os.path.join(ROOT, "chapters", ch, "images")
+        os.makedirs(dst, exist_ok=True)
+        shutil.copy2(os.path.join(OUT, "subagent_split.png"), os.path.join(dst, "subagent_split.png"))
     print("output dir:", OUT)
 
 if __name__ == "__main__":

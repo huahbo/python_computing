@@ -17,6 +17,10 @@ from datetime import datetime
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import texbook as tb
 import fonts
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEX_DIR = os.path.join(ROOT, "教材TeX")
@@ -49,7 +53,10 @@ def chapter_meta(ch):
 
 def merged_book_md(cfg):
     parts = []
+    ptitles = tb.part_titles(cfg)
     for ch in cfg["chapters"]:
+        if ch in ptitles:
+            parts.append("```{=latex}\n\\part{" + tb.latex_escape(ptitles[ch]) + "}\n```")
         title, _ = chapter_meta(ch)
         num = tb.chapter_no(ch)
         if num is not None:
@@ -97,7 +104,7 @@ def copy_figures(ch):
             shutil.copy2(os.path.join(src, f), os.path.join(dst, f))
 
 
-def split_chapters(tex, chapters, appendix_names=None, pre_body=None, chapter_covers=None):
+def split_chapters(tex, chapters, appendix_names=None, pre_body=None, chapter_covers=None, part_titles=None):
     """Split the standalone tex body at chapter boundaries -> chapter files.
     Returns (main_tex, chapter_chunks, appendix_chunks)."""
     bd = tex.index("\\begin{document}")
@@ -105,6 +112,7 @@ def split_chapters(tex, chapters, appendix_names=None, pre_body=None, chapter_co
     preamble = tex[:bd] + "\n\\input{cover.tex}\n" + "\\begin{document}\n"
     body = tex[bd + len("\\begin{document}"):ed]
     appendix_names = appendix_names or []
+    ptitles = part_titles or {}
     if appendix_names:
         marker = "\\appendix"
         app_idx = body.find(marker)
@@ -118,7 +126,8 @@ def split_chapters(tex, chapters, appendix_names=None, pre_body=None, chapter_co
         chunks_c = []
         for i, p in enumerate(pos_c):
             end = pos_c[i + 1] if i + 1 < len(pos_c) else len(chapter_body)
-            chunks_c.append(chapter_body[p:end].rstrip() + "\n")
+            start = p
+            chunks_c.append(chapter_body[start:end].rstrip() + "\n")
         pos_a = [m.start() for m in re.finditer(r"\\chapter\{", appendix_body)]
         if len(pos_a) != len(appendix_names):
             raise RuntimeError(f"appendix count mismatch: tex={len(pos_a)} cfg={len(appendix_names)}")
@@ -130,6 +139,8 @@ def split_chapters(tex, chapters, appendix_names=None, pre_body=None, chapter_co
         cover_lines = ""
         if chapter_covers:
             for (num, ttl), ch in zip(chapter_covers, chapters):
+                if ch in ptitles:
+                    cover_lines += f"\\part{{{tb.latex_escape(ptitles[ch])}}}\n"
                 cover_lines += f"\\chaptercover{{{num}}}{{{tb.latex_escape(ttl)}}}\n"
                 cover_lines += f"\\input{{chapters/ch{ch}.tex}}\n"
         else:
@@ -142,14 +153,21 @@ def split_chapters(tex, chapters, appendix_names=None, pre_body=None, chapter_co
     chunks = []
     for i, p in enumerate(pos):
         end = pos[i + 1] if i + 1 < len(pos) else len(body)
-        chunks.append(body[p:end].rstrip() + "\n")
+        start = p
+        chunks.append(body[start:end].rstrip() + "\n")
     cover_lines = ""
     if chapter_covers:
         for (num, ttl), ch in zip(chapter_covers, chapters):
+            if ch in ptitles:
+                cover_lines += f"\\part{{{tb.latex_escape(ptitles[ch])}}}\n"
             cover_lines += f"\\chaptercover{{{num}}}{{{tb.latex_escape(ttl)}}}\n"
             cover_lines += f"\\input{{chapters/ch{ch}.tex}}\n"
     else:
-        cover_lines = "\n".join(["\\input{chapters/ch" + ch + ".tex}\n" for ch in chapters])
+        cover_lines = ""
+        for ch in chapters:
+            if ch in ptitles:
+                cover_lines += f"\\part{{{tb.latex_escape(ptitles[ch])}}}\n"
+            cover_lines += "\\input{chapters/ch" + ch + ".tex}\n"
     main = preamble + (pre_body or "") + cover_lines + "\n\\end{document}\n"
     return main, chunks, []
 
@@ -229,7 +247,8 @@ def main():
         num = tb.chapter_no(ch)
         chapter_covers.append((str(num) if num is not None else "", ttl))
     main_tex, chunks, app_chunks = split_chapters(tex, chapters, appendix_names,
-                                                  pre_body=pre_body, chapter_covers=chapter_covers)
+                                                  pre_body=pre_body, chapter_covers=chapter_covers,
+                                                  part_titles=tb.part_titles(cfg))
 
     # 3) per-chapter files + manual protection + cache
     for ch, chunk in zip(chapters, chunks):
