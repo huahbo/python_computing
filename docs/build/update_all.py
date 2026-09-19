@@ -36,6 +36,7 @@ def main():
     codes.append(run([sys.executable, "build/check_indexes.py"], "1.8) check indexes"))
     codes.append(run([sys.executable, "build/pdf_build.py"], "2) per-chapter PDFs"))
     codes.append(run([sys.executable, "build/part_pdf.py"], "2.5) part PDFs"))
+    codes.append(run([sys.executable, "build/check_pdf_layout.py"], "2.7) PDF layout self-check"))
     codes.append(run([sys.executable, "build/texbook.py", "--full"], "3) full book PDF"))
     if "--tex" in sys.argv:
         cmd = [sys.executable, "build/emit_tex.py"]

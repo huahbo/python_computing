@@ -22,17 +22,17 @@
 
 | 文件 | 章节 | 页数 |
 | ---- | ---- | ---- |
-| `09-agent-basics-AI Agent 编程基础.pdf` | 9 AI Agent 编程基础 | 22 页 |
+| `09-agent-basics-AI Agent 编程基础.pdf` | 9 AI Agent 编程基础 | 25 页 |
 | `10-agent-workflow-Agent 工作流与验证方法.pdf` | 10 Agent 工作流与验证方法 | 7 页（编写中） |
 | `11-agent-cases-案例实战：从修 bug 到端到端项目.pdf` | 11 案例实战 | 15 页（编写中） |
 | `12-agent-engineering-工程化与持续演进.pdf` | 12 工程化与持续演进 | 2 页（编写中） |
-| `第二部分-AI-Agent编程.pdf` | 第二部分合并（含部分封面） | 47 页 |
+| `第二部分-AI-Agent编程.pdf` | 第二部分合并（含部分封面） | 50 页 |
 
 ## 全书与附录
 
 | 文件 | 内容 | 页数 |
 | ---- | ---- | ---- |
-| `Python科学计算_全书.pdf` | 全书（第 0–12 章 + 附录 A–G，含两部分分隔页） | 356 页 |
+| `Python科学计算_全书.pdf` | 全书（第 0–12 章 + 附录 A–G，含两部分分隔页） | 359 页 |
 | `数学与算法补充.pdf` | 附录 A–G | 38 页 |
 
 ## 排版约定（自动生效，无需手改正文）
@@ -40,7 +40,8 @@
 - **图片**：`\floatplacement{figure}{tp}` + 高度上限 `0.70\textheight`，图片只排在页顶或独立页，**不会被页面下沿裁切**；
 - **代码块**：`fvextra` 自动折行（`breaklines` + `breakanywhere`），长注释与长命令不再溢出页边；
 - **正文**：`xurl` + `hyphenat[htt]` + `\sloppy` + `\emergencystretch=3em`，长 URL 与长等宽串可断行；
-- 以上规则统一写在 `build/texbook_header.tex`，对每章 PDF、全书 PDF 与 TeX 工程同时生效。
+- 以上规则统一写在 `build/texbook_header.tex`，对每章 PDF、全书 PDF 与 TeX 工程同时生效；
+- 生成后自检：`python build/check_pdf_layout.py`（检测越界图片与超出右边界的文本行），已接入 `update_all.py` 与 CI。
 
 ## 重新构建
 
