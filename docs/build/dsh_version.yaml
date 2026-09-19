@@ -28,8 +28,7 @@ review_on_change:
   - chapters/10-agent-workflow/04-常见误区与科研规范.md
   - chapters/09-agent-basics/images/shot_web_home.png
   - chapters/09-agent-basics/images/shot_settings_model.png
-  - chapters/09-agent-basics/images/shot_permission_dialog.png
-  - chapters/09-agent-basics/images/shot_session_timeline.png
+  - chapters/09-agent-basics/images/shot_workspace_picker.png
 
 notes:
   - 官方 release tag 全部为 prerelease，没有传统意义的稳定版；npm latest 即当前推荐安装版本。
