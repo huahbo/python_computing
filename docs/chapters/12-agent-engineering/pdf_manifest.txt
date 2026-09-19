@@ -1,3 +1,6 @@
 # 第 12 章 PDF 合订清单（build/pdf_build.py 读取）
 TITLE: 工程化与持续演进
 README.md
+01-版本与时效管理.md
+02-成本、协作与合规.md
+03-综合项目Project3.md
